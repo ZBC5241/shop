@@ -118,6 +118,42 @@ tr:hover td{background:var(--blue-light)}
   .kanban-wrap{flex-direction:column}
   .kanban-col{min-width:100%}
 }
+/* Emp-Cat Drill styles */
+.emp-bar{grid-template-columns:repeat(5,1fr)}
+.tabbar{display:inline-flex;background:#e8eef6;border-radius:12px;padding:4px;gap:4px;margin-bottom:14px}
+.tabbar button{border:0;background:transparent;padding:8px 16px;border-radius:9px;font-size:13px;font-weight:600;color:var(--gray);cursor:pointer;transition:.2s}
+.tabbar button.on{background:#fff;color:var(--dark);box-shadow:0 2px 6px rgba(31,42,68,.1)}
+.emp-card{position:relative;overflow:hidden}
+.emp-card .top{display:flex;justify-content:space-between;align-items:flex-start;cursor:pointer}
+.emp-card .nm{font-size:17px;font-weight:800}
+.emp-card .rank{font-size:12px;color:var(--gray)}
+.emp-card .gp{font-size:24px;font-weight:800;margin-top:8px}
+.emp-card .rate{font-size:13px;color:var(--gray);margin-top:2px}
+.pbar{height:8px;border-radius:5px;background:var(--gray-light);margin-top:12px;overflow:hidden}
+.pbar i{display:block;height:100%;border-radius:5px;transition:width 1.2s ease}
+.drill{margin-top:14px;border-top:1px dashed var(--border);padding-top:12px;display:none}
+.drill.open{display:block;animation:fadeIn .4s both}
+.blk{border:1px solid var(--border);border-radius:12px;margin-bottom:10px;overflow:hidden}
+.blk-head{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;cursor:pointer;background:#f8fafc;transition:.2s}
+.blk-head:hover{background:#eef4fb}
+.blk-head .bname{font-weight:700;font-size:14px}
+.blk-head .bgp{font-weight:700}
+.sku-rows{display:none}
+.sku-rows.open{display:block;animation:fadeIn .3s both}
+.negcell{color:var(--red)}
+.split{display:flex;gap:10px;margin-top:4px}
+.split .s{font-size:12px;color:var(--gray)}
+.cat-grid{grid-template-columns:repeat(5,1fr)}
+.cat-card{position:relative;overflow:hidden;cursor:pointer;border:1px solid var(--border)}
+.cat-card .ic{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:10px}
+.cat-card .cn{font-size:15px;font-weight:700}
+.cat-card .cgp{font-size:20px;font-weight:800;margin-top:6px}
+.cat-card .meta{font-size:12px;color:var(--gray);margin-top:4px}
+.cat-card .bar{height:5px;border-radius:3px;background:var(--gray-light);margin-top:10px;overflow:hidden}
+.cat-card .bar i{display:block;height:100%;border-radius:3px;transition:width 1s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media(max-width:900px){.emp-bar{grid-template-columns:1fr 1fr}.cat-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:600px){.emp-bar{grid-template-columns:1fr}.cat-grid{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
 <body>
@@ -125,7 +161,7 @@ tr:hover td{background:var(--blue-light)}
 <div class="header">
   <div class="header-top">
     <h1>李家村万达华为授权体验店 · 8月销售进度看板</h1>
-    <div class="date-info">数据区间 2026-08-01 ~ 08-08 | 更新于 08-08</div>
+    <div class="date-info">数据区间 2026-08-01 ~ 08-07 | 更新于 08-08</div>
   </div>
   <div class="progress-bar-wrap">
     <div class="progress-bar-fill" style="width:25.8%"></div>
@@ -143,7 +179,8 @@ tr:hover td{background:var(--blue-light)}
   <button onclick="switchTab('channel')">渠道挂账</button>
   <button onclick="switchTab('daily')">每日任务</button>
   <button onclick="switchTab('onpage')">一页纸闭环</button>
-  <button onclick="switchTab('manager')">店长绩效</button>
+  <button onclick="switchTab('empcat')">员工品类</button>
+      <button onclick="switchTab('manager')">店长绩效</button>
 </div>
 
 <div class="main">
@@ -243,6 +280,24 @@ tr:hover td{background:var(--blue-light)}
   </div>
   <div class="section-title">基础运营闭环清单</div>
   <ul class="checklist" id="checklist"></ul>
+</div>
+
+<!-- ==================== 员工×品类明细达成 ==================== -->
+<div class="section" id="sec-empcat">
+  <div class="kpi-strip">
+    <div class="kpi-card"><div class="kpi-label">总毛利</div><div class="kpi-value" id="ec-totalgp"></div><div class="kpi-sub" id="ec-date"></div></div>
+    <div class="kpi-card"><div class="kpi-label">毛利完成率</div><div class="kpi-value" id="ec-rate"></div><div class="kpi-sub" id="ec-tp"></div></div>
+    <div class="kpi-card"><div class="kpi-label">品类数</div><div class="kpi-value" id="ec-cats"></div><div class="kpi-sub">员工×品类明细</div></div>
+  </div>
+  <div class="section-title">员工毛利达成（点卡片下钻看品类/逐笔）</div>
+  <div class="tabbar" id="ec-sort">
+    <button data-sort="gp" class="on">按毛利</button>
+    <button data-sort="rate">按排名</button>
+    <button data-sort="cnt">按笔数</button>
+  </div>
+  <div class="grid emp-bar" id="ec-empGrid"></div>
+  <div class="section-title">品类毛利结构（点卡片看日度趋势）</div>
+  <div class="grid cat-grid" id="ec-catGrid"></div>
 </div>
 
 <!-- ==================== 店长绩效 ==================== -->
@@ -600,6 +655,1172 @@ function renderManagerTable(){
     </tr>`;
   });
 }
+
+// ===== 员工×品类明细数据（提取自用友云XS明细，规则同Excel SUMIFS公式） =====
+const EC_DATA = {
+ "dates": [
+  "2026-08-01",
+  "2026-08-02",
+  "2026-08-03",
+  "2026-08-04",
+  "2026-08-05",
+  "2026-08-06",
+  "2026-08-07"
+ ],
+ "day_gp": {
+  "2026-08-01": 5036.51,
+  "2026-08-02": 5900.23,
+  "2026-08-03": 3567.75,
+  "2026-08-04": 4378.15,
+  "2026-08-05": 3267.66,
+  "2026-08-06": 4256.8,
+  "2026-08-07": 2609.07
+ },
+ "emp_detail": {
+  "邵乐乐": {
+   "增值服务": [
+    {
+     "date": "2026-08-01",
+     "name": "COOYEE 耳夹式耳机 S33 pro  白",
+     "qty": 1,
+     "amt": 0,
+     "gp": -89
+    },
+    {
+     "date": "2026-08-01",
+     "name": "Cooyee华为Nova15 Pro/Ultra高清钢化膜",
+     "qty": 1,
+     "amt": 99,
+     "gp": 80.01
+    },
+    {
+     "date": "2026-08-01",
+     "name": "Cooyee华为Nova15 Pro/Ultra高清钢化膜",
+     "qty": 1,
+     "amt": 99,
+     "gp": 80.01
+    },
+    {
+     "date": "2026-08-01",
+     "name": "COOYEE 华为 mate70pro pro+3D热弯钢化膜",
+     "qty": 1,
+     "amt": 99,
+     "gp": 61.41
+    },
+    {
+     "date": "2026-08-05",
+     "name": "星联优享-699",
+     "qty": 1,
+     "amt": 549,
+     "gp": 549
+    },
+    {
+     "date": "2026-08-05",
+     "name": "闪能 66w全兼容快充10000毫安移动电源LP13  66W 1000  白色",
+     "qty": 1,
+     "amt": 0,
+     "gp": -59
+    },
+    {
+     "date": "2026-08-05",
+     "name": "COOYEE 华为Pura X 前屏钢化膜",
+     "qty": 1,
+     "amt": 0,
+     "gp": -21.61
+    },
+    {
+     "date": "2026-08-07",
+     "name": "399贴膜套包",
+     "qty": 1,
+     "amt": 399,
+     "gp": 399
+    },
+    {
+     "date": "2026-08-07",
+     "name": "Cooyee 华为mate X7 3D热弯全胶钢化膜",
+     "qty": 1,
+     "amt": 0,
+     "gp": -37.06
+    }
+   ],
+   "手机": [
+    {
+     "date": "2026-08-01",
+     "name": "华为畅享90 Pro Max CHZ-AL00  8GB+512GB  曜金黑",
+     "qty": 1,
+     "amt": 2299,
+     "gp": 268.25
+    },
+    {
+     "date": "2026-08-01",
+     "name": "华为畅享90 Pro Max CHZ-AL00  8GB+512GB  飞天青",
+     "qty": 1,
+     "amt": 2299,
+     "gp": 283
+    },
+    {
+     "date": "2026-08-02",
+     "name": "华为 nova15 PSN-AL00  12GB+256GB  好搭紫",
+     "qty": 1,
+     "amt": 2449,
+     "gp": 208
+    },
+    {
+     "date": "2026-08-02",
+     "name": "华为畅享90 Pro Max CHZ-AL00  8GB+512GB  曜金黑",
+     "qty": 1,
+     "amt": 2099,
+     "gp": 68.25
+    },
+    {
+     "date": "2026-08-02",
+     "name": "华为 Mate80 VYG-AL30  16GB+512GB  曜石黑",
+     "qty": 1,
+     "amt": 5199,
+     "gp": 524
+    },
+    {
+     "date": "2026-08-05",
+     "name": "华为畅享90 Pro Max CHZ-AL00  8GB+512GB  曜金黑",
+     "qty": -1,
+     "amt": -2099,
+     "gp": -68.25
+    },
+    {
+     "date": "2026-08-05",
+     "name": "华为畅享90 Plus JUY-AL50  8GB+256GB  羽沙白",
+     "qty": 1,
+     "amt": 1486.65,
+     "gp": -25.35
+    },
+    {
+     "date": "2026-08-05",
+     "name": "华为 PuraX VDE-AL00  16GB+512GB  型格紫",
+     "qty": 1,
+     "amt": 7839.02,
+     "gp": 959.02
+    },
+    {
+     "date": "2026-08-05",
+     "name": "华为畅享90 Pro Max CHZ-AL00  8GB+512GB  曜金黑",
+     "qty": 1,
+     "amt": 2099,
+     "gp": 68.25
+    },
+    {
+     "date": "2026-08-07",
+     "name": "华为畅享90 Pro Max CHZ-AL00  8GB+256GB  飞天青",
+     "qty": 1,
+     "amt": 1948.33,
+     "gp": 268.33
+    }
+   ],
+   "其他": [
+    {
+     "date": "2026-08-02",
+     "name": "5G半成卡",
+     "qty": 1,
+     "amt": 0,
+     "gp": 0
+    },
+    {
+     "date": "2026-08-02",
+     "name": "单卡新入网",
+     "qty": 1,
+     "amt": 59,
+     "gp": 236
+    },
+    {
+     "date": "2026-08-02",
+     "name": "权益包",
+     "qty": 1,
+     "amt": 5,
+     "gp": 0
+    }
+   ],
+   "穿戴": [
+    {
+     "date": "2026-08-04",
+     "name": "华为 超新星手表X1 DRA-L10(蓝色硅胶表带)星际蓝",
+     "qty": 1,
+     "amt": 1598,
+     "gp": 367
+    },
+    {
+     "date": "2026-08-05",
+     "name": "华为手环11 CDY-B39 NFC版(黑色氟橡胶表带)羽砂黑",
+     "qty": 1,
+     "amt": 269,
+     "gp": 5.99
+    },
+    {
+     "date": "2026-08-05",
+     "name": "华为手环11 CDY-B39 NFC版(黑色氟橡胶表带)羽砂黑",
+     "qty": 6,
+     "amt": 1614,
+     "gp": 35.94
+    },
+    {
+     "date": "2026-08-05",
+     "name": "华为手环11 CDY-B39 NFC版(黑色氟橡胶表带)羽砂黑",
+     "qty": 11,
+     "amt": 2959,
+     "gp": 143
+    },
+    {
+     "date": "2026-08-05",
+     "name": "华为 WATCH GT6 KSU-B19 41mm(白色复合素皮表带)浮光白",
+     "qty": 1,
+     "amt": 1154.3,
+     "gp": -145.7
+    },
+    {
+     "date": "2026-08-07",
+     "name": "华为 WATCH GT6 ATM-B19 46mm(黑色氟橡胶表带)雅丹黑",
+     "qty": 1,
+     "amt": 1258,
+     "gp": 35
+    }
+   ]
+  },
+  "杨丽华": {
+   "手机": [
+    {
+     "date": "2026-08-01",
+     "name": "华为畅享90 Pro Max CHZ-AL00  8GB+512GB  飞天青",
+     "qty": 1,
+     "amt": 2299,
+     "gp": 283
+    },
+    {
+     "date": "2026-08-01",
+     "name": "华为 Mate X7 典藏版 DEL-AL20  16GB+512GB  云锦白",
+     "qty": 1,
+     "amt": 13799,
+     "gp": 1080.91
+    },
+    {
+     "date": "2026-08-02",
+     "name": "华为 Pura90 Pro Max SCA-AL00  16GB+1TB  晨曦金",
+     "qty": 1,
+     "amt": 8329.02,
+     "gp": 934.02
+    },
+    {
+     "date": "2026-08-02",
+     "name": "华为 PuraX Max HOP-AL00  12GB+512GB  幻夜黑",
+     "qty": 1,
+     "amt": 11799,
+     "gp": 879
+    },
+    {
+     "date": "2026-08-03",
+     "name": "华为 Pura90 Pro MLN-AL00  12GB+512GB  椰青白",
+     "qty": 1,
+     "amt": 5799,
+     "gp": 699
+    },
+    {
+     "date": "2026-08-04",
+     "name": "华为畅享90 Pro Max CHZ-AL00  8GB+512GB  曜金黑",
+     "qty": 1,
+     "amt": 2299,
+     "gp": 283
+    },
+    {
+     "date": "2026-08-06",
+     "name": "华为 Mate80 VYG-AL00  12GB+512GB  雪域白",
+     "qty": 1,
+     "amt": 4999,
+     "gp": 579
+    },
+    {
+     "date": "2026-08-07",
+     "name": "华为 nova16 EMA-AL00U 12GB+256GB 星空黑",
+     "qty": 1,
+     "amt": 2799,
+     "gp": 309
+    }
+   ],
+   "穿戴": [
+    {
+     "date": "2026-08-01",
+     "name": "华为 WATCH5 RTS-AL00 46mm(钛金属表带)钛空银",
+     "qty": 1,
+     "amt": 2999,
+     "gp": 439
+    },
+    {
+     "date": "2026-08-02",
+     "name": "华为 WATCH D2 LCA-B10(黑色氟橡胶表带)无色",
+     "qty": 1,
+     "amt": 2988,
+     "gp": 572.2
+    },
+    {
+     "date": "2026-08-02",
+     "name": "华为手环11 CDY-B39 NFC版(白色氟橡胶表带) 悦动白",
+     "qty": 1,
+     "amt": 269,
+     "gp": 13
+    },
+    {
+     "date": "2026-08-03",
+     "name": "华为 WATCH GT6 KSU-B19 41mm(紫色氟橡胶表带)流光紫",
+     "qty": 1,
+     "amt": 989,
+     "gp": -157
+    },
+    {
+     "date": "2026-08-04",
+     "name": "华为 WATCH FIT4 SYA-B19(韵律黑氟橡胶表带)韵律黑",
+     "qty": 1,
+     "amt": 699,
+     "gp": 103
+    }
+   ],
+   "增值服务": [
+    {
+     "date": "2026-08-01",
+     "name": "199贴膜套包",
+     "qty": 1,
+     "amt": 200,
+     "gp": 200
+    },
+    {
+     "date": "2026-08-01",
+     "name": "Cooyee华为Nova15 Pro/Ultra高清钢化膜",
+     "qty": 1,
+     "amt": 100,
+     "gp": 81.01
+    },
+    {
+     "date": "2026-08-02",
+     "name": "199贴膜套包",
+     "qty": 1,
+     "amt": 199,
+     "gp": 199
+    },
+    {
+     "date": "2026-08-02",
+     "name": "COOYEE 华为Mate X6 热弯全胶钢化膜",
+     "qty": 1,
+     "amt": 0,
+     "gp": -37.65
+    },
+    {
+     "date": "2026-08-02",
+     "name": "Cooyee华为Pura X MAX前屏高清钢化膜",
+     "qty": 1,
+     "amt": 0,
+     "gp": -21.96
+    },
+    {
+     "date": "2026-08-03",
+     "name": "199贴膜套包",
+     "qty": 1,
+     "amt": 199,
+     "gp": 199
+    },
+    {
+     "date": "2026-08-03",
+     "name": "Cooyee 华为mate80 Rs 一体镜头膜",
+     "qty": 1,
+     "amt": 0,
+     "gp": -23.57
+    },
+    {
+     "date": "2026-08-03",
+     "name": "Cooyee 华为mate80 pro Max-mate80 RS 高清钢化膜",
+     "qty": 1,
+     "amt": 0,
+     "gp": -18.85
+    },
+    {
+     "date": "2026-08-03",
+     "name": "199贴膜套包",
+     "qty": 1,
+     "amt": 199,
+     "gp": 199
+    },
+    {
+     "date": "2026-08-03",
+     "name": "Cooyee华为Pura90Pro铝合金镜头膜 黑色 带定位器",
+     "qty": 1,
+     "amt": 0,
+     "gp": -26
+    },
+    {
+     "date": "2026-08-03",
+     "name": "COOYEE 华为GT6手表钢化膜 41mm 定位版",
+     "qty": 2,
+     "amt": 198,
+     "gp": 161.16
+    },
+    {
+     "date": "2026-08-04",
+     "name": "399贴膜套包",
+     "qty": 1,
+     "amt": 399,
+     "gp": 399
+    },
+    {
+     "date": "2026-08-04",
+     "name": "199贴膜套包",
+     "qty": 1,
+     "amt": 190,
+     "gp": 190
+    },
+    {
+     "date": "2026-08-04",
+     "name": "199贴膜套包",
+     "qty": 1,
+     "amt": 199,
+     "gp": 199
+    }
+   ],
+   "平板": [
+    {
+     "date": "2026-08-04",
+     "name": "华为 MatePad 11.5S 灵动款  SLG-W50  (12G+256G)柔光版  原野绿",
+     "qty": 1,
+     "amt": 2799,
+     "gp": 391
+    }
+   ],
+   "其他": [
+    {
+     "date": "2026-08-06",
+     "name": "华为冰糖全能充电器(Max 100W)HW-200500C03白",
+     "qty": 1,
+     "amt": 229,
+     "gp": 44
+    },
+    {
+     "date": "2026-08-07",
+     "name": "华为自带线全能充移动电源  66W 12000  雪域白",
+     "qty": 1,
+     "amt": 329,
+     "gp": 65
+    }
+   ],
+   "费用类": [
+    {
+     "date": "2026-08-06",
+     "name": "打包费",
+     "qty": 1,
+     "amt": 1,
+     "gp": 1
+    }
+   ]
+  },
+  "李泽": {
+   "手机": [
+    {
+     "date": "2026-08-01",
+     "name": "华为 PuraX Max HOP-AL00  12GB+512GB  零度白",
+     "qty": 1,
+     "amt": 11799,
+     "gp": 879
+    },
+    {
+     "date": "2026-08-02",
+     "name": "华为 Mate X7 DEL-AL10  12GB+512GB  寰宇红",
+     "qty": 1,
+     "amt": 12499,
+     "gp": 669
+    },
+    {
+     "date": "2026-08-03",
+     "name": "华为畅享90 Pro Max CHZ-AL00  8GB+256GB  飞天青",
+     "qty": 1,
+     "amt": 1899,
+     "gp": 219
+    },
+    {
+     "date": "2026-08-03",
+     "name": "华为 Mate80 Pro SGT-AL50  12GB+512GB  曜石黑",
+     "qty": 1,
+     "amt": 5699,
+     "gp": 609
+    },
+    {
+     "date": "2026-08-05",
+     "name": "华为 Mate 70 Pro 优享版 PLR-AL80  12GB+512GB  云杉绿",
+     "qty": 1,
+     "amt": 4999,
+     "gp": 183
+    },
+    {
+     "date": "2026-08-05",
+     "name": "华为 nova16 EMA-AL00U 12GB+256GB 幻彩贝母",
+     "qty": 1,
+     "amt": 2799,
+     "gp": 309
+    }
+   ],
+   "增值服务": [
+    {
+     "date": "2026-08-01",
+     "name": "199贴膜套包",
+     "qty": 1,
+     "amt": 199,
+     "gp": 199
+    },
+    {
+     "date": "2026-08-01",
+     "name": "COOYEE 华为Pura X 一体镜头膜 带定位器",
+     "qty": 1,
+     "amt": 0,
+     "gp": -23.57
+    },
+    {
+     "date": "2026-08-01",
+     "name": "COOYEE 华为Pura X 前屏钢化膜",
+     "qty": 1,
+     "amt": 0,
+     "gp": -21.61
+    },
+    {
+     "date": "2026-08-02",
+     "name": "星联尊享-2000",
+     "qty": 1,
+     "amt": 702,
+     "gp": 702
+    },
+    {
+     "date": "2026-08-02",
+     "name": "华为 Clip2 Care+（一年期）",
+     "qty": 1,
+     "amt": 99,
+     "gp": 39.6
+    },
+    {
+     "date": "2026-08-02",
+     "name": "RockSpace 活动权益膜 S码(180BZ-01J)",
+     "qty": 1,
+     "amt": 49,
+     "gp": 44.72
+    },
+    {
+     "date": "2026-08-03",
+     "name": "Cooyee华为Nova15 Pro/Ultra高清钢化膜",
+     "qty": 1,
+     "amt": 100,
+     "gp": 81.01
+    },
+    {
+     "date": "2026-08-03",
+     "name": "星联优享-499",
+     "qty": 1,
+     "amt": 400,
+     "gp": 400
+    },
+    {
+     "date": "2026-08-03",
+     "name": "星联优享-499",
+     "qty": 1,
+     "amt": 400,
+     "gp": 400
+    },
+    {
+     "date": "2026-08-05",
+     "name": "星联优享-499",
+     "qty": 1,
+     "amt": 400,
+     "gp": 400
+    },
+    {
+     "date": "2026-08-05",
+     "name": "Cooyee华为Nova14/15/16高清钢化膜",
+     "qty": 1,
+     "amt": 0,
+     "gp": -19
+    },
+    {
+     "date": "2026-08-05",
+     "name": "Cooyee华为Nova14/15/16高清钢化膜",
+     "qty": 1,
+     "amt": 0,
+     "gp": -19
+    },
+    {
+     "date": "2026-08-05",
+     "name": "COOYEE 华为 mate70pro pro+3D热弯钢化膜",
+     "qty": 1,
+     "amt": 0,
+     "gp": -37.59
+    },
+    {
+     "date": "2026-08-07",
+     "name": "星联尊享-2000",
+     "qty": 1,
+     "amt": 822,
+     "gp": 822
+    },
+    {
+     "date": "2026-08-07",
+     "name": "华为 WATCH D2 Care+（一年期）",
+     "qty": 1,
+     "amt": 179,
+     "gp": 71.6
+    }
+   ],
+   "音频": [
+    {
+     "date": "2026-08-02",
+     "name": "华为 FreeClip 2 耳机 T0027 丹宁蓝",
+     "qty": 1,
+     "amt": 1199,
+     "gp": 130.58
+    }
+   ],
+   "穿戴": [
+    {
+     "date": "2026-08-02",
+     "name": "华为 WATCH FIT 5 NKI-B19  悦动白(白色氟橡胶表带)",
+     "qty": 1,
+     "amt": 899,
+     "gp": 24
+    },
+    {
+     "date": "2026-08-06",
+     "name": "华为 WATCH FIT 5 NKI-B19  韵律黑(黑色氟橡胶表带)",
+     "qty": 1,
+     "amt": 1099,
+     "gp": 224
+    },
+    {
+     "date": "2026-08-06",
+     "name": "华为 WATCH FIT 5 NKI-B19  风信紫(淡紫色氟橡胶表带)",
+     "qty": 1,
+     "amt": 1099,
+     "gp": 224
+    },
+    {
+     "date": "2026-08-07",
+     "name": "华为 WATCH FIT 5 NKI-B19  悦动白(白色氟橡胶表带)",
+     "qty": 1,
+     "amt": 999,
+     "gp": 202
+    },
+    {
+     "date": "2026-08-07",
+     "name": "华为 WATCH FIT 5 NKI-B19  悦动白(白色氟橡胶表带)",
+     "qty": 1,
+     "amt": 899,
+     "gp": 102
+    },
+    {
+     "date": "2026-08-07",
+     "name": "华为 WATCH D2 LCA-B11(白色复合素皮表带)无色",
+     "qty": 1,
+     "amt": 2788,
+     "gp": 372.2
+    }
+   ],
+   "演示机": [
+    {
+     "date": "2026-08-02",
+     "name": "华为 Watch FIT 3 SLO-B19(珍珠白真皮表带)珍珠白-演示机",
+     "qty": 1,
+     "amt": 249,
+     "gp": -237.61
+    }
+   ]
+  },
+  "陈超磊": {
+   "手机": [
+    {
+     "date": "2026-08-01",
+     "name": "华为 PuraX Max HOP-AL00  12GB+512GB  幻夜黑",
+     "qty": -1,
+     "amt": -11699,
+     "gp": -779
+    },
+    {
+     "date": "2026-08-01",
+     "name": "华为 Mate X7 DEL-AL10  12GB+256GB  曜石黑",
+     "qty": 1,
+     "amt": 11799,
+     "gp": 897.91
+    },
+    {
+     "date": "2026-08-01",
+     "name": "华为 PuraX Max HOP-AL00  12GB+512GB  幻夜黑",
+     "qty": 1,
+     "amt": 11599,
+     "gp": 679
+    },
+    {
+     "date": "2026-08-02",
+     "name": "华为 Pura90 Pro MLN-AL00  12GB+512GB  桑果黑",
+     "qty": 1,
+     "amt": 5799,
+     "gp": 699
+    },
+    {
+     "date": "2026-08-03",
+     "name": "华为 nova16 EMA-AL00U 12GB+256GB 星空黑",
+     "qty": 1,
+     "amt": 2889,
+     "gp": 399
+    },
+    {
+     "date": "2026-08-04",
+     "name": "华为 Mate80 VYG-AL30  16GB+512GB  曜石黑",
+     "qty": 1,
+     "amt": 5299,
+     "gp": 624
+    },
+    {
+     "date": "2026-08-04",
+     "name": "华为 PuraX Max HOP-AL00  12GB+512GB  橄榄金",
+     "qty": 1,
+     "amt": 11799,
+     "gp": 879
+    },
+    {
+     "date": "2026-08-06",
+     "name": "华为畅享90 Plus JUY-AL50  8GB+256GB  星海蓝",
+     "qty": 1,
+     "amt": 1799,
+     "gp": 287
+    },
+    {
+     "date": "2026-08-06",
+     "name": "华为 Pura90 Pro MLN-AL00  12GB+512GB  椰青白",
+     "qty": 1,
+     "amt": 5699,
+     "gp": 599
+    },
+    {
+     "date": "2026-08-06",
+     "name": "华为 Pura90 Pro MLN-AL00  12GB+512GB  椰青白",
+     "qty": 1,
+     "amt": 5699,
+     "gp": 599
+    }
+   ],
+   "增值服务": [
+    {
+     "date": "2026-08-01",
+     "name": "199贴膜套包",
+     "qty": 1,
+     "amt": 199,
+     "gp": 199
+    },
+    {
+     "date": "2026-08-01",
+     "name": "COOYEE 华为GT6手表钢化膜 46mm 定位版",
+     "qty": 1,
+     "amt": 100,
+     "gp": 80.19
+    },
+    {
+     "date": "2026-08-02",
+     "name": "Cooyee华为P70/P80/P90pro高清钢化膜",
+     "qty": 1,
+     "amt": 0,
+     "gp": -19
+    },
+    {
+     "date": "2026-08-02",
+     "name": "Cooyee华为matepad air 12寸2024  2.5D高清钢化膜",
+     "qty": 1,
+     "amt": 99,
+     "gp": 71.08
+    },
+    {
+     "date": "2026-08-02",
+     "name": "199贴膜套包",
+     "qty": 1,
+     "amt": 299,
+     "gp": 299
+    },
+    {
+     "date": "2026-08-02",
+     "name": "Cooyee华为P70/P80/P90pro高清钢化膜",
+     "qty": 1,
+     "amt": 0,
+     "gp": -19
+    },
+    {
+     "date": "2026-08-02",
+     "name": "Cooyee华为Pura90Pro铝合金镜头膜 黑色 带定位器",
+     "qty": 1,
+     "amt": 0,
+     "gp": -26
+    },
+    {
+     "date": "2026-08-03",
+     "name": "Cooyee华为Nova14/15/16高清钢化膜",
+     "qty": 1,
+     "amt": 99,
+     "gp": 80
+    },
+    {
+     "date": "2026-08-04",
+     "name": "199贴膜套包",
+     "qty": 1,
+     "amt": 200,
+     "gp": 200
+    },
+    {
+     "date": "2026-08-04",
+     "name": "Cooyee 华为mate80-mate80Pro 高清钢化膜",
+     "qty": 1,
+     "amt": 0,
+     "gp": -18.89
+    },
+    {
+     "date": "2026-08-04",
+     "name": "星联优享-499",
+     "qty": 1,
+     "amt": 499,
+     "gp": 499
+    },
+    {
+     "date": "2026-08-04",
+     "name": "闪能 66w全兼容快充10000毫安移动电源LP13  66W 1000  白色",
+     "qty": 1,
+     "amt": 0,
+     "gp": -59
+    },
+    {
+     "date": "2026-08-04",
+     "name": "华为 WATCH 5 904L不锈钢表壳+钛合金表壳 Care+（一年期）",
+     "qty": 1,
+     "amt": 0,
+     "gp": -119.4
+    },
+    {
+     "date": "2026-08-04",
+     "name": "COOYEE 华为Watch5手表钢化膜 46mm",
+     "qty": 1,
+     "amt": 0,
+     "gp": -18.68
+    },
+    {
+     "date": "2026-08-05",
+     "name": "星联优享-499",
+     "qty": 1,
+     "amt": 550,
+     "gp": 550
+    },
+    {
+     "date": "2026-08-05",
+     "name": "Cooyee 华为mate X7 3D热弯全胶钢化膜",
+     "qty": 1,
+     "amt": 0,
+     "gp": -37.06
+    },
+    {
+     "date": "2026-08-05",
+     "name": "Cooyee 华为mate X7 一体镜头膜",
+     "qty": 1,
+     "amt": 0,
+     "gp": -23.96
+    },
+    {
+     "date": "2026-08-06",
+     "name": "Cooyee华为Nova15 Pro/Ultra高清钢化膜",
+     "qty": 1,
+     "amt": 99,
+     "gp": 80.01
+    },
+    {
+     "date": "2026-08-06",
+     "name": "199贴膜套包",
+     "qty": 1,
+     "amt": 199,
+     "gp": 199
+    },
+    {
+     "date": "2026-08-06",
+     "name": "COOYEE 华为P70 高清钢化膜",
+     "qty": 2,
+     "amt": 0,
+     "gp": -37.21
+    },
+    {
+     "date": "2026-08-06",
+     "name": "Cooyee华为Pura90Pro铝合金镜头膜 黑色 带定位器",
+     "qty": 1,
+     "amt": 0,
+     "gp": -26
+    }
+   ],
+   "音频": [
+    {
+     "date": "2026-08-01",
+     "name": "华为 FreeClip 2 耳机 T0027 丹宁蓝",
+     "qty": 1,
+     "amt": 1199,
+     "gp": 159
+    },
+    {
+     "date": "2026-08-03",
+     "name": "华为 FreeClip 2 典藏版 耳机 T0027  星海蓝",
+     "qty": 1,
+     "amt": 1499,
+     "gp": 284
+    }
+   ],
+   "其他": [
+    {
+     "date": "2026-08-02",
+     "name": "华为自带线全能充移动电源  100W 12000mAh  陶瓷白",
+     "qty": 1,
+     "amt": 269,
+     "gp": -51
+    }
+   ],
+   "穿戴": [
+    {
+     "date": "2026-08-03",
+     "name": "华为手环11 CDY-B39 NFC版(黑色氟橡胶表带)羽砂黑",
+     "qty": 1,
+     "amt": 319,
+     "gp": 63
+    },
+    {
+     "date": "2026-08-04",
+     "name": "华为 WATCH 十周年款 RTS-AL00 46mm(蓝色素皮复合表带)  蓝色",
+     "qty": 1,
+     "amt": 2799,
+     "gp": 479
+    }
+   ],
+   "电脑": [
+    {
+     "date": "2026-08-05",
+     "name": "华为 MateBook14 MNTXM-24A HarmonyOS 24GB+1TB 柔光版 原野绿",
+     "qty": 1,
+     "amt": 8049,
+     "gp": 521
+    }
+   ],
+   "平板": [
+    {
+     "date": "2026-08-06",
+     "name": "华为 MatePad 11.5 TXZ-W20   12G+256G 柔光版  深空灰 鸿蒙焕新版",
+     "qty": 1,
+     "amt": 3399,
+     "gp": 485
+    }
+   ]
+  },
+  "张博晨": {
+   "增值服务": [
+    {
+     "date": "2026-08-04",
+     "name": "Cooyee 华为mate80-mate80Pro 高清钢化膜",
+     "qty": 1,
+     "amt": 0,
+     "gp": -18.89
+    },
+    {
+     "date": "2026-08-06",
+     "name": "星联优享-999",
+     "qty": 1,
+     "amt": 999,
+     "gp": 999
+    }
+   ]
+  }
+ },
+ "emp_summary": [
+  {
+   "name": "陈超磊",
+   "gp": 8676.99,
+   "amt": 70558,
+   "cnt": 38,
+   "negcnt": 13,
+   "rank": 1
+  },
+  {
+   "name": "杨丽华",
+   "gp": 8217.27,
+   "amt": 65307.02,
+   "cnt": 31,
+   "negcnt": 6,
+   "rank": 2
+  },
+  {
+   "name": "李泽",
+   "gp": 6948.33,
+   "amt": 52275,
+   "cnt": 29,
+   "negcnt": 6,
+   "rank": 3
+  },
+  {
+   "name": "邵乐乐",
+   "gp": 4193.49,
+   "amt": 35780.3,
+   "cnt": 28,
+   "negcnt": 7,
+   "rank": 4
+  },
+  {
+   "name": "张博晨",
+   "gp": 980.11,
+   "amt": 999,
+   "cnt": 2,
+   "negcnt": 1,
+   "rank": 5
+  }
+ ],
+ "cat_summary": [
+  {
+   "name": "手机",
+   "gp": 15352.34,
+   "amt": 168117.02,
+   "cnt": 34
+  },
+  {
+   "name": "增值服务",
+   "gp": 8534.25,
+   "amt": 9820,
+   "cnt": 61
+  },
+  {
+   "name": "穿戴",
+   "gp": 3101.63,
+   "amt": 27697.3,
+   "cnt": 19
+  },
+  {
+   "name": "平板",
+   "gp": 876,
+   "amt": 6198,
+   "cnt": 2
+  },
+  {
+   "name": "音频",
+   "gp": 573.58,
+   "amt": 3897,
+   "cnt": 3
+  },
+  {
+   "name": "电脑",
+   "gp": 521,
+   "amt": 8049,
+   "cnt": 1
+  },
+  {
+   "name": "其他",
+   "gp": 294,
+   "amt": 891,
+   "cnt": 6
+  },
+  {
+   "name": "费用类",
+   "gp": 1,
+   "amt": 1,
+   "cnt": 1
+  },
+  {
+   "name": "演示机",
+   "gp": -237.61,
+   "amt": 249,
+   "cnt": 1
+  }
+ ],
+ "kpi": {
+  "amt": 224919,
+  "gp": 29016,
+  "gp_task": 205000,
+  "amt_task": 1600000,
+  "rate": 14.2,
+  "time_progress": 22.6,
+  "date_start": "2026-08-01",
+  "date_end": "2026-08-07"
+ }
+};
+const EC_CAT_COLOR={"手机":"#3b82f6","增值服务":"#8b5cf6","穿戴":"#06b6d4","平板":"#10b981","音频":"#f59e0b","电脑":"#ef4444","运营商":"#ec4899","配件":"#14b8a6","演示机":"#94a3b8","费用类":"#a855f7"};
+const EC_ICON={"手机":"📱","增值服务":"✨","穿戴":"⌚","平板":"📟","音频":"🎧","电脑":"💻","运营商":"📡","配件":"🔌","演示机":"🖥️","费用类":"🧾"};
+const EC_fmt=n=>(n<0?"-":"")+"¥"+Math.abs(n).toLocaleString('zh-CN',{maximumFractionDigits:0});
+const EC_fmt1=n=>(n<0?"-":"")+"¥"+Math.abs(n).toLocaleString('zh-CN',{maximumFractionDigits:1});
+function ecRateColor(rate,tp){return rate>=tp?'var(--green)':(rate>=tp*0.6?'var(--orange)':'var(--red)');}
+function ecRing(perc,color){
+  const r=42,c=2*Math.PI*r,off=c*(1-Math.min(perc,1));
+  return `<svg width="76" height="76" viewBox="0 0 100 100">
+    <circle cx="50" cy="50" r="${r}" fill="none" stroke="#E5E7EB" stroke-width="9"/>
+    <circle cx="50" cy="50" r="${r}" fill="none" stroke="${color}" stroke-width="9" stroke-linecap="round"
+      transform="rotate(-90 50 50)" stroke-dasharray="${c}" stroke-dashoffset="${c}" style="transition:stroke-dashoffset 1s ease" data-off="${off}"/>
+    <text x="50" y="55" text-anchor="middle" font-size="15" font-weight="700" fill="${color}">${perc.toFixed(0)}%</text></svg>`;
+}
+function ecBuildKPI(){
+  const k=EC_DATA.kpi;
+  document.getElementById('ec-totalgp').textContent=EC_fmt1(k.gp);
+  document.getElementById('ec-date').textContent=k.date_start+' ~ '+k.date_end;
+  document.getElementById('ec-rate').textContent=k.rate+'%';
+  document.getElementById('ec-tp').textContent='时间进度 '+k.time_progress+'%';
+  document.getElementById('ec-cats').textContent=EC_DATA.cat_summary.length+'类';
+}
+let ecSort='gp';
+function ecBuildEmp(){
+  let arr=[...EC_DATA.emp_summary];
+  arr.sort((a,b)=> ecSort==='gp'?b.gp-a.gp : ecSort==='cnt'?b.cnt-a.cnt : a.rank-b.rank);
+  const tp=EC_DATA.kpi.time_progress;
+  document.getElementById('ec-empGrid').innerHTML=arr.map(e=>{
+    const rate=EC_DATA.kpi.gp_task? null:null;
+    const col=ecRateColor(0,tp); // 占位
+    const w=Math.min(100, Math.round(e.gp/ (EC_DATA.emp_summary[0].gp||1) *100));
+    const empRate = Math.round(e.gp / (e.gp+ (EC_DATA.kpi.gp - EC_DATA.kpi.gp)) *0); // 个人无任务则不显示率
+    return `<div class="card emp-card" data-name="${e.name}">
+      <div class="top" onclick="ecToggleDrill('${e.name}')">
+        <div><div class="nm">${e.name}</div><div class="rank">第 ${e.rank} 名 ｜ ${e.cnt}笔</div></div>
+        <div style="text-align:right"><div class="gp">${EC_fmt1(e.gp)}</div><div class="rate">金额 ${EC_fmt(e.amt)}</div></div>
+      </div>
+      <div class="pbar"><i style="width:0%;background:var(--blue)" data-w="${w}"></i></div>
+      <div class="split"><span class="s">负毛利 ${e.negcnt}笔</span></div>
+      <div class="drill" id="ec-drill-${e.name}">${ecDrill(e)}</div>
+    </div>`;
+  }).join('');
+  requestAnimationFrame(()=>document.querySelectorAll('#ec-empGrid .pbar i').forEach(p=>p.style.width=p.dataset.w+'%'));
+}
+function ecDrill(e){
+  const det=EC_DATA.emp_detail[e.name];
+  const blocks=Object.keys(det).map(cat=>{
+    const ts=det[cat].slice().sort((a,b)=>b.gp-a.gp);
+    const cgp=ts.reduce((s,t)=>s+t.gp,0), ccnt=ts.length;
+    const rows=ts.map(t=>`<tr><td>${t.date.slice(5)} ${t.name}</td><td>${t.qty}</td><td>${EC_fmt1(t.amt)}</td><td class="${t.gp<0?'negcell':''}">${EC_fmt1(t.gp)}</td></tr>`).join('');
+    return `<div class="blk"><div class="blk-head" onclick="ecToggleSku('${e.name}','${cat}')">
+        <span class="bname" style="color:${EC_CAT_COLOR[cat]||'#64748b'}">${EC_ICON[cat]||''} ${cat}</span>
+        <span class="bgp ${cgp<0?'negcell':''}">${EC_fmt1(cgp)} · ${ccnt}笔 ▾</span></div>
+      <div class="sku-rows" id="ec-sku-${e.name}-${cat}"><table><thead><tr><th>商品(日期)</th><th>数量</th><th>金额</th><th>毛利</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
+  }).join('');
+  return `<div style="font-size:12px;color:var(--gray);margin:10px 0 6px;font-weight:600">各品类板块（点开看逐笔明细）</div>${blocks}`;
+}
+function ecBuildCat(){
+  const max=Math.max(...EC_DATA.cat_summary.map(c=>c.gp),1);
+  document.getElementById('ec-catGrid').innerHTML=EC_DATA.cat_summary.map(c=>{
+    const col=EC_CAT_COLOR[c.name]||'#64748b', w=Math.max(4,Math.min(100,c.gp/max*100));
+    return `<div class="card cat-card" onclick="ecOpenCat('${c.name}')">
+      <div class="ic" style="background:${col}1a;color:${col}">${EC_ICON[c.name]||'📦'}</div>
+      <div class="cn">${c.name}</div>
+      <div class="cgp" style="color:${c.gp<0?'var(--red)':'var(--dark)'}">${EC_fmt1(c.gp)}</div>
+      <div class="meta">${c.cnt}笔 ｜ 金额 ${EC_fmt(c.amt)}</div>
+      <div class="bar"><i style="width:${w}%;background:${col}"></i></div>
+    </div>`;
+  }).join('');
+}
+function ecOpenCat(name){
+  const c=EC_DATA.cat_summary.find(x=>x.name===name);
+  alert(`${name}\n累计毛利 ${EC_fmt1(c.gp)}\n金额 ${EC_fmt(c.amt)}\n笔数 ${c.cnt}`);
+}
+function ecToggleDrill(n){const el=document.getElementById('ec-drill-'+n);el.classList.toggle('open');}
+function ecToggleSku(n,c){const el=document.getElementById('ec-sku-'+n+'-'+c);el.classList.toggle('open');}
+document.getElementById('ec-sort').addEventListener('click',ev=>{
+  if(ev.target.tagName!=='BUTTON')return;
+  document.querySelectorAll('#ec-sort button').forEach(b=>b.classList.remove('on'));
+  ev.target.classList.add('on');ecSort=ev.target.dataset.sort;ecBuildEmp();
+});
+ecBuildKPI();ecBuildEmp();ecBuildCat();
+
 </script>
 </body>
 </html>
