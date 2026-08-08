@@ -1,300 +1,605 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>门店业绩达成考核表 · 2026-08-08</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>李家村万达华为授权体验店 · 8月销售数据进度看板</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:#eef1f6;color:#1e293b;padding:24px;line-height:1.6}
+:root{
+  --blue:#4F8EF7;--blue-light:#E8F0FE;--purple:#7C5CFC;--purple-light:#F0ECFF;
+  --green:#22C55E;--green-light:#DCFCE7;--red:#EF4444;--red-light:#FEE2E2;
+  --orange:#F59E0B;--orange-light:#FEF3C7;--gray:#6B7280;--gray-light:#F3F4F6;
+  --dark:#1E293B;--border:#E5E7EB;--bg:#F8FAFC;--card:#FFF;
+  --radius:12px;--shadow:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--dark);line-height:1.5}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-thumb{background:#CBD5E1;border-radius:3px}
 
-/* ===== Header banner（融合蓝紫渐变） ===== */
-.header{background:linear-gradient(135deg,#1e3a5f 0%,#2b5aed 100%);border-radius:16px;padding:26px 32px;color:#fff;margin-bottom:20px;box-shadow:0 4px 20px rgba(43,90,237,.15);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
-.header h1{font-size:22px;font-weight:800;margin-bottom:4px}
-.header .sub{font-size:13px;opacity:.85}
-.header .prog{display:flex;flex-direction:column;align-items:flex-end}
-.header .prog .num{font-size:40px;font-weight:800;line-height:1;color:#ff5a5f}
-.header .prog .lab{font-size:12px;opacity:.85;margin-top:2px}
+/* Header */
+.header{background:linear-gradient(135deg,#4F8EF7 0%,#7C5CFC 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 12px rgba(79,142,247,.25)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.header h1{font-size:18px;font-weight:700;letter-spacing:.5px}
+.header .date-info{font-size:12px;opacity:.9}
+.progress-bar-wrap{height:8px;background:rgba(255,255,255,.2);border-radius:4px;overflow:hidden}
+.progress-bar-fill{height:100%;background:#fff;border-radius:4px;transition:width .6s ease}
+.progress-meta{display:flex;justify-content:space-between;font-size:11px;margin-top:4px;opacity:.85}
 
-/* ===== 配色逻辑说明卡 ===== */
-.legend-card{background:#fff;border-radius:12px;padding:12px 18px;margin-bottom:18px;box-shadow:0 1px 4px rgba(0,0,0,.06);font-size:12px;color:#64748b;display:flex;gap:18px;flex-wrap:wrap;align-items:center}
-.legend-card b{color:#1e293b}
-.dot{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:middle}
-.d-name{background:#c00000}.d-grp{background:#6f93c0}.d-tot{background:#fde4c8}.d-gap{background:#e60012}.d-ok{background:#00a651}
+/* Nav tabs */
+.nav{display:flex;gap:6px;padding:12px 24px 0;background:var(--bg);position:sticky;top:76px;z-index:99;overflow-x:auto;padding-bottom:12px}
+.nav button{border:none;background:var(--card);color:var(--gray);padding:6px 14px;border-radius:20px;font-size:12px;cursor:pointer;white-space:nowrap;border:1px solid var(--border);transition:all .2s}
+.nav button:hover{border-color:var(--blue);color:var(--blue)}
+.nav button.active{background:var(--blue);color:#fff;border-color:var(--blue)}
 
-/* ===== KPI 卡片带（汇总关键达成） ===== */
-.kpi-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
-.kpi-card{background:#fff;border-radius:12px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.06);border-top:3px solid #c00000}
-.kpi-card .k-name{font-size:12px;color:#64748b;font-weight:600;margin-bottom:6px}
-.kpi-card .k-score{font-size:26px;font-weight:800;color:#1e293b}
-.kpi-card .k-score .u{font-size:13px;color:#94a3b8;font-weight:600}
-.kpi-card .k-sub{font-size:11px;color:#94a3b8;margin-top:4px}
-.kpi-card.warn{border-top-color:#f59e0b}
-.kpi-card.warn .k-score{color:#d97706}
-.kpi-card.good{border-top-color:#10b981}
-.kpi-card.good .k-score{color:#059669}
-.kpi-card.red{border-top-color:#ef4444}
-.kpi-card.red .k-score{color:#ef4444}
+/* Main */
+.main{padding:0 24px 40px}
+.section{display:none}
+.section.active{display:block}
 
-/* ===== 区块卡片 ===== */
-.section-card{background:#fff;border-radius:16px;padding:22px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
-.section-title{font-size:16px;font-weight:800;color:#1e3a5f;margin-bottom:14px;padding-left:8px;border-left:4px solid #2b5aed}
-.scroll{width:100%;overflow-x:auto;border:1px solid #d4dbe6;border-radius:8px}
-table{border-collapse:collapse;font-size:11.5px;white-space:nowrap;width:100%}
-th,td{border:1px solid #c9d3e0;padding:5px 7px;text-align:center;line-height:1.35}
-/* 姓名列 正红 */
-th.name{background:#c00000;color:#fff;font-weight:800}
-/* 分组表头 灰蓝 */
-th.grp{background:#6f93c0;color:#fff;font-weight:700}
-th.grp .sub{font-weight:400;font-size:10px;opacity:.92}
-/* 缺口列头 红字 */
-th.gap{color:#ff7a7a}
-/* 行 */
-tr.odd td{background:#fff}
-tr.even td{background:#eef3fa}
-tr.total td{background:#fde4c8;font-weight:700}
-td.namecell{background:#c00000;color:#fff;font-weight:700;text-align:left;padding-left:10px}
-tr.total td.namecell{background:#c00000}
-/* 颜色规则 */
-.r{color:#e60012}.g{color:#00a651}.b{color:#000}.rtr{color:#e60012;font-weight:600}.muted{color:#94a3b8}
-.health12{font-size:9px;color:#cfe0f5}
-.foot{text-align:center;font-size:12px;color:#94a3b8;padding:8px 0 2px}
-.foot .sig{font-weight:600;color:#64748b}
-@media(max-width:768px){.kpi-strip{grid-template-columns:repeat(2,1fr)}}
-@media print{.scroll{overflow:visible}}
+/* KPI strip */
+.kpi-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px}
+.kpi-card{background:var(--card);border-radius:var(--radius);padding:14px 16px;box-shadow:var(--shadow);border-left:3px solid var(--blue)}
+.kpi-card.purple{border-left-color:var(--purple)}
+.kpi-card.green{border-left-color:var(--green)}
+.kpi-card.orange{border-left-color:var(--orange)}
+.kpi-card.red{border-left-color:var(--red)}
+.kpi-label{font-size:11px;color:var(--gray);margin-bottom:2px}
+.kpi-value{font-size:20px;font-weight:700;letter-spacing:-.5px}
+.kpi-sub{font-size:11px;color:var(--gray);margin-top:2px}
+.kpi-sub .up{color:var(--green)}
+.kpi-sub .down{color:var(--red)}
+
+/* Kanban columns */
+.kanban-wrap{display:flex;gap:16px;overflow-x:auto;padding-bottom:8px}
+.kanban-col{min-width:260px;flex:1;background:var(--gray-light);border-radius:var(--radius);padding:12px}
+.kanban-col-title{font-size:13px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.kanban-col-title .badge{font-size:10px;padding:1px 8px;border-radius:10px;font-weight:600}
+
+/* Cards */
+.card{background:var(--card);border-radius:10px;padding:14px;margin-bottom:10px;box-shadow:var(--shadow);border:1px solid var(--border);transition:box-shadow .2s}
+.card:hover{box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.card-name{font-weight:700;font-size:14px}
+.card-score{font-size:18px;font-weight:800;color:var(--blue)}
+.card-score.warn{color:var(--orange)}
+.card-score.danger{color:var(--red)}
+.card-score.good{color:var(--green)}
+
+/* Progress mini */
+.metric-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px}
+.metric-label{width:56px;color:var(--gray);flex-shrink:0}
+.metric-bar{flex:1;height:6px;background:var(--gray-light);border-radius:3px;overflow:hidden}
+.metric-bar-fill{height:100%;border-radius:3px;transition:width .4s}
+.metric-bar-fill.blue{background:var(--blue)}
+.metric-bar-fill.green{background:var(--green)}
+.metric-bar-fill.orange{background:var(--orange)}
+.metric-bar-fill.red{background:var(--red)}
+.metric-val{width:40px;text-align:right;font-weight:600;flex-shrink:0}
+
+/* Person card special */
+.person-card{position:relative;overflow:hidden}
+.person-card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;border-radius:0 4px 4px 0}
+.person-card.rank-1::before{background:var(--green)}
+.person-card.rank-2::before{background:var(--blue)}
+.person-card.rank-3::before{background:var(--orange)}
+.person-card.rank-4::before{background:var(--gray)}
+
+/* Table */
+.table-wrap{overflow-x:auto;margin-bottom:20px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{background:var(--gray-light);padding:8px 10px;text-align:left;font-weight:600;white-space:nowrap;border-bottom:2px solid var(--border);position:sticky;top:0}
+td{padding:6px 10px;border-bottom:1px solid var(--border);white-space:nowrap}
+tr:hover td{background:var(--blue-light)}
+.cell-num{text-align:right;font-variant-numeric:tabular-nums}
+.cell-pct{text-align:right}
+.cell-green{color:var(--green);font-weight:600}
+.cell-red{color:var(--red);font-weight:600}
+.cell-orange{color:var(--orange);font-weight:600}
+
+/* Checklist */
+.checklist{list-style:none}
+.checklist li{padding:8px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;font-size:13px}
+.checklist li:last-child{border-bottom:none}
+.check-icon{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
+.check-icon.ok{background:var(--green-light);color:var(--green)}
+.check-icon.warn{background:var(--orange-light);color:var(--orange)}
+
+/* Section title */
+.section-title{font-size:16px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.section-title::before{content:'';width:4px;height:20px;background:var(--blue);border-radius:2px}
+
+/* Responsive */
+@media(max-width:768px){
+  .header{padding:14px 16px 12px}
+  .nav{padding:10px 16px}
+  .main{padding:0 16px 32px}
+  .kpi-strip{grid-template-columns:repeat(2,1fr)}
+  .kanban-wrap{flex-direction:column}
+  .kanban-col{min-width:100%}
+}
 </style>
 </head>
 <body>
 
-<!-- ===== Header ===== -->
 <div class="header">
-  <div>
-    <h1>李家村万达华为授权体验店 · 业绩达成考核表</h1>
-    <div class="sub">陕西省西安市碑林区 ｜ 融合经营考核 ｜ 数据区间 2026-08-01 ~ 08-08</div>
+  <div class="header-top">
+    <h1>李家村万达华为授权体验店 · 8月销售进度看板</h1>
+    <div class="date-info">数据区间 2026-08-01 ~ 08-08 | 更新于 08-08</div>
   </div>
-  <div class="prog">
-    <div class="num">26%</div>
-    <div class="lab">时间进度（第 8 / 31 天）</div>
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill" style="width:25.8%"></div>
   </div>
-</div>
-
-<!-- ===== 配色说明 ===== -->
-<div class="legend-card">
-  <span><i class="dot d-name"></i>姓名列：正红底白字</span>
-  <span><i class="dot d-grp"></i>品类分组：灰蓝底</span>
-  <span><i class="dot d-tot"></i>合计行：浅橙底</span>
-  <span><i class="dot d-gap"></i>缺口（负数）：红字</span>
-  <span><i class="dot d-ok"></i>完成率未达标：绿 / 达标·超量：红</span>
-</div>
-
-<!-- ===== KPI 汇总带 ===== -->
-<div class="kpi-strip">
-  <div class="kpi-card red">
-    <div class="k-name">毛利达成（合计）</div>
-    <div class="k-score">14<span class="u">%</span></div>
-    <div class="k-sub">完成 29,016 / 任务 205,000</div>
-  </div>
-  <div class="kpi-card warn">
-    <div class="k-name">毛利全月缺口</div>
-    <div class="k-score">-175,984</div>
-    <div class="k-sub">距目标尚需日均 5,663</div>
-  </div>
-  <div class="kpi-card good">
-    <div class="k-name">增值达成（合计）</div>
-    <div class="k-score">17<span class="u">%</span></div>
-    <div class="k-sub">完成 9,575 / 任务 57,000</div>
-  </div>
-  <div class="kpi-card">
-    <div class="k-name">综合健康度（门店毛利率）</div>
-    <div class="k-score">12.9<span class="u">%</span></div>
-    <div class="k-sub">优惠券 12,016 ｜ 占比 41.4%</div>
+  <div class="progress-meta">
+    <span>时间进度 25.8%（第8天/31天）</span>
+    <span>销额完成 14.1% | 毛利完成 14.2%</span>
   </div>
 </div>
 
-<!-- ===== 表1 品类业绩达成 ===== -->
-<div class="section-card">
-  <div class="section-title">📦 品类业绩达成表</div>
-  <div class="scroll">
-  <table>
-    <tr>
-      <th class="name" rowspan="2">姓名</th>
-      <th class="grp" colspan="4">毛利（35分）</th>
-      <th class="grp" colspan="4">手机（15分）</th>
-      <th class="grp" colspan="4">PC</th>
-      <th class="grp" colspan="4">平板</th>
-      <th class="grp" colspan="4">穿戴</th>
-      <th class="grp" colspan="4">音频</th>
-      <th class="grp" colspan="4">HD（5分）</th>
-      <th class="grp" colspan="4">智慧办公（5分）</th>
-      <th class="grp" colspan="4">音频穿戴（5分）</th>
-    </tr>
-    <tr>
-      <th class="grp">任务</th><th class="grp">完成</th><th class="grp gap">缺口</th><th class="grp">完成率</th>
-      <th class="grp">任务</th><th class="grp">完成</th><th class="grp gap">缺口</th><th class="grp">完成率</th>
-      <th class="grp">任务</th><th class="grp">完成</th><th class="grp gap">缺口</th><th class="grp">完成率</th>
-      <th class="grp">任务</th><th class="grp">完成</th><th class="grp gap">缺口</th><th class="grp">完成率</th>
-      <th class="grp">任务</th><th class="grp">完成</th><th class="grp gap">缺口</th><th class="grp">完成率</th>
-      <th class="grp">任务</th><th class="grp">完成</th><th class="grp gap">缺口</th><th class="grp">完成率</th>
-      <th class="grp">任务</th><th class="grp">完成</th><th class="grp gap">缺口</th><th class="grp">完成率</th>
-      <th class="grp">任务</th><th class="grp">完成</th><th class="grp gap">缺口</th><th class="grp">完成率</th>
-      <th class="grp">任务</th><th class="grp">完成</th><th class="grp gap">缺口</th><th class="grp">完成率</th>
-    </tr>
-    <tr class="odd"><td class="namecell">邵乐乐</td>
-      <td>50000</td><td>4193</td><td class="r">-45807</td><td class="g">8%</td>
-      <td>43</td><td>8</td><td class="r">-35</td><td class="g">19%</td>
-      <td>3</td><td>0</td><td class="r">-3</td><td class="g">0%</td>
-      <td>8</td><td>0</td><td class="r">-8</td><td class="g">0%</td>
-      <td>25</td><td>21</td><td class="r">-4</td><td class="rtr">84%</td>
-      <td>9</td><td>0</td><td class="r">-9</td><td class="g">0%</td>
-      <td>0</td><td>0</td><td class="b">0</td><td class="rtr">100%</td>
-      <td>11</td><td>0</td><td class="r">-11</td><td class="g">0%</td>
-      <td>34</td><td>21</td><td class="r">-13</td><td class="rtr">62%</td>
-    </tr>
-    <tr class="even"><td class="namecell">杨丽华</td>
-      <td>51000</td><td>8217</td><td class="r">-42783</td><td class="g">16%</td>
-      <td>43</td><td>8</td><td class="r">-35</td><td class="g">19%</td>
-      <td>3</td><td>0</td><td class="r">-3</td><td class="g">0%</td>
-      <td>8</td><td>1</td><td class="r">-7</td><td class="g">13%</td>
-      <td>25</td><td>5</td><td class="r">-20</td><td class="g">20%</td>
-      <td>9</td><td>0</td><td class="r">-9</td><td class="g">0%</td>
-      <td>0</td><td>0</td><td class="b">0</td><td class="rtr">100%</td>
-      <td>11</td><td>1</td><td class="r">-10</td><td class="g">9%</td>
-      <td>34</td><td>5</td><td class="r">-29</td><td class="g">15%</td>
-    </tr>
-    <tr class="odd"><td class="namecell">李泽</td>
-      <td>52000</td><td>6948</td><td class="r">-45052</td><td class="g">13%</td>
-      <td>42</td><td>6</td><td class="r">-36</td><td class="g">14%</td>
-      <td>4</td><td>0</td><td class="r">-4</td><td class="g">0%</td>
-      <td>9</td><td>0</td><td class="r">-9</td><td class="g">0%</td>
-      <td>25</td><td>6</td><td class="r">-19</td><td class="g">24%</td>
-      <td>9</td><td>1</td><td class="r">-8</td><td class="g">11%</td>
-      <td>1</td><td>0</td><td class="r">-1</td><td class="g">0%</td>
-      <td>13</td><td>0</td><td class="r">-13</td><td class="g">0%</td>
-      <td>34</td><td>7</td><td class="r">-27</td><td class="g">21%</td>
-    </tr>
-    <tr class="even"><td class="namecell">陈超磊</td>
-      <td>52000</td><td>8677</td><td class="r">-43323</td><td class="g">17%</td>
-      <td>42</td><td>8</td><td class="r">-34</td><td class="g">19%</td>
-      <td>4</td><td>1</td><td class="r">-3</td><td class="rtr">25%</td>
-      <td>9</td><td>1</td><td class="r">-8</td><td class="g">11%</td>
-      <td>25</td><td>2</td><td class="r">-23</td><td class="g">8%</td>
-      <td>10</td><td>2</td><td class="r">-8</td><td class="g">20%</td>
-      <td>1</td><td>0</td><td class="r">-1</td><td class="g">0%</td>
-      <td>13</td><td>2</td><td class="r">-11</td><td class="g">15%</td>
-      <td>35</td><td>4</td><td class="r">-31</td><td class="g">11%</td>
-    </tr>
-    <tr class="total"><td class="namecell">合计</td>
-      <td>205000</td><td>29016</td><td class="r">-175984</td><td class="g">14%</td>
-      <td>170</td><td>30</td><td class="r">-140</td><td class="g">18%</td>
-      <td>14</td><td>1</td><td class="r">-13</td><td class="g">7%</td>
-      <td>34</td><td>2</td><td class="r">-32</td><td class="g">6%</td>
-      <td>100</td><td>34</td><td class="r">-66</td><td class="rtr">34%</td>
-      <td>37</td><td>3</td><td class="r">-34</td><td class="g">8%</td>
-      <td>2</td><td>0</td><td class="r">-2</td><td class="g">0%</td>
-      <td>48</td><td>3</td><td class="r">-45</td><td class="g">6%</td>
-      <td>137</td><td>37</td><td class="r">-100</td><td class="rtr">27%</td>
-    </tr>
-  </table>
+<div class="nav">
+  <button class="active" onclick="switchTab('sales')">销售进度</button>
+  <button onclick="switchTab('perf')">绩效考评</button>
+  <button onclick="switchTab('ops')">运营看板</button>
+  <button onclick="switchTab('channel')">渠道挂账</button>
+  <button onclick="switchTab('daily')">每日任务</button>
+  <button onclick="switchTab('onpage')">一页纸闭环</button>
+  <button onclick="switchTab('manager')">店长绩效</button>
+</div>
+
+<div class="main">
+
+<!-- ==================== 销售进度 ==================== -->
+<div class="section active" id="sec-sales">
+  <div class="kpi-strip">
+    <div class="kpi-card"><div class="kpi-label">销售额任务</div><div class="kpi-value">160万</div><div class="kpi-sub">完成 22.5万 <span class="down">缺口 137.5万</span></div></div>
+    <div class="kpi-card purple"><div class="kpi-label">毛利任务</div><div class="kpi-value">20.5万</div><div class="kpi-sub">完成 2.9万 <span class="down">缺口 17.6万</span></div></div>
+    <div class="kpi-card green"><div class="kpi-label">手机任务/完成</div><div class="kpi-value">170/30</div><div class="kpi-sub">完成率 17.6%</div></div>
+    <div class="kpi-card orange"><div class="kpi-label">增值任务/完成</div><div class="kpi-value">5.7万/0.96万</div><div class="kpi-sub">完成率 16.8%</div></div>
+  </div>
+
+  <div class="section-title">业务员销售看板</div>
+  <div class="kanban-wrap" id="person-kanban"></div>
+
+  <div class="section-title" style="margin-top:24px">品类达成明细</div>
+  <div class="table-wrap">
+    <table id="category-table">
+      <thead><tr>
+        <th>品类</th><th>分值</th><th>任务</th><th>完成</th><th>缺口</th><th>完成率</th><th>状态</th>
+      </tr></thead>
+      <tbody id="category-tbody"></tbody>
+    </table>
   </div>
 </div>
 
-<!-- ===== 表2 运营考核达成 ===== -->
-<div class="section-card">
-  <div class="section-title">🏪 运营考核达成表</div>
-  <div class="scroll">
-  <table>
-    <tr>
-      <th class="name" rowspan="2">姓名</th>
-      <th class="grp" colspan="15">各科生</th>
-      <th class="grp" colspan="4">考核项</th>
-      <th class="grp" colspan="10">增值（20分）</th>
-      <th class="grp" colspan="4">健康度 <span class="health12">12.00%</span></th>
-      <th class="grp" colspan="3">星联</th>
-    </tr>
-    <tr>
-      <th class="grp">积分</th><th class="grp">完成</th><th class="grp gap">缺口</th><th class="grp">完成率</th>
-      <th class="grp">终端总量</th><th class="grp">care+</th><th class="grp gap">缺口</th><th class="grp">搭售率</th>
-      <th class="grp">单数</th><th class="grp gap">缺口</th><th class="grp">搭售率</th>
-      <th class="grp">单数</th><th class="grp gap">缺口</th><th class="grp">搭售率</th>
-      <th class="grp">任务</th><th class="grp gap">缺口</th>
-      <th class="grp">任务</th><th class="grp gap">缺口</th>
-      <th class="grp">单量</th><th class="grp">金额</th><th class="grp">增值</th>
-      <th class="grp">单量</th><th class="grp">金额</th><th class="grp">增值</th>
-      <th class="grp">任务</th><th class="grp">完成</th><th class="grp gap">缺口</th><th class="grp">完成率</th>
-      <th class="grp">优惠券</th><th class="grp">占比</th><th class="grp">毛利率</th><th class="grp">增值率</th>
-      <th class="grp">优享</th><th class="grp">尊享</th><th class="grp">合计</th>
-    </tr>
-    <tr class="odd"><td class="namecell">邵乐乐</td>
-      <td>150</td><td>64</td><td class="r">-86</td><td class="rtr">42.7%</td>
-      <td>8</td><td>1</td><td class="r">-2</td><td class="b">12.5%</td>
-      <td>2</td><td class="b">0</td><td class="rtr">25.0%</td>
-      <td>5</td><td class="r">-10</td><td class="g">17.2%</td>
-      <td>1</td><td class="b">0</td>
-      <td>3</td><td class="g">-3</td>
-      <td>1</td><td class="muted">—</td><td>40</td>
-      <td>1</td><td>663</td><td>93</td>
-      <td>14250</td><td>1288</td><td class="r">-12962</td><td class="g">9%</td>
-      <td>3112</td><td>74.2%</td><td class="g">11.7%</td><td class="rtr">3.6%</td>
-      <td>1</td><td>0</td><td>1</td>
-    </tr>
-    <tr class="even"><td class="namecell">杨丽华</td>
-      <td>150</td><td>0</td><td class="r">-150</td><td class="g">0.0%</td>
-      <td>8</td><td>0</td><td class="r">-3</td><td class="b">0.0%</td>
-      <td>3</td><td class="r">1</td><td class="rtr">37.5%</td>
-      <td>17</td><td class="r">10</td><td class="rtr">121.4%</td>
-      <td>1</td><td class="b">0</td>
-      <td>3</td><td class="g">-3</td>
-      <td>2</td><td class="muted">—</td><td>398</td>
-      <td>1</td><td>320</td><td>45</td>
-      <td>14250</td><td>2142</td><td class="r">-12108</td><td class="g">15%</td>
-      <td>2144</td><td>26.1%</td><td class="rtr">12.6%</td><td class="rtr">3.3%</td>
-      <td>0</td><td>0</td><td>0</td>
-    </tr>
-    <tr class="odd"><td class="namecell">李泽</td>
-      <td>150</td><td>0</td><td class="r">-150</td><td class="g">0.0%</td>
-      <td>6</td><td>5</td><td class="r">3</td><td class="rtr">83.3%</td>
-      <td>0</td><td class="g">-2</td><td class="g">0.0%</td>
-      <td>4</td><td class="g">-2</td><td class="g">33.3%</td>
-      <td>1</td><td class="b">0</td>
-      <td>3</td><td class="g">-2</td>
-      <td class="muted">—</td><td class="muted">—</td><td>0</td>
-      <td>0</td><td>0</td><td>0</td>
-      <td>14250</td><td>3039</td><td class="r">-11211</td><td class="g">21%</td>
-      <td>2784</td><td>40.1%</td><td class="rtr">13.3%</td><td class="rtr">5.8%</td>
-      <td>3</td><td>2</td><td>5</td>
-    </tr>
-    <tr class="even"><td class="namecell">陈超磊</td>
-      <td>150</td><td>0</td><td class="r">-150</td><td class="g">0.0%</td>
-      <td>8</td><td>2</td><td class="r">-1</td><td class="b">25.0%</td>
-      <td>3</td><td class="r">1</td><td class="rtr">37.5%</td>
-      <td>12</td><td class="r">6</td><td class="rtr">100.0%</td>
-      <td>1</td><td class="b">0</td>
-      <td>3</td><td class="g">-3</td>
-      <td>3</td><td class="muted">—</td><td>273</td>
-      <td>0</td><td>0</td><td>0</td>
-      <td>14250</td><td>2126</td><td class="r">-12124</td><td class="g">15%</td>
-      <td>3877</td><td>44.7%</td><td class="rtr">12.3%</td><td class="rtr">3.0%</td>
-      <td>2</td><td>0</td><td>2</td>
-    </tr>
-    <tr class="total"><td class="namecell">合计</td>
-      <td>600</td><td>64</td><td class="r">-536</td><td class="rtr">10.7%</td>
-      <td>30</td><td>9</td><td class="b">0</td><td class="rtr">30.0%</td>
-      <td>9</td><td class="r">3</td><td class="rtr">30.0%</td>
-      <td>38</td><td class="r">23</td><td class="rtr">56.7%</td>
-      <td>4</td><td class="b">0</td>
-      <td>12</td><td class="g">-11</td>
-      <td>7</td><td>0</td><td>711</td>
-      <td>2</td><td>983</td><td>138</td>
-      <td>57000</td><td>9575</td><td class="r">-47425</td><td class="g">17%</td>
-      <td>12016</td><td>41.4%</td><td class="rtr">12.9%</td><td class="rtr">4.3%</td>
-      <td>7</td><td>2</td><td>9</td>
-    </tr>
-  </table>
+<!-- ==================== 绩效考评 ==================== -->
+<div class="section" id="sec-perf">
+  <div class="kpi-strip">
+    <div class="kpi-card green"><div class="kpi-label">陈超磊 绩效</div><div class="kpi-value">32.8</div><div class="kpi-sub">满分 95 | 排名 1</div></div>
+    <div class="kpi-card"><div class="kpi-label">邵乐乐 绩效</div><div class="kpi-value">30.6</div><div class="kpi-sub">满分 95 | 排名 2</div></div>
+    <div class="kpi-card orange"><div class="kpi-label">杨丽华 绩效</div><div class="kpi-value">27.6</div><div class="kpi-sub">满分 95 | 排名 3</div></div>
+    <div class="kpi-card purple"><div class="kpi-label">李泽 绩效</div><div class="kpi-value">32.8</div><div class="kpi-sub">满分 95 | 排名 1</div></div>
+  </div>
+  <div class="section-title">个人绩效明细</div>
+  <div class="kanban-wrap" id="perf-kanban"></div>
+</div>
+
+<!-- ==================== 运营看板 ==================== -->
+<div class="section" id="sec-ops">
+  <div class="kpi-strip">
+    <div class="kpi-card green"><div class="kpi-label">运营看板总分</div><div class="kpi-value">72.2</div><div class="kpi-sub">满分 100 | 排名 5</div></div>
+  </div>
+  <div class="section-title">运营评分明细</div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>分类</th><th>项目</th><th>目标</th><th>达成</th><th>分值</th><th>得分</th><th>规则</th><th>措施</th></tr></thead>
+      <tbody id="ops-tbody"></tbody>
+    </table>
   </div>
 </div>
 
-<div class="foot">数据源：用友云「门店毛利明细表-华为终端」导出 ｜ 时间进度 2026-08-08（第 8 / 31 天）<br>
-<span class="sig">颜色规则：缺口(负数)=红；完成率/搭售率未达标=绿、达标·超量=红；考核项缺口负=绿、正=红、0=黑 ｜ 设计与李家村7月复盘 · htmldrop 同源风格</span></div>
+<!-- ==================== 渠道挂账 ==================== -->
+<div class="section" id="sec-channel">
+  <div class="kpi-strip">
+    <div class="kpi-card orange"><div class="kpi-label">渠道挂账任务</div><div class="kpi-value">12万</div><div class="kpi-sub">完成 1.97万 <span class="down">缺口 10万</span></div></div>
+  </div>
+  <div class="section-title">渠道挂账进度</div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>姓名</th><th>任务</th><th>完成</th><th>缺口</th><th>完成率</th></tr></thead>
+      <tbody>
+        <tr><td>邵乐乐</td><td class="cell-num">30,000</td><td class="cell-num">0</td><td class="cell-num cell-red">-30,000</td><td class="cell-pct cell-red">0%</td></tr>
+        <tr><td>杨丽华</td><td class="cell-num">30,000</td><td class="cell-num">0</td><td class="cell-num cell-red">-30,000</td><td class="cell-pct cell-red">0%</td></tr>
+        <tr><td>李泽</td><td class="cell-num">30,000</td><td class="cell-num">0</td><td class="cell-num cell-red">-30,000</td><td class="cell-pct cell-red">0%</td></tr>
+        <tr><td>陈超磊</td><td class="cell-num">30,000</td><td class="cell-num">19,697</td><td class="cell-num cell-red">-10,303</td><td class="cell-pct cell-orange">65.7%</td></tr>
+        <tr><td>张博晨</td><td class="cell-num">-</td><td class="cell-num">0</td><td class="cell-num">0</td><td class="cell-pct">-</td></tr>
+        <tr style="font-weight:700"><td>合计</td><td class="cell-num">120,000</td><td class="cell-num">19,697</td><td class="cell-num cell-red">-100,303</td><td class="cell-pct cell-red">16.4%</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
 
+<!-- ==================== 每日任务 ==================== -->
+<div class="section" id="sec-daily">
+  <div class="section-title">8月8日 每日任务缺口</div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>姓名</th><th>手机</th><th>毛利</th><th>增值</th><th>智慧办公</th><th>音频穿戴</th><th>HD</th><th>Care+</th><th>回收</th><th>贴膜</th><th>电信积分</th><th>滞销</th><th>摄影课</th><th>优享/会员</th><th>尊享/储值</th></tr></thead>
+      <tbody id="daily-tbody"></tbody>
+    </table>
+  </div>
+  <div class="section-title" style="margin-top:24px">8月8日 每日达成</div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>姓名</th><th>手机</th><th>毛利</th><th>增值</th><th>智慧办公</th><th>音频穿戴</th><th>HD</th><th>会员</th><th>回收</th><th>贴膜</th><th>电信积分</th><th>滞销</th><th>摄影课</th><th>优享/会员</th><th>尊享/储值</th><th>得分</th></tr></thead>
+      <tbody id="daily-achieved-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ==================== 一页纸闭环 ==================== -->
+<div class="section" id="sec-onpage">
+  <div class="kpi-strip">
+    <div class="kpi-card green"><div class="kpi-label">闭环率</div><div class="kpi-value">5.7</div><div class="kpi-sub">综合完成率</div></div>
+  </div>
+  <div class="section-title">基础运营闭环清单</div>
+  <ul class="checklist" id="checklist"></ul>
+</div>
+
+<!-- ==================== 店长绩效 ==================== -->
+<div class="section" id="sec-manager">
+  <div class="kpi-strip">
+    <div class="kpi-card"><div class="kpi-label">店长绩效总分</div><div class="kpi-value">36.5</div><div class="kpi-sub">满分 100</div></div>
+  </div>
+  <div class="section-title">店长绩效考评明细</div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>考核内容</th><th>项目</th><th>目标</th><th>完成</th><th>权重</th><th>得分</th></tr></thead>
+      <tbody id="manager-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+</div>
+
+<script>
+// ===== Data =====
+const persons = [
+  { name:'邵乐乐', grossProfit:{task:50000,done:4193.48}, phone:{task:43,done:8},
+    pc:{task:3,done:0}, tablet:{task:8,done:0}, wear:{task:25,done:21}, audio:{task:9,done:0},
+    hd:{task:0,done:0}, smartOffice:{task:11,done:0}, valueAdd:{task:14250,done:1287.57},
+    sales:{task:400000,done:35780.3}, score:30.62, rank:2,
+    points:{task:150,done:64}, carePlus:{total:8,done:1}, recycle:{total:2,done:2}, film:{total:5,done:10},
+    photo:{task:1,done:0}, exam:{task:3,done:0}, health:.12, starUnion:{you:1,zun:0} },
+  { name:'杨丽华', grossProfit:{task:51000,done:8217.27}, phone:{task:43,done:8},
+    pc:{task:3,done:0}, tablet:{task:8,done:1}, wear:{task:25,done:5}, audio:{task:9,done:0},
+    hd:{task:0,done:0}, smartOffice:{task:11,done:1}, valueAdd:{task:14250,done:2141.94},
+    sales:{task:400000,done:65307.02}, score:27.63, rank:3,
+    points:{task:150,done:0}, carePlus:{total:8,done:0}, recycle:{total:3,done:1}, film:{total:17,done:10},
+    photo:{task:1,done:0}, exam:{task:3,done:0}, health:.26, starUnion:{you:0,zun:0} },
+  { name:'李泽', grossProfit:{task:52000,done:6948.32}, phone:{task:42,done:6},
+    pc:{task:4,done:0}, tablet:{task:9,done:0}, wear:{task:25,done:6}, audio:{task:9,done:1},
+    hd:{task:1,done:0}, smartOffice:{task:13,done:0}, valueAdd:{task:14250,done:3039.15},
+    sales:{task:400000,done:52275}, score:32.83, rank:1,
+    points:{task:150,done:0}, carePlus:{total:6,done:5}, recycle:{total:0,done:0}, film:{total:4,done:2},
+    photo:{task:1,done:0}, exam:{task:3,done:-2}, health:.40, starUnion:{you:3,zun:2} },
+  { name:'陈超磊', grossProfit:{task:52000,done:8676.99}, phone:{task:42,done:8},
+    pc:{task:4,done:1}, tablet:{task:9,done:1}, wear:{task:25,done:2}, audio:{task:10,done:2},
+    hd:{task:1,done:0}, smartOffice:{task:13,done:2}, valueAdd:{task:14250,done:2126.08},
+    sales:{task:400000,done:70558}, score:32.83, rank:1,
+    points:{task:150,done:0}, carePlus:{total:8,done:2}, recycle:{total:3,done:1}, film:{total:12,done:6},
+    photo:{task:1,done:0}, exam:{task:3,done:-3}, health:.45, starUnion:{you:2,zun:0} },
+];
+
+const categorySummary = [
+  {name:'毛利',score:35,task:205000,done:29016,unit:'元'},
+  {name:'手机',score:15,task:170,done:30,unit:'台'},
+  {name:'增值',score:20,task:57000,done:9574.85,unit:'元'},
+  {name:'智慧办公',score:5,task:48,done:3,unit:'台'},
+  {name:'音频穿戴',score:5,task:137,done:37,unit:'台'},
+  {name:'HD',score:5,task:2,done:0,unit:'台'},
+  {name:'电信积分',score:5,task:600,done:64,unit:'分'},
+  {name:'摄影课程',score:5,task:4,done:0,unit:'人'},
+];
+
+const opsData = [
+  {cat:'经营',item:'POS合规和ROI',target:'A',achieved:'A',score:8,got:8,rule:'门店D=0分,C=2分,AB=6分',measures:'/'},
+  {cat:'运营规范性',item:'点检第一次',target:'100',achieved:'100',score:10,got:8,rule:'成绩≥99%得10分,95%≤成绩<99%得8分',measures:'未知原因'},
+  {cat:'增值业务',item:'服务产品',target:'5%',achieved:'0.15',score:5,got:5,rule:'0-10%线性得分*60%',measures:'/'},
+  {cat:'增值业务',item:'以旧换新',target:'5%',achieved:'0.73',score:5,got:4.2,rule:'换新量/回收量0%-100%线性,占比50%',measures:'回收总量34,单回收10,补贴24'},
+  {cat:'即时零售',item:'GMV达成率',target:'5.6W',achieved:'3.97W',score:3,got:1,rule:'达成率80%以上线性得分(120%封顶)',measures:'提升即时零售销额'},
+  {cat:'即时零售',item:'履约率',target:'0.9',achieved:'1',score:3,got:3,rule:'90%-100%线性得分(100%封顶)',measures:'提升GMV'},
+  {cat:'即时零售',item:'库存维护',target:'0.7',achieved:'0.77',score:2,got:1.5,rule:'70%-100%线性得分(100%封顶)',measures:'/'},
+  {cat:'即时零售',item:'好评率',target:'0.15',achieved:'0.5',score:2,got:1.5,rule:'0-15%线性得分(15%封顶)',measures:'/'},
+  {cat:'用户经营',item:'企微会员新增',target:'0.25',achieved:'0.5',score:4,got:4,rule:'人均≥省平均水平(6分)',measures:'/'},
+  {cat:'用户经营',item:'企微会员占比',target:'0.2',achieved:'0.53',score:8,got:8,rule:'人均≥省平均水平(7分)',measures:'/'},
+  {cat:'用户经营',item:'V3以上会员占比',target:'0.15',achieved:'0.2',score:8,got:8,rule:'人均V3及以上≥省平均水平(7分)',measures:'/'},
+  {cat:'活动',item:'走引流',target:'3场',achieved:'2场',score:10,got:6.7,rule:'/',measures:'/'},
+  {cat:'亲和力',item:'温暖故事',target:'10',achieved:'0',score:10,got:0,rule:'加分项',measures:'投稿2篇未选上'},
+  {cat:'消费者声音',item:'满意度(订单问卷)',target:'3',achieved:'3',score:5,got:5,rule:'满意度97%-100%线性得分5分',measures:'/'},
+  {cat:'消费者声音',item:'满意度(内置问卷)',target:'3',achieved:'7',score:7,got:0,rule:'满意度65%-70%线性得分7分',measures:'内置问卷基线75%'},
+  {cat:'消费者声音',item:'投诉管理',target:'0',achieved:'0',score:0,got:0,rule:'恶性投诉-5分/单,非恶性-2分/单',measures:'/'},
+  {cat:'人员能力',item:'人员满编率',target:'1',achieved:'1',score:5,got:5,rule:'满编率=1得5分',measures:'/'},
+  {cat:'人员能力',item:'达人标签率',target:'1',achieved:'1',score:5,got:3.3,rule:'标签率100%得5分',measures:'当前配置1+3,缺编1人'},
+];
+
+const checklistItems = [
+  {name:'签到',rate:1,ok:true},{name:'晨读',rate:1,ok:true},{name:'多码合一完成率',rate:0.5,ok:true},
+  {name:'企微有效率',rate:1,ok:true},{name:'社群拉新',rate:0.29,ok:true},{name:'企微每日朋友圈转发',rate:1,ok:true},
+  {name:'当日资料上传',rate:1,ok:true},{name:'ERP下账',rate:1,ok:true},{name:'美团/京东下账',rate:1,ok:true},
+  {name:'合规项(异常管控,POS合规)',rate:1,ok:true},{name:'渠道运营表(每日更新)',rate:1,ok:true},
+  {name:'社群内容宣发(周度≥3次)',rate:0.66,ok:true},{name:'库房反馈(每周三)',rate:1,ok:true},
+];
+
+const managerData = [
+  {cat:'业绩指标',item:'收入完成率',target:'1,600,000',done:'224,919',weight:25,score:3.51},
+  {cat:'业绩指标',item:'毛利完成率',target:'205,000',done:'-',weight:10,score:0},
+  {cat:'业绩指标',item:'增值',target:'57,000',done:'9,574.85',weight:15,score:2.52},
+  {cat:'产业指标',item:'手机',target:'170',done:'30',weight:10,score:0},
+  {cat:'产业指标',item:'智慧办公',target:'48',done:'3',weight:4,score:0},
+  {cat:'产业指标',item:'音频&穿戴',target:'137',done:'37',weight:4,score:0},
+  {cat:'产业指标',item:'HD',target:'2',done:'0',weight:2,score:0},
+  {cat:'运营指标',item:'用户经营',target:'-',done:'-',weight:5,score:5},
+  {cat:'运营指标',item:'活动运营',target:'-',done:'-',weight:5,score:5},
+  {cat:'运营指标',item:'渠道运营',target:'-',done:'-',weight:5,score:5},
+  {cat:'运营指标',item:'渠道运营数据完成率',target:'-',done:'-',weight:5,score:5},
+  {cat:'人才发展',item:'培训管理',target:'-',done:'-',weight:'-',score:'-'},
+  {cat:'人才发展',item:'达人标签',target:'-',done:'-',weight:'-',score:-2},
+  {cat:'人才发展',item:'全科生',target:'-',done:'-',weight:'-',score:'-'},
+  {cat:'价值观',item:'企业文化',target:'-',done:'-',weight:10,score:9.5},
+  {cat:'加减分项',item:'超库龄月度任务完成',target:'-',done:'-',weight:'-',score:3},
+];
+
+const dailyTasks = [
+  {name:'邵乐乐',vals:{phone:-2,profit:-2291,valueAdd:-649,smartOffice:-1,audioWear:-1,hd:0,carePlus:-1,recycle:0,film:-1,points:-5,stagnant:-1,photo:0,starYou:1,starZun:1}},
+  {name:'杨丽华',vals:{phone:-2,profit:-2140,valueAdd:-606,smartOffice:-1,audioWear:-2,hd:0,carePlus:-1,recycle:1,film:1,points:-8,stagnant:-1,photo:0,starYou:1,starZun:1}},
+  {name:'李泽',vals:{phone:-2,profit:-2253,valueAdd:-561,smartOffice:-1,audioWear:-2,hd:-1,carePlus:1,recycle:-1,film:-1,points:-8,stagnant:-1,photo:0,starYou:1,starZun:1}},
+  {name:'陈超磊',vals:{phone:-2,profit:-2167,valueAdd:-607,smartOffice:-1,audioWear:-2,hd:-1,carePlus:-1,recycle:1,film:1,points:-8,stagnant:-1,photo:0,starYou:1,starZun:1}},
+];
+
+const dailyAchieved = [
+  {name:'邵乐乐',vals:{phone:1,profit:665.27,valueAdd:361.94,smartOffice:0,audioWear:1,hd:0,star:0,recycle:'-',film:2,points:0,stagnant:0,photo:0,starYou:0,starZun:0,score:0}},
+  {name:'杨丽华',vals:{phone:1,profit:374,valueAdd:0,smartOffice:0,audioWear:0,hd:0,star:0,recycle:'-',film:0,points:0,stagnant:0,photo:0,starYou:0,starZun:0,score:0}},
+  {name:'李泽',vals:{phone:0,profit:1569.8,valueAdd:893.6,smartOffice:0,audioWear:3,hd:0,star:1,recycle:'-',film:0,points:0,stagnant:0,photo:0,starYou:0,starZun:1,score:0}},
+  {name:'陈超磊',vals:{phone:0,profit:0,valueAdd:0,smartOffice:0,audioWear:0,hd:0,star:0,recycle:'-',film:0,points:0,stagnant:0,photo:0,starYou:0,starZun:0,score:0}},
+];
+
+// ===== Render Functions =====
+function pct(d,t){return t>0?(d/t*100):0}
+function fmt(n){return n>=10000?(n/10000).toFixed(1)+'万':n.toFixed?n.toFixed(0):n}
+function fmtM(n){return n>=10000?(n/10000).toFixed(2)+'万':n.toLocaleString()}
+function barColor(r){return r>=80?'green':r>=50?'blue':r>=20?'orange':'red'}
+function statusCell(r){
+  if(r>=100)return '<span class="cell-green">达标</span>';
+  if(r>=50)return '<span class="cell-orange">进行中</span>';
+  return '<span class="cell-red">落后</span>';
+}
+
+function renderPersonKanban(){
+  const wrap=document.getElementById('person-kanban');
+  wrap.innerHTML='';
+  persons.forEach((p,i)=>{
+    const gpPct=pct(p.grossProfit.done,p.grossProfit.task);
+    const phPct=pct(p.phone.done,p.phone.task);
+    const vaPct=pct(p.valueAdd.done,p.valueAdd.task);
+    const wePct=pct(p.wear.done,p.wear.task);
+    const soPct=pct(p.smartOffice.done,p.smartOffice.task);
+    const rankClass=p.rank<=3?'rank-'+p.rank:'rank-4';
+    const col=document.createElement('div');
+    col.className='kanban-col';
+    col.innerHTML=`
+      <div class="kanban-col-title">${p.name} <span class="badge" style="background:var(--blue-light);color:var(--blue)">绩效 ${p.score}</span></div>
+      <div class="card person-card ${rankClass}">
+        <div class="card-header"><span class="card-name">毛利</span><span class="card-score ${gpPct<20?'danger':gpPct<50?'warn':''}">${gpPct.toFixed(1)}%</span></div>
+        <div class="metric-row"><span class="metric-label">任务</span><span class="metric-val">${fmtM(p.grossProfit.task)}</span></div>
+        <div class="metric-row"><span class="metric-label">完成</span><span class="metric-val">${fmtM(p.grossProfit.done)}</span></div>
+        <div class="metric-row"><span class="metric-label">进度</span><div class="metric-bar"><div class="metric-bar-fill ${barColor(gpPct)}" style="width:${Math.min(gpPct,100)}%"></div></div><span class="metric-val">${gpPct.toFixed(1)}%</span></div>
+      </div>
+      <div class="card person-card ${rankClass}">
+        <div class="card-header"><span class="card-name">手机</span><span class="card-score ${phPct<20?'danger':phPct<50?'warn':''}">${phPct.toFixed(1)}%</span></div>
+        <div class="metric-row"><span class="metric-label">任务</span><span class="metric-val">${p.phone.task}台</span></div>
+        <div class="metric-row"><span class="metric-label">完成</span><span class="metric-val">${p.phone.done}台</span></div>
+        <div class="metric-row"><span class="metric-label">进度</span><div class="metric-bar"><div class="metric-bar-fill ${barColor(phPct)}" style="width:${Math.min(phPct,100)}%"></div></div><span class="metric-val">${phPct.toFixed(1)}%</span></div>
+      </div>
+      <div class="card person-card ${rankClass}">
+        <div class="card-header"><span class="card-name">增值</span><span class="card-score ${vaPct<20?'danger':vaPct<50?'warn':''}">${vaPct.toFixed(1)}%</span></div>
+        <div class="metric-row"><span class="metric-label">任务</span><span class="metric-val">${fmtM(p.valueAdd.task)}</span></div>
+        <div class="metric-row"><span class="metric-label">完成</span><span class="metric-val">${fmtM(p.valueAdd.done)}</span></div>
+        <div class="metric-row"><span class="metric-label">进度</span><div class="metric-bar"><div class="metric-bar-fill ${barColor(vaPct)}" style="width:${Math.min(vaPct,100)}%"></div></div><span class="metric-val">${vaPct.toFixed(1)}%</span></div>
+      </div>
+      <div class="card person-card ${rankClass}">
+        <div class="card-header"><span class="card-name">产业指标</span></div>
+        <div class="metric-row"><span class="metric-label">智慧办公</span><div class="metric-bar"><div class="metric-bar-fill ${barColor(soPct)}" style="width:${Math.min(soPct,100)}%"></div></div><span class="metric-val">${p.smartOffice.done}/${p.smartOffice.task}</span></div>
+        <div class="metric-row"><span class="metric-label">音频穿戴</span><div class="metric-bar"><div class="metric-bar-fill ${barColor(wePct)}" style="width:${Math.min(wePct,100)}%"></div></div><span class="metric-val">${p.wear.done}/${p.wear.task}</span></div>
+        <div class="metric-row"><span class="metric-label">HD</span><div class="metric-bar"><div class="metric-bar-fill ${barColor(pct(p.hd.done,Math.max(p.hd.task,1)))}" style="width:${p.hd.task>0?Math.min(pct(p.hd.done,p.hd.task),100):100}%"></div></div><span class="metric-val">${p.hd.done}/${p.hd.task||'-'}</span></div>
+        <div class="metric-row"><span class="metric-label">积分</span><div class="metric-bar"><div class="metric-bar-fill ${barColor(pct(p.points.done,p.points.task))}" style="width:${Math.min(pct(p.points.done,p.points.task),100)}%"></div></div><span class="metric-val">${p.points.done}/${p.points.task}</span></div>
+      </div>
+      <div class="card person-card ${rankClass}">
+        <div class="card-header"><span class="card-name">销售额</span><span class="card-score">${pct(p.sales.done,p.sales.task).toFixed(1)}%</span></div>
+        <div class="metric-row"><span class="metric-label">任务</span><span class="metric-val">${fmtM(p.sales.task)}</span></div>
+        <div class="metric-row"><span class="metric-label">完成</span><span class="metric-val">${fmtM(p.sales.done)}</span></div>
+      </div>
+    `;
+    wrap.appendChild(col);
+  });
+}
+
+function renderCategoryTable(){
+  const tbody=document.getElementById('category-tbody');
+  tbody.innerHTML='';
+  categorySummary.forEach(c=>{
+    const r=pct(c.done,c.task);
+    tbody.innerHTML+=`<tr>
+      <td style="font-weight:600">${c.name}</td><td class="cell-num">${c.score}分</td>
+      <td class="cell-num">${fmtM(c.task)}${c.unit}</td><td class="cell-num">${fmtM(c.done)}${c.unit}</td>
+      <td class="cell-num cell-red">-${fmtM(c.task-c.done)}${c.unit}</td>
+      <td class="cell-pct ${r>=50?'cell-green':r>=20?'cell-orange':'cell-red'}">${r.toFixed(1)}%</td>
+      <td>${statusCell(r)}</td></tr>`;
+  });
+}
+
+function renderPerfKanban(){
+  const wrap=document.getElementById('perf-kanban');
+  wrap.innerHTML='';
+  const perfDetail=[
+    {name:'邵乐乐',items:[
+      {cat:'业绩',item:'毛利',task:50000,done:4193.48,score:2.94,full:35},
+      {cat:'业绩',item:'手机',task:43,done:8,score:2.79,full:15},
+      {cat:'业绩',item:'增值',task:14250,done:1287.57,score:1.81,full:20},
+      {cat:'产业',item:'智慧办公',task:11,done:0,score:0,full:5},
+      {cat:'产业',item:'音频穿戴',task:34,done:21,score:3.09,full:5},
+      {cat:'产业',item:'HD',task:0,done:0,score:5,full:5},
+      {cat:'产业',item:'电信积分',task:150,done:150,score:5,full:5},
+      {cat:'产业',item:'课程',task:1,done:0,score:0,full:5},
+    ]},
+    {name:'杨丽华',items:[
+      {cat:'业绩',item:'毛利',task:51000,done:8217.27,score:5.64,full:35},
+      {cat:'业绩',item:'手机',task:43,done:8,score:2.79,full:15},
+      {cat:'业绩',item:'增值',task:14250,done:2141.94,score:3.01,full:20},
+      {cat:'产业',item:'智慧办公',task:11,done:1,score:0.45,full:5},
+      {cat:'产业',item:'音频穿戴',task:34,done:5,score:0.74,full:5},
+      {cat:'产业',item:'HD',task:0,done:0,score:5,full:5},
+      {cat:'产业',item:'电信积分',task:150,done:150,score:5,full:5},
+      {cat:'产业',item:'课程',task:1,done:0,score:0,full:5},
+    ]},
+    {name:'李泽',items:[
+      {cat:'业绩',item:'毛利',task:52000,done:6948.32,score:4.69,full:35},
+      {cat:'业绩',item:'手机',task:42,done:6,score:2.14,full:15},
+      {cat:'业绩',item:'增值',task:14250,done:3039.15,score:4.27,full:20},
+      {cat:'产业',item:'智慧办公',task:13,done:0,score:0,full:5},
+      {cat:'产业',item:'音频穿戴',task:34,done:7,score:1.03,full:5},
+      {cat:'产业',item:'HD',task:1,done:0,score:0,full:5},
+      {cat:'产业',item:'电信积分',task:150,done:0,score:0,full:5},
+      {cat:'产业',item:'课程',task:1,done:0,score:0,full:5},
+    ]},
+    {name:'陈超磊',items:[
+      {cat:'业绩',item:'毛利',task:52000,done:8676.99,score:5.84,full:35},
+      {cat:'业绩',item:'手机',task:42,done:8,score:2.86,full:15},
+      {cat:'业绩',item:'增值',task:14250,done:2126.08,score:2.99,full:20},
+      {cat:'产业',item:'智慧办公',task:13,done:2,score:0.77,full:5},
+      {cat:'产业',item:'音频穿戴',task:35,done:5,score:0.71,full:5},
+      {cat:'产业',item:'HD',task:1,done:0,score:0,full:5},
+      {cat:'产业',item:'电信积分',task:150,done:0,score:0,full:5},
+      {cat:'产业',item:'课程',task:1,done:0,score:0,full:5},
+    ]},
+  ];
+  perfDetail.forEach(pd=>{
+    const col=document.createElement('div');
+    col.className='kanban-col';
+    let cards='';
+    pd.items.forEach(it=>{
+      const r=it.task>0?pct(it.done,it.task):0;
+      cards+=`<div class="card" style="padding:10px 12px;margin-bottom:6px">
+        <div style="display:flex;justify-content:space-between;font-size:12px">
+          <span style="color:var(--gray)">${it.cat}·${it.item}</span>
+          <span style="font-weight:700;color:var(--blue)">${it.score}分 <span style="color:var(--gray);font-weight:400">/ ${it.full}分</span></span>
+        </div>
+        <div class="metric-row" style="margin-top:4px">
+          <div class="metric-bar"><div class="metric-bar-fill ${barColor(r)}" style="width:${Math.min(r,100)}%"></div></div>
+          <span class="metric-val" style="width:auto">${it.done}/${it.task}</span>
+        </div>
+      </div>`;
+    });
+    col.innerHTML=`<div class="kanban-col-title">${pd.name} <span class="badge" style="background:var(--green-light);color:var(--green)">${persons.find(p=>p.name===pd.name).score}分</span></div>${cards}`;
+    wrap.appendChild(col);
+  });
+}
+
+function renderOpsTable(){
+  const tbody=document.getElementById('ops-tbody');
+  tbody.innerHTML='';
+  opsData.forEach(r=>{
+    const pctV=r.score>0?(r.got/r.score*100):0;
+    tbody.innerHTML+=`<tr>
+      <td class="cell-num">${r.target}</td><td class="cell-num">${r.achieved}</td>
+      <td class="cell-num">${r.score}</td><td class="cell-num ${pctV>=80?'cell-green':pctV>=50?'':'cell-red'}">${r.got}</td><td>${r.rule}</td><td>${r.measures}</td></tr>`;
+  });
+}
+
+function renderDailyTable(){
+  const tbody1=document.getElementById('daily-tbody');
+  const tbody2=document.getElementById('daily-achieved-tbody');
+  tbody1.innerHTML='';tbody2.innerHTML='';
+  dailyTasks.forEach(d=>{
+    const v=d.vals;
+    const fmtV=n=>{if(typeof n==='number')return n>0?'+'+n:n===0?'0':n;return n};
+    const cls=n=>typeof n==='number'?(n>0?'cell-green':n<0?'cell-red':''):'';
+    tbody1.innerHTML+=`<tr>
+      <td style="font-weight:600">${d.name}</td>
+      <td class="cell-num ${cls(v.phone)}">${fmtV(v.phone)}</td>
+      <td class="cell-num ${cls(v.profit)}">${fmtV(v.profit)}</td>
+      <td class="cell-num ${cls(v.valueAdd)}">${fmtV(v.valueAdd)}</td>
+      <td class="cell-num ${cls(v.smartOffice)}">${fmtV(v.smartOffice)}</td>
+      <td class="cell-num ${cls(v.audioWear)}">${fmtV(v.audioWear)}</td>
+      <td class="cell-num ${cls(v.hd)}">${fmtV(v.hd)}</td>
+      <td class="cell-num ${cls(v.carePlus)}">${fmtV(v.carePlus)}</td>
+      <td class="cell-num ${cls(v.recycle)}">${fmtV(v.recycle)}</td>
+      <td class="cell-num ${cls(v.film)}">${fmtV(v.film)}</td>
+      <td class="cell-num ${cls(v.points)}">${fmtV(v.points)}</td>
+      <td class="cell-num ${cls(v.stagnant)}">${fmtV(v.stagnant)}</td>
+      <td class="cell-num">${v.photo}</td>
+      <td class="cell-num ${cls(v.starYou)}">${fmtV(v.starYou)}</td>
+      <td class="cell-num ${cls(v.starZun)}">${fmtV(v.starZun)}</td>
+    </tr>`;
+  });
+  dailyAchieved.forEach(d=>{
+    const v=d.vals;
+    tbody2.innerHTML+=`<tr>
+      <td style="font-weight:600">${d.name}</td>
+      <td class="cell-num">${v.phone}</td><td class="cell-num">${v.profit}</td>
+      <td class="cell-num">${v.valueAdd}</td><td class="cell-num">${v.smartOffice}</td>
+      <td class="cell-num">${v.audioWear}</td><td class="cell-num">${v.hd}</td>
+      <td class="cell-num">${v.star}</td><td class="cell-num">${v.recycle}</td>
+      <td class="cell-num">${v.film}</td><td class="cell-num">${v.points}</td>
+      <td class="cell-num">${v.stagnant}</td><td class="cell-num">${v.photo}</td>
+      <td class="cell-num">${v.starYou}</td><td class="cell-num">${v.starZun}</td>
+      <td class="cell-num" style="font-weight:700">${v.score}</td>
+    </tr>`;
+  });
+}
+
+// Tab switching
+function switchTab(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// Init
+renderPersonKanban();
+renderCategoryTable();
+renderPerfKanban();
+renderOpsTable();
+renderChecklist();
+renderManagerTable();
+renderDailyTable();
+
+function renderChecklist(){
+  const ul=document.getElementById('checklist');
+  ul.innerHTML='';
+  checklistItems.forEach(it=>{
+    const ok=it.rate>=1;
+    ul.innerHTML+=`<li>
+      <span class="check-icon ${ok?'ok':'warn'}">${ok?'✓':'!'}</span>
+      <span style="flex:1">${it.name}</span>
+      <span style="font-weight:600;color:${ok?'var(--green)':'var(--orange)'}">${(it.rate*100).toFixed(0)}%</span>
+    </li>`;
+  });
+}
+
+function renderManagerTable(){
+  const tbody=document.getElementById('manager-tbody');
+  tbody.innerHTML='';
+  managerData.forEach(r=>{
+    const scoreVal=typeof r.score==='number'?r.score:'-';
+    const scoreClass=typeof r.score==='number'?(r.score>0?'cell-green':r.score<0?'cell-red':''):'';
+    tbody.innerHTML+=`<tr>
+      <td>${r.cat}</td><td>${r.item}</td>
+      <td class="cell-num">${r.target}</td><td class="cell-num">${r.done}</td>
+      <td class="cell-num">${r.weight}</td><td class="cell-num ${scoreClass}">${scoreVal}</td>
+    </tr>`;
+  });
+}
+</script>
 </body>
 </html>
