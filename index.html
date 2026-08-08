@@ -29,7 +29,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
   color:#fff;padding:24px 20px 16px;position:sticky;top:0;z-index:100;
   box-shadow:0 8px 32px rgba(79,142,247,.35),0 2px 8px rgba(0,0,0,.1);
   transform-style:preserve-3d;transition:transform .3s}
-.header:hover{transform:perspective(800px) rotateX(1deg)}
+.header:hover{transform:translateY(-2px)}
 .header-row{display:flex;align-items:center;justify-content:space-between}
 .header h1{font-size:18px;font-weight:800;letter-spacing:1px;text-shadow:0 2px 4px rgba(0,0,0,.15)}
 .header .sub{font-size:11px;opacity:.85;margin-top:2px}
@@ -60,7 +60,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
   transition:all .3s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d;position:relative;overflow:hidden}
 .card3d::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;
   background:linear-gradient(90deg,var(--blue),var(--purple));opacity:0;transition:opacity .3s}
-.card3d:hover{transform:translateY(-4px) rotateX(1deg);
+.card3d:hover{transform:translateY(-4px);
   box-shadow:0 20px 40px -12px rgba(79,142,247,.15),0 8px 16px -8px rgba(0,0,0,.08)}
 .card3d:hover::before{opacity:1}
 
@@ -88,7 +88,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 .person.r2::before{background:linear-gradient(180deg,#4F8EF7,#60A5FA)}
 .person.r3::before{background:linear-gradient(180deg,#F59E0B,#FBBF24)}
 .person.r4::before{background:linear-gradient(180deg,#94A3B8,#CBD5E1)}
-.person:hover{transform:perspective(600px) rotateY(-2deg) translateX(4px);
+.person:hover{transform:translateY(-4px);
   box-shadow:0 12px 32px -8px rgba(0,0,0,.12),-4px 0 16px rgba(79,142,247,.08)}
 .person-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
 .person-name{font-size:15px;font-weight:700}
@@ -443,9 +443,7 @@ document.addEventListener('mousemove', function(e){
     var x = e.clientX - rect.left;
     var y = e.clientY - rect.top;
     if(x < 0 || x > rect.width || y < 0 || y > rect.height) return;
-    var rotateY = ((x / rect.width) - 0.5) * 4;
-    var rotateX = (0.5 - (y / rect.height)) * 4;
-    card.style.transform = 'perspective(600px) rotateX('+rotateX+'deg) rotateY('+rotateY+'deg) translateY(-2px)';
+    card.style.transform = 'translateY(-4px) scale(1.02)';
   });
 });
 </script>
