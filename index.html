@@ -2,1825 +2,452 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>李家村万达华为授权体验店 · 8月销售数据进度看板</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>李家村万达华为 · 8月业绩看板</title>
 <style>
-:root{
-  --blue:#4F8EF7;--blue-light:#E8F0FE;--purple:#7C5CFC;--purple-light:#F0ECFF;
-  --green:#22C55E;--green-light:#DCFCE7;--red:#EF4444;--red-light:#FEE2E2;
-  --orange:#F59E0B;--orange-light:#FEF3C7;--gray:#6B7280;--gray-light:#F3F4F6;
-  --dark:#1E293B;--border:#E5E7EB;--bg:#F8FAFC;--card:#FFF;
-  --radius:12px;--shadow:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
-}
+:root{--blue:#4F8EF7;--blue-l:#DBEAFE;--purple:#8B5CF6;--purple-l:#EDE9FE;
+  --green:#10B981;--green-l:#D1FAE5;--orange:#F59E0B;--orange-l:#FEF3C7;
+  --red:#EF4444;--red-l:#FEE2E2;--dark:#0F172A;--gray:#64748B;--gray-l:#F1F5F9;
+  --border:#E2E8F0;--bg:#F8FAFC;--card:#FFF;--glass:rgba(255,255,255,.75)}
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--dark);line-height:1.5}
-::-webkit-scrollbar{width:6px;height:6px}
-::-webkit-scrollbar-thumb{background:#CBD5E1;border-radius:3px}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  background:var(--bg);color:var(--dark);line-height:1.5;overflow-x:hidden}
+
+.scene-bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;
+  background:linear-gradient(135deg,#EEF2FF 0%,#F0F9FF 40%,#F5F3FF 70%,#FFF 100%);perspective:1000px}
+.scene-bg::before{content:'';position:absolute;top:-40%;right:-20%;width:60vw;height:60vw;
+  border-radius:50%;background:radial-gradient(circle,rgba(79,142,247,.08) 0%,transparent 70%);
+  animation:float1 20s ease-in-out infinite}
+.scene-bg::after{content:'';position:absolute;bottom:-30%;left:-10%;width:50vw;height:50vw;
+  border-radius:50%;background:radial-gradient(circle,rgba(139,92,246,.06) 0%,transparent 70%);
+  animation:float2 25s ease-in-out infinite}
+@keyframes float1{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-30px) scale(1.05)}}
+@keyframes float2{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(20px) scale(1.03)}}
 
 /* Header */
-.header{background:linear-gradient(135deg,#4F8EF7 0%,#7C5CFC 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 12px rgba(79,142,247,.25)}
-.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.header h1{font-size:18px;font-weight:700;letter-spacing:.5px}
-.header .date-info{font-size:12px;opacity:.9}
-.progress-bar-wrap{height:8px;background:rgba(255,255,255,.2);border-radius:4px;overflow:hidden}
-.progress-bar-fill{height:100%;background:#fff;border-radius:4px;transition:width .6s ease}
-.progress-meta{display:flex;justify-content:space-between;font-size:11px;margin-top:4px;opacity:.85}
+.header{background:linear-gradient(135deg,#4F8EF7 0%,#7C5CFC 50%,#9333EA 100%);
+  color:#fff;padding:24px 20px 16px;position:sticky;top:0;z-index:100;
+  box-shadow:0 8px 32px rgba(79,142,247,.35),0 2px 8px rgba(0,0,0,.1);
+  transform-style:preserve-3d;transition:transform .3s}
+.header:hover{transform:perspective(800px) rotateX(1deg)}
+.header-row{display:flex;align-items:center;justify-content:space-between}
+.header h1{font-size:18px;font-weight:800;letter-spacing:1px;text-shadow:0 2px 4px rgba(0,0,0,.15)}
+.header .sub{font-size:11px;opacity:.85;margin-top:2px}
+.pbar-wrap{height:6px;background:rgba(255,255,255,.2);border-radius:3px;margin-top:10px;overflow:hidden}
+.pbar-fill{height:100%;background:linear-gradient(90deg,#FFF,#FDE68A);border-radius:3px;transition:width .8s cubic-bezier(.4,0,.2,1)}
+.pbar-meta{display:flex;justify-content:space-between;font-size:10px;margin-top:3px;opacity:.8}
 
-/* Nav tabs */
-.nav{display:flex;gap:6px;padding:12px 24px 0;background:var(--bg);position:sticky;top:76px;z-index:99;overflow-x:auto;padding-bottom:12px}
-.nav button{border:none;background:var(--card);color:var(--gray);padding:6px 14px;border-radius:20px;font-size:12px;cursor:pointer;white-space:nowrap;border:1px solid var(--border);transition:all .2s}
-.nav button:hover{border-color:var(--blue);color:var(--blue)}
-.nav button.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+/* Nav */
+.nav{display:flex;gap:8px;padding:14px 20px 0;background:transparent;position:sticky;top:80px;z-index:99}
+.nav button{border:none;background:var(--glass);color:var(--gray);padding:8px 18px;
+  border-radius:12px 12px 0 0;font-size:13px;font-weight:600;cursor:pointer;
+  white-space:nowrap;backdrop-filter:blur(10px);border:1px solid var(--border);border-bottom:2px solid transparent;
+  transition:all .25s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d}
+.nav button:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(79,142,247,.15)}
+.nav button.active{background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;
+  border-color:transparent;box-shadow:0 4px 16px rgba(79,142,247,.3);transform:translateY(-2px) scale(1.02)}
 
 /* Main */
-.main{padding:0 24px 40px}
-.section{display:none}
-.section.active{display:block}
+.main{padding:0 20px 40px}
+.tab{display:none;animation:fadeUp .4s ease}
+.tab.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 
-/* KPI strip */
-.kpi-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px}
-.kpi-card{background:var(--card);border-radius:var(--radius);padding:14px 16px;box-shadow:var(--shadow);border-left:3px solid var(--blue)}
-.kpi-card.purple{border-left-color:var(--purple)}
-.kpi-card.green{border-left-color:var(--green)}
-.kpi-card.orange{border-left-color:var(--orange)}
-.kpi-card.red{border-left-color:var(--red)}
+/* Card3d */
+.card3d{background:var(--card);border-radius:16px;padding:18px;margin-bottom:14px;
+  border:1px solid rgba(226,232,240,.8);
+  box-shadow:0 4px 6px -1px rgba(0,0,0,.05),0 2px 4px -2px rgba(0,0,0,.03);
+  transition:all .3s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d;position:relative;overflow:hidden}
+.card3d::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--blue),var(--purple));opacity:0;transition:opacity .3s}
+.card3d:hover{transform:translateY(-4px) rotateX(1deg);
+  box-shadow:0 20px 40px -12px rgba(79,142,247,.15),0 8px 16px -8px rgba(0,0,0,.08)}
+.card3d:hover::before{opacity:1}
+
+/* KPI */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:16px}
+.kpi{background:var(--card);border-radius:14px;padding:14px;border:1px solid var(--border);
+  position:relative;overflow:hidden;transition:all .3s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d;cursor:default}
+.kpi::after{content:'';position:absolute;top:-50%;right:-30%;width:80px;height:80px;border-radius:50%;opacity:.08;transition:all .4s}
+.kpi:hover{transform:translateY(-4px) scale(1.02);box-shadow:0 12px 24px -8px rgba(0,0,0,.12)}
+.kpi.blue::after{background:var(--blue)}.kpi.purple::after{background:var(--purple)}
+.kpi.green::after{background:var(--green)}.kpi.orange::after{background:var(--orange)}
+.kpi.red::after{background:var(--red)}
 .kpi-label{font-size:11px;color:var(--gray);margin-bottom:2px}
-.kpi-value{font-size:20px;font-weight:700;letter-spacing:-.5px}
-.kpi-sub{font-size:11px;color:var(--gray);margin-top:2px}
-.kpi-sub .up{color:var(--green)}
-.kpi-sub .down{color:var(--red)}
+.kpi-val{font-size:22px;font-weight:800;letter-spacing:-.5px;
+  background:linear-gradient(135deg,var(--dark) 0%,var(--gray) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.kpi-sub{font-size:10px;color:var(--gray);margin-top:2px}
 
-/* Kanban columns */
-.kanban-wrap{display:flex;gap:16px;overflow-x:auto;padding-bottom:8px}
-.kanban-col{min-width:260px;flex:1;background:var(--gray-light);border-radius:var(--radius);padding:12px}
-.kanban-col-title{font-size:13px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:6px}
-.kanban-col-title .badge{font-size:10px;padding:1px 8px;border-radius:10px;font-weight:600}
+/* Person */
+.person{background:var(--card);border-radius:16px;padding:16px 18px;margin-bottom:14px;
+  border:1px solid var(--border);position:relative;overflow:hidden;
+  transform-style:preserve-3d;transition:all .35s cubic-bezier(.4,0,.2,1)}
+.person::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;border-radius:0 4px 4px 0}
+.person.r1::before{background:linear-gradient(180deg,#10B981,#34D399)}
+.person.r2::before{background:linear-gradient(180deg,#4F8EF7,#60A5FA)}
+.person.r3::before{background:linear-gradient(180deg,#F59E0B,#FBBF24)}
+.person.r4::before{background:linear-gradient(180deg,#94A3B8,#CBD5E1)}
+.person:hover{transform:perspective(600px) rotateY(-2deg) translateX(4px);
+  box-shadow:0 12px 32px -8px rgba(0,0,0,.12),-4px 0 16px rgba(79,142,247,.08)}
+.person-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.person-name{font-size:15px;font-weight:700}
+.person-score{font-size:24px;font-weight:900;
+  background:linear-gradient(135deg,var(--blue),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.person-score.warn{background:linear-gradient(135deg,var(--orange),#FB923C);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.person-score.danger{background:linear-gradient(135deg,var(--red),#F87171);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.person-score.good{background:linear-gradient(135deg,var(--green),#34D399);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 
-/* Cards */
-.card{background:var(--card);border-radius:10px;padding:14px;margin-bottom:10px;box-shadow:var(--shadow);border:1px solid var(--border);transition:box-shadow .2s}
-.card:hover{box-shadow:0 4px 12px rgba(0,0,0,.08)}
-.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.card-name{font-weight:700;font-size:14px}
-.card-score{font-size:18px;font-weight:800;color:var(--blue)}
-.card-score.warn{color:var(--orange)}
-.card-score.danger{color:var(--red)}
-.card-score.good{color:var(--green)}
+/* Metric bar */
+.m-row{display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:12px}
+.m-label{width:60px;color:var(--gray);flex-shrink:0;font-weight:500}
+.m-bar{flex:1;height:7px;background:var(--gray-l);border-radius:4px;overflow:hidden;position:relative}
+.m-fill{height:100%;border-radius:4px;transition:width .6s cubic-bezier(.4,0,.2,1);position:relative}
+.m-fill::after{content:'';position:absolute;top:0;right:0;bottom:0;width:20px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.4));border-radius:0 4px 4px 0}
+.m-fill.blue{background:linear-gradient(90deg,#4F8EF7,#60A5FA)}
+.m-fill.green{background:linear-gradient(90deg,#10B981,#34D399)}
+.m-fill.orange{background:linear-gradient(90deg,#F59E0B,#FBBF24)}
+.m-fill.red{background:linear-gradient(90deg,#EF4444,#F87171)}
+.m-fill.purple{background:linear-gradient(90deg,#8B5CF6,#A78BFA)}
+.m-val{width:70px;text-align:right;font-weight:700;flex-shrink:0;font-variant-numeric:tabular-nums}
 
-/* Progress mini */
-.metric-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px}
-.metric-label{width:56px;color:var(--gray);flex-shrink:0}
-.metric-bar{flex:1;height:6px;background:var(--gray-light);border-radius:3px;overflow:hidden}
-.metric-bar-fill{height:100%;border-radius:3px;transition:width .4s}
-.metric-bar-fill.blue{background:var(--blue)}
-.metric-bar-fill.green{background:var(--green)}
-.metric-bar-fill.orange{background:var(--orange)}
-.metric-bar-fill.red{background:var(--red)}
-.metric-val{width:40px;text-align:right;font-weight:600;flex-shrink:0}
+/* Drill */
+.drill{background:var(--gray-l);border-radius:10px;margin-top:10px;
+  max-height:0;overflow:hidden;transition:max-height .4s ease,padding .4s ease;padding:0 12px}
+.drill.open{max-height:2000px;padding:12px;overflow-y:auto}
+.drill-title{font-size:12px;font-weight:700;margin-bottom:8px;color:var(--blue);cursor:pointer}
+.drill-cat{margin-bottom:8px}
+.drill-cat-title{font-size:12px;font-weight:700;color:var(--purple);margin-bottom:4px}
+.drill-item{display:flex;justify-content:space-between;align-items:center;
+  padding:4px 0;font-size:11px;border-bottom:1px dashed var(--border)}
+.drill-item:last-child{border:none}
+.drill-sub{font-size:10px;color:var(--gray);margin-left:4px}
 
-/* Person card special */
-.person-card{position:relative;overflow:hidden}
-.person-card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;border-radius:0 4px 4px 0}
-.person-card.rank-1::before{background:var(--green)}
-.person-card.rank-2::before{background:var(--blue)}
-.person-card.rank-3::before{background:var(--orange)}
-.person-card.rank-4::before{background:var(--gray)}
+/* Channel table */
+.ch-table{width:100%;border-collapse:separate;border-spacing:0;font-size:12px}
+.ch-table th{background:var(--gray-l);padding:10px 12px;text-align:left;font-weight:700;position:sticky;top:0;border-bottom:2px solid var(--border)}
+.ch-table td{padding:8px 12px;border-bottom:1px solid var(--border)}
+.ch-table tr:hover td{background:var(--blue-l)}
+.ch-table .num{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
 
-/* Table */
-.table-wrap{overflow-x:auto;margin-bottom:20px}
-table{width:100%;border-collapse:collapse;font-size:12px}
-th{background:var(--gray-light);padding:8px 10px;text-align:left;font-weight:600;white-space:nowrap;border-bottom:2px solid var(--border);position:sticky;top:0}
-td{padding:6px 10px;border-bottom:1px solid var(--border);white-space:nowrap}
-tr:hover td{background:var(--blue-light)}
-.cell-num{text-align:right;font-variant-numeric:tabular-nums}
-.cell-pct{text-align:right}
-.cell-green{color:var(--green);font-weight:600}
-.cell-red{color:var(--red);font-weight:600}
-.cell-orange{color:var(--orange);font-weight:600}
+/* Perf */
+.perf-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.perf-card{background:var(--card);border-radius:16px;padding:16px;border:1px solid var(--border);
+  transform-style:preserve-3d;transition:all .3s cubic-bezier(.4,0,.2,1)}
+.perf-card:hover{transform:translateY(-4px);box-shadow:0 16px 32px -8px rgba(0,0,0,.1)}
+.perf-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.perf-name{font-size:15px;font-weight:800}
+.perf-score{font-size:28px;font-weight:900;-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.perf-row{display:flex;align-items:center;gap:6px;margin-bottom:4px;font-size:11px}
+.perf-row .l{width:70px;color:var(--gray)}.perf-row .v{width:60px;text-align:right;font-weight:700}
+.perf-row .t{width:50px;text-align:right;color:var(--gray);font-size:10px}
+.perf-row .bar{flex:1;height:5px;background:var(--gray-l);border-radius:3px;overflow:hidden}
+.perf-row .fill{height:100%;border-radius:3px;transition:width .5s}
 
-/* Checklist */
-.checklist{list-style:none}
-.checklist li{padding:8px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;font-size:13px}
-.checklist li:last-child{border-bottom:none}
-.check-icon{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
-.check-icon.ok{background:var(--green-light);color:var(--green)}
-.check-icon.warn{background:var(--orange-light);color:var(--orange)}
-
-/* Section title */
-.section-title{font-size:16px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
-.section-title::before{content:'';width:4px;height:20px;background:var(--blue);border-radius:2px}
-
-/* Responsive */
-@media(max-width:768px){
-  .header{padding:14px 16px 12px}
-  .nav{padding:10px 16px}
-  .main{padding:0 16px 32px}
-  .kpi-strip{grid-template-columns:repeat(2,1fr)}
-  .kanban-wrap{flex-direction:column}
-  .kanban-col{min-width:100%}
-}
-/* Emp-Cat Drill styles */
-.emp-bar{grid-template-columns:repeat(5,1fr)}
-.tabbar{display:inline-flex;background:#e8eef6;border-radius:12px;padding:4px;gap:4px;margin-bottom:14px}
-.tabbar button{border:0;background:transparent;padding:8px 16px;border-radius:9px;font-size:13px;font-weight:600;color:var(--gray);cursor:pointer;transition:.2s}
-.tabbar button.on{background:#fff;color:var(--dark);box-shadow:0 2px 6px rgba(31,42,68,.1)}
-.emp-card{position:relative;overflow:hidden}
-.emp-card .top{display:flex;justify-content:space-between;align-items:flex-start;cursor:pointer}
-.emp-card .nm{font-size:17px;font-weight:800}
-.emp-card .rank{font-size:12px;color:var(--gray)}
-.emp-card .gp{font-size:24px;font-weight:800;margin-top:8px}
-.emp-card .rate{font-size:13px;color:var(--gray);margin-top:2px}
-.pbar{height:8px;border-radius:5px;background:var(--gray-light);margin-top:12px;overflow:hidden}
-.pbar i{display:block;height:100%;border-radius:5px;transition:width 1.2s ease}
-.drill{margin-top:14px;border-top:1px dashed var(--border);padding-top:12px;display:none}
-.drill.open{display:block;animation:fadeIn .4s both}
-.blk{border:1px solid var(--border);border-radius:12px;margin-bottom:10px;overflow:hidden}
-.blk-head{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;cursor:pointer;background:#f8fafc;transition:.2s}
-.blk-head:hover{background:#eef4fb}
-.blk-head .bname{font-weight:700;font-size:14px}
-.blk-head .bgp{font-weight:700}
-.sku-rows{display:none}
-.sku-rows.open{display:block;animation:fadeIn .3s both}
-.negcell{color:var(--red)}
-.split{display:flex;gap:10px;margin-top:4px}
-.split .s{font-size:12px;color:var(--gray)}
-.cat-grid{grid-template-columns:repeat(5,1fr)}
-.cat-card{position:relative;overflow:hidden;cursor:pointer;border:1px solid var(--border)}
-.cat-card .ic{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:10px}
-.cat-card .cn{font-size:15px;font-weight:700}
-.cat-card .cgp{font-size:20px;font-weight:800;margin-top:6px}
-.cat-card .meta{font-size:12px;color:var(--gray);margin-top:4px}
-.cat-card .bar{height:5px;border-radius:3px;background:var(--gray-light);margin-top:10px;overflow:hidden}
-.cat-card .bar i{display:block;height:100%;border-radius:3px;transition:width 1s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-@media(max-width:900px){.emp-bar{grid-template-columns:1fr 1fr}.cat-grid{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:600px){.emp-bar{grid-template-columns:1fr}.cat-grid{grid-template-columns:repeat(2,1fr)}}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-thumb{background:#CBD5E1;border-radius:3px}
+@media(max-width:600px){.kpi-grid{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="header-top">
-    <h1>李家村万达华为授权体验店 · 8月销售进度看板</h1>
-    <div class="date-info">数据区间 2026-08-01 ~ 08-07 | 更新于 08-08</div>
+<div class="scene-bg"></div>
+
+<div class="header" id="header">
+  <div class="header-row">
+    <div>
+      <h1>李家村万达华为授权体验店</h1>
+      <div class="sub">8月业绩看板 · 数据区间 08-01 ~ 08-07</div>
+    </div>
+    <div style="text-align:right">
+      <div style="font-size:10px;opacity:.7">毛利达成</div>
+      <div id="hdrPct" style="font-size:22px;font-weight:900">--</div>
+    </div>
   </div>
-  <div class="progress-bar-wrap">
-    <div class="progress-bar-fill" style="width:25.8%"></div>
-  </div>
-  <div class="progress-meta">
-    <span>时间进度 25.8%（第8天/31天）</span>
-    <span>销额完成 14.1% | 毛利完成 14.2%</span>
-  </div>
+  <div class="pbar-wrap"><div class="pbar-fill" id="hdrBar" style="width:0%"></div></div>
+  <div class="pbar-meta"><span id="hdrDone">--</span><span id="hdrTarget">--</span></div>
 </div>
 
-<div class="nav">
-  <button class="active" onclick="switchTab('sales')">销售进度</button>
-  <button onclick="switchTab('perf')">绩效考评</button>
-  <button onclick="switchTab('ops')">运营看板</button>
-  <button onclick="switchTab('channel')">渠道挂账</button>
-  <button onclick="switchTab('daily')">每日任务</button>
-  <button onclick="switchTab('onpage')">一页纸闭环</button>
-  <button onclick="switchTab('empcat')">员工品类</button>
-      <button onclick="switchTab('manager')">店长绩效</button>
+<div class="nav" id="navBar">
+  <button class="active" data-tab="sales">销售进度</button>
+  <button data-tab="channel">渠道挂账</button>
+  <button data-tab="perf">绩效考评</button>
 </div>
 
 <div class="main">
-
-<!-- ==================== 销售进度 ==================== -->
-<div class="section active" id="sec-sales">
-  <div class="kpi-strip">
-    <div class="kpi-card"><div class="kpi-label">销售额任务</div><div class="kpi-value">160万</div><div class="kpi-sub">完成 22.5万 <span class="down">缺口 137.5万</span></div></div>
-    <div class="kpi-card purple"><div class="kpi-label">毛利任务</div><div class="kpi-value">20.5万</div><div class="kpi-sub">完成 2.9万 <span class="down">缺口 17.6万</span></div></div>
-    <div class="kpi-card green"><div class="kpi-label">手机任务/完成</div><div class="kpi-value">170/30</div><div class="kpi-sub">完成率 17.6%</div></div>
-    <div class="kpi-card orange"><div class="kpi-label">增值任务/完成</div><div class="kpi-value">5.7万/0.96万</div><div class="kpi-sub">完成率 16.8%</div></div>
+  <div class="tab active" id="tab-sales">
+    <div class="kpi-grid" id="kpiGrid"></div>
+    <div id="salesPersons"></div>
   </div>
-
-  <div class="section-title">业务员销售看板</div>
-  <div class="kanban-wrap" id="person-kanban"></div>
-
-  <div class="section-title" style="margin-top:24px">品类达成明细</div>
-  <div class="table-wrap">
-    <table id="category-table">
-      <thead><tr>
-        <th>品类</th><th>分值</th><th>任务</th><th>完成</th><th>缺口</th><th>完成率</th><th>状态</th>
-      </tr></thead>
-      <tbody id="category-tbody"></tbody>
-    </table>
+  <div class="tab" id="tab-channel">
+    <div class="card3d">
+      <div style="font-size:14px;font-weight:700;margin-bottom:12px">各业务员渠道销售净额明细</div>
+      <div style="overflow-x:auto"><table class="ch-table" id="channelTable"></table></div>
+    </div>
+    <div class="card3d">
+      <div style="font-size:14px;font-weight:700;margin-bottom:12px">渠道占比分析</div>
+      <div id="channelViz"></div>
+    </div>
   </div>
-</div>
-
-<!-- ==================== 绩效考评 ==================== -->
-<div class="section" id="sec-perf">
-  <div class="kpi-strip">
-    <div class="kpi-card green"><div class="kpi-label">陈超磊 绩效</div><div class="kpi-value">32.8</div><div class="kpi-sub">满分 95 | 排名 1</div></div>
-    <div class="kpi-card"><div class="kpi-label">邵乐乐 绩效</div><div class="kpi-value">30.6</div><div class="kpi-sub">满分 95 | 排名 2</div></div>
-    <div class="kpi-card orange"><div class="kpi-label">杨丽华 绩效</div><div class="kpi-value">27.6</div><div class="kpi-sub">满分 95 | 排名 3</div></div>
-    <div class="kpi-card purple"><div class="kpi-label">李泽 绩效</div><div class="kpi-value">32.8</div><div class="kpi-sub">满分 95 | 排名 1</div></div>
+  <div class="tab" id="tab-perf">
+    <div class="kpi-grid" id="perfKpi"></div>
+    <div class="perf-grid" id="perfGrid"></div>
   </div>
-  <div class="section-title">个人绩效明细</div>
-  <div class="kanban-wrap" id="perf-kanban"></div>
-</div>
-
-<!-- ==================== 运营看板 ==================== -->
-<div class="section" id="sec-ops">
-  <div class="kpi-strip">
-    <div class="kpi-card green"><div class="kpi-label">运营看板总分</div><div class="kpi-value">72.2</div><div class="kpi-sub">满分 100 | 排名 5</div></div>
-  </div>
-  <div class="section-title">运营评分明细</div>
-  <div class="table-wrap">
-    <table>
-      <thead><tr><th>分类</th><th>项目</th><th>目标</th><th>达成</th><th>分值</th><th>得分</th><th>规则</th><th>措施</th></tr></thead>
-      <tbody id="ops-tbody"></tbody>
-    </table>
-  </div>
-</div>
-
-<!-- ==================== 渠道挂账 ==================== -->
-<div class="section" id="sec-channel">
-  <div class="kpi-strip">
-    <div class="kpi-card orange"><div class="kpi-label">渠道挂账任务</div><div class="kpi-value">12万</div><div class="kpi-sub">完成 1.97万 <span class="down">缺口 10万</span></div></div>
-  </div>
-  <div class="section-title">渠道挂账进度</div>
-  <div class="table-wrap">
-    <table>
-      <thead><tr><th>姓名</th><th>任务</th><th>完成</th><th>缺口</th><th>完成率</th></tr></thead>
-      <tbody>
-        <tr><td>邵乐乐</td><td class="cell-num">30,000</td><td class="cell-num">0</td><td class="cell-num cell-red">-30,000</td><td class="cell-pct cell-red">0%</td></tr>
-        <tr><td>杨丽华</td><td class="cell-num">30,000</td><td class="cell-num">0</td><td class="cell-num cell-red">-30,000</td><td class="cell-pct cell-red">0%</td></tr>
-        <tr><td>李泽</td><td class="cell-num">30,000</td><td class="cell-num">0</td><td class="cell-num cell-red">-30,000</td><td class="cell-pct cell-red">0%</td></tr>
-        <tr><td>陈超磊</td><td class="cell-num">30,000</td><td class="cell-num">19,697</td><td class="cell-num cell-red">-10,303</td><td class="cell-pct cell-orange">65.7%</td></tr>
-        <tr><td>张博晨</td><td class="cell-num">-</td><td class="cell-num">0</td><td class="cell-num">0</td><td class="cell-pct">-</td></tr>
-        <tr style="font-weight:700"><td>合计</td><td class="cell-num">120,000</td><td class="cell-num">19,697</td><td class="cell-num cell-red">-100,303</td><td class="cell-pct cell-red">16.4%</td></tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-
-<!-- ==================== 每日任务 ==================== -->
-<div class="section" id="sec-daily">
-  <div class="section-title">8月8日 每日任务缺口</div>
-  <div class="table-wrap">
-    <table>
-      <thead><tr><th>姓名</th><th>手机</th><th>毛利</th><th>增值</th><th>智慧办公</th><th>音频穿戴</th><th>HD</th><th>Care+</th><th>回收</th><th>贴膜</th><th>电信积分</th><th>滞销</th><th>摄影课</th><th>优享/会员</th><th>尊享/储值</th></tr></thead>
-      <tbody id="daily-tbody"></tbody>
-    </table>
-  </div>
-  <div class="section-title" style="margin-top:24px">8月8日 每日达成</div>
-  <div class="table-wrap">
-    <table>
-      <thead><tr><th>姓名</th><th>手机</th><th>毛利</th><th>增值</th><th>智慧办公</th><th>音频穿戴</th><th>HD</th><th>会员</th><th>回收</th><th>贴膜</th><th>电信积分</th><th>滞销</th><th>摄影课</th><th>优享/会员</th><th>尊享/储值</th><th>得分</th></tr></thead>
-      <tbody id="daily-achieved-tbody"></tbody>
-    </table>
-  </div>
-</div>
-
-<!-- ==================== 一页纸闭环 ==================== -->
-<div class="section" id="sec-onpage">
-  <div class="kpi-strip">
-    <div class="kpi-card green"><div class="kpi-label">闭环率</div><div class="kpi-value">5.7</div><div class="kpi-sub">综合完成率</div></div>
-  </div>
-  <div class="section-title">基础运营闭环清单</div>
-  <ul class="checklist" id="checklist"></ul>
-</div>
-
-<!-- ==================== 员工×品类明细达成 ==================== -->
-<div class="section" id="sec-empcat">
-  <div class="kpi-strip">
-    <div class="kpi-card"><div class="kpi-label">总毛利</div><div class="kpi-value" id="ec-totalgp"></div><div class="kpi-sub" id="ec-date"></div></div>
-    <div class="kpi-card"><div class="kpi-label">毛利完成率</div><div class="kpi-value" id="ec-rate"></div><div class="kpi-sub" id="ec-tp"></div></div>
-    <div class="kpi-card"><div class="kpi-label">品类数</div><div class="kpi-value" id="ec-cats"></div><div class="kpi-sub">员工×品类明细</div></div>
-  </div>
-  <div class="section-title">员工毛利达成（点卡片下钻看品类/逐笔）</div>
-  <div class="tabbar" id="ec-sort">
-    <button data-sort="gp" class="on">按毛利</button>
-    <button data-sort="rate">按排名</button>
-    <button data-sort="cnt">按笔数</button>
-  </div>
-  <div class="grid emp-bar" id="ec-empGrid"></div>
-  <div class="section-title">品类毛利结构（点卡片看日度趋势）</div>
-  <div class="grid cat-grid" id="ec-catGrid"></div>
-</div>
-
-<!-- ==================== 店长绩效 ==================== -->
-<div class="section" id="sec-manager">
-  <div class="kpi-strip">
-    <div class="kpi-card"><div class="kpi-label">店长绩效总分</div><div class="kpi-value">36.5</div><div class="kpi-sub">满分 100</div></div>
-  </div>
-  <div class="section-title">店长绩效考评明细</div>
-  <div class="table-wrap">
-    <table>
-      <thead><tr><th>考核内容</th><th>项目</th><th>目标</th><th>完成</th><th>权重</th><th>得分</th></tr></thead>
-      <tbody id="manager-tbody"></tbody>
-    </table>
-  </div>
-</div>
-
 </div>
 
 <script>
-// ===== Data =====
-const persons = [
-  { name:'邵乐乐', grossProfit:{task:50000,done:4193.48}, phone:{task:43,done:8},
-    pc:{task:3,done:0}, tablet:{task:8,done:0}, wear:{task:25,done:21}, audio:{task:9,done:0},
-    hd:{task:0,done:0}, smartOffice:{task:11,done:0}, valueAdd:{task:14250,done:1287.57},
-    sales:{task:400000,done:35780.3}, score:30.62, rank:2,
-    points:{task:150,done:64}, carePlus:{total:8,done:1}, recycle:{total:2,done:2}, film:{total:5,done:10},
-    photo:{task:1,done:0}, exam:{task:3,done:0}, health:.12, starUnion:{you:1,zun:0} },
-  { name:'杨丽华', grossProfit:{task:51000,done:8217.27}, phone:{task:43,done:8},
-    pc:{task:3,done:0}, tablet:{task:8,done:1}, wear:{task:25,done:5}, audio:{task:9,done:0},
-    hd:{task:0,done:0}, smartOffice:{task:11,done:1}, valueAdd:{task:14250,done:2141.94},
-    sales:{task:400000,done:65307.02}, score:27.63, rank:3,
-    points:{task:150,done:0}, carePlus:{total:8,done:0}, recycle:{total:3,done:1}, film:{total:17,done:10},
-    photo:{task:1,done:0}, exam:{task:3,done:0}, health:.26, starUnion:{you:0,zun:0} },
-  { name:'李泽', grossProfit:{task:52000,done:6948.32}, phone:{task:42,done:6},
-    pc:{task:4,done:0}, tablet:{task:9,done:0}, wear:{task:25,done:6}, audio:{task:9,done:1},
-    hd:{task:1,done:0}, smartOffice:{task:13,done:0}, valueAdd:{task:14250,done:3039.15},
-    sales:{task:400000,done:52275}, score:32.83, rank:1,
-    points:{task:150,done:0}, carePlus:{total:6,done:5}, recycle:{total:0,done:0}, film:{total:4,done:2},
-    photo:{task:1,done:0}, exam:{task:3,done:-2}, health:.40, starUnion:{you:3,zun:2} },
-  { name:'陈超磊', grossProfit:{task:52000,done:8676.99}, phone:{task:42,done:8},
-    pc:{task:4,done:1}, tablet:{task:9,done:1}, wear:{task:25,done:2}, audio:{task:10,done:2},
-    hd:{task:1,done:0}, smartOffice:{task:13,done:2}, valueAdd:{task:14250,done:2126.08},
-    sales:{task:400000,done:70558}, score:32.83, rank:1,
-    points:{task:150,done:0}, carePlus:{total:8,done:2}, recycle:{total:3,done:1}, film:{total:12,done:6},
-    photo:{task:1,done:0}, exam:{task:3,done:-3}, health:.45, starUnion:{you:2,zun:0} },
-];
+// === DATA_PLACEHOLDER ===
+// Will be replaced by Python
+var EMP_SUM = {"邵乐乐": {"qty": 22, "amount": 31143.3, "profit": 3778.55, "cats": {"15增值服务": {"qty": 9, "amount": 1245, "profit": 962.76}, "01手机": {"qty": 8, "amount": 25619, "profit": 2553.5}, "10运营商业务": {"qty": 1, "amount": 0, "profit": 0}, "08穿戴": {"qty": 4, "amount": 4279.3, "profit": 262.29}}}, "杨丽华": {"qty": 27, "amount": 65108.02, "profit": 8145.92, "cats": {"01手机": {"qty": 8, "amount": 52122.02, "profit": 5046.93}, "08穿戴": {"qty": 5, "amount": 7944, "profit": 1020.2}, "15增值服务": {"qty": 11, "amount": 1685, "profit": 1578.79}, "06平板电脑": {"qty": 1, "amount": 2799, "profit": 391}, "09配件": {"qty": 2, "amount": 558, "profit": 109}}}, "陈超磊": {"qty": 30, "amount": 69908, "profit": 8360.84, "cats": {"01手机": {"qty": 8, "amount": 50682, "profit": 4883.91}, "15增值服务": {"qty": 15, "amount": 1693, "profit": 1436.93}, "07音频": {"qty": 2, "amount": 2698, "profit": 493}, "09配件": {"qty": 1, "amount": 269, "profit": -51}, "08穿戴": {"qty": 2, "amount": 3118, "profit": 592}, "05电脑": {"qty": 1, "amount": 8049, "profit": 521}, "06平板电脑": {"qty": 1, "amount": 3399, "profit": 485}}}, "李泽": {"qty": 24, "amount": 50473, "profit": 5618.74, "cats": {"01手机": {"qty": 6, "amount": 39694, "profit": 2868}, "15增值服务": {"qty": 10, "amount": 1548, "profit": 1425.57}, "07音频": {"qty": 1, "amount": 1199, "profit": 180.58}, "08穿戴": {"qty": 6, "amount": 7783, "profit": 1382.2}, "21演示机": {"qty": 1, "amount": 249, "profit": -237.61}}}, "张博晨": {"qty": 2, "amount": 999, "profit": 980.11, "cats": {"15增值服务": {"qty": 2, "amount": 999, "profit": 980.11}}}};
+var CHANNEL = {"张博晨": {"自然客流": 466606.0}, "李泽": {"自然客流": 92045.0, "企业上门购": 1345.0}, "邵乐乐": {"自然客流": 23832.32, "京东到家": 7141.98, "企业上门购": 3497.0}, "杨丽华": {"自然客流": 57808.020000000004, "三大地图": 2799.0}, "陈超磊": {"自然客流": 52850.0, "三大地图": 19697.0}, "": {"": 727621.32}};
+var EMP_DETAIL = {"邵乐乐": {"增值服务": [{"date": "2026-08-01", "name": "COOYEE 耳夹式耳机 S33 pro  白", "qty": 1, "amt": 0, "gp": -89}, {"date": "2026-08-01", "name": "Cooyee华为Nova15 Pro/Ultra高清钢化膜", "qty": 1, "amt": 99, "gp": 80.01}, {"date": "2026-08-01", "name": "Cooyee华为Nova15 Pro/Ultra高清钢化膜", "qty": 1, "amt": 99, "gp": 80.01}, {"date": "2026-08-01", "name": "COOYEE 华为 mate70pro pro+3D热弯钢化膜", "qty": 1, "amt": 99, "gp": 61.41}, {"date": "2026-08-05", "name": "星联优享-699", "qty": 1, "amt": 549, "gp": 549}, {"date": "2026-08-05", "name": "闪能 66w全兼容快充10000毫安移动电源LP13  66W 1000  白色", "qty": 1, "amt": 0, "gp": -59}, {"date": "2026-08-05", "name": "COOYEE 华为Pura X 前屏钢化膜", "qty": 1, "amt": 0, "gp": -21.61}, {"date": "2026-08-07", "name": "399贴膜套包", "qty": 1, "amt": 399, "gp": 399}, {"date": "2026-08-07", "name": "Cooyee 华为mate X7 3D热弯全胶钢化膜", "qty": 1, "amt": 0, "gp": -37.06}], "手机": [{"date": "2026-08-01", "name": "华为畅享90 Pro Max CHZ-AL00  8GB+512GB  曜金黑", "qty": 1, "amt": 2299, "gp": 268.25}, {"date": "2026-08-01", "name": "华为畅享90 Pro Max CHZ-AL00  8GB+512GB  飞天青", "qty": 1, "amt": 2299, "gp": 283}, {"date": "2026-08-02", "name": "华为 nova15 PSN-AL00  12GB+256GB  好搭紫", "qty": 1, "amt": 2449, "gp": 208}, {"date": "2026-08-02", "name": "华为畅享90 Pro Max CHZ-AL00  8GB+512GB  曜金黑", "qty": 1, "amt": 2099, "gp": 68.25}, {"date": "2026-08-02", "name": "华为 Mate80 VYG-AL30  16GB+512GB  曜石黑", "qty": 1, "amt": 5199, "gp": 524}, {"date": "2026-08-05", "name": "华为畅享90 Pro Max CHZ-AL00  8GB+512GB  曜金黑", "qty": -1, "amt": -2099, "gp": -68.25}, {"date": "2026-08-05", "name": "华为畅享90 Plus JUY-AL50  8GB+256GB  羽沙白", "qty": 1, "amt": 1486.65, "gp": -25.35}, {"date": "2026-08-05", "name": "华为 PuraX VDE-AL00  16GB+512GB  型格紫", "qty": 1, "amt": 7839.02, "gp": 959.02}, {"date": "2026-08-05", "name": "华为畅享90 Pro Max CHZ-AL00  8GB+512GB  曜金黑", "qty": 1, "amt": 2099, "gp": 68.25}, {"date": "2026-08-07", "name": "华为畅享90 Pro Max CHZ-AL00  8GB+256GB  飞天青", "qty": 1, "amt": 1948.33, "gp": 268.33}], "其他": [{"date": "2026-08-02", "name": "5G半成卡", "qty": 1, "amt": 0, "gp": 0}, {"date": "2026-08-02", "name": "单卡新入网", "qty": 1, "amt": 59, "gp": 236}, {"date": "2026-08-02", "name": "权益包", "qty": 1, "amt": 5, "gp": 0}], "穿戴": [{"date": "2026-08-04", "name": "华为 超新星手表X1 DRA-L10(蓝色硅胶表带)星际蓝", "qty": 1, "amt": 1598, "gp": 367}, {"date": "2026-08-05", "name": "华为手环11 CDY-B39 NFC版(黑色氟橡胶表带)羽砂黑", "qty": 1, "amt": 269, "gp": 5.99}, {"date": "2026-08-05", "name": "华为手环11 CDY-B39 NFC版(黑色氟橡胶表带)羽砂黑", "qty": 6, "amt": 1614, "gp": 35.94}, {"date": "2026-08-05", "name": "华为手环11 CDY-B39 NFC版(黑色氟橡胶表带)羽砂黑", "qty": 11, "amt": 2959, "gp": 143}, {"date": "2026-08-05", "name": "华为 WATCH GT6 KSU-B19 41mm(白色复合素皮表带)浮光白", "qty": 1, "amt": 1154.3, "gp": -145.7}, {"date": "2026-08-07", "name": "华为 WATCH GT6 ATM-B19 46mm(黑色氟橡胶表带)雅丹黑", "qty": 1, "amt": 1258, "gp": 35}]}, "杨丽华": {"手机": [{"date": "2026-08-01", "name": "华为畅享90 Pro Max CHZ-AL00  8GB+512GB  飞天青", "qty": 1, "amt": 2299, "gp": 283}, {"date": "2026-08-01", "name": "华为 Mate X7 典藏版 DEL-AL20  16GB+512GB  云锦白", "qty": 1, "amt": 13799, "gp": 1080.91}, {"date": "2026-08-02", "name": "华为 Pura90 Pro Max SCA-AL00  16GB+1TB  晨曦金", "qty": 1, "amt": 8329.02, "gp": 934.02}, {"date": "2026-08-02", "name": "华为 PuraX Max HOP-AL00  12GB+512GB  幻夜黑", "qty": 1, "amt": 11799, "gp": 879}, {"date": "2026-08-03", "name": "华为 Pura90 Pro MLN-AL00  12GB+512GB  椰青白", "qty": 1, "amt": 5799, "gp": 699}, {"date": "2026-08-04", "name": "华为畅享90 Pro Max CHZ-AL00  8GB+512GB  曜金黑", "qty": 1, "amt": 2299, "gp": 283}, {"date": "2026-08-06", "name": "华为 Mate80 VYG-AL00  12GB+512GB  雪域白", "qty": 1, "amt": 4999, "gp": 579}, {"date": "2026-08-07", "name": "华为 nova16 EMA-AL00U 12GB+256GB 星空黑", "qty": 1, "amt": 2799, "gp": 309}], "穿戴": [{"date": "2026-08-01", "name": "华为 WATCH5 RTS-AL00 46mm(钛金属表带)钛空银", "qty": 1, "amt": 2999, "gp": 439}, {"date": "2026-08-02", "name": "华为 WATCH D2 LCA-B10(黑色氟橡胶表带)无色", "qty": 1, "amt": 2988, "gp": 572.2}, {"date": "2026-08-02", "name": "华为手环11 CDY-B39 NFC版(白色氟橡胶表带) 悦动白", "qty": 1, "amt": 269, "gp": 13}, {"date": "2026-08-03", "name": "华为 WATCH GT6 KSU-B19 41mm(紫色氟橡胶表带)流光紫", "qty": 1, "amt": 989, "gp": -157}, {"date": "2026-08-04", "name": "华为 WATCH FIT4 SYA-B19(韵律黑氟橡胶表带)韵律黑", "qty": 1, "amt": 699, "gp": 103}], "增值服务": [{"date": "2026-08-01", "name": "199贴膜套包", "qty": 1, "amt": 200, "gp": 200}, {"date": "2026-08-01", "name": "Cooyee华为Nova15 Pro/Ultra高清钢化膜", "qty": 1, "amt": 100, "gp": 81.01}, {"date": "2026-08-02", "name": "199贴膜套包", "qty": 1, "amt": 199, "gp": 199}, {"date": "2026-08-02", "name": "COOYEE 华为Mate X6 热弯全胶钢化膜", "qty": 1, "amt": 0, "gp": -37.65}, {"date": "2026-08-02", "name": "Cooyee华为Pura X MAX前屏高清钢化膜", "qty": 1, "amt": 0, "gp": -21.96}, {"date": "2026-08-03", "name": "199贴膜套包", "qty": 1, "amt": 199, "gp": 199}, {"date": "2026-08-03", "name": "Cooyee 华为mate80 Rs 一体镜头膜", "qty": 1, "amt": 0, "gp": -23.57}, {"date": "2026-08-03", "name": "Cooyee 华为mate80 pro Max-mate80 RS 高清钢化膜", "qty": 1, "amt": 0, "gp": -18.85}, {"date": "2026-08-03", "name": "199贴膜套包", "qty": 1, "amt": 199, "gp": 199}, {"date": "2026-08-03", "name": "Cooyee华为Pura90Pro铝合金镜头膜 黑色 带定位器", "qty": 1, "amt": 0, "gp": -26}, {"date": "2026-08-03", "name": "COOYEE 华为GT6手表钢化膜 41mm 定位版", "qty": 2, "amt": 198, "gp": 161.16}, {"date": "2026-08-04", "name": "399贴膜套包", "qty": 1, "amt": 399, "gp": 399}, {"date": "2026-08-04", "name": "199贴膜套包", "qty": 1, "amt": 190, "gp": 190}, {"date": "2026-08-04", "name": "199贴膜套包", "qty": 1, "amt": 199, "gp": 199}], "平板": [{"date": "2026-08-04", "name": "华为 MatePad 11.5S 灵动款  SLG-W50  (12G+256G)柔光版  原野绿", "qty": 1, "amt": 2799, "gp": 391}], "其他": [{"date": "2026-08-06", "name": "华为冰糖全能充电器(Max 100W)HW-200500C03白", "qty": 1, "amt": 229, "gp": 44}, {"date": "2026-08-07", "name": "华为自带线全能充移动电源  66W 12000  雪域白", "qty": 1, "amt": 329, "gp": 65}], "费用类": [{"date": "2026-08-06", "name": "打包费", "qty": 1, "amt": 1, "gp": 1}]}, "李泽": {"手机": [{"date": "2026-08-01", "name": "华为 PuraX Max HOP-AL00  12GB+512GB  零度白", "qty": 1, "amt": 11799, "gp": 879}, {"date": "2026-08-02", "name": "华为 Mate X7 DEL-AL10  12GB+512GB  寰宇红", "qty": 1, "amt": 12499, "gp": 669}, {"date": "2026-08-03", "name": "华为畅享90 Pro Max CHZ-AL00  8GB+256GB  飞天青", "qty": 1, "amt": 1899, "gp": 219}, {"date": "2026-08-03", "name": "华为 Mate80 Pro SGT-AL50  12GB+512GB  曜石黑", "qty": 1, "amt": 5699, "gp": 609}, {"date": "2026-08-05", "name": "华为 Mate 70 Pro 优享版 PLR-AL80  12GB+512GB  云杉绿", "qty": 1, "amt": 4999, "gp": 183}, {"date": "2026-08-05", "name": "华为 nova16 EMA-AL00U 12GB+256GB 幻彩贝母", "qty": 1, "amt": 2799, "gp": 309}], "增值服务": [{"date": "2026-08-01", "name": "199贴膜套包", "qty": 1, "amt": 199, "gp": 199}, {"date": "2026-08-01", "name": "COOYEE 华为Pura X 一体镜头膜 带定位器", "qty": 1, "amt": 0, "gp": -23.57}, {"date": "2026-08-01", "name": "COOYEE 华为Pura X 前屏钢化膜", "qty": 1, "amt": 0, "gp": -21.61}, {"date": "2026-08-02", "name": "星联尊享-2000", "qty": 1, "amt": 702, "gp": 702}, {"date": "2026-08-02", "name": "华为 Clip2 Care+（一年期）", "qty": 1, "amt": 99, "gp": 39.6}, {"date": "2026-08-02", "name": "RockSpace 活动权益膜 S码(180BZ-01J)", "qty": 1, "amt": 49, "gp": 44.72}, {"date": "2026-08-03", "name": "Cooyee华为Nova15 Pro/Ultra高清钢化膜", "qty": 1, "amt": 100, "gp": 81.01}, {"date": "2026-08-03", "name": "星联优享-499", "qty": 1, "amt": 400, "gp": 400}, {"date": "2026-08-03", "name": "星联优享-499", "qty": 1, "amt": 400, "gp": 400}, {"date": "2026-08-05", "name": "星联优享-499", "qty": 1, "amt": 400, "gp": 400}, {"date": "2026-08-05", "name": "Cooyee华为Nova14/15/16高清钢化膜", "qty": 1, "amt": 0, "gp": -19}, {"date": "2026-08-05", "name": "Cooyee华为Nova14/15/16高清钢化膜", "qty": 1, "amt": 0, "gp": -19}, {"date": "2026-08-05", "name": "COOYEE 华为 mate70pro pro+3D热弯钢化膜", "qty": 1, "amt": 0, "gp": -37.59}, {"date": "2026-08-07", "name": "星联尊享-2000", "qty": 1, "amt": 822, "gp": 822}, {"date": "2026-08-07", "name": "华为 WATCH D2 Care+（一年期）", "qty": 1, "amt": 179, "gp": 71.6}], "音频": [{"date": "2026-08-02", "name": "华为 FreeClip 2 耳机 T0027 丹宁蓝", "qty": 1, "amt": 1199, "gp": 130.58}], "穿戴": [{"date": "2026-08-02", "name": "华为 WATCH FIT 5 NKI-B19  悦动白(白色氟橡胶表带)", "qty": 1, "amt": 899, "gp": 24}, {"date": "2026-08-06", "name": "华为 WATCH FIT 5 NKI-B19  韵律黑(黑色氟橡胶表带)", "qty": 1, "amt": 1099, "gp": 224}, {"date": "2026-08-06", "name": "华为 WATCH FIT 5 NKI-B19  风信紫(淡紫色氟橡胶表带)", "qty": 1, "amt": 1099, "gp": 224}, {"date": "2026-08-07", "name": "华为 WATCH FIT 5 NKI-B19  悦动白(白色氟橡胶表带)", "qty": 1, "amt": 999, "gp": 202}, {"date": "2026-08-07", "name": "华为 WATCH FIT 5 NKI-B19  悦动白(白色氟橡胶表带)", "qty": 1, "amt": 899, "gp": 102}, {"date": "2026-08-07", "name": "华为 WATCH D2 LCA-B11(白色复合素皮表带)无色", "qty": 1, "amt": 2788, "gp": 372.2}], "演示机": [{"date": "2026-08-02", "name": "华为 Watch FIT 3 SLO-B19(珍珠白真皮表带)珍珠白-演示机", "qty": 1, "amt": 249, "gp": -237.61}]}, "陈超磊": {"手机": [{"date": "2026-08-01", "name": "华为 PuraX Max HOP-AL00  12GB+512GB  幻夜黑", "qty": -1, "amt": -11699, "gp": -779}, {"date": "2026-08-01", "name": "华为 Mate X7 DEL-AL10  12GB+256GB  曜石黑", "qty": 1, "amt": 11799, "gp": 897.91}, {"date": "2026-08-01", "name": "华为 PuraX Max HOP-AL00  12GB+512GB  幻夜黑", "qty": 1, "amt": 11599, "gp": 679}, {"date": "2026-08-02", "name": "华为 Pura90 Pro MLN-AL00  12GB+512GB  桑果黑", "qty": 1, "amt": 5799, "gp": 699}, {"date": "2026-08-03", "name": "华为 nova16 EMA-AL00U 12GB+256GB 星空黑", "qty": 1, "amt": 2889, "gp": 399}, {"date": "2026-08-04", "name": "华为 Mate80 VYG-AL30  16GB+512GB  曜石黑", "qty": 1, "amt": 5299, "gp": 624}, {"date": "2026-08-04", "name": "华为 PuraX Max HOP-AL00  12GB+512GB  橄榄金", "qty": 1, "amt": 11799, "gp": 879}, {"date": "2026-08-06", "name": "华为畅享90 Plus JUY-AL50  8GB+256GB  星海蓝", "qty": 1, "amt": 1799, "gp": 287}, {"date": "2026-08-06", "name": "华为 Pura90 Pro MLN-AL00  12GB+512GB  椰青白", "qty": 1, "amt": 5699, "gp": 599}, {"date": "2026-08-06", "name": "华为 Pura90 Pro MLN-AL00  12GB+512GB  椰青白", "qty": 1, "amt": 5699, "gp": 599}], "增值服务": [{"date": "2026-08-01", "name": "199贴膜套包", "qty": 1, "amt": 199, "gp": 199}, {"date": "2026-08-01", "name": "COOYEE 华为GT6手表钢化膜 46mm 定位版", "qty": 1, "amt": 100, "gp": 80.19}, {"date": "2026-08-02", "name": "Cooyee华为P70/P80/P90pro高清钢化膜", "qty": 1, "amt": 0, "gp": -19}, {"date": "2026-08-02", "name": "Cooyee华为matepad air 12寸2024  2.5D高清钢化膜", "qty": 1, "amt": 99, "gp": 71.08}, {"date": "2026-08-02", "name": "199贴膜套包", "qty": 1, "amt": 299, "gp": 299}, {"date": "2026-08-02", "name": "Cooyee华为P70/P80/P90pro高清钢化膜", "qty": 1, "amt": 0, "gp": -19}, {"date": "2026-08-02", "name": "Cooyee华为Pura90Pro铝合金镜头膜 黑色 带定位器", "qty": 1, "amt": 0, "gp": -26}, {"date": "2026-08-03", "name": "Cooyee华为Nova14/15/16高清钢化膜", "qty": 1, "amt": 99, "gp": 80}, {"date": "2026-08-04", "name": "199贴膜套包", "qty": 1, "amt": 200, "gp": 200}, {"date": "2026-08-04", "name": "Cooyee 华为mate80-mate80Pro 高清钢化膜", "qty": 1, "amt": 0, "gp": -18.89}, {"date": "2026-08-04", "name": "星联优享-499", "qty": 1, "amt": 499, "gp": 499}, {"date": "2026-08-04", "name": "闪能 66w全兼容快充10000毫安移动电源LP13  66W 1000  白色", "qty": 1, "amt": 0, "gp": -59}, {"date": "2026-08-04", "name": "华为 WATCH 5 904L不锈钢表壳+钛合金表壳 Care+（一年期）", "qty": 1, "amt": 0, "gp": -119.4}, {"date": "2026-08-04", "name": "COOYEE 华为Watch5手表钢化膜 46mm", "qty": 1, "amt": 0, "gp": -18.68}, {"date": "2026-08-05", "name": "星联优享-499", "qty": 1, "amt": 550, "gp": 550}, {"date": "2026-08-05", "name": "Cooyee 华为mate X7 3D热弯全胶钢化膜", "qty": 1, "amt": 0, "gp": -37.06}, {"date": "2026-08-05", "name": "Cooyee 华为mate X7 一体镜头膜", "qty": 1, "amt": 0, "gp": -23.96}, {"date": "2026-08-06", "name": "Cooyee华为Nova15 Pro/Ultra高清钢化膜", "qty": 1, "amt": 99, "gp": 80.01}, {"date": "2026-08-06", "name": "199贴膜套包", "qty": 1, "amt": 199, "gp": 199}, {"date": "2026-08-06", "name": "COOYEE 华为P70 高清钢化膜", "qty": 2, "amt": 0, "gp": -37.21}, {"date": "2026-08-06", "name": "Cooyee华为Pura90Pro铝合金镜头膜 黑色 带定位器", "qty": 1, "amt": 0, "gp": -26}], "音频": [{"date": "2026-08-01", "name": "华为 FreeClip 2 耳机 T0027 丹宁蓝", "qty": 1, "amt": 1199, "gp": 159}, {"date": "2026-08-03", "name": "华为 FreeClip 2 典藏版 耳机 T0027  星海蓝", "qty": 1, "amt": 1499, "gp": 284}], "其他": [{"date": "2026-08-02", "name": "华为自带线全能充移动电源  100W 12000mAh  陶瓷白", "qty": 1, "amt": 269, "gp": -51}], "穿戴": [{"date": "2026-08-03", "name": "华为手环11 CDY-B39 NFC版(黑色氟橡胶表带)羽砂黑", "qty": 1, "amt": 319, "gp": 63}, {"date": "2026-08-04", "name": "华为 WATCH 十周年款 RTS-AL00 46mm(蓝色素皮复合表带)  蓝色", "qty": 1, "amt": 2799, "gp": 479}], "电脑": [{"date": "2026-08-05", "name": "华为 MateBook14 MNTXM-24A HarmonyOS 24GB+1TB 柔光版 原野绿", "qty": 1, "amt": 8049, "gp": 521}], "平板": [{"date": "2026-08-06", "name": "华为 MatePad 11.5 TXZ-W20   12G+256G 柔光版  深空灰 鸿蒙焕新版", "qty": 1, "amt": 3399, "gp": 485}]}, "张博晨": {"增值服务": [{"date": "2026-08-04", "name": "Cooyee 华为mate80-mate80Pro 高清钢化膜", "qty": 1, "amt": 0, "gp": -18.89}, {"date": "2026-08-06", "name": "星联优享-999", "qty": 1, "amt": 999, "gp": 999}]}};
+var DATES = ["2026-08-01", "2026-08-02", "2026-08-03", "2026-08-04", "2026-08-05", "2026-08-06", "2026-08-07"];
+var DAY_GP = {"2026-08-01": 5036.51, "2026-08-02": 5900.23, "2026-08-03": 3567.75, "2026-08-04": 4378.15, "2026-08-05": 3267.66, "2026-08-06": 4256.8, "2026-08-07": 2609.07};
 
-const categorySummary = [
-  {name:'毛利',score:35,task:205000,done:29016,unit:'元'},
-  {name:'手机',score:15,task:170,done:30,unit:'台'},
-  {name:'增值',score:20,task:57000,done:9574.85,unit:'元'},
-  {name:'智慧办公',score:5,task:48,done:3,unit:'台'},
-  {name:'音频穿戴',score:5,task:137,done:37,unit:'台'},
-  {name:'HD',score:5,task:2,done:0,unit:'台'},
-  {name:'电信积分',score:5,task:600,done:64,unit:'分'},
-  {name:'摄影课程',score:5,task:4,done:0,unit:'人'},
-];
+var MAIN_EMP = ['邵乐乐','杨丽华','李泽','陈超磊'];
+var CAT_MAP = {'01手机':'手机','05电脑':'电脑','06平板电脑':'平板','07音频':'音频','08穿戴':'穿戴','09配件':'配件','10运营商业务':'运营商','15增值服务':'增值服务','21演示机':'演示'};
+var CATS = ['手机','电脑','平板','音频','穿戴','配件','运营商','增值服务','演示'];
 
-const opsData = [
-  {cat:'经营',item:'POS合规和ROI',target:'A',achieved:'A',score:8,got:8,rule:'门店D=0分,C=2分,AB=6分',measures:'/'},
-  {cat:'运营规范性',item:'点检第一次',target:'100',achieved:'100',score:10,got:8,rule:'成绩≥99%得10分,95%≤成绩<99%得8分',measures:'未知原因'},
-  {cat:'增值业务',item:'服务产品',target:'5%',achieved:'0.15',score:5,got:5,rule:'0-10%线性得分*60%',measures:'/'},
-  {cat:'增值业务',item:'以旧换新',target:'5%',achieved:'0.73',score:5,got:4.2,rule:'换新量/回收量0%-100%线性,占比50%',measures:'回收总量34,单回收10,补贴24'},
-  {cat:'即时零售',item:'GMV达成率',target:'5.6W',achieved:'3.97W',score:3,got:1,rule:'达成率80%以上线性得分(120%封顶)',measures:'提升即时零售销额'},
-  {cat:'即时零售',item:'履约率',target:'0.9',achieved:'1',score:3,got:3,rule:'90%-100%线性得分(100%封顶)',measures:'提升GMV'},
-  {cat:'即时零售',item:'库存维护',target:'0.7',achieved:'0.77',score:2,got:1.5,rule:'70%-100%线性得分(100%封顶)',measures:'/'},
-  {cat:'即时零售',item:'好评率',target:'0.15',achieved:'0.5',score:2,got:1.5,rule:'0-15%线性得分(15%封顶)',measures:'/'},
-  {cat:'用户经营',item:'企微会员新增',target:'0.25',achieved:'0.5',score:4,got:4,rule:'人均≥省平均水平(6分)',measures:'/'},
-  {cat:'用户经营',item:'企微会员占比',target:'0.2',achieved:'0.53',score:8,got:8,rule:'人均≥省平均水平(7分)',measures:'/'},
-  {cat:'用户经营',item:'V3以上会员占比',target:'0.15',achieved:'0.2',score:8,got:8,rule:'人均V3及以上≥省平均水平(7分)',measures:'/'},
-  {cat:'活动',item:'走引流',target:'3场',achieved:'2场',score:10,got:6.7,rule:'/',measures:'/'},
-  {cat:'亲和力',item:'温暖故事',target:'10',achieved:'0',score:10,got:0,rule:'加分项',measures:'投稿2篇未选上'},
-  {cat:'消费者声音',item:'满意度(订单问卷)',target:'3',achieved:'3',score:5,got:5,rule:'满意度97%-100%线性得分5分',measures:'/'},
-  {cat:'消费者声音',item:'满意度(内置问卷)',target:'3',achieved:'7',score:7,got:0,rule:'满意度65%-70%线性得分7分',measures:'内置问卷基线75%'},
-  {cat:'消费者声音',item:'投诉管理',target:'0',achieved:'0',score:0,got:0,rule:'恶性投诉-5分/单,非恶性-2分/单',measures:'/'},
-  {cat:'人员能力',item:'人员满编率',target:'1',achieved:'1',score:5,got:5,rule:'满编率=1得5分',measures:'/'},
-  {cat:'人员能力',item:'达人标签率',target:'1',achieved:'1',score:5,got:3.3,rule:'标签率100%得5分',measures:'当前配置1+3,缺编1人'},
-];
-
-const checklistItems = [
-  {name:'签到',rate:1,ok:true},{name:'晨读',rate:1,ok:true},{name:'多码合一完成率',rate:0.5,ok:true},
-  {name:'企微有效率',rate:1,ok:true},{name:'社群拉新',rate:0.29,ok:true},{name:'企微每日朋友圈转发',rate:1,ok:true},
-  {name:'当日资料上传',rate:1,ok:true},{name:'ERP下账',rate:1,ok:true},{name:'美团/京东下账',rate:1,ok:true},
-  {name:'合规项(异常管控,POS合规)',rate:1,ok:true},{name:'渠道运营表(每日更新)',rate:1,ok:true},
-  {name:'社群内容宣发(周度≥3次)',rate:0.66,ok:true},{name:'库房反馈(每周三)',rate:1,ok:true},
-];
-
-const managerData = [
-  {cat:'业绩指标',item:'收入完成率',target:'1,600,000',done:'224,919',weight:25,score:3.51},
-  {cat:'业绩指标',item:'毛利完成率',target:'205,000',done:'-',weight:10,score:0},
-  {cat:'业绩指标',item:'增值',target:'57,000',done:'9,574.85',weight:15,score:2.52},
-  {cat:'产业指标',item:'手机',target:'170',done:'30',weight:10,score:0},
-  {cat:'产业指标',item:'智慧办公',target:'48',done:'3',weight:4,score:0},
-  {cat:'产业指标',item:'音频&穿戴',target:'137',done:'37',weight:4,score:0},
-  {cat:'产业指标',item:'HD',target:'2',done:'0',weight:2,score:0},
-  {cat:'运营指标',item:'用户经营',target:'-',done:'-',weight:5,score:5},
-  {cat:'运营指标',item:'活动运营',target:'-',done:'-',weight:5,score:5},
-  {cat:'运营指标',item:'渠道运营',target:'-',done:'-',weight:5,score:5},
-  {cat:'运营指标',item:'渠道运营数据完成率',target:'-',done:'-',weight:5,score:5},
-  {cat:'人才发展',item:'培训管理',target:'-',done:'-',weight:'-',score:'-'},
-  {cat:'人才发展',item:'达人标签',target:'-',done:'-',weight:'-',score:-2},
-  {cat:'人才发展',item:'全科生',target:'-',done:'-',weight:'-',score:'-'},
-  {cat:'价值观',item:'企业文化',target:'-',done:'-',weight:10,score:9.5},
-  {cat:'加减分项',item:'超库龄月度任务完成',target:'-',done:'-',weight:'-',score:3},
-];
-
-const dailyTasks = [
-  {name:'邵乐乐',vals:{phone:-2,profit:-2291,valueAdd:-649,smartOffice:-1,audioWear:-1,hd:0,carePlus:-1,recycle:0,film:-1,points:-5,stagnant:-1,photo:0,starYou:1,starZun:1}},
-  {name:'杨丽华',vals:{phone:-2,profit:-2140,valueAdd:-606,smartOffice:-1,audioWear:-2,hd:0,carePlus:-1,recycle:1,film:1,points:-8,stagnant:-1,photo:0,starYou:1,starZun:1}},
-  {name:'李泽',vals:{phone:-2,profit:-2253,valueAdd:-561,smartOffice:-1,audioWear:-2,hd:-1,carePlus:1,recycle:-1,film:-1,points:-8,stagnant:-1,photo:0,starYou:1,starZun:1}},
-  {name:'陈超磊',vals:{phone:-2,profit:-2167,valueAdd:-607,smartOffice:-1,audioWear:-2,hd:-1,carePlus:-1,recycle:1,film:1,points:-8,stagnant:-1,photo:0,starYou:1,starZun:1}},
-];
-
-const dailyAchieved = [
-  {name:'邵乐乐',vals:{phone:1,profit:665.27,valueAdd:361.94,smartOffice:0,audioWear:1,hd:0,star:0,recycle:'-',film:2,points:0,stagnant:0,photo:0,starYou:0,starZun:0,score:0}},
-  {name:'杨丽华',vals:{phone:1,profit:374,valueAdd:0,smartOffice:0,audioWear:0,hd:0,star:0,recycle:'-',film:0,points:0,stagnant:0,photo:0,starYou:0,starZun:0,score:0}},
-  {name:'李泽',vals:{phone:0,profit:1569.8,valueAdd:893.6,smartOffice:0,audioWear:3,hd:0,star:1,recycle:'-',film:0,points:0,stagnant:0,photo:0,starYou:0,starZun:1,score:0}},
-  {name:'陈超磊',vals:{phone:0,profit:0,valueAdd:0,smartOffice:0,audioWear:0,hd:0,star:0,recycle:'-',film:0,points:0,stagnant:0,photo:0,starYou:0,starZun:0,score:0}},
-];
-
-// ===== Render Functions =====
-function pct(d,t){return t>0?(d/t*100):0}
-function fmt(n){return n>=10000?(n/10000).toFixed(1)+'万':n.toFixed?n.toFixed(0):n}
-function fmtM(n){return n>=10000?(n/10000).toFixed(2)+'万':n.toLocaleString()}
-function barColor(r){return r>=80?'green':r>=50?'blue':r>=20?'orange':'red'}
-function statusCell(r){
-  if(r>=100)return '<span class="cell-green">达标</span>';
-  if(r>=50)return '<span class="cell-orange">进行中</span>';
-  return '<span class="cell-red">落后</span>';
-}
-
-function renderPersonKanban(){
-  const wrap=document.getElementById('person-kanban');
-  wrap.innerHTML='';
-  persons.forEach((p,i)=>{
-    const gpPct=pct(p.grossProfit.done,p.grossProfit.task);
-    const phPct=pct(p.phone.done,p.phone.task);
-    const vaPct=pct(p.valueAdd.done,p.valueAdd.task);
-    const wePct=pct(p.wear.done,p.wear.task);
-    const soPct=pct(p.smartOffice.done,p.smartOffice.task);
-    const rankClass=p.rank<=3?'rank-'+p.rank:'rank-4';
-    const col=document.createElement('div');
-    col.className='kanban-col';
-    col.innerHTML=`
-      <div class="kanban-col-title">${p.name} <span class="badge" style="background:var(--blue-light);color:var(--blue)">绩效 ${p.score}</span></div>
-      <div class="card person-card ${rankClass}">
-        <div class="card-header"><span class="card-name">毛利</span><span class="card-score ${gpPct<20?'danger':gpPct<50?'warn':''}">${gpPct.toFixed(1)}%</span></div>
-        <div class="metric-row"><span class="metric-label">任务</span><span class="metric-val">${fmtM(p.grossProfit.task)}</span></div>
-        <div class="metric-row"><span class="metric-label">完成</span><span class="metric-val">${fmtM(p.grossProfit.done)}</span></div>
-        <div class="metric-row"><span class="metric-label">进度</span><div class="metric-bar"><div class="metric-bar-fill ${barColor(gpPct)}" style="width:${Math.min(gpPct,100)}%"></div></div><span class="metric-val">${gpPct.toFixed(1)}%</span></div>
-      </div>
-      <div class="card person-card ${rankClass}">
-        <div class="card-header"><span class="card-name">手机</span><span class="card-score ${phPct<20?'danger':phPct<50?'warn':''}">${phPct.toFixed(1)}%</span></div>
-        <div class="metric-row"><span class="metric-label">任务</span><span class="metric-val">${p.phone.task}台</span></div>
-        <div class="metric-row"><span class="metric-label">完成</span><span class="metric-val">${p.phone.done}台</span></div>
-        <div class="metric-row"><span class="metric-label">进度</span><div class="metric-bar"><div class="metric-bar-fill ${barColor(phPct)}" style="width:${Math.min(phPct,100)}%"></div></div><span class="metric-val">${phPct.toFixed(1)}%</span></div>
-      </div>
-      <div class="card person-card ${rankClass}">
-        <div class="card-header"><span class="card-name">增值</span><span class="card-score ${vaPct<20?'danger':vaPct<50?'warn':''}">${vaPct.toFixed(1)}%</span></div>
-        <div class="metric-row"><span class="metric-label">任务</span><span class="metric-val">${fmtM(p.valueAdd.task)}</span></div>
-        <div class="metric-row"><span class="metric-label">完成</span><span class="metric-val">${fmtM(p.valueAdd.done)}</span></div>
-        <div class="metric-row"><span class="metric-label">进度</span><div class="metric-bar"><div class="metric-bar-fill ${barColor(vaPct)}" style="width:${Math.min(vaPct,100)}%"></div></div><span class="metric-val">${vaPct.toFixed(1)}%</span></div>
-      </div>
-      <div class="card person-card ${rankClass}">
-        <div class="card-header"><span class="card-name">产业指标</span></div>
-        <div class="metric-row"><span class="metric-label">智慧办公</span><div class="metric-bar"><div class="metric-bar-fill ${barColor(soPct)}" style="width:${Math.min(soPct,100)}%"></div></div><span class="metric-val">${p.smartOffice.done}/${p.smartOffice.task}</span></div>
-        <div class="metric-row"><span class="metric-label">音频穿戴</span><div class="metric-bar"><div class="metric-bar-fill ${barColor(wePct)}" style="width:${Math.min(wePct,100)}%"></div></div><span class="metric-val">${p.wear.done}/${p.wear.task}</span></div>
-        <div class="metric-row"><span class="metric-label">HD</span><div class="metric-bar"><div class="metric-bar-fill ${barColor(pct(p.hd.done,Math.max(p.hd.task,1)))}" style="width:${p.hd.task>0?Math.min(pct(p.hd.done,p.hd.task),100):100}%"></div></div><span class="metric-val">${p.hd.done}/${p.hd.task||'-'}</span></div>
-        <div class="metric-row"><span class="metric-label">积分</span><div class="metric-bar"><div class="metric-bar-fill ${barColor(pct(p.points.done,p.points.task))}" style="width:${Math.min(pct(p.points.done,p.points.task),100)}%"></div></div><span class="metric-val">${p.points.done}/${p.points.task}</span></div>
-      </div>
-      <div class="card person-card ${rankClass}">
-        <div class="card-header"><span class="card-name">销售额</span><span class="card-score">${pct(p.sales.done,p.sales.task).toFixed(1)}%</span></div>
-        <div class="metric-row"><span class="metric-label">任务</span><span class="metric-val">${fmtM(p.sales.task)}</span></div>
-        <div class="metric-row"><span class="metric-label">完成</span><span class="metric-val">${fmtM(p.sales.done)}</span></div>
-      </div>
-    `;
-    wrap.appendChild(col);
-  });
-}
-
-function renderCategoryTable(){
-  const tbody=document.getElementById('category-tbody');
-  tbody.innerHTML='';
-  categorySummary.forEach(c=>{
-    const r=pct(c.done,c.task);
-    tbody.innerHTML+=`<tr>
-      <td style="font-weight:600">${c.name}</td><td class="cell-num">${c.score}分</td>
-      <td class="cell-num">${fmtM(c.task)}${c.unit}</td><td class="cell-num">${fmtM(c.done)}${c.unit}</td>
-      <td class="cell-num cell-red">-${fmtM(c.task-c.done)}${c.unit}</td>
-      <td class="cell-pct ${r>=50?'cell-green':r>=20?'cell-orange':'cell-red'}">${r.toFixed(1)}%</td>
-      <td>${statusCell(r)}</td></tr>`;
-  });
-}
-
-function renderPerfKanban(){
-  const wrap=document.getElementById('perf-kanban');
-  wrap.innerHTML='';
-  const perfDetail=[
-    {name:'邵乐乐',items:[
-      {cat:'业绩',item:'毛利',task:50000,done:4193.48,score:2.94,full:35},
-      {cat:'业绩',item:'手机',task:43,done:8,score:2.79,full:15},
-      {cat:'业绩',item:'增值',task:14250,done:1287.57,score:1.81,full:20},
-      {cat:'产业',item:'智慧办公',task:11,done:0,score:0,full:5},
-      {cat:'产业',item:'音频穿戴',task:34,done:21,score:3.09,full:5},
-      {cat:'产业',item:'HD',task:0,done:0,score:5,full:5},
-      {cat:'产业',item:'电信积分',task:150,done:150,score:5,full:5},
-      {cat:'产业',item:'课程',task:1,done:0,score:0,full:5},
-    ]},
-    {name:'杨丽华',items:[
-      {cat:'业绩',item:'毛利',task:51000,done:8217.27,score:5.64,full:35},
-      {cat:'业绩',item:'手机',task:43,done:8,score:2.79,full:15},
-      {cat:'业绩',item:'增值',task:14250,done:2141.94,score:3.01,full:20},
-      {cat:'产业',item:'智慧办公',task:11,done:1,score:0.45,full:5},
-      {cat:'产业',item:'音频穿戴',task:34,done:5,score:0.74,full:5},
-      {cat:'产业',item:'HD',task:0,done:0,score:5,full:5},
-      {cat:'产业',item:'电信积分',task:150,done:150,score:5,full:5},
-      {cat:'产业',item:'课程',task:1,done:0,score:0,full:5},
-    ]},
-    {name:'李泽',items:[
-      {cat:'业绩',item:'毛利',task:52000,done:6948.32,score:4.69,full:35},
-      {cat:'业绩',item:'手机',task:42,done:6,score:2.14,full:15},
-      {cat:'业绩',item:'增值',task:14250,done:3039.15,score:4.27,full:20},
-      {cat:'产业',item:'智慧办公',task:13,done:0,score:0,full:5},
-      {cat:'产业',item:'音频穿戴',task:34,done:7,score:1.03,full:5},
-      {cat:'产业',item:'HD',task:1,done:0,score:0,full:5},
-      {cat:'产业',item:'电信积分',task:150,done:0,score:0,full:5},
-      {cat:'产业',item:'课程',task:1,done:0,score:0,full:5},
-    ]},
-    {name:'陈超磊',items:[
-      {cat:'业绩',item:'毛利',task:52000,done:8676.99,score:5.84,full:35},
-      {cat:'业绩',item:'手机',task:42,done:8,score:2.86,full:15},
-      {cat:'业绩',item:'增值',task:14250,done:2126.08,score:2.99,full:20},
-      {cat:'产业',item:'智慧办公',task:13,done:2,score:0.77,full:5},
-      {cat:'产业',item:'音频穿戴',task:35,done:5,score:0.71,full:5},
-      {cat:'产业',item:'HD',task:1,done:0,score:0,full:5},
-      {cat:'产业',item:'电信积分',task:150,done:0,score:0,full:5},
-      {cat:'产业',item:'课程',task:1,done:0,score:0,full:5},
-    ]},
-  ];
-  perfDetail.forEach(pd=>{
-    const col=document.createElement('div');
-    col.className='kanban-col';
-    let cards='';
-    pd.items.forEach(it=>{
-      const r=it.task>0?pct(it.done,it.task):0;
-      cards+=`<div class="card" style="padding:10px 12px;margin-bottom:6px">
-        <div style="display:flex;justify-content:space-between;font-size:12px">
-          <span style="color:var(--gray)">${it.cat}·${it.item}</span>
-          <span style="font-weight:700;color:var(--blue)">${it.score}分 <span style="color:var(--gray);font-weight:400">/ ${it.full}分</span></span>
-        </div>
-        <div class="metric-row" style="margin-top:4px">
-          <div class="metric-bar"><div class="metric-bar-fill ${barColor(r)}" style="width:${Math.min(r,100)}%"></div></div>
-          <span class="metric-val" style="width:auto">${it.done}/${it.task}</span>
-        </div>
-      </div>`;
-    });
-    col.innerHTML=`<div class="kanban-col-title">${pd.name} <span class="badge" style="background:var(--green-light);color:var(--green)">${persons.find(p=>p.name===pd.name).score}分</span></div>${cards}`;
-    wrap.appendChild(col);
-  });
-}
-
-function renderOpsTable(){
-  const tbody=document.getElementById('ops-tbody');
-  tbody.innerHTML='';
-  opsData.forEach(r=>{
-    const pctV=r.score>0?(r.got/r.score*100):0;
-    tbody.innerHTML+=`<tr>
-      <td class="cell-num">${r.target}</td><td class="cell-num">${r.achieved}</td>
-      <td class="cell-num">${r.score}</td><td class="cell-num ${pctV>=80?'cell-green':pctV>=50?'':'cell-red'}">${r.got}</td><td>${r.rule}</td><td>${r.measures}</td></tr>`;
-  });
-}
-
-function renderDailyTable(){
-  const tbody1=document.getElementById('daily-tbody');
-  const tbody2=document.getElementById('daily-achieved-tbody');
-  tbody1.innerHTML='';tbody2.innerHTML='';
-  dailyTasks.forEach(d=>{
-    const v=d.vals;
-    const fmtV=n=>{if(typeof n==='number')return n>0?'+'+n:n===0?'0':n;return n};
-    const cls=n=>typeof n==='number'?(n>0?'cell-green':n<0?'cell-red':''):'';
-    tbody1.innerHTML+=`<tr>
-      <td style="font-weight:600">${d.name}</td>
-      <td class="cell-num ${cls(v.phone)}">${fmtV(v.phone)}</td>
-      <td class="cell-num ${cls(v.profit)}">${fmtV(v.profit)}</td>
-      <td class="cell-num ${cls(v.valueAdd)}">${fmtV(v.valueAdd)}</td>
-      <td class="cell-num ${cls(v.smartOffice)}">${fmtV(v.smartOffice)}</td>
-      <td class="cell-num ${cls(v.audioWear)}">${fmtV(v.audioWear)}</td>
-      <td class="cell-num ${cls(v.hd)}">${fmtV(v.hd)}</td>
-      <td class="cell-num ${cls(v.carePlus)}">${fmtV(v.carePlus)}</td>
-      <td class="cell-num ${cls(v.recycle)}">${fmtV(v.recycle)}</td>
-      <td class="cell-num ${cls(v.film)}">${fmtV(v.film)}</td>
-      <td class="cell-num ${cls(v.points)}">${fmtV(v.points)}</td>
-      <td class="cell-num ${cls(v.stagnant)}">${fmtV(v.stagnant)}</td>
-      <td class="cell-num">${v.photo}</td>
-      <td class="cell-num ${cls(v.starYou)}">${fmtV(v.starYou)}</td>
-      <td class="cell-num ${cls(v.starZun)}">${fmtV(v.starZun)}</td>
-    </tr>`;
-  });
-  dailyAchieved.forEach(d=>{
-    const v=d.vals;
-    tbody2.innerHTML+=`<tr>
-      <td style="font-weight:600">${d.name}</td>
-      <td class="cell-num">${v.phone}</td><td class="cell-num">${v.profit}</td>
-      <td class="cell-num">${v.valueAdd}</td><td class="cell-num">${v.smartOffice}</td>
-      <td class="cell-num">${v.audioWear}</td><td class="cell-num">${v.hd}</td>
-      <td class="cell-num">${v.star}</td><td class="cell-num">${v.recycle}</td>
-      <td class="cell-num">${v.film}</td><td class="cell-num">${v.points}</td>
-      <td class="cell-num">${v.stagnant}</td><td class="cell-num">${v.photo}</td>
-      <td class="cell-num">${v.starYou}</td><td class="cell-num">${v.starZun}</td>
-      <td class="cell-num" style="font-weight:700">${v.score}</td>
-    </tr>`;
-  });
-}
-
-// Tab switching
-function switchTab(id){
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
-  document.getElementById('sec-'+id).classList.add('active');
-  event.target.classList.add('active');
-}
-
-// Init
-renderPersonKanban();
-renderCategoryTable();
-renderPerfKanban();
-renderOpsTable();
-renderChecklist();
-renderManagerTable();
-renderDailyTable();
-
-function renderChecklist(){
-  const ul=document.getElementById('checklist');
-  ul.innerHTML='';
-  checklistItems.forEach(it=>{
-    const ok=it.rate>=1;
-    ul.innerHTML+=`<li>
-      <span class="check-icon ${ok?'ok':'warn'}">${ok?'✓':'!'}</span>
-      <span style="flex:1">${it.name}</span>
-      <span style="font-weight:600;color:${ok?'var(--green)':'var(--orange)'}">${(it.rate*100).toFixed(0)}%</span>
-    </li>`;
-  });
-}
-
-function renderManagerTable(){
-  const tbody=document.getElementById('manager-tbody');
-  tbody.innerHTML='';
-  managerData.forEach(r=>{
-    const scoreVal=typeof r.score==='number'?r.score:'-';
-    const scoreClass=typeof r.score==='number'?(r.score>0?'cell-green':r.score<0?'cell-red':''):'';
-    tbody.innerHTML+=`<tr>
-      <td>${r.cat}</td><td>${r.item}</td>
-      <td class="cell-num">${r.target}</td><td class="cell-num">${r.done}</td>
-      <td class="cell-num">${r.weight}</td><td class="cell-num ${scoreClass}">${scoreVal}</td>
-    </tr>`;
-  });
-}
-
-// ===== 员工×品类明细数据（提取自用友云XS明细，规则同Excel SUMIFS公式） =====
-const EC_DATA = {
- "dates": [
-  "2026-08-01",
-  "2026-08-02",
-  "2026-08-03",
-  "2026-08-04",
-  "2026-08-05",
-  "2026-08-06",
-  "2026-08-07"
- ],
- "day_gp": {
-  "2026-08-01": 5036.51,
-  "2026-08-02": 5900.23,
-  "2026-08-03": 3567.75,
-  "2026-08-04": 4378.15,
-  "2026-08-05": 3267.66,
-  "2026-08-06": 4256.8,
-  "2026-08-07": 2609.07
- },
- "emp_detail": {
-  "邵乐乐": {
-   "增值服务": [
-    {
-     "date": "2026-08-01",
-     "name": "COOYEE 耳夹式耳机 S33 pro  白",
-     "qty": 1,
-     "amt": 0,
-     "gp": -89
-    },
-    {
-     "date": "2026-08-01",
-     "name": "Cooyee华为Nova15 Pro/Ultra高清钢化膜",
-     "qty": 1,
-     "amt": 99,
-     "gp": 80.01
-    },
-    {
-     "date": "2026-08-01",
-     "name": "Cooyee华为Nova15 Pro/Ultra高清钢化膜",
-     "qty": 1,
-     "amt": 99,
-     "gp": 80.01
-    },
-    {
-     "date": "2026-08-01",
-     "name": "COOYEE 华为 mate70pro pro+3D热弯钢化膜",
-     "qty": 1,
-     "amt": 99,
-     "gp": 61.41
-    },
-    {
-     "date": "2026-08-05",
-     "name": "星联优享-699",
-     "qty": 1,
-     "amt": 549,
-     "gp": 549
-    },
-    {
-     "date": "2026-08-05",
-     "name": "闪能 66w全兼容快充10000毫安移动电源LP13  66W 1000  白色",
-     "qty": 1,
-     "amt": 0,
-     "gp": -59
-    },
-    {
-     "date": "2026-08-05",
-     "name": "COOYEE 华为Pura X 前屏钢化膜",
-     "qty": 1,
-     "amt": 0,
-     "gp": -21.61
-    },
-    {
-     "date": "2026-08-07",
-     "name": "399贴膜套包",
-     "qty": 1,
-     "amt": 399,
-     "gp": 399
-    },
-    {
-     "date": "2026-08-07",
-     "name": "Cooyee 华为mate X7 3D热弯全胶钢化膜",
-     "qty": 1,
-     "amt": 0,
-     "gp": -37.06
-    }
-   ],
-   "手机": [
-    {
-     "date": "2026-08-01",
-     "name": "华为畅享90 Pro Max CHZ-AL00  8GB+512GB  曜金黑",
-     "qty": 1,
-     "amt": 2299,
-     "gp": 268.25
-    },
-    {
-     "date": "2026-08-01",
-     "name": "华为畅享90 Pro Max CHZ-AL00  8GB+512GB  飞天青",
-     "qty": 1,
-     "amt": 2299,
-     "gp": 283
-    },
-    {
-     "date": "2026-08-02",
-     "name": "华为 nova15 PSN-AL00  12GB+256GB  好搭紫",
-     "qty": 1,
-     "amt": 2449,
-     "gp": 208
-    },
-    {
-     "date": "2026-08-02",
-     "name": "华为畅享90 Pro Max CHZ-AL00  8GB+512GB  曜金黑",
-     "qty": 1,
-     "amt": 2099,
-     "gp": 68.25
-    },
-    {
-     "date": "2026-08-02",
-     "name": "华为 Mate80 VYG-AL30  16GB+512GB  曜石黑",
-     "qty": 1,
-     "amt": 5199,
-     "gp": 524
-    },
-    {
-     "date": "2026-08-05",
-     "name": "华为畅享90 Pro Max CHZ-AL00  8GB+512GB  曜金黑",
-     "qty": -1,
-     "amt": -2099,
-     "gp": -68.25
-    },
-    {
-     "date": "2026-08-05",
-     "name": "华为畅享90 Plus JUY-AL50  8GB+256GB  羽沙白",
-     "qty": 1,
-     "amt": 1486.65,
-     "gp": -25.35
-    },
-    {
-     "date": "2026-08-05",
-     "name": "华为 PuraX VDE-AL00  16GB+512GB  型格紫",
-     "qty": 1,
-     "amt": 7839.02,
-     "gp": 959.02
-    },
-    {
-     "date": "2026-08-05",
-     "name": "华为畅享90 Pro Max CHZ-AL00  8GB+512GB  曜金黑",
-     "qty": 1,
-     "amt": 2099,
-     "gp": 68.25
-    },
-    {
-     "date": "2026-08-07",
-     "name": "华为畅享90 Pro Max CHZ-AL00  8GB+256GB  飞天青",
-     "qty": 1,
-     "amt": 1948.33,
-     "gp": 268.33
-    }
-   ],
-   "其他": [
-    {
-     "date": "2026-08-02",
-     "name": "5G半成卡",
-     "qty": 1,
-     "amt": 0,
-     "gp": 0
-    },
-    {
-     "date": "2026-08-02",
-     "name": "单卡新入网",
-     "qty": 1,
-     "amt": 59,
-     "gp": 236
-    },
-    {
-     "date": "2026-08-02",
-     "name": "权益包",
-     "qty": 1,
-     "amt": 5,
-     "gp": 0
-    }
-   ],
-   "穿戴": [
-    {
-     "date": "2026-08-04",
-     "name": "华为 超新星手表X1 DRA-L10(蓝色硅胶表带)星际蓝",
-     "qty": 1,
-     "amt": 1598,
-     "gp": 367
-    },
-    {
-     "date": "2026-08-05",
-     "name": "华为手环11 CDY-B39 NFC版(黑色氟橡胶表带)羽砂黑",
-     "qty": 1,
-     "amt": 269,
-     "gp": 5.99
-    },
-    {
-     "date": "2026-08-05",
-     "name": "华为手环11 CDY-B39 NFC版(黑色氟橡胶表带)羽砂黑",
-     "qty": 6,
-     "amt": 1614,
-     "gp": 35.94
-    },
-    {
-     "date": "2026-08-05",
-     "name": "华为手环11 CDY-B39 NFC版(黑色氟橡胶表带)羽砂黑",
-     "qty": 11,
-     "amt": 2959,
-     "gp": 143
-    },
-    {
-     "date": "2026-08-05",
-     "name": "华为 WATCH GT6 KSU-B19 41mm(白色复合素皮表带)浮光白",
-     "qty": 1,
-     "amt": 1154.3,
-     "gp": -145.7
-    },
-    {
-     "date": "2026-08-07",
-     "name": "华为 WATCH GT6 ATM-B19 46mm(黑色氟橡胶表带)雅丹黑",
-     "qty": 1,
-     "amt": 1258,
-     "gp": 35
-    }
-   ]
-  },
-  "杨丽华": {
-   "手机": [
-    {
-     "date": "2026-08-01",
-     "name": "华为畅享90 Pro Max CHZ-AL00  8GB+512GB  飞天青",
-     "qty": 1,
-     "amt": 2299,
-     "gp": 283
-    },
-    {
-     "date": "2026-08-01",
-     "name": "华为 Mate X7 典藏版 DEL-AL20  16GB+512GB  云锦白",
-     "qty": 1,
-     "amt": 13799,
-     "gp": 1080.91
-    },
-    {
-     "date": "2026-08-02",
-     "name": "华为 Pura90 Pro Max SCA-AL00  16GB+1TB  晨曦金",
-     "qty": 1,
-     "amt": 8329.02,
-     "gp": 934.02
-    },
-    {
-     "date": "2026-08-02",
-     "name": "华为 PuraX Max HOP-AL00  12GB+512GB  幻夜黑",
-     "qty": 1,
-     "amt": 11799,
-     "gp": 879
-    },
-    {
-     "date": "2026-08-03",
-     "name": "华为 Pura90 Pro MLN-AL00  12GB+512GB  椰青白",
-     "qty": 1,
-     "amt": 5799,
-     "gp": 699
-    },
-    {
-     "date": "2026-08-04",
-     "name": "华为畅享90 Pro Max CHZ-AL00  8GB+512GB  曜金黑",
-     "qty": 1,
-     "amt": 2299,
-     "gp": 283
-    },
-    {
-     "date": "2026-08-06",
-     "name": "华为 Mate80 VYG-AL00  12GB+512GB  雪域白",
-     "qty": 1,
-     "amt": 4999,
-     "gp": 579
-    },
-    {
-     "date": "2026-08-07",
-     "name": "华为 nova16 EMA-AL00U 12GB+256GB 星空黑",
-     "qty": 1,
-     "amt": 2799,
-     "gp": 309
-    }
-   ],
-   "穿戴": [
-    {
-     "date": "2026-08-01",
-     "name": "华为 WATCH5 RTS-AL00 46mm(钛金属表带)钛空银",
-     "qty": 1,
-     "amt": 2999,
-     "gp": 439
-    },
-    {
-     "date": "2026-08-02",
-     "name": "华为 WATCH D2 LCA-B10(黑色氟橡胶表带)无色",
-     "qty": 1,
-     "amt": 2988,
-     "gp": 572.2
-    },
-    {
-     "date": "2026-08-02",
-     "name": "华为手环11 CDY-B39 NFC版(白色氟橡胶表带) 悦动白",
-     "qty": 1,
-     "amt": 269,
-     "gp": 13
-    },
-    {
-     "date": "2026-08-03",
-     "name": "华为 WATCH GT6 KSU-B19 41mm(紫色氟橡胶表带)流光紫",
-     "qty": 1,
-     "amt": 989,
-     "gp": -157
-    },
-    {
-     "date": "2026-08-04",
-     "name": "华为 WATCH FIT4 SYA-B19(韵律黑氟橡胶表带)韵律黑",
-     "qty": 1,
-     "amt": 699,
-     "gp": 103
-    }
-   ],
-   "增值服务": [
-    {
-     "date": "2026-08-01",
-     "name": "199贴膜套包",
-     "qty": 1,
-     "amt": 200,
-     "gp": 200
-    },
-    {
-     "date": "2026-08-01",
-     "name": "Cooyee华为Nova15 Pro/Ultra高清钢化膜",
-     "qty": 1,
-     "amt": 100,
-     "gp": 81.01
-    },
-    {
-     "date": "2026-08-02",
-     "name": "199贴膜套包",
-     "qty": 1,
-     "amt": 199,
-     "gp": 199
-    },
-    {
-     "date": "2026-08-02",
-     "name": "COOYEE 华为Mate X6 热弯全胶钢化膜",
-     "qty": 1,
-     "amt": 0,
-     "gp": -37.65
-    },
-    {
-     "date": "2026-08-02",
-     "name": "Cooyee华为Pura X MAX前屏高清钢化膜",
-     "qty": 1,
-     "amt": 0,
-     "gp": -21.96
-    },
-    {
-     "date": "2026-08-03",
-     "name": "199贴膜套包",
-     "qty": 1,
-     "amt": 199,
-     "gp": 199
-    },
-    {
-     "date": "2026-08-03",
-     "name": "Cooyee 华为mate80 Rs 一体镜头膜",
-     "qty": 1,
-     "amt": 0,
-     "gp": -23.57
-    },
-    {
-     "date": "2026-08-03",
-     "name": "Cooyee 华为mate80 pro Max-mate80 RS 高清钢化膜",
-     "qty": 1,
-     "amt": 0,
-     "gp": -18.85
-    },
-    {
-     "date": "2026-08-03",
-     "name": "199贴膜套包",
-     "qty": 1,
-     "amt": 199,
-     "gp": 199
-    },
-    {
-     "date": "2026-08-03",
-     "name": "Cooyee华为Pura90Pro铝合金镜头膜 黑色 带定位器",
-     "qty": 1,
-     "amt": 0,
-     "gp": -26
-    },
-    {
-     "date": "2026-08-03",
-     "name": "COOYEE 华为GT6手表钢化膜 41mm 定位版",
-     "qty": 2,
-     "amt": 198,
-     "gp": 161.16
-    },
-    {
-     "date": "2026-08-04",
-     "name": "399贴膜套包",
-     "qty": 1,
-     "amt": 399,
-     "gp": 399
-    },
-    {
-     "date": "2026-08-04",
-     "name": "199贴膜套包",
-     "qty": 1,
-     "amt": 190,
-     "gp": 190
-    },
-    {
-     "date": "2026-08-04",
-     "name": "199贴膜套包",
-     "qty": 1,
-     "amt": 199,
-     "gp": 199
-    }
-   ],
-   "平板": [
-    {
-     "date": "2026-08-04",
-     "name": "华为 MatePad 11.5S 灵动款  SLG-W50  (12G+256G)柔光版  原野绿",
-     "qty": 1,
-     "amt": 2799,
-     "gp": 391
-    }
-   ],
-   "其他": [
-    {
-     "date": "2026-08-06",
-     "name": "华为冰糖全能充电器(Max 100W)HW-200500C03白",
-     "qty": 1,
-     "amt": 229,
-     "gp": 44
-    },
-    {
-     "date": "2026-08-07",
-     "name": "华为自带线全能充移动电源  66W 12000  雪域白",
-     "qty": 1,
-     "amt": 329,
-     "gp": 65
-    }
-   ],
-   "费用类": [
-    {
-     "date": "2026-08-06",
-     "name": "打包费",
-     "qty": 1,
-     "amt": 1,
-     "gp": 1
-    }
-   ]
-  },
-  "李泽": {
-   "手机": [
-    {
-     "date": "2026-08-01",
-     "name": "华为 PuraX Max HOP-AL00  12GB+512GB  零度白",
-     "qty": 1,
-     "amt": 11799,
-     "gp": 879
-    },
-    {
-     "date": "2026-08-02",
-     "name": "华为 Mate X7 DEL-AL10  12GB+512GB  寰宇红",
-     "qty": 1,
-     "amt": 12499,
-     "gp": 669
-    },
-    {
-     "date": "2026-08-03",
-     "name": "华为畅享90 Pro Max CHZ-AL00  8GB+256GB  飞天青",
-     "qty": 1,
-     "amt": 1899,
-     "gp": 219
-    },
-    {
-     "date": "2026-08-03",
-     "name": "华为 Mate80 Pro SGT-AL50  12GB+512GB  曜石黑",
-     "qty": 1,
-     "amt": 5699,
-     "gp": 609
-    },
-    {
-     "date": "2026-08-05",
-     "name": "华为 Mate 70 Pro 优享版 PLR-AL80  12GB+512GB  云杉绿",
-     "qty": 1,
-     "amt": 4999,
-     "gp": 183
-    },
-    {
-     "date": "2026-08-05",
-     "name": "华为 nova16 EMA-AL00U 12GB+256GB 幻彩贝母",
-     "qty": 1,
-     "amt": 2799,
-     "gp": 309
-    }
-   ],
-   "增值服务": [
-    {
-     "date": "2026-08-01",
-     "name": "199贴膜套包",
-     "qty": 1,
-     "amt": 199,
-     "gp": 199
-    },
-    {
-     "date": "2026-08-01",
-     "name": "COOYEE 华为Pura X 一体镜头膜 带定位器",
-     "qty": 1,
-     "amt": 0,
-     "gp": -23.57
-    },
-    {
-     "date": "2026-08-01",
-     "name": "COOYEE 华为Pura X 前屏钢化膜",
-     "qty": 1,
-     "amt": 0,
-     "gp": -21.61
-    },
-    {
-     "date": "2026-08-02",
-     "name": "星联尊享-2000",
-     "qty": 1,
-     "amt": 702,
-     "gp": 702
-    },
-    {
-     "date": "2026-08-02",
-     "name": "华为 Clip2 Care+（一年期）",
-     "qty": 1,
-     "amt": 99,
-     "gp": 39.6
-    },
-    {
-     "date": "2026-08-02",
-     "name": "RockSpace 活动权益膜 S码(180BZ-01J)",
-     "qty": 1,
-     "amt": 49,
-     "gp": 44.72
-    },
-    {
-     "date": "2026-08-03",
-     "name": "Cooyee华为Nova15 Pro/Ultra高清钢化膜",
-     "qty": 1,
-     "amt": 100,
-     "gp": 81.01
-    },
-    {
-     "date": "2026-08-03",
-     "name": "星联优享-499",
-     "qty": 1,
-     "amt": 400,
-     "gp": 400
-    },
-    {
-     "date": "2026-08-03",
-     "name": "星联优享-499",
-     "qty": 1,
-     "amt": 400,
-     "gp": 400
-    },
-    {
-     "date": "2026-08-05",
-     "name": "星联优享-499",
-     "qty": 1,
-     "amt": 400,
-     "gp": 400
-    },
-    {
-     "date": "2026-08-05",
-     "name": "Cooyee华为Nova14/15/16高清钢化膜",
-     "qty": 1,
-     "amt": 0,
-     "gp": -19
-    },
-    {
-     "date": "2026-08-05",
-     "name": "Cooyee华为Nova14/15/16高清钢化膜",
-     "qty": 1,
-     "amt": 0,
-     "gp": -19
-    },
-    {
-     "date": "2026-08-05",
-     "name": "COOYEE 华为 mate70pro pro+3D热弯钢化膜",
-     "qty": 1,
-     "amt": 0,
-     "gp": -37.59
-    },
-    {
-     "date": "2026-08-07",
-     "name": "星联尊享-2000",
-     "qty": 1,
-     "amt": 822,
-     "gp": 822
-    },
-    {
-     "date": "2026-08-07",
-     "name": "华为 WATCH D2 Care+（一年期）",
-     "qty": 1,
-     "amt": 179,
-     "gp": 71.6
-    }
-   ],
-   "音频": [
-    {
-     "date": "2026-08-02",
-     "name": "华为 FreeClip 2 耳机 T0027 丹宁蓝",
-     "qty": 1,
-     "amt": 1199,
-     "gp": 130.58
-    }
-   ],
-   "穿戴": [
-    {
-     "date": "2026-08-02",
-     "name": "华为 WATCH FIT 5 NKI-B19  悦动白(白色氟橡胶表带)",
-     "qty": 1,
-     "amt": 899,
-     "gp": 24
-    },
-    {
-     "date": "2026-08-06",
-     "name": "华为 WATCH FIT 5 NKI-B19  韵律黑(黑色氟橡胶表带)",
-     "qty": 1,
-     "amt": 1099,
-     "gp": 224
-    },
-    {
-     "date": "2026-08-06",
-     "name": "华为 WATCH FIT 5 NKI-B19  风信紫(淡紫色氟橡胶表带)",
-     "qty": 1,
-     "amt": 1099,
-     "gp": 224
-    },
-    {
-     "date": "2026-08-07",
-     "name": "华为 WATCH FIT 5 NKI-B19  悦动白(白色氟橡胶表带)",
-     "qty": 1,
-     "amt": 999,
-     "gp": 202
-    },
-    {
-     "date": "2026-08-07",
-     "name": "华为 WATCH FIT 5 NKI-B19  悦动白(白色氟橡胶表带)",
-     "qty": 1,
-     "amt": 899,
-     "gp": 102
-    },
-    {
-     "date": "2026-08-07",
-     "name": "华为 WATCH D2 LCA-B11(白色复合素皮表带)无色",
-     "qty": 1,
-     "amt": 2788,
-     "gp": 372.2
-    }
-   ],
-   "演示机": [
-    {
-     "date": "2026-08-02",
-     "name": "华为 Watch FIT 3 SLO-B19(珍珠白真皮表带)珍珠白-演示机",
-     "qty": 1,
-     "amt": 249,
-     "gp": -237.61
-    }
-   ]
-  },
-  "陈超磊": {
-   "手机": [
-    {
-     "date": "2026-08-01",
-     "name": "华为 PuraX Max HOP-AL00  12GB+512GB  幻夜黑",
-     "qty": -1,
-     "amt": -11699,
-     "gp": -779
-    },
-    {
-     "date": "2026-08-01",
-     "name": "华为 Mate X7 DEL-AL10  12GB+256GB  曜石黑",
-     "qty": 1,
-     "amt": 11799,
-     "gp": 897.91
-    },
-    {
-     "date": "2026-08-01",
-     "name": "华为 PuraX Max HOP-AL00  12GB+512GB  幻夜黑",
-     "qty": 1,
-     "amt": 11599,
-     "gp": 679
-    },
-    {
-     "date": "2026-08-02",
-     "name": "华为 Pura90 Pro MLN-AL00  12GB+512GB  桑果黑",
-     "qty": 1,
-     "amt": 5799,
-     "gp": 699
-    },
-    {
-     "date": "2026-08-03",
-     "name": "华为 nova16 EMA-AL00U 12GB+256GB 星空黑",
-     "qty": 1,
-     "amt": 2889,
-     "gp": 399
-    },
-    {
-     "date": "2026-08-04",
-     "name": "华为 Mate80 VYG-AL30  16GB+512GB  曜石黑",
-     "qty": 1,
-     "amt": 5299,
-     "gp": 624
-    },
-    {
-     "date": "2026-08-04",
-     "name": "华为 PuraX Max HOP-AL00  12GB+512GB  橄榄金",
-     "qty": 1,
-     "amt": 11799,
-     "gp": 879
-    },
-    {
-     "date": "2026-08-06",
-     "name": "华为畅享90 Plus JUY-AL50  8GB+256GB  星海蓝",
-     "qty": 1,
-     "amt": 1799,
-     "gp": 287
-    },
-    {
-     "date": "2026-08-06",
-     "name": "华为 Pura90 Pro MLN-AL00  12GB+512GB  椰青白",
-     "qty": 1,
-     "amt": 5699,
-     "gp": 599
-    },
-    {
-     "date": "2026-08-06",
-     "name": "华为 Pura90 Pro MLN-AL00  12GB+512GB  椰青白",
-     "qty": 1,
-     "amt": 5699,
-     "gp": 599
-    }
-   ],
-   "增值服务": [
-    {
-     "date": "2026-08-01",
-     "name": "199贴膜套包",
-     "qty": 1,
-     "amt": 199,
-     "gp": 199
-    },
-    {
-     "date": "2026-08-01",
-     "name": "COOYEE 华为GT6手表钢化膜 46mm 定位版",
-     "qty": 1,
-     "amt": 100,
-     "gp": 80.19
-    },
-    {
-     "date": "2026-08-02",
-     "name": "Cooyee华为P70/P80/P90pro高清钢化膜",
-     "qty": 1,
-     "amt": 0,
-     "gp": -19
-    },
-    {
-     "date": "2026-08-02",
-     "name": "Cooyee华为matepad air 12寸2024  2.5D高清钢化膜",
-     "qty": 1,
-     "amt": 99,
-     "gp": 71.08
-    },
-    {
-     "date": "2026-08-02",
-     "name": "199贴膜套包",
-     "qty": 1,
-     "amt": 299,
-     "gp": 299
-    },
-    {
-     "date": "2026-08-02",
-     "name": "Cooyee华为P70/P80/P90pro高清钢化膜",
-     "qty": 1,
-     "amt": 0,
-     "gp": -19
-    },
-    {
-     "date": "2026-08-02",
-     "name": "Cooyee华为Pura90Pro铝合金镜头膜 黑色 带定位器",
-     "qty": 1,
-     "amt": 0,
-     "gp": -26
-    },
-    {
-     "date": "2026-08-03",
-     "name": "Cooyee华为Nova14/15/16高清钢化膜",
-     "qty": 1,
-     "amt": 99,
-     "gp": 80
-    },
-    {
-     "date": "2026-08-04",
-     "name": "199贴膜套包",
-     "qty": 1,
-     "amt": 200,
-     "gp": 200
-    },
-    {
-     "date": "2026-08-04",
-     "name": "Cooyee 华为mate80-mate80Pro 高清钢化膜",
-     "qty": 1,
-     "amt": 0,
-     "gp": -18.89
-    },
-    {
-     "date": "2026-08-04",
-     "name": "星联优享-499",
-     "qty": 1,
-     "amt": 499,
-     "gp": 499
-    },
-    {
-     "date": "2026-08-04",
-     "name": "闪能 66w全兼容快充10000毫安移动电源LP13  66W 1000  白色",
-     "qty": 1,
-     "amt": 0,
-     "gp": -59
-    },
-    {
-     "date": "2026-08-04",
-     "name": "华为 WATCH 5 904L不锈钢表壳+钛合金表壳 Care+（一年期）",
-     "qty": 1,
-     "amt": 0,
-     "gp": -119.4
-    },
-    {
-     "date": "2026-08-04",
-     "name": "COOYEE 华为Watch5手表钢化膜 46mm",
-     "qty": 1,
-     "amt": 0,
-     "gp": -18.68
-    },
-    {
-     "date": "2026-08-05",
-     "name": "星联优享-499",
-     "qty": 1,
-     "amt": 550,
-     "gp": 550
-    },
-    {
-     "date": "2026-08-05",
-     "name": "Cooyee 华为mate X7 3D热弯全胶钢化膜",
-     "qty": 1,
-     "amt": 0,
-     "gp": -37.06
-    },
-    {
-     "date": "2026-08-05",
-     "name": "Cooyee 华为mate X7 一体镜头膜",
-     "qty": 1,
-     "amt": 0,
-     "gp": -23.96
-    },
-    {
-     "date": "2026-08-06",
-     "name": "Cooyee华为Nova15 Pro/Ultra高清钢化膜",
-     "qty": 1,
-     "amt": 99,
-     "gp": 80.01
-    },
-    {
-     "date": "2026-08-06",
-     "name": "199贴膜套包",
-     "qty": 1,
-     "amt": 199,
-     "gp": 199
-    },
-    {
-     "date": "2026-08-06",
-     "name": "COOYEE 华为P70 高清钢化膜",
-     "qty": 2,
-     "amt": 0,
-     "gp": -37.21
-    },
-    {
-     "date": "2026-08-06",
-     "name": "Cooyee华为Pura90Pro铝合金镜头膜 黑色 带定位器",
-     "qty": 1,
-     "amt": 0,
-     "gp": -26
-    }
-   ],
-   "音频": [
-    {
-     "date": "2026-08-01",
-     "name": "华为 FreeClip 2 耳机 T0027 丹宁蓝",
-     "qty": 1,
-     "amt": 1199,
-     "gp": 159
-    },
-    {
-     "date": "2026-08-03",
-     "name": "华为 FreeClip 2 典藏版 耳机 T0027  星海蓝",
-     "qty": 1,
-     "amt": 1499,
-     "gp": 284
-    }
-   ],
-   "其他": [
-    {
-     "date": "2026-08-02",
-     "name": "华为自带线全能充移动电源  100W 12000mAh  陶瓷白",
-     "qty": 1,
-     "amt": 269,
-     "gp": -51
-    }
-   ],
-   "穿戴": [
-    {
-     "date": "2026-08-03",
-     "name": "华为手环11 CDY-B39 NFC版(黑色氟橡胶表带)羽砂黑",
-     "qty": 1,
-     "amt": 319,
-     "gp": 63
-    },
-    {
-     "date": "2026-08-04",
-     "name": "华为 WATCH 十周年款 RTS-AL00 46mm(蓝色素皮复合表带)  蓝色",
-     "qty": 1,
-     "amt": 2799,
-     "gp": 479
-    }
-   ],
-   "电脑": [
-    {
-     "date": "2026-08-05",
-     "name": "华为 MateBook14 MNTXM-24A HarmonyOS 24GB+1TB 柔光版 原野绿",
-     "qty": 1,
-     "amt": 8049,
-     "gp": 521
-    }
-   ],
-   "平板": [
-    {
-     "date": "2026-08-06",
-     "name": "华为 MatePad 11.5 TXZ-W20   12G+256G 柔光版  深空灰 鸿蒙焕新版",
-     "qty": 1,
-     "amt": 3399,
-     "gp": 485
-    }
-   ]
-  },
-  "张博晨": {
-   "增值服务": [
-    {
-     "date": "2026-08-04",
-     "name": "Cooyee 华为mate80-mate80Pro 高清钢化膜",
-     "qty": 1,
-     "amt": 0,
-     "gp": -18.89
-    },
-    {
-     "date": "2026-08-06",
-     "name": "星联优享-999",
-     "qty": 1,
-     "amt": 999,
-     "gp": 999
-    }
-   ]
-  }
- },
- "emp_summary": [
-  {
-   "name": "陈超磊",
-   "gp": 8676.99,
-   "amt": 70558,
-   "cnt": 38,
-   "negcnt": 13,
-   "rank": 1
-  },
-  {
-   "name": "杨丽华",
-   "gp": 8217.27,
-   "amt": 65307.02,
-   "cnt": 31,
-   "negcnt": 6,
-   "rank": 2
-  },
-  {
-   "name": "李泽",
-   "gp": 6948.33,
-   "amt": 52275,
-   "cnt": 29,
-   "negcnt": 6,
-   "rank": 3
-  },
-  {
-   "name": "邵乐乐",
-   "gp": 4193.49,
-   "amt": 35780.3,
-   "cnt": 28,
-   "negcnt": 7,
-   "rank": 4
-  },
-  {
-   "name": "张博晨",
-   "gp": 980.11,
-   "amt": 999,
-   "cnt": 2,
-   "negcnt": 1,
-   "rank": 5
-  }
- ],
- "cat_summary": [
-  {
-   "name": "手机",
-   "gp": 15352.34,
-   "amt": 168117.02,
-   "cnt": 34
-  },
-  {
-   "name": "增值服务",
-   "gp": 8534.25,
-   "amt": 9820,
-   "cnt": 61
-  },
-  {
-   "name": "穿戴",
-   "gp": 3101.63,
-   "amt": 27697.3,
-   "cnt": 19
-  },
-  {
-   "name": "平板",
-   "gp": 876,
-   "amt": 6198,
-   "cnt": 2
-  },
-  {
-   "name": "音频",
-   "gp": 573.58,
-   "amt": 3897,
-   "cnt": 3
-  },
-  {
-   "name": "电脑",
-   "gp": 521,
-   "amt": 8049,
-   "cnt": 1
-  },
-  {
-   "name": "其他",
-   "gp": 294,
-   "amt": 891,
-   "cnt": 6
-  },
-  {
-   "name": "费用类",
-   "gp": 1,
-   "amt": 1,
-   "cnt": 1
-  },
-  {
-   "name": "演示机",
-   "gp": -237.61,
-   "amt": 249,
-   "cnt": 1
-  }
- ],
- "kpi": {
-  "amt": 224919,
-  "gp": 29016,
-  "gp_task": 205000,
-  "amt_task": 1600000,
-  "rate": 14.2,
-  "time_progress": 22.6,
-  "date_start": "2026-08-01",
-  "date_end": "2026-08-07"
- }
-};
-const EC_CAT_COLOR={"手机":"#3b82f6","增值服务":"#8b5cf6","穿戴":"#06b6d4","平板":"#10b981","音频":"#f59e0b","电脑":"#ef4444","运营商":"#ec4899","配件":"#14b8a6","演示机":"#94a3b8","费用类":"#a855f7"};
-const EC_ICON={"手机":"📱","增值服务":"✨","穿戴":"⌚","平板":"📟","音频":"🎧","电脑":"💻","运营商":"📡","配件":"🔌","演示机":"🖥️","费用类":"🧾"};
-const EC_fmt=n=>(n<0?"-":"")+"¥"+Math.abs(n).toLocaleString('zh-CN',{maximumFractionDigits:0});
-const EC_fmt1=n=>(n<0?"-":"")+"¥"+Math.abs(n).toLocaleString('zh-CN',{maximumFractionDigits:1});
-function ecRateColor(rate,tp){return rate>=tp?'var(--green)':(rate>=tp*0.6?'var(--orange)':'var(--red)');}
-function ecRing(perc,color){
-  const r=42,c=2*Math.PI*r,off=c*(1-Math.min(perc,1));
-  return `<svg width="76" height="76" viewBox="0 0 100 100">
-    <circle cx="50" cy="50" r="${r}" fill="none" stroke="#E5E7EB" stroke-width="9"/>
-    <circle cx="50" cy="50" r="${r}" fill="none" stroke="${color}" stroke-width="9" stroke-linecap="round"
-      transform="rotate(-90 50 50)" stroke-dasharray="${c}" stroke-dashoffset="${c}" style="transition:stroke-dashoffset 1s ease" data-off="${off}"/>
-    <text x="50" y="55" text-anchor="middle" font-size="15" font-weight="700" fill="${color}">${perc.toFixed(0)}%</text></svg>`;
-}
-function ecBuildKPI(){
-  const k=EC_DATA.kpi;
-  document.getElementById('ec-totalgp').textContent=EC_fmt1(k.gp);
-  document.getElementById('ec-date').textContent=k.date_start+' ~ '+k.date_end;
-  document.getElementById('ec-rate').textContent=k.rate+'%';
-  document.getElementById('ec-tp').textContent='时间进度 '+k.time_progress+'%';
-  document.getElementById('ec-cats').textContent=EC_DATA.cat_summary.length+'类';
-}
-let ecSort='gp';
-function ecBuildEmp(){
-  let arr=[...EC_DATA.emp_summary];
-  arr.sort((a,b)=> ecSort==='gp'?b.gp-a.gp : ecSort==='cnt'?b.cnt-a.cnt : a.rank-b.rank);
-  const tp=EC_DATA.kpi.time_progress;
-  document.getElementById('ec-empGrid').innerHTML=arr.map(e=>{
-    const rate=EC_DATA.kpi.gp_task? null:null;
-    const col=ecRateColor(0,tp); // 占位
-    const w=Math.min(100, Math.round(e.gp/ (EC_DATA.emp_summary[0].gp||1) *100));
-    const empRate = Math.round(e.gp / (e.gp+ (EC_DATA.kpi.gp - EC_DATA.kpi.gp)) *0); // 个人无任务则不显示率
-    return `<div class="card emp-card" data-name="${e.name}">
-      <div class="top" onclick="ecToggleDrill('${e.name}')">
-        <div><div class="nm">${e.name}</div><div class="rank">第 ${e.rank} 名 ｜ ${e.cnt}笔</div></div>
-        <div style="text-align:right"><div class="gp">${EC_fmt1(e.gp)}</div><div class="rate">金额 ${EC_fmt(e.amt)}</div></div>
-      </div>
-      <div class="pbar"><i style="width:0%;background:var(--blue)" data-w="${w}"></i></div>
-      <div class="split"><span class="s">负毛利 ${e.negcnt}笔</span></div>
-      <div class="drill" id="ec-drill-${e.name}">${ecDrill(e)}</div>
-    </div>`;
-  }).join('');
-  requestAnimationFrame(()=>document.querySelectorAll('#ec-empGrid .pbar i').forEach(p=>p.style.width=p.dataset.w+'%'));
-}
-function ecDrill(e){
-  const det=EC_DATA.emp_detail[e.name];
-  const blocks=Object.keys(det).map(cat=>{
-    const ts=det[cat].slice().sort((a,b)=>b.gp-a.gp);
-    const cgp=ts.reduce((s,t)=>s+t.gp,0), ccnt=ts.length;
-    const rows=ts.map(t=>`<tr><td>${t.date.slice(5)} ${t.name}</td><td>${t.qty}</td><td>${EC_fmt1(t.amt)}</td><td class="${t.gp<0?'negcell':''}">${EC_fmt1(t.gp)}</td></tr>`).join('');
-    return `<div class="blk"><div class="blk-head" onclick="ecToggleSku('${e.name}','${cat}')">
-        <span class="bname" style="color:${EC_CAT_COLOR[cat]||'#64748b'}">${EC_ICON[cat]||''} ${cat}</span>
-        <span class="bgp ${cgp<0?'negcell':''}">${EC_fmt1(cgp)} · ${ccnt}笔 ▾</span></div>
-      <div class="sku-rows" id="ec-sku-${e.name}-${cat}"><table><thead><tr><th>商品(日期)</th><th>数量</th><th>金额</th><th>毛利</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
-  }).join('');
-  return `<div style="font-size:12px;color:var(--gray);margin:10px 0 6px;font-weight:600">各品类板块（点开看逐笔明细）</div>${blocks}`;
-}
-function ecBuildCat(){
-  const max=Math.max(...EC_DATA.cat_summary.map(c=>c.gp),1);
-  document.getElementById('ec-catGrid').innerHTML=EC_DATA.cat_summary.map(c=>{
-    const col=EC_CAT_COLOR[c.name]||'#64748b', w=Math.max(4,Math.min(100,c.gp/max*100));
-    return `<div class="card cat-card" onclick="ecOpenCat('${c.name}')">
-      <div class="ic" style="background:${col}1a;color:${col}">${EC_ICON[c.name]||'📦'}</div>
-      <div class="cn">${c.name}</div>
-      <div class="cgp" style="color:${c.gp<0?'var(--red)':'var(--dark)'}">${EC_fmt1(c.gp)}</div>
-      <div class="meta">${c.cnt}笔 ｜ 金额 ${EC_fmt(c.amt)}</div>
-      <div class="bar"><i style="width:${w}%;background:${col}"></i></div>
-    </div>`;
-  }).join('');
-}
-function ecOpenCat(name){
-  const c=EC_DATA.cat_summary.find(x=>x.name===name);
-  alert(`${name}\n累计毛利 ${EC_fmt1(c.gp)}\n金额 ${EC_fmt(c.amt)}\n笔数 ${c.cnt}`);
-}
-function ecToggleDrill(n){const el=document.getElementById('ec-drill-'+n);el.classList.toggle('open');}
-function ecToggleSku(n,c){const el=document.getElementById('ec-sku-'+n+'-'+c);el.classList.toggle('open');}
-document.getElementById('ec-sort').addEventListener('click',ev=>{
-  if(ev.target.tagName!=='BUTTON')return;
-  document.querySelectorAll('#ec-sort button').forEach(b=>b.classList.remove('on'));
-  ev.target.classList.add('on');ecSort=ev.target.dataset.sort;ecBuildEmp();
+// Tab switch
+document.querySelectorAll('.nav button').forEach(function(btn){
+  btn.onclick = function(){
+    document.querySelectorAll('.nav button').forEach(function(b){b.classList.remove('active')});
+    document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});
+    btn.classList.add('active');
+    document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
+  };
 });
-ecBuildKPI();ecBuildEmp();ecBuildCat();
 
+// Calc totals
+var totalGP = 0, totalAmt = 0, totalQty = 0;
+MAIN_EMP.forEach(function(n){
+  var d = EMP_SUM[n];
+  if(d){ totalGP += d.profit; totalAmt += d.amount; totalQty += d.qty; }
+});
+
+// Header
+var monthTargetGP = 10000;
+var pct = Math.min(totalGP / monthTargetGP * 100, 100);
+document.getElementById('hdrPct').textContent = (totalGP/monthTargetGP*100).toFixed(1) + '%';
+document.getElementById('hdrBar').style.width = pct + '%';
+document.getElementById('hdrDone').textContent = '已达成 \u00A5' + totalGP.toFixed(0);
+document.getElementById('hdrTarget').textContent = '月目标 \u00A5' + monthTargetGP;
+
+// === Tab 1: Sales ===
+(function(){
+  var avgGP = totalQty > 0 ? totalGP/totalQty : 0;
+  var kpis = [
+    {label:'总毛利',val:'\u00A5'+totalGP.toFixed(0),cls:'blue',sub:'08-01~08-07'},
+    {label:'总销售额',val:'\u00A5'+(totalAmt/10000).toFixed(1)+'万',cls:'purple',sub:'出库口径'},
+    {label:'总销量',val:totalQty+'台',cls:'green',sub:'不含退换'},
+    {label:'客单毛利',val:'\u00A5'+avgGP.toFixed(0),cls:'orange',sub:'毛利/销量'},
+    {label:'业务员',val:MAIN_EMP.length+'人',cls:'blue',sub:'在岗考核'},
+    {label:'日均毛利',val:'\u00A5'+(totalGP/7).toFixed(0),cls:'purple',sub:'7天平均'}
+  ];
+  var grid = document.getElementById('kpiGrid');
+  kpis.forEach(function(k){
+    grid.innerHTML += '<div class="kpi '+k.cls+'"><div class="kpi-label">'+k.label+'</div><div class="kpi-val">'+k.val+'</div><div class="kpi-sub">'+k.sub+'</div></div>';
+  });
+
+  var sorted = MAIN_EMP.slice().sort(function(a,b){ return (EMP_SUM[b]?EMP_SUM[b].profit:0) - (EMP_SUM[a]?EMP_SUM[a].profit:0); });
+  var container = document.getElementById('salesPersons');
+
+  sorted.forEach(function(name, idx){
+    var d = EMP_SUM[name] || {qty:0,amount:0,profit:0,cats:{}};
+    var gpTarget = 2500;
+    var scoreClass = d.profit >= gpTarget ? 'good' : d.profit >= gpTarget*0.7 ? 'warn' : 'danger';
+    var html = '<div class="person r'+(idx+1)+'" onclick="toggleDrill(this)">';
+    html += '<div class="person-top">';
+    html += '<div><div class="person-name">'+name+'</div><div style="font-size:11px;color:var(--gray)">销量'+d.qty+'台 \u00B7 销售额\u00A5'+(d.amount/10000).toFixed(1)+'万</div></div>';
+    html += '<div class="person-score '+scoreClass+'">'+(d.profit>=0?'+':'')+'\u00A5'+d.profit.toFixed(0)+'</div>';
+    html += '</div>';
+
+    // Category bars
+    CATS.forEach(function(cat){
+      var catKey = '';
+      for(var k in CAT_MAP){ if(CAT_MAP[k]===cat){ catKey=k; break; } }
+      var actual = 0;
+      if(d.cats){
+        for(var ck in d.cats){
+          if(ck === catKey || ck === cat) actual += d.cats[ck].profit;
+        }
+      }
+      if(actual === 0) return;
+      var pctVal = Math.min(actual / 3000 * 100, 100);
+      var color = actual >= 0 ? (cat==='手机'?'blue':'green') : 'red';
+      html += '<div class="m-row">';
+      html += '<div class="m-label">'+cat+'</div>';
+      html += '<div class="m-bar"><div class="m-fill '+color+'" style="width:'+Math.max(pctVal,3)+'%"></div></div>';
+      html += '<div class="m-val" style="color:'+(actual>=0?'var(--dark)':'var(--red)')+'">\u00A5'+actual.toFixed(0)+'</div>';
+      html += '</div>';
+    });
+
+    // Drill-down
+    html += '<div class="drill" id="drill_'+name+'">';
+    html += '<div class="drill-title">\u25BC SKU明细展开</div>';
+
+    if(EMP_DETAIL[name]){
+      for(var catName in EMP_DETAIL[name]){
+        var items = EMP_DETAIL[name][catName];
+        html += '<div class="drill-cat"><div class="drill-cat-title">\u3010'+catName+'\u3011</div>';
+        items.forEach(function(item){
+          var gpColor = item.gp >= 0 ? 'var(--green)' : 'var(--red)';
+          html += '<div class="drill-item"><span>'+item.date.slice(5)+' '+item.name+'<span class="drill-sub">\u00D7'+item.qty+'</span></span>';
+          html += '<span style="color:'+gpColor+';font-weight:600">\u00A5'+item.gp.toFixed(0)+'</span></div>';
+        });
+        html += '</div>';
+      }
+    }
+    html += '</div></div>';
+    container.innerHTML += html;
+  });
+})();
+
+function toggleDrill(el){
+  var drill = el.querySelector('.drill');
+  if(drill) drill.classList.toggle('open');
+}
+
+// === Tab 2: Channel ===
+(function(){
+  var channels = ['三大地图','京东到家','企业上门购','自然客流'];
+  var table = document.getElementById('channelTable');
+  var html = '<thead><tr><th>业务员</th>';
+  channels.forEach(function(ch){ html += '<th class="num">'+ch+'</th>'; });
+  html += '<th class="num">合计</th></tr></thead><tbody>';
+
+  MAIN_EMP.forEach(function(name){
+    var emp = CHANNEL[name] || {};
+    var total = 0;
+    html += '<tr><td style="font-weight:700">'+name+'</td>';
+    channels.forEach(function(ch){
+      var v = emp[ch] || 0;
+      total += v;
+      html += '<td class="num" style="color:'+(v>0?'var(--dark)':'var(--gray)')+'">\u00A5'+(v>0?v.toFixed(0):'-')+'</td>';
+    });
+    html += '<td class="num" style="font-weight:800;color:var(--blue)">\u00A5'+total.toFixed(0)+'</td></tr>';
+  });
+
+  // Total row
+  html += '<tr style="background:var(--gray-l);font-weight:700"><td>合计</td>';
+  channels.forEach(function(ch){
+    var s = 0;
+    MAIN_EMP.forEach(function(n){ s += (CHANNEL[n]?CHANNEL[n][ch]||0:0); });
+    html += '<td class="num">\u00A5'+s.toFixed(0)+'</td>';
+  });
+  var grandTotal = 0;
+  MAIN_EMP.forEach(function(n){
+    if(!CHANNEL[n]) return;
+    for(var k in CHANNEL[n]) grandTotal += CHANNEL[n][k];
+  });
+  html += '<td class="num" style="color:var(--purple)">\u00A5'+grandTotal.toFixed(0)+'</td></tr></tbody>';
+  table.innerHTML = html;
+
+  // Channel viz
+  var viz = document.getElementById('channelViz');
+  var colors = {'三大地图':'var(--blue)','京东到家':'var(--purple)','企业上门购':'var(--orange)','自然客流':'var(--green)'};
+  channels.forEach(function(ch){
+    var s = 0;
+    MAIN_EMP.forEach(function(n){ s += (CHANNEL[n]?CHANNEL[n][ch]||0:0); });
+    var p = grandTotal > 0 ? (s/grandTotal*100) : 0;
+    viz.innerHTML += '<div class="m-row" style="margin-bottom:8px">';
+    viz.innerHTML += '<div class="m-label" style="width:70px">'+ch+'</div>';
+    viz.innerHTML += '<div class="m-bar" style="height:10px"><div style="height:100%;border-radius:5px;background:'+colors[ch]+';width:'+Math.max(p,2)+'%;transition:width .6s"></div></div>';
+    viz.innerHTML += '<div class="m-val">\u00A5'+s.toFixed(0)+' <span style="font-size:9px;color:var(--gray)">'+p.toFixed(1)+'%</span></div></div>';
+  });
+})();
+
+// === Tab 3: Performance ===
+(function(){
+  var perfKpi = document.getElementById('perfKpi');
+  var perfGrid = document.getElementById('perfGrid');
+
+  var perfScores = [];
+  MAIN_EMP.forEach(function(name){
+    var d = EMP_SUM[name];
+    if(!d) return;
+    var score = 0;
+    var phoneGP = 0, vasGP = 0, carrierAmt = 0, wearGP = 0;
+    if(d.cats){
+      for(var k in d.cats){
+        if(k.indexOf('手机')>=0) phoneGP += d.cats[k].profit;
+        if(k.indexOf('增值')>=0) vasGP += d.cats[k].profit;
+        if(k.indexOf('运营商')>=0) carrierAmt += d.cats[k].amount;
+        if(k.indexOf('穿戴')>=0) wearGP += d.cats[k].profit;
+      }
+    }
+    score += Math.min(phoneGP/2500*40, 40);
+    score += Math.min(vasGP/2000*20, 20);
+    score += Math.min(carrierAmt/200*20, 20);
+    score += Math.min(wearGP/500*20, 20);
+    score = Math.min(score, 100);
+    perfScores.push({name:name, score:score, d:d});
+  });
+
+  var totalPerfScore = 0;
+  perfScores.forEach(function(s){ totalPerfScore += s.score; });
+  var avgScore = perfScores.length > 0 ? totalPerfScore / perfScores.length : 0;
+  var maxScore = Math.max.apply(null, perfScores.map(function(s){return s.score;}));
+  var minScore = Math.min.apply(null, perfScores.map(function(s){return s.score;}));
+  var maxName = perfScores.reduce(function(a,b){return a.score>b.score?a:b;}).name;
+  var minName = perfScores.reduce(function(a,b){return a.score<b.score?a:b;}).name;
+  var passCount = perfScores.filter(function(s){return s.score>=60;}).length;
+
+  perfKpi.innerHTML = '<div class="kpi purple"><div class="kpi-label">平均绩效分</div><div class="kpi-val">'+avgScore.toFixed(1)+'</div><div class="kpi-sub">满分100</div></div>';
+  perfKpi.innerHTML += '<div class="kpi blue"><div class="kpi-label">最高分</div><div class="kpi-val">'+maxScore.toFixed(1)+'</div><div class="kpi-sub">'+maxName+'</div></div>';
+  perfKpi.innerHTML += '<div class="kpi orange"><div class="kpi-label">最低分</div><div class="kpi-val">'+minScore.toFixed(1)+'</div><div class="kpi-sub">'+minName+'</div></div>';
+  perfKpi.innerHTML += '<div class="kpi green"><div class="kpi-label">达标人数</div><div class="kpi-val">'+passCount+'/'+perfScores.length+'</div><div class="kpi-sub">60分及格线</div></div>';
+
+  perfScores.sort(function(a,b){return b.score-a.score;});
+  perfScores.forEach(function(item, idx){
+    var d = item.d;
+    var metrics = [];
+    if(d.cats){
+      var phoneGP = 0, vasGP = 0, carrierAmt = 0, wearGP = 0;
+      for(var k in d.cats){
+        if(k.indexOf('手机')>=0) phoneGP += d.cats[k].profit;
+        if(k.indexOf('增值')>=0) vasGP += d.cats[k].profit;
+        if(k.indexOf('运营商')>=0) carrierAmt += d.cats[k].amount;
+        if(k.indexOf('穿戴')>=0) wearGP += d.cats[k].profit;
+      }
+      metrics.push({label:'手机毛利',val:phoneGP,target:2500,max:3000});
+      metrics.push({label:'增值服务',val:vasGP,target:2000,max:3000});
+      metrics.push({label:'运营商',val:carrierAmt,target:200,max:300});
+      metrics.push({label:'穿戴毛利',val:wearGP,target:500,max:1000});
+      metrics.push({label:'总毛利',val:d.profit,target:2500,max:5000});
+    }
+    var scoreColor = item.score>=80?'var(--green)':item.score>=60?'var(--blue)':item.score>=40?'var(--orange)':'var(--red)';
+    var html = '<div class="perf-card">';
+    html += '<div class="perf-header"><div class="perf-name">#'+(idx+1)+' '+item.name+'</div>';
+    html += '<div class="perf-score" style="background:linear-gradient(135deg,'+scoreColor+',var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent">'+item.score.toFixed(1)+'</div></div>';
+    metrics.forEach(function(m){
+      var p = m.target>0 ? Math.min(m.val/m.target*100,100) : 0;
+      var barP = m.max>0 ? Math.min(m.val/m.max*100,100) : 0;
+      var c = p>=100?'var(--green)':p>=70?'var(--blue)':p>=40?'var(--orange)':'var(--red)';
+      html += '<div class="perf-row"><div class="l">'+m.label+'</div>';
+      html += '<div class="bar"><div class="fill" style="width:'+barP+'%;background:'+c+'"></div></div>';
+      html += '<div class="v" style="color:'+c+'">\u00A5'+m.val.toFixed(0)+'</div>';
+      html += '<div class="t">/\u00A5'+m.target+'</div></div>';
+    });
+    html += '</div>';
+    perfGrid.innerHTML += html;
+  });
+})();
+
+// 3D Tilt effect
+document.addEventListener('mousemove', function(e){
+  var cards = document.querySelectorAll('.card3d,.kpi,.person,.perf-card');
+  cards.forEach(function(card){
+    var rect = card.getBoundingClientRect();
+    var x = e.clientX - rect.left;
+    var y = e.clientY - rect.top;
+    if(x < 0 || x > rect.width || y < 0 || y > rect.height) return;
+    var rotateY = ((x / rect.width) - 0.5) * 4;
+    var rotateX = (0.5 - (y / rect.height)) * 4;
+    card.style.transform = 'perspective(600px) rotateX('+rotateX+'deg) rotateY('+rotateY+'deg) translateY(-2px)';
+  });
+});
 </script>
 </body>
 </html>
