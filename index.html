@@ -184,6 +184,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
   <button class="active" data-tab="sales">销售进度</button>
   <button data-tab="channel">渠道挂账</button>
   <button data-tab="perf">绩效考评</button>
+  <button data-tab="target">任务进度</button>
 </div>
 
 <div class="main">
@@ -205,6 +206,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
     <div class="kpi-grid" id="perfKpi"></div>
     <div class="perf-grid" id="perfGrid"></div>
   </div>
+  <div class="tab" id="tab-target">
+    <div class="kpi-grid" id="targetKpi"></div>
+    <div class="card">
+      <div style="font-size:14px;font-weight:700;margin-bottom:12px;color:var(--text)">8月任务进度 · 统计维度：时间进度</div>
+      <div style="overflow-x:auto"><table class="ch-table" id="targetTable"></table></div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -218,6 +226,14 @@ var DAY_GP = {"2026-08-01": 5136.51, "2026-08-02": 6028.23, "2026-08-03": 3567.7
 var MAIN_EMP = ['邵乐乐','杨丽华','李泽','陈超磊'];
 var CAT_MAP = {'01手机':'手机','05电脑':'电脑','06平板电脑':'平板','07音频':'音频','08穿戴':'穿戴','09配件':'配件','10运营商业务':'运营商','15增值服务':'增值服务','21演示机':'演示'};
 var CATS = ['手机','电脑','平板','音频','穿戴','配件','运营商','增值服务','演示'];
+
+// === TASK TARGET DATA (8月) ===
+var TASK_DATA = {
+  '邵乐乐': {t_gp:50000, t_phone:43, t_vas:14250, t_pc:3, t_tab:8, t_audio:9, t_wear:25, d_gp:4193.48, d_phone:8, d_vas:962.75, d_pc:0, d_tab:0, d_audio:0, d_wear:21},
+  '杨丽华': {t_gp:51000, t_phone:43, t_vas:14250, t_pc:3, t_tab:8, t_audio:9, t_wear:25, d_gp:10008.27, d_phone:10, d_vas:2698.14, d_pc:0, d_tab:1, d_audio:0, d_wear:5},
+  '李泽':   {t_gp:52000, t_phone:42, t_vas:14250, t_pc:4, t_tab:9, t_audio:9, t_wear:25, d_gp:7232.32, d_phone:6, d_vas:3039.15, d_pc:0, d_tab:0, d_audio:1, d_wear:6},
+  '陈超磊': {t_gp:52000, t_phone:42, t_vas:14250, t_pc:4, t_tab:9, t_audio:10, t_wear:25, d_gp:8985.99, d_phone:9, d_vas:1853.08, d_pc:1, d_tab:1, d_audio:2, d_wear:2}
+};
 
 // Tab switch
 document.querySelectorAll('.nav button').forEach(function(btn){
@@ -437,6 +453,101 @@ function toggleDrill(el){
     html += '</div>';
     perfGrid.innerHTML += html;
   });
+})();
+
+// === Tab 4: Task Target Progress ===
+(function(){
+  var kpiEl = document.getElementById('targetKpi');
+  var tblEl = document.getElementById('targetTable');
+
+  // KPI cards
+  var totalTargetGP = 0, totalDoneGP = 0, totalTargetPhone = 0, totalDonePhone = 0;
+  MAIN_EMP.forEach(function(n){ var d = TASK_DATA[n]; totalTargetGP += d.t_gp; totalDoneGP += d.d_gp; totalTargetPhone += d.t_phone; totalDonePhone += d.d_phone; });
+  var overallPct = (totalDoneGP / totalTargetGP * 100).toFixed(1);
+  kpiEl.innerHTML = '<div class="kpi red"><div class="kpi-label">时间进度</div><div class="kpi-val">23%</div><div class="kpi-sub">8/31天</div></div>';
+  kpiEl.innerHTML += '<div class="kpi purple"><div class="kpi-label">毛利总达成</div><div class="kpi-val">' + overallPct + '%</div><div class="kpi-sub">\u00A5' + totalDoneGP.toFixed(0) + '/\u00A5' + totalTargetGP + '</div></div>';
+  kpiEl.innerHTML += '<div class="kpi blue"><div class="kpi-label">手机总完成</div><div class="kpi-val">' + totalDonePhone + '/' + totalTargetPhone + '</div><div class="kpi-sub">' + (totalDonePhone/totalTargetPhone*100).toFixed(0) + '%</div></div>';
+  kpiEl.innerHTML += '<div class="kpi orange"><div class="kpi-label">PC总完成</div><div class="kpi-val">1/14</div><div class="kpi-sub">7%</div></div>';
+
+  // Define task dimensions: [key, label, unit, isCurrency]
+  var dims = [
+    ['gp', '毛利', true],
+    ['phone', '手机', false],
+    ['vas', '增值服务', true],
+    ['pc', 'PC', false],
+    ['tab', '平板', false],
+    ['audio', '音频', false],
+    ['wear', '穿戴', false]
+  ];
+
+  // Build table
+  var html = '<thead>';
+  // Row 1: top header
+  html += '<tr><th rowspan="2" style="text-align:center;min-width:60px">姓名</th>';
+  dims.forEach(function(d) {
+    var label = d[1];
+    if (label === '毛利') label = '毛利（35分）';
+    else if (label === '手机') label = '手机（15分）';
+    html += '<th colspan="4" style="text-align:center;border-left:1px solid var(--glass-border)">' + label + '</th>';
+  });
+  html += '</tr>';
+  // Row 2: sub headers
+  html += '<tr>';
+  dims.forEach(function(d, i) {
+    var border = i > 0 ? 'border-left:1px solid var(--glass-border);' : '';
+    html += '<th style="' + border + '">任务</th><th>完成</th><th>缺口</th><th>完成率</th>';
+  });
+  html += '</tr></thead><tbody>';
+
+  // Data rows
+  MAIN_EMP.forEach(function(name) {
+    var td = TASK_DATA[name];
+    html += '<tr><td style="font-weight:800;color:var(--text)">' + name + '</td>';
+    dims.forEach(function(d, i) {
+      var key = d[0];
+      var isC = d[2];
+      var target = td['t_' + key];
+      var done = td['d_' + key];
+      var gap = done - target;
+      var pct = target > 0 ? (done / target * 100) : 0;
+
+      var border = i > 0 ? 'border-left:1px solid var(--glass-border);' : '';
+      var fmt = function(v) { return isC ? '\u00A5' + v.toFixed(0) : v; };
+
+      // Color for gap and pct
+      var pctColor = pct >= 80 ? '#10B981' : pct >= 50 ? '#F59E0B' : '#EF4444';
+      var gapColor = gap >= 0 ? '#10B981' : '#EF4444';
+
+      html += '<td class="num" style="' + border + 'color:var(--text-sub)">' + fmt(target) + '</td>';
+      html += '<td class="num" style="font-weight:700;color:var(--text)">' + fmt(done) + '</td>';
+      html += '<td class="num" style="color:' + gapColor + '">' + (gap >= 0 ? '+' : '') + fmt(gap) + '</td>';
+      html += '<td class="num" style="color:' + pctColor + ';font-weight:700">' + pct.toFixed(0) + '%</td>';
+    });
+    html += '</tr>';
+  });
+
+  // Totals row
+  html += '<tr style="background:rgba(255,255,255,.03);font-weight:800"><td style="color:var(--text-sub)">合计</td>';
+  dims.forEach(function(d, i) {
+    var key = d[0];
+    var isC = d[2];
+    var tTotal = 0, dTotal = 0;
+    MAIN_EMP.forEach(function(n) { tTotal += TASK_DATA[n]['t_' + key]; dTotal += TASK_DATA[n]['d_' + key]; });
+    var gap = dTotal - tTotal;
+    var pct = tTotal > 0 ? (dTotal / tTotal * 100) : 0;
+    var fmt = function(v) { return isC ? '\u00A5' + v.toFixed(0) : v; };
+    var pctColor = pct >= 80 ? '#10B981' : pct >= 50 ? '#F59E0B' : '#EF4444';
+    var gapColor = gap >= 0 ? '#10B981' : '#EF4444';
+    var border = i > 0 ? 'border-left:1px solid var(--glass-border);' : '';
+
+    html += '<td class="num" style="' + border + 'color:var(--text-sub)">' + fmt(tTotal) + '</td>';
+    html += '<td class="num" style="color:var(--text)">' + fmt(dTotal) + '</td>';
+    html += '<td class="num" style="color:' + gapColor + '">' + (gap >= 0 ? '+' : '') + fmt(gap) + '</td>';
+    html += '<td class="num" style="color:' + pctColor + '">' + pct.toFixed(0) + '%</td>';
+  });
+  html += '</tr></tbody>';
+
+  tblEl.innerHTML = html;
 })();
 </script>
 </body>
