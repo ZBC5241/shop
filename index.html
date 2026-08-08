@@ -5,148 +5,159 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>李家村万达华为 · 8月业绩看板</title>
 <style>
-:root{--blue:#4F8EF7;--blue-l:#DBEAFE;--purple:#8B5CF6;--purple-l:#EDE9FE;
-  --green:#10B981;--green-l:#D1FAE5;--orange:#F59E0B;--orange-l:#FEF3C7;
-  --red:#EF4444;--red-l:#FEE2E2;--dark:#0F172A;--gray:#64748B;--gray-l:#F1F5F9;
-  --border:#E2E8F0;--bg:#F8FAFC;--card:#FFF;--glass:rgba(255,255,255,.75)}
+:root{
+  --bg-deep:#0B1120;--bg-card:rgba(15,23,42,.85);--bg-nav:rgba(15,23,42,.75);
+  --glass-border:rgba(148,163,184,.08);--glass-border-h:rgba(148,163,184,.15);
+  --text:#F1F5F9;--text-sub:#94A3B8;--text-dim:#64748B;
+  --blue:#3B82F6;--blue-l:rgba(59,130,246,.15);
+  --purple:#8B5CF6;--purple-l:rgba(139,92,246,.15);
+  --green:#10B981;--green-l:rgba(16,185,129,.15);
+  --orange:#F59E0B;--orange-l:rgba(245,158,11,.15);
+  --red:#EF4444;--red-l:rgba(239,68,68,.15);
+  --cyan:#06B6D4;--cyan-l:rgba(6,182,212,.15);
+}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
-  background:var(--bg);color:var(--dark);line-height:1.5;overflow-x:hidden}
+  background:var(--bg-deep);color:var(--text);line-height:1.5;overflow-x:hidden}
 
-.scene-bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;
-  background:linear-gradient(135deg,#EEF2FF 0%,#F0F9FF 40%,#F5F3FF 70%,#FFF 100%);perspective:1000px}
-.scene-bg::before{content:'';position:absolute;top:-40%;right:-20%;width:60vw;height:60vw;
-  border-radius:50%;background:radial-gradient(circle,rgba(79,142,247,.08) 0%,transparent 70%);
-  animation:float1 20s ease-in-out infinite}
-.scene-bg::after{content:'';position:absolute;bottom:-30%;left:-10%;width:50vw;height:50vw;
-  border-radius:50%;background:radial-gradient(circle,rgba(139,92,246,.06) 0%,transparent 70%);
-  animation:float2 25s ease-in-out infinite}
-@keyframes float1{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-30px) scale(1.05)}}
-@keyframes float2{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(20px) scale(1.03)}}
+/* Ambient background */
+.scene-bg{position:fixed;inset:0;z-index:-1;
+  background:radial-gradient(ellipse 60% 50% at 20% 20%,rgba(59,130,246,.06),transparent),
+  radial-gradient(ellipse 50% 60% at 80% 70%,rgba(139,92,246,.05),transparent),
+  radial-gradient(ellipse 40% 40% at 50% 50%,rgba(6,182,212,.03),transparent),
+  linear-gradient(135deg,#0B1120 0%,#0F172A 40%,#111827 100%);
+  animation:ambientShift 30s ease-in-out infinite alternate}
+@keyframes ambientShift{0%{filter:brightness(1)}50%{filter:brightness(1.05)}100%{filter:brightness(1)}}
 
-/* Header */
-.header{background:linear-gradient(135deg,#4F8EF7 0%,#7C5CFC 50%,#9333EA 100%);
-  color:#fff;padding:24px 20px 16px;position:sticky;top:0;z-index:100;
-  box-shadow:0 8px 32px rgba(79,142,247,.35),0 2px 8px rgba(0,0,0,.1);
-  transform-style:preserve-3d;transition:transform .3s}
-.header:hover{transform:translateY(-2px)}
+/* Header with glass */
+.header{background:var(--bg-nav);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--glass-border);color:var(--text);padding:20px 24px 16px;
+  position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(0,0,0,.3)}
 .header-row{display:flex;align-items:center;justify-content:space-between}
-.header h1{font-size:18px;font-weight:800;letter-spacing:1px;text-shadow:0 2px 4px rgba(0,0,0,.15)}
-.header .sub{font-size:11px;opacity:.85;margin-top:2px}
-.pbar-wrap{height:6px;background:rgba(255,255,255,.2);border-radius:3px;margin-top:10px;overflow:hidden}
-.pbar-fill{height:100%;background:linear-gradient(90deg,#FFF,#FDE68A);border-radius:3px;transition:width .8s cubic-bezier(.4,0,.2,1)}
-.pbar-meta{display:flex;justify-content:space-between;font-size:10px;margin-top:3px;opacity:.8}
+.header h1{font-size:17px;font-weight:800;letter-spacing:.5px}
+.header .sub{font-size:11px;color:var(--text-dim);margin-top:2px}
+.hdr-pct{font-size:26px;font-weight:900;
+  background:linear-gradient(135deg,#3B82F6,#8B5CF6);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.pbar-wrap{height:4px;background:rgba(255,255,255,.08);border-radius:2px;margin-top:10px;overflow:hidden}
+.pbar-fill{height:100%;border-radius:2px;transition:width .8s cubic-bezier(.4,0,.2,1);
+  background:linear-gradient(90deg,#3B82F6,#8B5CF6,#06B6D4)}
+.pbar-meta{display:flex;justify-content:space-between;font-size:10px;margin-top:3px;color:var(--text-dim)}
 
-/* Nav */
-.nav{display:flex;gap:8px;padding:14px 20px 0;background:transparent;position:sticky;top:80px;z-index:99}
-.nav button{border:none;background:var(--glass);color:var(--gray);padding:8px 18px;
-  border-radius:12px 12px 0 0;font-size:13px;font-weight:600;cursor:pointer;
-  white-space:nowrap;backdrop-filter:blur(10px);border:1px solid var(--border);border-bottom:2px solid transparent;
-  transition:all .25s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d}
-.nav button:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(79,142,247,.15)}
-.nav button.active{background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;
-  border-color:transparent;box-shadow:0 4px 16px rgba(79,142,247,.3);transform:translateY(-2px) scale(1.02)}
+/* Nav tabs */
+.nav{display:flex;gap:6px;padding:14px 24px 0;background:transparent;position:sticky;top:76px;z-index:99}
+.nav button{border:none;background:rgba(255,255,255,.04);color:var(--text-dim);padding:8px 20px;
+  border-radius:10px 10px 0 0;font-size:13px;font-weight:600;cursor:pointer;
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border:1px solid transparent;border-bottom:2px solid transparent;
+  transition:all .25s cubic-bezier(.4,0,.2,1)}
+.nav button:hover{background:rgba(255,255,255,.08);color:var(--text);transform:translateY(-1px)}
+.nav button.active{background:linear-gradient(135deg,rgba(59,130,246,.2),rgba(139,92,246,.2));
+  color:#fff;border-color:var(--glass-border-h);
+  box-shadow:0 4px 16px rgba(59,130,246,.15),inset 0 1px 0 rgba(255,255,255,.05)}
 
-/* Main */
-.main{padding:0 20px 40px}
+.main{padding:0 24px 40px}
 .tab{display:none;animation:fadeUp .4s ease}
 .tab.active{display:block}
-@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 
-/* Card3d */
-.card3d{background:var(--card);border-radius:16px;padding:18px;margin-bottom:14px;
-  border:1px solid rgba(226,232,240,.8);
-  box-shadow:0 4px 6px -1px rgba(0,0,0,.05),0 2px 4px -2px rgba(0,0,0,.03);
-  transition:all .3s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d;position:relative;overflow:hidden}
-.card3d::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;
-  background:linear-gradient(90deg,var(--blue),var(--purple));opacity:0;transition:opacity .3s}
-.card3d:hover{transform:translateY(-4px);
-  box-shadow:0 20px 40px -12px rgba(79,142,247,.15),0 8px 16px -8px rgba(0,0,0,.08)}
-.card3d:hover::before{opacity:1}
+/* Glass Card */
+.card{background:var(--bg-card);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-radius:14px;padding:18px;margin-bottom:14px;
+  border:1px solid var(--glass-border);
+  box-shadow:0 8px 32px -8px rgba(0,0,0,.3),0 2px 8px rgba(0,0,0,.2);
+  transition:all .3s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden}
+.card:hover{border-color:var(--glass-border-h);
+  box-shadow:0 16px 40px -12px rgba(0,0,0,.4),0 4px 12px rgba(0,0,0,.3)}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent)}
 
 /* KPI */
-.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:16px}
-.kpi{background:var(--card);border-radius:14px;padding:14px;border:1px solid var(--border);
-  position:relative;overflow:hidden;transition:all .3s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d;cursor:default}
-.kpi::after{content:'';position:absolute;top:-50%;right:-30%;width:80px;height:80px;border-radius:50%;opacity:.08;transition:all .4s}
-.kpi:hover{transform:translateY(-4px) scale(1.02);box-shadow:0 12px 24px -8px rgba(0,0,0,.12)}
-.kpi.blue::after{background:var(--blue)}.kpi.purple::after{background:var(--purple)}
-.kpi.green::after{background:var(--green)}.kpi.orange::after{background:var(--orange)}
-.kpi.red::after{background:var(--red)}
-.kpi-label{font-size:11px;color:var(--gray);margin-bottom:2px}
-.kpi-val{font-size:22px;font-weight:800;letter-spacing:-.5px;
-  background:linear-gradient(135deg,var(--dark) 0%,var(--gray) 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.kpi-sub{font-size:10px;color:var(--gray);margin-top:2px}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:16px}
+.kpi{background:var(--bg-card);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-radius:12px;padding:14px;border:1px solid var(--glass-border);
+  position:relative;overflow:hidden;transition:all .3s;cursor:default}
+.kpi:hover{transform:translateY(-3px);border-color:var(--glass-border-h);
+  box-shadow:0 12px 24px -8px rgba(0,0,0,.4)}
+.kpi-label{font-size:11px;color:var(--text-dim);margin-bottom:4px}
+.kpi-val{font-size:20px;font-weight:800;letter-spacing:-.5px;color:var(--text)}
+.kpi-sub{font-size:10px;color:var(--text-dim);margin-top:2px}
+.kpi.blue .kpi-val{color:#60A5FA}.kpi.purple .kpi-val{color:#A78BFA}
+.kpi.green .kpi-val{color:#34D399}.kpi.orange .kpi-val{color:#FBBF24}
+.kpi.red .kpi-val{color:#F87171}
 
-/* Person */
-.person{background:var(--card);border-radius:16px;padding:16px 18px;margin-bottom:14px;
-  border:1px solid var(--border);position:relative;overflow:hidden;
-  transform-style:preserve-3d;transition:all .35s cubic-bezier(.4,0,.2,1)}
-.person::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;border-radius:0 4px 4px 0}
+/* Person card */
+.person{background:var(--bg-card);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-radius:14px;padding:16px 18px;margin-bottom:12px;
+  border:1px solid var(--glass-border);position:relative;overflow:hidden;
+  transition:all .35s cubic-bezier(.4,0,.2,1)}
+.person::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;border-radius:0 3px 3px 0}
 .person.r1::before{background:linear-gradient(180deg,#10B981,#34D399)}
-.person.r2::before{background:linear-gradient(180deg,#4F8EF7,#60A5FA)}
+.person.r2::before{background:linear-gradient(180deg,#3B82F6,#60A5FA)}
 .person.r3::before{background:linear-gradient(180deg,#F59E0B,#FBBF24)}
-.person.r4::before{background:linear-gradient(180deg,#94A3B8,#CBD5E1)}
-.person:hover{transform:translateY(-4px);
-  box-shadow:0 12px 32px -8px rgba(0,0,0,.12),-4px 0 16px rgba(79,142,247,.08)}
+.person.r4::before{background:linear-gradient(180deg,#64748B,#94A3B8)}
+.person:hover{transform:translateY(-3px);border-color:var(--glass-border-h);
+  box-shadow:0 12px 32px -8px rgba(0,0,0,.4),-3px 0 16px rgba(59,130,246,.06)}
 .person-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-.person-name{font-size:15px;font-weight:700}
+.person-name{font-size:15px;font-weight:700;color:var(--text)}
 .person-score{font-size:24px;font-weight:900;
-  background:linear-gradient(135deg,var(--blue),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.person-score.warn{background:linear-gradient(135deg,var(--orange),#FB923C);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.person-score.danger{background:linear-gradient(135deg,var(--red),#F87171);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.person-score.good{background:linear-gradient(135deg,var(--green),#34D399);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  background:linear-gradient(135deg,#3B82F6,#8B5CF6);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.person-score.warn{background:linear-gradient(135deg,#F59E0B,#FB923C);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.person-score.danger{background:linear-gradient(135deg,#EF4444,#F87171);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.person-score.good{background:linear-gradient(135deg,#10B981,#34D399);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 
 /* Metric bar */
 .m-row{display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:12px}
-.m-label{width:60px;color:var(--gray);flex-shrink:0;font-weight:500}
-.m-bar{flex:1;height:7px;background:var(--gray-l);border-radius:4px;overflow:hidden;position:relative}
-.m-fill{height:100%;border-radius:4px;transition:width .6s cubic-bezier(.4,0,.2,1);position:relative}
-.m-fill::after{content:'';position:absolute;top:0;right:0;bottom:0;width:20px;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.4));border-radius:0 4px 4px 0}
-.m-fill.blue{background:linear-gradient(90deg,#4F8EF7,#60A5FA)}
+.m-label{width:60px;color:var(--text-dim);flex-shrink:0;font-weight:500}
+.m-bar{flex:1;height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;position:relative}
+.m-fill{height:100%;border-radius:3px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+.m-fill.blue{background:linear-gradient(90deg,#3B82F6,#60A5FA)}
 .m-fill.green{background:linear-gradient(90deg,#10B981,#34D399)}
 .m-fill.orange{background:linear-gradient(90deg,#F59E0B,#FBBF24)}
 .m-fill.red{background:linear-gradient(90deg,#EF4444,#F87171)}
 .m-fill.purple{background:linear-gradient(90deg,#8B5CF6,#A78BFA)}
-.m-val{width:70px;text-align:right;font-weight:700;flex-shrink:0;font-variant-numeric:tabular-nums}
+.m-val{width:70px;text-align:right;font-weight:700;flex-shrink:0;font-variant-numeric:tabular-nums;color:var(--text)}
 
-/* Drill */
-.drill{background:var(--gray-l);border-radius:10px;margin-top:10px;
-  max-height:0;overflow:hidden;transition:max-height .4s ease,padding .4s ease;padding:0 12px}
-.drill.open{max-height:2000px;padding:12px;overflow-y:auto}
-.drill-title{font-size:12px;font-weight:700;margin-bottom:8px;color:var(--blue);cursor:pointer}
+/* Drill down */
+.drill{background:rgba(0,0,0,.2);border-radius:10px;margin-top:10px;
+  max-height:0;overflow:hidden;transition:max-height .4s ease,padding .4s ease;padding:0 12px;
+  border:1px solid transparent}
+.drill.open{max-height:2000px;padding:12px;overflow-y:auto;border-color:var(--glass-border)}
+.drill-title{font-size:12px;font-weight:700;margin-bottom:8px;color:#60A5FA;cursor:pointer}
 .drill-cat{margin-bottom:8px}
-.drill-cat-title{font-size:12px;font-weight:700;color:var(--purple);margin-bottom:4px}
+.drill-cat-title{font-size:12px;font-weight:700;color:#A78BFA;margin-bottom:4px}
 .drill-item{display:flex;justify-content:space-between;align-items:center;
-  padding:4px 0;font-size:11px;border-bottom:1px dashed var(--border)}
+  padding:4px 0;font-size:11px;border-bottom:1px dashed rgba(255,255,255,.05)}
 .drill-item:last-child{border:none}
-.drill-sub{font-size:10px;color:var(--gray);margin-left:4px}
+.drill-sub{font-size:10px;color:var(--text-dim);margin-left:4px}
 
 /* Channel table */
 .ch-table{width:100%;border-collapse:separate;border-spacing:0;font-size:12px}
-.ch-table th{background:var(--gray-l);padding:10px 12px;text-align:left;font-weight:700;position:sticky;top:0;border-bottom:2px solid var(--border)}
-.ch-table td{padding:8px 12px;border-bottom:1px solid var(--border)}
-.ch-table tr:hover td{background:var(--blue-l)}
+.ch-table th{background:rgba(255,255,255,.04);padding:10px 12px;text-align:left;font-weight:700;
+  color:var(--text-sub);border-bottom:1px solid var(--glass-border)}
+.ch-table td{padding:8px 12px;border-bottom:1px solid rgba(255,255,255,.03);color:var(--text)}
+.ch-table tr:hover td{background:rgba(59,130,246,.06)}
 .ch-table .num{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
 
 /* Perf */
 .perf-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
-.perf-card{background:var(--card);border-radius:16px;padding:16px;border:1px solid var(--border);
-  transform-style:preserve-3d;transition:all .3s cubic-bezier(.4,0,.2,1)}
-.perf-card:hover{transform:translateY(-4px);box-shadow:0 16px 32px -8px rgba(0,0,0,.1)}
+.perf-card{background:var(--bg-card);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-radius:14px;padding:16px;border:1px solid var(--glass-border);
+  transition:all .3s cubic-bezier(.4,0,.2,1)}
+.perf-card:hover{transform:translateY(-3px);border-color:var(--glass-border-h);
+  box-shadow:0 16px 32px -8px rgba(0,0,0,.4)}
 .perf-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.perf-name{font-size:15px;font-weight:800}
+.perf-name{font-size:15px;font-weight:800;color:var(--text)}
 .perf-score{font-size:28px;font-weight:900;-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .perf-row{display:flex;align-items:center;gap:6px;margin-bottom:4px;font-size:11px}
-.perf-row .l{width:70px;color:var(--gray)}.perf-row .v{width:60px;text-align:right;font-weight:700}
-.perf-row .t{width:50px;text-align:right;color:var(--gray);font-size:10px}
-.perf-row .bar{flex:1;height:5px;background:var(--gray-l);border-radius:3px;overflow:hidden}
+.perf-row .l{width:70px;color:var(--text-dim)}.perf-row .v{width:60px;text-align:right;font-weight:700;color:var(--text)}
+.perf-row .t{width:50px;text-align:right;color:var(--text-dim);font-size:10px}
+.perf-row .bar{flex:1;height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden}
 .perf-row .fill{height:100%;border-radius:3px;transition:width .5s}
 
 ::-webkit-scrollbar{width:5px;height:5px}
-::-webkit-scrollbar-thumb{background:#CBD5E1;border-radius:3px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(148,163,184,.2);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:rgba(148,163,184,.35)}
 @media(max-width:600px){.kpi-grid{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
@@ -161,8 +172,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
       <div class="sub">8月业绩看板 · 数据区间 08-01 ~ 08-08</div>
     </div>
     <div style="text-align:right">
-      <div style="font-size:10px;opacity:.7">毛利达成</div>
-      <div id="hdrPct" style="font-size:22px;font-weight:900">--</div>
+      <div style="font-size:10px;color:var(--text-dim)">毛利达成</div>
+      <div id="hdrPct" class="hdr-pct">--</div>
     </div>
   </div>
   <div class="pbar-wrap"><div class="pbar-fill" id="hdrBar" style="width:0%"></div></div>
@@ -181,12 +192,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
     <div id="salesPersons"></div>
   </div>
   <div class="tab" id="tab-channel">
-    <div class="card3d">
-      <div style="font-size:14px;font-weight:700;margin-bottom:12px">各业务员渠道销售净额明细</div>
+    <div class="card">
+      <div style="font-size:14px;font-weight:700;margin-bottom:12px;color:var(--text)">各业务员渠道销售净额明细</div>
       <div style="overflow-x:auto"><table class="ch-table" id="channelTable"></table></div>
     </div>
-    <div class="card3d">
-      <div style="font-size:14px;font-weight:700;margin-bottom:12px">渠道占比分析</div>
+    <div class="card">
+      <div style="font-size:14px;font-weight:700;margin-bottom:12px;color:var(--text)">渠道占比分析</div>
       <div id="channelViz"></div>
     </div>
   </div>
@@ -197,13 +208,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 </div>
 
 <script>
-// === DATA_PLACEHOLDER ===
-// Will be replaced by Python
-var EMP_SUM = {"邵乐乐":{"qty":41,"amount":35780.3,"profit":4193.48,"cats":{"手机":{"qty":8.0,"amount":25619.0,"profit":2553.5},"穿戴":{"qty":21.0,"amount":8852.3,"profit":441.23},"运营商":{"qty":3.0,"amount":64.0,"profit":236.0},"增值服务":{"qty":9.0,"amount":1245.0,"profit":962.75}}},"杨丽华":{"qty":34,"amount":80905.02,"profit":9689.27,"cats":{"手机":{"qty":9.0,"amount":66721.02,"profit":5469.93},"平板":{"qty":1.0,"amount":2799.0,"profit":391.0},"穿戴":{"qty":5.0,"amount":7944.0,"profit":1020.2},"配件":{"qty":2.0,"amount":558.0,"profit":109.0},"增值服务":{"qty":16.0,"amount":2882.0,"profit":2698.14}}},"李泽":{"qty":29,"amount":52275.0,"profit":7232.32,"cats":{"手机":{"qty":6.0,"amount":39694.0,"profit":2868.0},"音频":{"qty":1.0,"amount":1199.0,"profit":180.58},"穿戴":{"qty":6.0,"amount":7783.0,"profit":1382.2},"增值服务":{"qty":15.0,"amount":3350.0,"profit":3039.15},"演示":{"qty":1.0,"amount":249.0,"profit":-237.61}}},"陈超磊":{"qty":38,"amount":72447.0,"profit":8985.99,"cats":{"手机":{"qty":9.0,"amount":52571.0,"profit":5092.91},"电脑":{"qty":1.0,"amount":8049.0,"profit":521.0},"平板":{"qty":1.0,"amount":3399.0,"profit":485.0},"音频":{"qty":2.0,"amount":2698.0,"profit":493.0},"穿戴":{"qty":2.0,"amount":3118.0,"profit":592.0},"配件":{"qty":1.0,"amount":269.0,"profit":-51.0},"增值服务":{"qty":22.0,"amount":2343.0,"profit":1853.08}}},"张博晨":{"qty":3,"amount":999.0,"profit":958.15,"cats":{"增值服务":{"qty":3.0,"amount":999.0,"profit":958.15}}}};
-var CHANNEL = {"张博晨":{"自然客流":453670.0},"李泽":{"自然客流":86358.0,"企业上门购":1345.0},"邵乐乐":{"自然客流":23333.32,"京东到家":3935.65,"企业上门购":3497.0},"杨丽华":{"自然客流":57379.020000000004},"陈超磊":{"自然客流":52850.0,"三大地图":19697.0}};
-var EMP_DETAIL = {"邵乐乐":{"增值服务":[{"date":"2026-08-01","name":"三方配件","qty":1.0,"amt":0.0,"gp":-89.0},{"date":"2026-08-01","name":"贴膜","qty":1.0,"amt":99.0,"gp":80.01},{"date":"2026-08-01","name":"贴膜","qty":1.0,"amt":99.0,"gp":80.01},{"date":"2026-08-01","name":"贴膜","qty":1.0,"amt":99.0,"gp":61.41},{"date":"2026-08-05","name":"权益系列","qty":1.0,"amt":549.0,"gp":549.0},{"date":"2026-08-05","name":"三方配件","qty":1.0,"amt":0.0,"gp":-59.0},{"date":"2026-08-05","name":"贴膜","qty":1.0,"amt":0.0,"gp":-21.61},{"date":"2026-08-07","name":"服务","qty":1.0,"amt":399.0,"gp":399.0},{"date":"2026-08-07","name":"贴膜","qty":1.0,"amt":0.0,"gp":-37.06}],"手机":[{"date":"2026-08-01","name":"畅享90 Pro Max","qty":1.0,"amt":2299.0,"gp":268.25},{"date":"2026-08-01","name":"畅享90 Pro Max","qty":1.0,"amt":2299.0,"gp":283.0},{"date":"2026-08-02","name":"Nova 15","qty":1.0,"amt":2449.0,"gp":208.0},{"date":"2026-08-02","name":"畅享90 Pro Max","qty":1.0,"amt":2099.0,"gp":68.25},{"date":"2026-08-02","name":"Mate80","qty":1.0,"amt":5199.0,"gp":524.0},{"date":"2026-08-05","name":"畅享90 Pro Max","qty":-1.0,"amt":-2099.0,"gp":-68.25},{"date":"2026-08-05","name":"畅享90 Plus","qty":1.0,"amt":1486.65,"gp":-25.35},{"date":"2026-08-05","name":"PuraX","qty":1.0,"amt":7839.02,"gp":959.02},{"date":"2026-08-05","name":"畅享90 Pro Max","qty":1.0,"amt":2099.0,"gp":68.25},{"date":"2026-08-07","name":"畅享90 Pro Max","qty":1.0,"amt":1948.33,"gp":268.33}],"运营商":[{"date":"2026-08-02","name":"UIM卡","qty":1.0,"amt":0.0,"gp":0.0},{"date":"2026-08-02","name":"新入网","qty":1.0,"amt":59.0,"gp":236.0},{"date":"2026-08-02","name":"电信权益包","qty":1.0,"amt":5.0,"gp":0.0}],"穿戴":[{"date":"2026-08-04","name":"超新星手表X1","qty":1.0,"amt":1598.0,"gp":367.0},{"date":"2026-08-05","name":"手环11","qty":1.0,"amt":269.0,"gp":5.99},{"date":"2026-08-05","name":"手环11","qty":6.0,"amt":1614.0,"gp":35.94},{"date":"2026-08-05","name":"手环11","qty":11.0,"amt":2959.0,"gp":143.0},{"date":"2026-08-05","name":"Watch GT6","qty":1.0,"amt":1154.3,"gp":-145.7},{"date":"2026-08-07","name":"Watch GT6","qty":1.0,"amt":1258.0,"gp":35.0}]},"杨丽华":{"手机":[{"date":"2026-08-01","name":"畅享90 Pro Max","qty":1.0,"amt":2299.0,"gp":283.0},{"date":"2026-08-01","name":"Mate X7","qty":1.0,"amt":13799.0,"gp":1080.91},{"date":"2026-08-02","name":"Pura90 Pro Max","qty":1.0,"amt":8329.02,"gp":934.02},{"date":"2026-08-02","name":"Pura X Max","qty":1.0,"amt":11799.0,"gp":879.0},{"date":"2026-08-03","name":"Pura90 Pro","qty":1.0,"amt":5799.0,"gp":699.0},{"date":"2026-08-04","name":"畅享90 Pro Max","qty":1.0,"amt":2299.0,"gp":283.0},{"date":"2026-08-06","name":"Mate80","qty":1.0,"amt":4999.0,"gp":579.0},{"date":"2026-08-07","name":"nova 16","qty":1.0,"amt":2799.0,"gp":309.0},{"date":"2026-08-08","name":"Mate70 Pro","qty":1.0,"amt":4899.0,"gp":63.0},{"date":"2026-08-08","name":"Pura X Max","qty":1.0,"amt":12499.0,"gp":669.0},{"date":"2026-08-08","name":"nova 16","qty":-1.0,"amt":-2799.0,"gp":-309.0}],"穿戴":[{"date":"2026-08-01","name":"Watch5","qty":1.0,"amt":2999.0,"gp":489.0},{"date":"2026-08-02","name":"Watch D2","qty":1.0,"amt":2988.0,"gp":572.2},{"date":"2026-08-02","name":"手环11","qty":1.0,"amt":269.0,"gp":13.0},{"date":"2026-08-03","name":"Watch GT6","qty":1.0,"amt":989.0,"gp":-157.0},{"date":"2026-08-04","name":"WATCH FIT4","qty":1.0,"amt":699.0,"gp":103.0}],"增值服务":[{"date":"2026-08-01","name":"服务","qty":1.0,"amt":200.0,"gp":200.0},{"date":"2026-08-01","name":"贴膜","qty":1.0,"amt":100.0,"gp":81.01},{"date":"2026-08-02","name":"服务","qty":1.0,"amt":199.0,"gp":199.0},{"date":"2026-08-02","name":"贴膜","qty":1.0,"amt":0.0,"gp":-37.65},{"date":"2026-08-02","name":"贴膜","qty":1.0,"amt":0.0,"gp":-21.96},{"date":"2026-08-03","name":"服务","qty":1.0,"amt":199.0,"gp":199.0},{"date":"2026-08-03","name":"贴膜","qty":1.0,"amt":0.0,"gp":-23.57},{"date":"2026-08-03","name":"贴膜","qty":1.0,"amt":0.0,"gp":-18.85},{"date":"2026-08-03","name":"服务","qty":1.0,"amt":199.0,"gp":199.0},{"date":"2026-08-03","name":"贴膜","qty":1.0,"amt":0.0,"gp":-26.0},{"date":"2026-08-03","name":"贴膜","qty":2.0,"amt":198.0,"gp":161.16},{"date":"2026-08-04","name":"服务","qty":1.0,"amt":399.0,"gp":399.0},{"date":"2026-08-04","name":"服务","qty":1.0,"amt":190.0,"gp":190.0},{"date":"2026-08-04","name":"服务","qty":1.0,"amt":199.0,"gp":199.0},{"date":"2026-08-08","name":"权益系列","qty":1.0,"amt":999.0,"gp":999.0}],"平板":[{"date":"2026-08-04","name":"MatePad 11.5S","qty":1.0,"amt":2799.0,"gp":391.0}],"配件":[{"date":"2026-08-06","name":"电源类","qty":1.0,"amt":229.0,"gp":44.0},{"date":"2026-08-07","name":"电源类","qty":1.0,"amt":329.0,"gp":65.0}],"费用":[{"date":"2026-08-06","name":"费用类","qty":1.0,"amt":1.0,"gp":1.0}]},"李泽":{"手机":[{"date":"2026-08-01","name":"Pura X Max","qty":1.0,"amt":11799.0,"gp":879.0},{"date":"2026-08-02","name":"Mate X7","qty":1.0,"amt":12499.0,"gp":669.0},{"date":"2026-08-03","name":"畅享90 Pro Max","qty":1.0,"amt":1899.0,"gp":219.0},{"date":"2026-08-03","name":"Mate80 Pro","qty":1.0,"amt":5699.0,"gp":609.0},{"date":"2026-08-05","name":"Mate70 Pro","qty":1.0,"amt":4999.0,"gp":183.0},{"date":"2026-08-05","name":"nova 16","qty":1.0,"amt":2799.0,"gp":309.0}],"增值服务":[{"date":"2026-08-01","name":"服务","qty":1.0,"amt":199.0,"gp":199.0},{"date":"2026-08-01","name":"贴膜","qty":1.0,"amt":0.0,"gp":-23.57},{"date":"2026-08-01","name":"贴膜","qty":1.0,"amt":0.0,"gp":-21.61},{"date":"2026-08-02","name":"权益系列","qty":1.0,"amt":702.0,"gp":702.0},{"date":"2026-08-02","name":"碎屏","qty":1.0,"amt":99.0,"gp":39.6},{"date":"2026-08-02","name":"贴膜","qty":1.0,"amt":49.0,"gp":44.72},{"date":"2026-08-03","name":"贴膜","qty":1.0,"amt":100.0,"gp":81.01},{"date":"2026-08-03","name":"权益系列","qty":1.0,"amt":400.0,"gp":400.0},{"date":"2026-08-03","name":"权益系列","qty":1.0,"amt":400.0,"gp":400.0},{"date":"2026-08-05","name":"权益系列","qty":1.0,"amt":400.0,"gp":400.0},{"date":"2026-08-05","name":"贴膜","qty":1.0,"amt":0.0,"gp":-19.0},{"date":"2026-08-05","name":"贴膜","qty":1.0,"amt":0.0,"gp":-19.0},{"date":"2026-08-05","name":"贴膜","qty":1.0,"amt":0.0,"gp":-37.59},{"date":"2026-08-07","name":"权益系列","qty":1.0,"amt":822.0,"gp":822.0},{"date":"2026-08-07","name":"碎屏","qty":1.0,"amt":179.0,"gp":71.6}],"音频":[{"date":"2026-08-02","name":"FreeClip 2","qty":1.0,"amt":1199.0,"gp":180.58}],"穿戴":[{"date":"2026-08-02","name":"WATCH FIT 5","qty":1.0,"amt":899.0,"gp":102.0},{"date":"2026-08-06","name":"WATCH FIT 5","qty":1.0,"amt":1099.0,"gp":302.0},{"date":"2026-08-06","name":"WATCH FIT 5","qty":1.0,"amt":1099.0,"gp":302.0},{"date":"2026-08-07","name":"WATCH FIT 5","qty":1.0,"amt":999.0,"gp":202.0},{"date":"2026-08-07","name":"WATCH FIT 5","qty":1.0,"amt":899.0,"gp":102.0},{"date":"2026-08-07","name":"Watch D2","qty":1.0,"amt":2788.0,"gp":372.2}],"演示":[{"date":"2026-08-02","name":"穿戴","qty":1.0,"amt":249.0,"gp":-237.61}]},"陈超磊":{"手机":[{"date":"2026-08-01","name":"Pura X Max","qty":-1.0,"amt":-11699.0,"gp":-779.0},{"date":"2026-08-01","name":"Mate X7","qty":1.0,"amt":11799.0,"gp":897.91},{"date":"2026-08-01","name":"Pura X Max","qty":1.0,"amt":11599.0,"gp":679.0},{"date":"2026-08-02","name":"Pura90 Pro","qty":1.0,"amt":5799.0,"gp":699.0},{"date":"2026-08-03","name":"nova 16","qty":1.0,"amt":2889.0,"gp":399.0},{"date":"2026-08-04","name":"Mate80","qty":1.0,"amt":5299.0,"gp":624.0},{"date":"2026-08-04","name":"Pura X Max","qty":1.0,"amt":11799.0,"gp":879.0},{"date":"2026-08-06","name":"畅享90 Plus","qty":1.0,"amt":1799.0,"gp":287.0},{"date":"2026-08-06","name":"Pura90 Pro","qty":1.0,"amt":5699.0,"gp":599.0},{"date":"2026-08-06","name":"Pura90 Pro","qty":1.0,"amt":5699.0,"gp":599.0},{"date":"2026-08-08","name":"畅享90 Pro Max","qty":1.0,"amt":1889.0,"gp":209.0}],"增值服务":[{"date":"2026-08-01","name":"服务","qty":1.0,"amt":199.0,"gp":199.0},{"date":"2026-08-01","name":"贴膜","qty":1.0,"amt":100.0,"gp":80.19},{"date":"2026-08-02","name":"贴膜","qty":1.0,"amt":0.0,"gp":-19.0},{"date":"2026-08-02","name":"贴膜","qty":1.0,"amt":99.0,"gp":71.08},{"date":"2026-08-02","name":"服务","qty":1.0,"amt":299.0,"gp":299.0},{"date":"2026-08-02","name":"贴膜","qty":1.0,"amt":0.0,"gp":-19.0},{"date":"2026-08-02","name":"贴膜","qty":1.0,"amt":0.0,"gp":-26.0},{"date":"2026-08-03","name":"贴膜","qty":1.0,"amt":99.0,"gp":80.0},{"date":"2026-08-04","name":"服务","qty":1.0,"amt":200.0,"gp":200.0},{"date":"2026-08-04","name":"贴膜","qty":1.0,"amt":0.0,"gp":-18.89},{"date":"2026-08-04","name":"权益系列","qty":1.0,"amt":499.0,"gp":499.0},{"date":"2026-08-04","name":"三方配件","qty":1.0,"amt":0.0,"gp":-59.0},{"date":"2026-08-04","name":"碎屏","qty":1.0,"amt":0.0,"gp":-119.4},{"date":"2026-08-04","name":"贴膜","qty":1.0,"amt":0.0,"gp":-18.68},{"date":"2026-08-05","name":"权益系列","qty":1.0,"amt":550.0,"gp":550.0},{"date":"2026-08-05","name":"贴膜","qty":1.0,"amt":0.0,"gp":-37.06},{"date":"2026-08-05","name":"贴膜","qty":1.0,"amt":0.0,"gp":-23.96},{"date":"2026-08-06","name":"贴膜","qty":1.0,"amt":99.0,"gp":80.01},{"date":"2026-08-06","name":"服务","qty":1.0,"amt":199.0,"gp":199.0},{"date":"2026-08-06","name":"贴膜","qty":2.0,"amt":0.0,"gp":-37.21},{"date":"2026-08-06","name":"贴膜","qty":1.0,"amt":0.0,"gp":-26.0}],"音频":[{"date":"2026-08-01","name":"FreeClip 2","qty":1.0,"amt":1199.0,"gp":209.0},{"date":"2026-08-03","name":"FreeClip 2","qty":1.0,"amt":1499.0,"gp":284.0}],"配件":[{"date":"2026-08-02","name":"电源类","qty":1.0,"amt":269.0,"gp":-51.0}],"穿戴":[{"date":"2026-08-03","name":"手环11","qty":1.0,"amt":319.0,"gp":63.0},{"date":"2026-08-04","name":"WATCH 十周年款","qty":1.0,"amt":2799.0,"gp":529.0}],"电脑":[{"date":"2026-08-05","name":"MateBook14","qty":1.0,"amt":8049.0,"gp":521.0}],"平板":[{"date":"2026-08-06","name":"MatePad 11.5","qty":1.0,"amt":3399.0,"gp":485.0}]},"张博晨":{"增值服务":[{"date":"2026-08-04","name":"贴膜","qty":1.0,"amt":0.0,"gp":-18.89},{"date":"2026-08-06","name":"权益系列","qty":1.0,"amt":999.0,"gp":999.0},{"date":"2026-08-08","name":"贴膜","qty":1.0,"amt":0.0,"gp":-21.96}]}};
+// === DATA ===
+var EMP_SUM = {"邵乐乐": {"qty": 41, "amount": 35780.3, "profit": 4193.48, "cats": {"手机": {"qty": 8.0, "amount": 25619.0, "profit": 2553.5}, "穿戴": {"qty": 21.0, "amount": 8852.3, "profit": 441.23}, "运营商": {"qty": 3.0, "amount": 64.0, "profit": 236.0}, "增值服务": {"qty": 9.0, "amount": 1245.0, "profit": 962.75}}}, "杨丽华": {"qty": 34, "amount": 80905.02, "profit": 9689.27, "cats": {"手机": {"qty": 9.0, "amount": 66721.02, "profit": 5469.93}, "平板": {"qty": 1.0, "amount": 2799.0, "profit": 391.0}, "穿戴": {"qty": 5.0, "amount": 7944.0, "profit": 1020.2}, "配件": {"qty": 2.0, "amount": 558.0, "profit": 109.0}, "增值服务": {"qty": 16.0, "amount": 2882.0, "profit": 2698.14}}}, "李泽": {"qty": 29, "amount": 52275.0, "profit": 7232.32, "cats": {"手机": {"qty": 6.0, "amount": 39694.0, "profit": 2868.0}, "音频": {"qty": 1.0, "amount": 1199.0, "profit": 180.58}, "穿戴": {"qty": 6.0, "amount": 7783.0, "profit": 1382.2}, "增值服务": {"qty": 15.0, "amount": 3350.0, "profit": 3039.15}, "演示": {"qty": 1.0, "amount": 249.0, "profit": -237.61}}}, "陈超磊": {"qty": 38, "amount": 72447.0, "profit": 8985.99, "cats": {"手机": {"qty": 9.0, "amount": 52571.0, "profit": 5092.91}, "电脑": {"qty": 1.0, "amount": 8049.0, "profit": 521.0}, "平板": {"qty": 1.0, "amount": 3399.0, "profit": 485.0}, "音频": {"qty": 2.0, "amount": 2698.0, "profit": 493.0}, "穿戴": {"qty": 2.0, "amount": 3118.0, "profit": 592.0}, "配件": {"qty": 1.0, "amount": 269.0, "profit": -51.0}, "增值服务": {"qty": 22.0, "amount": 2343.0, "profit": 1853.08}}}, "张博晨": {"qty": 3, "amount": 999.0, "profit": 958.15, "cats": {"增值服务": {"qty": 3.0, "amount": 999.0, "profit": 958.15}}}};
+var CHANNEL = {"张博晨": {"自然客流": 453670.0}, "李泽": {"自然客流": 86358.0, "企业上门购": 1345.0}, "邵乐乐": {"自然客流": 23333.32, "京东到家": 3935.65, "企业上门购": 3497.0}, "杨丽华": {"自然客流": 57379.020000000004}, "陈超磊": {"自然客流": 52850.0, "三大地图": 19697.0}};
+var EMP_DETAIL = {"邵乐乐": {"增值服务": [{"date": "2026-08-01", "name": "三方配件", "qty": 1.0, "amt": 0.0, "gp": -89.0}, {"date": "2026-08-01", "name": "贴膜", "qty": 1.0, "amt": 99.0, "gp": 80.01}, {"date": "2026-08-01", "name": "贴膜", "qty": 1.0, "amt": 99.0, "gp": 80.01}, {"date": "2026-08-01", "name": "贴膜", "qty": 1.0, "amt": 99.0, "gp": 61.41}, {"date": "2026-08-05", "name": "权益系列", "qty": 1.0, "amt": 549.0, "gp": 549.0}, {"date": "2026-08-05", "name": "三方配件", "qty": 1.0, "amt": 0.0, "gp": -59.0}, {"date": "2026-08-05", "name": "贴膜", "qty": 1.0, "amt": 0.0, "gp": -21.61}, {"date": "2026-08-07", "name": "服务", "qty": 1.0, "amt": 399.0, "gp": 399.0}, {"date": "2026-08-07", "name": "贴膜", "qty": 1.0, "amt": 0.0, "gp": -37.06}], "手机": [{"date": "2026-08-01", "name": "畅享90 Pro Max", "qty": 1.0, "amt": 2299.0, "gp": 268.25}, {"date": "2026-08-01", "name": "畅享90 Pro Max", "qty": 1.0, "amt": 2299.0, "gp": 283.0}, {"date": "2026-08-02", "name": "Nova 15", "qty": 1.0, "amt": 2449.0, "gp": 208.0}, {"date": "2026-08-02", "name": "畅享90 Pro Max", "qty": 1.0, "amt": 2099.0, "gp": 68.25}, {"date": "2026-08-02", "name": "Mate80", "qty": 1.0, "amt": 5199.0, "gp": 524.0}, {"date": "2026-08-05", "name": "畅享90 Pro Max", "qty": -1.0, "amt": -2099.0, "gp": -68.25}, {"date": "2026-08-05", "name": "畅享90 Plus", "qty": 1.0, "amt": 1486.65, "gp": -25.35}, {"date": "2026-08-05", "name": "PuraX", "qty": 1.0, "amt": 7839.02, "gp": 959.02}, {"date": "2026-08-05", "name": "畅享90 Pro Max", "qty": 1.0, "amt": 2099.0, "gp": 68.25}, {"date": "2026-08-07", "name": "畅享90 Pro Max", "qty": 1.0, "amt": 1948.33, "gp": 268.33}], "运营商": [{"date": "2026-08-02", "name": "UIM卡", "qty": 1.0, "amt": 0.0, "gp": 0.0}, {"date": "2026-08-02", "name": "新入网", "qty": 1.0, "amt": 59.0, "gp": 236.0}, {"date": "2026-08-02", "name": "电信权益包", "qty": 1.0, "amt": 5.0, "gp": 0.0}], "穿戴": [{"date": "2026-08-04", "name": "超新星手表X1", "qty": 1.0, "amt": 1598.0, "gp": 367.0}, {"date": "2026-08-05", "name": "手环11", "qty": 1.0, "amt": 269.0, "gp": 5.99}, {"date": "2026-08-05", "name": "手环11", "qty": 6.0, "amt": 1614.0, "gp": 35.94}, {"date": "2026-08-05", "name": "手环11", "qty": 11.0, "amt": 2959.0, "gp": 143.0}, {"date": "2026-08-05", "name": "Watch GT6", "qty": 1.0, "amt": 1154.3, "gp": -145.7}, {"date": "2026-08-07", "name": "Watch GT6", "qty": 1.0, "amt": 1258.0, "gp": 35.0}]}, "杨丽华": {"手机": [{"date": "2026-08-01", "name": "畅享90 Pro Max", "qty": 1.0, "amt": 2299.0, "gp": 283.0}, {"date": "2026-08-01", "name": "Mate X7", "qty": 1.0, "amt": 13799.0, "gp": 1080.91}, {"date": "2026-08-02", "name": "Pura90 Pro Max", "qty": 1.0, "amt": 8329.02, "gp": 934.02}, {"date": "2026-08-02", "name": "Pura X Max", "qty": 1.0, "amt": 11799.0, "gp": 879.0}, {"date": "2026-08-03", "name": "Pura90 Pro", "qty": 1.0, "amt": 5799.0, "gp": 699.0}, {"date": "2026-08-04", "name": "畅享90 Pro Max", "qty": 1.0, "amt": 2299.0, "gp": 283.0}, {"date": "2026-08-06", "name": "Mate80", "qty": 1.0, "amt": 4999.0, "gp": 579.0}, {"date": "2026-08-07", "name": "nova 16", "qty": 1.0, "amt": 2799.0, "gp": 309.0}, {"date": "2026-08-08", "name": "Mate70 Pro", "qty": 1.0, "amt": 4899.0, "gp": 63.0}, {"date": "2026-08-08", "name": "Pura X Max", "qty": 1.0, "amt": 12499.0, "gp": 669.0}, {"date": "2026-08-08", "name": "nova 16", "qty": -1.0, "amt": -2799.0, "gp": -309.0}], "穿戴": [{"date": "2026-08-01", "name": "Watch5", "qty": 1.0, "amt": 2999.0, "gp": 489.0}, {"date": "2026-08-02", "name": "Watch D2", "qty": 1.0, "amt": 2988.0, "gp": 572.2}, {"date": "2026-08-02", "name": "手环11", "qty": 1.0, "amt": 269.0, "gp": 13.0}, {"date": "2026-08-03", "name": "Watch GT6", "qty": 1.0, "amt": 989.0, "gp": -157.0}, {"date": "2026-08-04", "name": "WATCH FIT4", "qty": 1.0, "amt": 699.0, "gp": 103.0}], "增值服务": [{"date": "2026-08-01", "name": "服务", "qty": 1.0, "amt": 200.0, "gp": 200.0}, {"date": "2026-08-01", "name": "贴膜", "qty": 1.0, "amt": 100.0, "gp": 81.01}, {"date": "2026-08-02", "name": "服务", "qty": 1.0, "amt": 199.0, "gp": 199.0}, {"date": "2026-08-02", "name": "贴膜", "qty": 1.0, "amt": 0.0, "gp": -37.65}, {"date": "2026-08-02", "name": "贴膜", "qty": 1.0, "amt": 0.0, "gp": -21.96}, {"date": "2026-08-03", "name": "服务", "qty": 1.0, "amt": 199.0, "gp": 199.0}, {"date": "2026-08-03", "name": "贴膜", "qty": 1.0, "amt": 0.0, "gp": -23.57}, {"date": "2026-08-03", "name": "贴膜", "qty": 1.0, "amt": 0.0, "gp": -18.85}, {"date": "2026-08-03", "name": "服务", "qty": 1.0, "amt": 199.0, "gp": 199.0}, {"date": "2026-08-03", "name": "贴膜", "qty": 1.0, "amt": 0.0, "gp": -26.0}, {"date": "2026-08-03", "name": "贴膜", "qty": 2.0, "amt": 198.0, "gp": 161.16}, {"date": "2026-08-04", "name": "服务", "qty": 1.0, "amt": 399.0, "gp": 399.0}, {"date": "2026-08-04", "name": "服务", "qty": 1.0, "amt": 190.0, "gp": 190.0}, {"date": "2026-08-04", "name": "服务", "qty": 1.0, "amt": 199.0, "gp": 199.0}, {"date": "2026-08-08", "name": "权益系列", "qty": 1.0, "amt": 999.0, "gp": 999.0}], "平板": [{"date": "2026-08-04", "name": "MatePad 11.5S", "qty": 1.0, "amt": 2799.0, "gp": 391.0}], "配件": [{"date": "2026-08-06", "name": "电源类", "qty": 1.0, "amt": 229.0, "gp": 44.0}, {"date": "2026-08-07", "name": "电源类", "qty": 1.0, "amt": 329.0, "gp": 65.0}], "费用": [{"date": "2026-08-06", "name": "费用类", "qty": 1.0, "amt": 1.0, "gp": 1.0}]}, "李泽": {"手机": [{"date": "2026-08-01", "name": "Pura X Max", "qty": 1.0, "amt": 11799.0, "gp": 879.0}, {"date": "2026-08-02", "name": "Mate X7", "qty": 1.0, "amt": 12499.0, "gp": 669.0}, {"date": "2026-08-03", "name": "畅享90 Pro Max", "qty": 1.0, "amt": 1899.0, "gp": 219.0}, {"date": "2026-08-03", "name": "Mate80 Pro", "qty": 1.0, "amt": 5699.0, "gp": 609.0}, {"date": "2026-08-05", "name": "Mate70 Pro", "qty": 1.0, "amt": 4999.0, "gp": 183.0}, {"date": "2026-08-05", "name": "nova 16", "qty": 1.0, "amt": 2799.0, "gp": 309.0}], "增值服务": [{"date": "2026-08-01", "name": "服务", "qty": 1.0, "amt": 199.0, "gp": 199.0}, {"date": "2026-08-01", "name": "贴膜", "qty": 1.0, "amt": 0.0, "gp": -23.57}, {"date": "2026-08-01", "name": "贴膜", "qty": 1.0, "amt": 0.0, "gp": -21.61}, {"date": "2026-08-02", "name": "权益系列", "qty": 1.0, "amt": 702.0, "gp": 702.0}, {"date": "2026-08-02", "name": "碎屏", "qty": 1.0, "amt": 99.0, "gp": 39.6}, {"date": "2026-08-02", "name": "贴膜", "qty": 1.0, "amt": 49.0, "gp": 44.72}, {"date": "2026-08-03", "name": "贴膜", "qty": 1.0, "amt": 100.0, "gp": 81.01}, {"date": "2026-08-03", "name": "权益系列", "qty": 1.0, "amt": 400.0, "gp": 400.0}, {"date": "2026-08-03", "name": "权益系列", "qty": 1.0, "amt": 400.0, "gp": 400.0}, {"date": "2026-08-05", "name": "权益系列", "qty": 1.0, "amt": 400.0, "gp": 400.0}, {"date": "2026-08-05", "name": "贴膜", "qty": 1.0, "amt": 0.0, "gp": -19.0}, {"date": "2026-08-05", "name": "贴膜", "qty": 1.0, "amt": 0.0, "gp": -19.0}, {"date": "2026-08-05", "name": "贴膜", "qty": 1.0, "amt": 0.0, "gp": -37.59}, {"date": "2026-08-07", "name": "权益系列", "qty": 1.0, "amt": 822.0, "gp": 822.0}, {"date": "2026-08-07", "name": "碎屏", "qty": 1.0, "amt": 179.0, "gp": 71.6}], "音频": [{"date": "2026-08-02", "name": "FreeClip 2", "qty": 1.0, "amt": 1199.0, "gp": 180.58}], "穿戴": [{"date": "2026-08-02", "name": "WATCH FIT 5", "qty": 1.0, "amt": 899.0, "gp": 102.0}, {"date": "2026-08-06", "name": "WATCH FIT 5", "qty": 1.0, "amt": 1099.0, "gp": 302.0}, {"date": "2026-08-06", "name": "WATCH FIT 5", "qty": 1.0, "amt": 1099.0, "gp": 302.0}, {"date": "2026-08-07", "name": "WATCH FIT 5", "qty": 1.0, "amt": 999.0, "gp": 202.0}, {"date": "2026-08-07", "name": "WATCH FIT 5", "qty": 1.0, "amt": 899.0, "gp": 102.0}, {"date": "2026-08-07", "name": "Watch D2", "qty": 1.0, "amt": 2788.0, "gp": 372.2}], "演示": [{"date": "2026-08-02", "name": "穿戴", "qty": 1.0, "amt": 249.0, "gp": -237.61}]}, "陈超磊": {"手机": [{"date": "2026-08-01", "name": "Pura X Max", "qty": -1.0, "amt": -11699.0, "gp": -779.0}, {"date": "2026-08-01", "name": "Mate X7", "qty": 1.0, "amt": 11799.0, "gp": 897.91}, {"date": "2026-08-01", "name": "Pura X Max", "qty": 1.0, "amt": 11599.0, "gp": 679.0}, {"date": "2026-08-02", "name": "Pura90 Pro", "qty": 1.0, "amt": 5799.0, "gp": 699.0}, {"date": "2026-08-03", "name": "nova 16", "qty": 1.0, "amt": 2889.0, "gp": 399.0}, {"date": "2026-08-04", "name": "Mate80", "qty": 1.0, "amt": 5299.0, "gp": 624.0}, {"date": "2026-08-04", "name": "Pura X Max", "qty": 1.0, "amt": 11799.0, "gp": 879.0}, {"date": "2026-08-06", "name": "畅享90 Plus", "qty": 1.0, "amt": 1799.0, "gp": 287.0}, {"date": "2026-08-06", "name": "Pura90 Pro", "qty": 1.0, "amt": 5699.0, "gp": 599.0}, {"date": "2026-08-06", "name": "Pura90 Pro", "qty": 1.0, "amt": 5699.0, "gp": 599.0}, {"date": "2026-08-08", "name": "畅享90 Pro Max", "qty": 1.0, "amt": 1889.0, "gp": 209.0}], "增值服务": [{"date": "2026-08-01", "name": "服务", "qty": 1.0, "amt": 199.0, "gp": 199.0}, {"date": "2026-08-01", "name": "贴膜", "qty": 1.0, "amt": 100.0, "gp": 80.19}, {"date": "2026-08-02", "name": "贴膜", "qty": 1.0, "amt": 0.0, "gp": -19.0}, {"date": "2026-08-02", "name": "贴膜", "qty": 1.0, "amt": 99.0, "gp": 71.08}, {"date": "2026-08-02", "name": "服务", "qty": 1.0, "amt": 299.0, "gp": 299.0}, {"date": "2026-08-02", "name": "贴膜", "qty": 1.0, "amt": 0.0, "gp": -19.0}, {"date": "2026-08-02", "name": "贴膜", "qty": 1.0, "amt": 0.0, "gp": -26.0}, {"date": "2026-08-03", "name": "贴膜", "qty": 1.0, "amt": 99.0, "gp": 80.0}, {"date": "2026-08-04", "name": "服务", "qty": 1.0, "amt": 200.0, "gp": 200.0}, {"date": "2026-08-04", "name": "贴膜", "qty": 1.0, "amt": 0.0, "gp": -18.89}, {"date": "2026-08-04", "name": "权益系列", "qty": 1.0, "amt": 499.0, "gp": 499.0}, {"date": "2026-08-04", "name": "三方配件", "qty": 1.0, "amt": 0.0, "gp": -59.0}, {"date": "2026-08-04", "name": "碎屏", "qty": 1.0, "amt": 0.0, "gp": -119.4}, {"date": "2026-08-04", "name": "贴膜", "qty": 1.0, "amt": 0.0, "gp": -18.68}, {"date": "2026-08-05", "name": "权益系列", "qty": 1.0, "amt": 550.0, "gp": 550.0}, {"date": "2026-08-05", "name": "贴膜", "qty": 1.0, "amt": 0.0, "gp": -37.06}, {"date": "2026-08-05", "name": "贴膜", "qty": 1.0, "amt": 0.0, "gp": -23.96}, {"date": "2026-08-06", "name": "贴膜", "qty": 1.0, "amt": 99.0, "gp": 80.01}, {"date": "2026-08-06", "name": "服务", "qty": 1.0, "amt": 199.0, "gp": 199.0}, {"date": "2026-08-06", "name": "贴膜", "qty": 2.0, "amt": 0.0, "gp": -37.21}, {"date": "2026-08-06", "name": "贴膜", "qty": 1.0, "amt": 0.0, "gp": -26.0}], "音频": [{"date": "2026-08-01", "name": "FreeClip 2", "qty": 1.0, "amt": 1199.0, "gp": 209.0}, {"date": "2026-08-03", "name": "FreeClip 2", "qty": 1.0, "amt": 1499.0, "gp": 284.0}], "配件": [{"date": "2026-08-02", "name": "电源类", "qty": 1.0, "amt": 269.0, "gp": -51.0}], "穿戴": [{"date": "2026-08-03", "name": "手环11", "qty": 1.0, "amt": 319.0, "gp": 63.0}, {"date": "2026-08-04", "name": "WATCH 十周年款", "qty": 1.0, "amt": 2799.0, "gp": 529.0}], "电脑": [{"date": "2026-08-05", "name": "MateBook14", "qty": 1.0, "amt": 8049.0, "gp": 521.0}], "平板": [{"date": "2026-08-06", "name": "MatePad 11.5", "qty": 1.0, "amt": 3399.0, "gp": 485.0}]}, "张博晨": {"增值服务": [{"date": "2026-08-04", "name": "贴膜", "qty": 1.0, "amt": 0.0, "gp": -18.89}, {"date": "2026-08-06", "name": "权益系列", "qty": 1.0, "amt": 999.0, "gp": 999.0}, {"date": "2026-08-08", "name": "贴膜", "qty": 1.0, "amt": 0.0, "gp": -21.96}]}};
 var DATES = ["2026-08-01", "2026-08-02", "2026-08-03", "2026-08-04", "2026-08-05", "2026-08-06", "2026-08-07", "2026-08-08"];
-var DAY_GP = {"2026-08-01":5136.51,"2026-08-02":6028.23,"2026-08-03":3567.75,"2026-08-04":4428.15,"2026-08-05":3267.66,"2026-08-06":4412.8,"2026-08-07":2609.07,"2026-08-08":1609.04};
+var DAY_GP = {"2026-08-01": 5136.51, "2026-08-02": 6028.23, "2026-08-03": 3567.75, "2026-08-04": 4428.15, "2026-08-05": 3267.66, "2026-08-06": 4412.8, "2026-08-07": 2609.07, "2026-08-08": 1609.04};
 
 var MAIN_EMP = ['邵乐乐','杨丽华','李泽','陈超磊'];
 var CAT_MAP = {'01手机':'手机','05电脑':'电脑','06平板电脑':'平板','07音频':'音频','08穿戴':'穿戴','09配件':'配件','10运营商业务':'运营商','15增值服务':'增值服务','21演示机':'演示'};
@@ -243,7 +253,7 @@ document.getElementById('hdrTarget').textContent = '月目标 \u00A5' + monthTar
     {label:'总销量',val:totalQty+'台',cls:'green',sub:'不含退换'},
     {label:'客单毛利',val:'\u00A5'+avgGP.toFixed(0),cls:'orange',sub:'毛利/销量'},
     {label:'业务员',val:MAIN_EMP.length+'人',cls:'blue',sub:'在岗考核'},
-    {label:'日均毛利',val:'\u00A5'+(totalGP/8).toFixed(0),cls:'purple',sub:'7天平均'}
+    {label:'日均毛利',val:'\u00A5'+(totalGP/DATES.length).toFixed(0),cls:'purple',sub:DATES.length+'天平均'}
   ];
   var grid = document.getElementById('kpiGrid');
   kpis.forEach(function(k){
@@ -255,22 +265,20 @@ document.getElementById('hdrTarget').textContent = '月目标 \u00A5' + monthTar
 
   sorted.forEach(function(name, idx){
     var d = EMP_SUM[name] || {qty:0,amount:0,profit:0,cats:{}};
-    var gpTarget = 2500;
+    var gpTarget = 5000;
     var scoreClass = d.profit >= gpTarget ? 'good' : d.profit >= gpTarget*0.7 ? 'warn' : 'danger';
     var html = '<div class="person r'+(idx+1)+'" onclick="toggleDrill(this)">';
     html += '<div class="person-top">';
-    html += '<div><div class="person-name">'+name+'</div><div style="font-size:11px;color:var(--gray)">销量'+d.qty+'台 \u00B7 销售额\u00A5'+(d.amount/10000).toFixed(1)+'万</div></div>';
+    html += '<div><div class="person-name">'+name+'</div><div style="font-size:11px;color:var(--text-dim)">销量'+d.qty+'台 \u00B7 销售额\u00A5'+(d.amount/10000).toFixed(1)+'万</div></div>';
     html += '<div class="person-score '+scoreClass+'">'+(d.profit>=0?'+':'')+'\u00A5'+d.profit.toFixed(0)+'</div>';
     html += '</div>';
 
-    // Category bars
     CATS.forEach(function(cat){
-      var catKey = '';
-      for(var k in CAT_MAP){ if(CAT_MAP[k]===cat){ catKey=k; break; } }
       var actual = 0;
       if(d.cats){
         for(var ck in d.cats){
-          if(ck === catKey || ck === cat) actual += d.cats[ck].profit;
+          if(ck === cat || ck.replace(/手机|电脑|平板|音频|穿戴|配件|运营商|增值|演示/g,'') === cat) actual += d.cats[ck].profit;
+          else if(d.cats[ck] && ck.indexOf(cat)>=0) actual += d.cats[ck].profit;
         }
       }
       if(actual === 0) return;
@@ -279,14 +287,12 @@ document.getElementById('hdrTarget').textContent = '月目标 \u00A5' + monthTar
       html += '<div class="m-row">';
       html += '<div class="m-label">'+cat+'</div>';
       html += '<div class="m-bar"><div class="m-fill '+color+'" style="width:'+Math.max(pctVal,3)+'%"></div></div>';
-      html += '<div class="m-val" style="color:'+(actual>=0?'var(--dark)':'var(--red)')+'">\u00A5'+actual.toFixed(0)+'</div>';
+      html += '<div class="m-val">\u00A5'+actual.toFixed(0)+'</div>';
       html += '</div>';
     });
 
-    // Drill-down
     html += '<div class="drill" id="drill_'+name+'">';
     html += '<div class="drill-title">\u25BC SKU明细展开</div>';
-
     if(EMP_DETAIL[name]){
       for(var catName in EMP_DETAIL[name]){
         var items = EMP_DETAIL[name][catName];
@@ -324,37 +330,35 @@ function toggleDrill(el){
     channels.forEach(function(ch){
       var v = emp[ch] || 0;
       total += v;
-      html += '<td class="num" style="color:'+(v>0?'var(--dark)':'var(--gray)')+'">\u00A5'+(v>0?v.toFixed(0):'-')+'</td>';
+      html += '<td class="num" style="color:'+(v>0?'var(--text)':'var(--text-dim)')+'">\u00A5'+(v>0?v.toFixed(0):'-')+'</td>';
     });
-    html += '<td class="num" style="font-weight:800;color:var(--blue)">\u00A5'+total.toFixed(0)+'</td></tr>';
+    html += '<td class="num" style="font-weight:800;color:#60A5FA">\u00A5'+total.toFixed(0)+'</td></tr>';
   });
 
-  // Total row
-  html += '<tr style="background:var(--gray-l);font-weight:700"><td>合计</td>';
+  html += '<tr style="background:rgba(255,255,255,.03);font-weight:700"><td style="color:var(--text-sub)">合计</td>';
   channels.forEach(function(ch){
     var s = 0;
     MAIN_EMP.forEach(function(n){ s += (CHANNEL[n]?CHANNEL[n][ch]||0:0); });
-    html += '<td class="num">\u00A5'+s.toFixed(0)+'</td>';
+    html += '<td class="num" style="color:var(--text-sub)">\u00A5'+s.toFixed(0)+'</td>';
   });
   var grandTotal = 0;
   MAIN_EMP.forEach(function(n){
     if(!CHANNEL[n]) return;
     for(var k in CHANNEL[n]) grandTotal += CHANNEL[n][k];
   });
-  html += '<td class="num" style="color:var(--purple)">\u00A5'+grandTotal.toFixed(0)+'</td></tr></tbody>';
+  html += '<td class="num" style="color:#A78BFA">\u00A5'+grandTotal.toFixed(0)+'</td></tr></tbody>';
   table.innerHTML = html;
 
-  // Channel viz
   var viz = document.getElementById('channelViz');
-  var colors = {'三大地图':'var(--blue)','京东到家':'var(--purple)','企业上门购':'var(--orange)','自然客流':'var(--green)'};
+  var colors = {'三大地图':'#3B82F6','京东到家':'#8B5CF6','企业上门购':'#F59E0B','自然客流':'#10B981'};
   channels.forEach(function(ch){
     var s = 0;
     MAIN_EMP.forEach(function(n){ s += (CHANNEL[n]?CHANNEL[n][ch]||0:0); });
     var p = grandTotal > 0 ? (s/grandTotal*100) : 0;
     viz.innerHTML += '<div class="m-row" style="margin-bottom:8px">';
     viz.innerHTML += '<div class="m-label" style="width:70px">'+ch+'</div>';
-    viz.innerHTML += '<div class="m-bar" style="height:10px"><div style="height:100%;border-radius:5px;background:'+colors[ch]+';width:'+Math.max(p,2)+'%;transition:width .6s"></div></div>';
-    viz.innerHTML += '<div class="m-val">\u00A5'+s.toFixed(0)+' <span style="font-size:9px;color:var(--gray)">'+p.toFixed(1)+'%</span></div></div>';
+    viz.innerHTML += '<div class="m-bar" style="height:8px"><div style="height:100%;border-radius:4px;background:'+colors[ch]+';width:'+Math.max(p,2)+'%;transition:width .6s"></div></div>';
+    viz.innerHTML += '<div class="m-val">\u00A5'+s.toFixed(0)+' <span style="font-size:9px;color:var(--text-dim)">'+p.toFixed(1)+'%</span></div></div>';
   });
 })();
 
@@ -417,14 +421,14 @@ function toggleDrill(el){
       metrics.push({label:'穿戴毛利',val:wearGP,target:500,max:1000});
       metrics.push({label:'总毛利',val:d.profit,target:2500,max:5000});
     }
-    var scoreColor = item.score>=80?'var(--green)':item.score>=60?'var(--blue)':item.score>=40?'var(--orange)':'var(--red)';
+    var scoreColor = item.score>=80?'#10B981':item.score>=60?'#3B82F6':item.score>=40?'#F59E0B':'#EF4444';
     var html = '<div class="perf-card">';
     html += '<div class="perf-header"><div class="perf-name">#'+(idx+1)+' '+item.name+'</div>';
-    html += '<div class="perf-score" style="background:linear-gradient(135deg,'+scoreColor+',var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent">'+item.score.toFixed(1)+'</div></div>';
+    html += '<div class="perf-score" style="background:linear-gradient(135deg,'+scoreColor+',#8B5CF6);-webkit-background-clip:text;-webkit-text-fill-color:transparent">'+item.score.toFixed(1)+'</div></div>';
     metrics.forEach(function(m){
       var p = m.target>0 ? Math.min(m.val/m.target*100,100) : 0;
       var barP = m.max>0 ? Math.min(m.val/m.max*100,100) : 0;
-      var c = p>=100?'var(--green)':p>=70?'var(--blue)':p>=40?'var(--orange)':'var(--red)';
+      var c = p>=100?'#10B981':p>=70?'#3B82F6':p>=40?'#F59E0B':'#EF4444';
       html += '<div class="perf-row"><div class="l">'+m.label+'</div>';
       html += '<div class="bar"><div class="fill" style="width:'+barP+'%;background:'+c+'"></div></div>';
       html += '<div class="v" style="color:'+c+'">\u00A5'+m.val.toFixed(0)+'</div>';
@@ -434,18 +438,6 @@ function toggleDrill(el){
     perfGrid.innerHTML += html;
   });
 })();
-
-// 3D Tilt effect
-document.addEventListener('mousemove', function(e){
-  var cards = document.querySelectorAll('.card3d,.kpi,.person,.perf-card');
-  cards.forEach(function(card){
-    var rect = card.getBoundingClientRect();
-    var x = e.clientX - rect.left;
-    var y = e.clientY - rect.top;
-    if(x < 0 || x > rect.width || y < 0 || y > rect.height) return;
-    card.style.transform = 'translateY(-4px) scale(1.02)';
-  });
-});
 </script>
 </body>
 </html>
