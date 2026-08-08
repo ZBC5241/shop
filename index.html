@@ -159,6 +159,27 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 ::-webkit-scrollbar-thumb{background:rgba(148,163,184,.2);border-radius:3px}
 ::-webkit-scrollbar-thumb:hover{background:rgba(148,163,184,.35)}
 @media(max-width:600px){.kpi-grid{grid-template-columns:repeat(2,1fr)}}
+
+/* 目标分解表（卡片式） */
+.goal-card{background:var(--bg-card);border:1px solid var(--glass-border);border-radius:16px;
+  padding:18px 20px;margin-bottom:18px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  box-shadow:0 4px 24px rgba(0,0,0,.25)}
+.goal-card h3{font-size:15px;font-weight:800;margin-bottom:14px;color:var(--text);
+  display:flex;align-items:center;gap:8px}
+.goal-card h3 .badge{font-size:10px;font-weight:600;color:#60A5FA;background:rgba(59,130,246,.12);
+  border:1px solid rgba(59,130,246,.2);padding:2px 8px;border-radius:20px}
+.goal-tbl{width:100%;border-collapse:separate;border-spacing:0;font-size:12px}
+.goal-tbl th{font-size:10.5px;color:var(--text-dim);font-weight:600;text-align:right;
+  padding:8px 10px;border-bottom:1px solid var(--glass-border);white-space:nowrap}
+.goal-tbl th:first-child{text-align:left}
+.goal-tbl td{text-align:right;padding:11px 10px;border-bottom:1px solid rgba(148,163,184,.06);
+  font-weight:700;color:var(--text);white-space:nowrap}
+.goal-tbl td:first-child{text-align:left;font-weight:800;color:var(--text)}
+.goal-tbl td.val{font-size:13px;color:#FBBF24;font-weight:800}
+.goal-tbl td.na{color:var(--text-dim);font-weight:500}
+.goal-tbl tr:last-child td{border-bottom:none}
+.goal-tbl .emp-row td:first-child{position:sticky;left:0;background:var(--bg-card)}
+.goal-note{font-size:11px;color:var(--text-dim);margin-top:12px;line-height:1.6}
 </style>
 </head>
 <body>
@@ -185,6 +206,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
   <button data-tab="channel">渠道挂账</button>
   <button data-tab="perf">绩效考评</button>
   <button data-tab="target">任务进度</button>
+  <button data-tab="goal">目标分解</button>
 </div>
 
 <div class="main">
@@ -215,6 +237,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
     <div class="card">
       <div style="font-size:14px;font-weight:700;margin-bottom:12px;color:var(--text)">全科生板块 · 实际完成（无任务指标）</div>
       <div style="overflow-x:auto"><table class="ch-table" id="qksTable"></table></div>
+    </div>
+  </div>
+  <div class="tab" id="tab-goal">
+    <div class="card">
+      <div style="font-size:14px;font-weight:700;margin-bottom:12px;color:var(--text)">8月任务目标分解 · 各员工完成值<span style="font-size:10px;color:var(--text-dim);font-weight:400">数据截止 2026-08-08</span></div>
+      <div id="goalCards"></div>
     </div>
   </div>
 </div>
@@ -611,6 +639,59 @@ function toggleDrill(el){
   });
   qhtml += '</tr></tbody>';
   qksEl.innerHTML = qhtml;
+})();
+
+// === Tab 5: 目标分解（每人一行，12列完成值） ===
+(function(){
+  var goalEl = document.getElementById('goalCards');
+  // 列定义: [key, 显示名, 是否金额]
+  var cols = [
+    ['销售','销售', false],
+    ['收入','收入', true],
+    ['毛利','毛利', true],
+    ['手机','手机', false],
+    ['增值服务','增值服务', true],
+    ['积分','积分', false],
+    ['PC','PC', false],
+    ['平板','平板', false],
+    ['音频','音频', false],
+    ['穿戴','穿戴', false],
+    ['HD','HD', false],
+    ['考核机','考核机', false]
+  ];
+  // 实际完成值(来源: XS明细聚合, 截止08-08)
+  // 收入=金额, 毛利=毛利, 手机/PC/平板/音频/穿戴=商品分类数量, 增值服务=金额, 积分=运营商单数, HD=无数据, 考核机=mate70系列含优享/pocket2×2
+  var DONE = {
+    '邵乐乐': {'销售':'-','收入':35780,'毛利':4193,'手机':8,'增值服务':1245,'积分':3,'PC':0,'平板':0,'音频':0,'穿戴':21,'HD':'--','考核机':0},
+    '杨丽华': {'销售':'-','收入':82904,'毛利':10008,'手机':10,'增值服务':2882,'积分':0,'PC':0,'平板':1,'音频':0,'穿戴':5,'HD':'--','考核机':2},
+    '李泽':   {'销售':'-','收入':52275,'毛利':7232,'手机':6,'增值服务':3350,'积分':0,'PC':0,'平板':0,'音频':1,'穿戴':6,'HD':'--','考核机':2},
+    '陈超磊': {'销售':'-','收入':72447,'毛利':8986,'手机':9,'增值服务':2343,'积分':0,'PC':1,'平板':1,'音频':2,'穿戴':2,'HD':'--','考核机':0}
+  };
+
+  function fmt(name, v){
+    var c = cols.find(function(x){return x[0]===name;})[2];
+    if(v === '--' || v === '-') return '<span class="na">--</span>';
+    return c ? '¥'+Number(v).toLocaleString('zh-CN') : v;
+  }
+
+  var html = '';
+  MAIN_EMP.forEach(function(name){
+    var d = DONE[name] || {};
+    html += '<div class="goal-card">';
+    html += '<h3>'+name+'<span class="badge">完成值</span></h3>';
+    html += '<div style="overflow-x:auto"><table class="goal-tbl"><thead><tr><th>板块</th>';
+    cols.forEach(function(c){ html += '<th>'+c[1]+'</th>'; });
+    html += '</tr></thead><tbody><tr class="emp-row"><td>'+name+'</td>';
+    cols.forEach(function(c){
+      var v = d[c[0]];
+      var cls = (v === '--' || v === '-') ? 'na' : 'val';
+      html += '<td class="'+cls+'">'+fmt(c[0], v)+'</td>';
+    });
+    html += '</tr></tbody></table></div>';
+    html += '<div class="goal-note">销售：参考「8月任务」表的店面销售列；积分=运营商单(10运营商业务)数；HD 暂无完成数据源显示 --；考核机按 mate70系列(含优享)/pocket2系列 每台×2 计（杨丽华2、李泽2，其余0）。</div>';
+    html += '</div>';
+  });
+  goalEl.innerHTML = html;
 })();
 </script>
 </body>
