@@ -2,671 +2,359 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>李家村万达华为 · 8月业绩看板</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>华为·李家村万达店 — 业绩考核看板 v7</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --bg:#F4F6F9;--card:#ffffff;
-  --ink:#1a1a2e;--sub:#7a7f8e;--dim:#a0a5b4;
-  --blue:#4F7DF7;--purple:#7C5CFC;--teal:#2CBBC8;--green:#10B981;
-  --amber:#F5A623;--rose:#E8557A;--red:#DC2626;
-  --border:#ECEEF3;
-}
-html{font-size:16px}
-body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","PingFang SC","Microsoft YaHei",sans-serif;
-  background:var(--bg);color:var(--ink);line-height:1.55;min-height:100vh;
-  -webkit-font-smoothing:antialiased;overflow-x:hidden}
-
-.wrap{width:100%;max-width:1160px;margin:0 auto;padding:0 16px 60px}
-
-/* ===== HEADER ===== */
-.header{background:linear-gradient(135deg,#4F7DF7 0%,#7C5CFC 50%,#9B6FFC 100%);
-  border-radius:0 0 24px 24px;padding:24px 20px 20px;margin:0 -16px 20px;
-  box-shadow:0 12px 40px -12px rgba(79,125,247,.35)}
-.header-top{display:flex;justify-content:space-between;align-items:flex-start}
-.header h1{font-size:18px;font-weight:800;letter-spacing:.3px;color:#fff}
-.header .sub{font-size:11.5px;color:rgba(255,255,255,.7);margin-top:4px}
-.time-box{text-align:right}
-.time-box .pct{font-size:32px;font-weight:900;line-height:1;color:#fff}
-.time-box .lab{font-size:11px;color:rgba(255,255,255,.65);margin-top:3px}
-.progress-bar{height:4px;background:rgba(255,255,255,.2);border-radius:2px;margin-top:12px;overflow:hidden}
-.progress-fill{height:100%;background:linear-gradient(90deg,#34D399,#6EE7B7);border-radius:2px;transition:width .8s}
-
-/* ===== VIEW SWITCH ===== */
-.view-bar{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
-.view-btn{border:none;background:var(--card);color:var(--sub);padding:6px 14px;border-radius:999px;
-  font-size:12px;font-weight:600;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.04);transition:all .2s}
-.view-btn:hover{background:#E8ECF4}
-.view-btn.active{background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff}
-
-/* ===== ALERT BANNER ===== */
-.alert-card{background:linear-gradient(135deg,#FFF5F5,#FFF8F0);border:1px solid #FECACA;
-  border-radius:18px;padding:14px 16px;margin-bottom:18px;position:relative;overflow:hidden;
-  animation:fadeInUp .5s ease}
-.alert-card::before{content:'⚠️';position:absolute;top:12px;right:16px;font-size:20px;opacity:.3}
-.alert-card .a-title{font-size:13px;font-weight:700;color:var(--red);margin-bottom:8px;display:flex;align-items:center;gap:6px}
-.alert-card .a-items{display:flex;flex-direction:column;gap:5px}
-.alert-item{font-size:12px;color:var(--ink);padding:4px 10px;background:rgba(255,255,255,.7);border-radius:8px;
-  display:flex;align-items:center;gap:6px}
-.alert-item .a-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
-.alert-item .a-dot.r{background:var(--red)}.alert-item .a-dot.o{background:var(--amber)}.alert-item .a-dot.b{background:var(--blue)}
-
-/* ===== FORECAST CARD ===== */
-.forecast-card{background:var(--card);border-radius:18px;padding:16px;margin-bottom:18px;
-  border:1px solid var(--border);box-shadow:0 2px 8px rgba(30,41,59,.04);
-  animation:fadeInUp .5s ease .1s both}
-.forecast-card .f-title{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:10px;display:flex;align-items:center;gap:6px}
-.forecast-card .f-title::before{content:'';width:4px;height:16px;background:linear-gradient(180deg,var(--amber),var(--rose));border-radius:3px;display:inline-block}
-.forecast-row{display:flex;gap:8px;flex-wrap:wrap}
-.forecast-item{background:#F8F9FC;border-radius:12px;padding:10px 14px;flex:1;min-width:100px;text-align:center}
-.forecast-item .f-label{font-size:10px;color:var(--dim);margin-bottom:3px}
-.forecast-item .f-val{font-size:16px;font-weight:800;color:var(--ink)}
-.forecast-item .f-val.danger{color:var(--red)}
-.forecast-item .f-val.ok{color:var(--green)}
-
-/* ===== KPI STRIP ===== */
-.kpi-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
-.kpi{background:var(--card);border-radius:20px;padding:16px 14px;
-  box-shadow:0 2px 12px rgba(30,41,59,.06);transition:all .25s;position:relative;overflow:hidden}
-.kpi:hover{transform:translateY(-2px);box-shadow:0 8px 24px -8px rgba(30,41,59,.12)}
-.kpi .k-label{font-size:10.5px;color:var(--dim);margin-bottom:6px;font-weight:600}
-.kpi .k-val{font-size:19px;font-weight:800;color:var(--ink);letter-spacing:-.3px}
-.kpi .k-sub{font-size:10px;color:var(--sub);margin-top:4px}
-.kpi .k-sub.red{color:var(--red);font-weight:700}
-.kpi .k-sub.green{color:var(--green);font-weight:700}
-.kpi .share-btn{position:absolute;top:10px;right:10px;width:24px;height:24px;border:none;background:#F0F2F7;
-  border-radius:6px;font-size:11px;color:var(--dim);cursor:pointer;opacity:0;transition:all .2s;display:flex;align-items:center;justify-content:center}
-.kpi:hover .share-btn{opacity:1}
-.kpi .share-btn:hover{background:#E4E7EE;color:var(--ink)}
-
-/* ===== SECTION TITLE ===== */
-.sec-title{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:12px;
-  padding-left:2px;display:flex;align-items:center;gap:8px}
-.sec-title::before{content:'';display:inline-block;width:4px;height:16px;
-  background:linear-gradient(180deg,var(--blue),var(--purple));border-radius:3px}
-.sec-title .s-share{margin-left:auto;width:26px;height:26px;border:none;background:#F0F2F7;
-  border-radius:8px;font-size:12px;color:var(--dim);cursor:pointer;transition:all .2s;
-  display:flex;align-items:center;justify-content:center}
-.sec-title .s-share:hover{background:#E4E7EE;color:var(--ink)}
-
-/* ===== CATEGORY GRID ===== */
-.cat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:22px}
-.cat{background:var(--card);border-radius:22px;padding:18px 16px;
-  box-shadow:0 2px 12px rgba(30,41,59,.06);transition:all .3s;cursor:pointer;
-  display:flex;flex-direction:column;align-items:center;position:relative}
-.cat:hover{transform:translateY(-3px);box-shadow:0 12px 32px -8px rgba(30,41,59,.14)}
-.cat .cat-share{position:absolute;top:10px;right:10px;width:24px;height:24px;border:none;background:#F0F2F7;
-  border-radius:6px;font-size:11px;color:var(--dim);cursor:pointer;opacity:0;transition:all .2s;
-  display:flex;align-items:center;justify-content:center}
-.cat:hover .cat-share{opacity:1}
-.cat .cat-share:hover{background:#E4E7EE;color:var(--ink)}
-
-.cat-head{display:flex;align-items:center;gap:8px;margin-bottom:12px;width:100%}
-.cat-icon{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;
-  justify-content:center;font-size:16px;flex-shrink:0}
-.cat-icon.blue{background:rgba(79,125,247,.1);color:var(--blue)}.cat-icon.purple{background:rgba(124,92,252,.1);color:var(--purple)}
-.cat-icon.teal{background:rgba(44,188,200,.1);color:var(--teal)}.cat-icon.green{background:rgba(16,185,129,.1);color:var(--green)}
-.cat-icon.amber{background:rgba(245,166,35,.1);color:var(--amber)}.cat-icon.rose{background:rgba(232,85,122,.1);color:var(--rose)}
-.cat-name{font-size:13px;font-weight:700;color:var(--ink)}
-
-.ring-wrap{position:relative;width:90px;height:90px;margin-bottom:12px}
-.ring-svg{width:100%;height:100%;transform:rotate(-90deg)}
-.ring-bg{fill:none;stroke:#F0F1F5;stroke-width:7}
-.ring-fg{fill:none;stroke-width:7;stroke-linecap:round}
-.ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.ring-pct{font-size:16px;font-weight:800;color:var(--ink);line-height:1}
-.ring-lab{font-size:9px;color:var(--dim);margin-top:2px}
-
-.cat-rows{width:100%}
-.cat-row{display:flex;justify-content:space-between;font-size:11.5px;color:var(--sub);padding:3px 0;line-height:1.6}
-.cat-row span:last-child{color:var(--ink);font-weight:600}
-.cat-row .gap-val{color:var(--red)!important;font-weight:700!important}
-
-.cat-tag{margin-top:10px;padding:3px 10px;border-radius:999px;font-size:10px;font-weight:700}
-.cat-tag.warn{background:#FFF8E1;color:#E6A100;animation:pulse-warn 2s ease-in-out infinite}
-.cat-tag.ok{background:#E6F9EE;color:#059669}
-
-@keyframes pulse-warn{0%,100%{opacity:1}50%{opacity:.7}}
-
-/* ===== DAILY TABLE ===== */
-.daily-card{background:var(--card);border-radius:22px;
-  box-shadow:0 2px 12px rgba(30,41,59,.06);overflow:hidden;margin-bottom:20px}
-.daily-header{padding:16px 16px 10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
-.daily-header .dh-title{font-size:14px;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:8px}
-.daily-header .dh-title::before{content:'';display:inline-block;width:4px;height:16px;
-  background:linear-gradient(180deg,var(--green),var(--teal));border-radius:3px}
-.chips{display:flex;gap:5px}
-.chip{border:none;background:#F0F2F7;color:var(--dim);padding:5px 11px;
-  border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;transition:all .2s}
-.chip:hover{background:#E4E7EE;color:var(--sub)}
-.chip.active{background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff}
-
-.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;padding:0 12px 14px}
-.scroll::-webkit-scrollbar{height:3px}
-.scroll::-webkit-scrollbar-thumb{background:#D4DBE8;border-radius:2px}
-table{border-collapse:collapse;width:100%;font-size:11.5px;white-space:nowrap}
-th,td{padding:8px 7px;text-align:center;border:none}
-thead th{background:#F8F9FC;color:var(--dim);font-weight:600;font-size:10.5px;border-bottom:1px solid var(--border)}
-th.emp,td.emp{text-align:left;font-weight:700;padding-left:10px;min-width:56px}
-th.emp{color:var(--ink)}td.emp{color:var(--sub);font-size:12px}
-tbody tr{border-bottom:1px solid #F5F6FA;transition:background .15s}
-tbody tr:hover td{background:#EFF4FF!important}
-tbody tr:nth-child(even) td{background:#FAFBFD}
-td.val{color:var(--ink);font-weight:600}td.blank{color:var(--dim)}
-td.top{background:rgba(16,185,129,.06)!important;color:#059669;font-weight:800}
-td.zero-hard{color:var(--red)!important;font-weight:700;position:relative}
-td.zero-hard::after{content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);
-  width:8px;height:2px;border-radius:1px;background:var(--red);animation:pulse-warn 2s ease-in-out infinite}
-tr.total-row td{border-top:1px solid var(--border);font-weight:700;color:var(--sub);background:#F8F9FC!important}
-
-/* ===== EMPLOYEE CARDS ===== */
-.emp-grid-wrap{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:20px}
-.emp-card{background:var(--card);border-radius:20px;
-  box-shadow:0 2px 12px rgba(30,41,59,.06);overflow:hidden;transition:all .25s}
-.emp-card:hover{box-shadow:0 6px 20px rgba(30,41,59,.1)}
-.emp-head{padding:14px 16px;display:flex;align-items:center;gap:10px;cursor:pointer}
-.emp-avatar{width:36px;height:36px;border-radius:12px;display:flex;align-items:center;
-  justify-content:center;font-size:14px;font-weight:800;color:#fff;flex-shrink:0}
-.emp-info{flex:1;min-width:0}
-.emp-info .e-name{font-size:14px;font-weight:700;color:var(--ink)}
-.emp-info .e-sum{font-size:11px;color:var(--sub);margin-top:1px}
-.emp-arrow{color:var(--dim);font-size:12px;transition:transform .2s;padding:4px}
-.emp-card.open .emp-arrow{transform:rotate(180deg)}
-.emp-body{display:none;padding:0 16px 14px}
-.emp-card.open .emp-body{display:block}
-.emp-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-.emp-cell{background:#F8F9FC;border-radius:12px;padding:10px 12px;text-align:center}
-.emp-cell .ec-label{font-size:10px;color:var(--dim);margin-bottom:3px}
-.emp-cell .ec-val{font-size:15px;font-weight:800;color:var(--ink)}
-.emp-cell .ec-val.red{color:var(--red)}
-
-/* ===== MODAL ===== */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
-.modal-overlay.show{display:flex}
-.modal-card{background:#fff;border-radius:20px;width:100%;max-width:520px;max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px -12px rgba(0,0,0,.2);padding:0}
-.modal-header{display:flex;justify-content:space-between;align-items:center;padding:18px 20px 12px;border-bottom:1px solid var(--border)}
-.modal-header .m-title{font-size:16px;font-weight:700;color:var(--ink)}
-.modal-close{width:28px;height:28px;border:none;background:#F0F2F7;border-radius:8px;font-size:14px;color:var(--dim);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
-.modal-close:hover{background:#E4E7EE;color:var(--ink)}
-.modal-summary{padding:14px 20px;display:flex;gap:4px;flex-wrap:wrap;font-size:12.5px;color:var(--sub);border-bottom:1px solid #F5F6FA}
-.modal-summary .ms-item{padding:0 10px;border-right:1px solid #ECEEF3}
-.modal-summary .ms-item:last-child{border:none}
-.modal-summary .ms-item .ms-val{color:var(--ink);font-weight:700}
-.modal-chart{padding:16px 16px 8px}
-.modal-chart canvas{width:100%!important;height:200px!important}
-.modal-legend{padding:6px 20px 16px;display:flex;gap:16px;font-size:11px;color:var(--dim)}
-.modal-legend span{display:flex;align-items:center;gap:4px}
-.modal-legend .leg-dot{width:8px;height:8px;border-radius:50%;display:inline-block}
-
-.foot{text-align:center;font-size:10.5px;color:var(--dim);padding:16px 0 8px;border-top:1px solid var(--border);margin-top:10px}
-
-/* ===== ANIMATIONS ===== */
-@keyframes fadeInUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-.anim-in{opacity:0;transform:translateY(16px);transition:all .5s cubic-bezier(.4,0,.2,1)}
-.anim-in.visible{opacity:1;transform:translateY(0)}
-
-/* ===== RESPONSIVE ===== */
-@media(min-width:768px){
-  .wrap{padding:0 24px 60px}
-  .header{border-radius:0 0 28px 28px;margin:0 -24px 24px;padding:28px 32px 24px}
-  .header h1{font-size:22px}.time-box .pct{font-size:38px}
-  .kpi-strip{gap:14px}.kpi{padding:20px 18px}.kpi .k-val{font-size:22px}
-  .cat-grid{grid-template-columns:repeat(3,1fr);gap:16px}
-  .emp-grid-wrap{grid-template-columns:repeat(2,1fr);gap:12px}
-  .sec-title{font-size:16px;margin:24px 0 14px}
-  table{font-size:12.5px}th,td{padding:9px 10px}
-  .modal-card{max-width:560px}
-}
-@media(min-width:1200px){
-  .wrap{padding:0 32px 60px}
-  .header{margin:0 -32px 28px;padding:32px 40px 28px}.header h1{font-size:24px}
-  .kpi-strip{grid-template-columns:repeat(3,1fr);gap:16px}
-  .cat-grid{grid-template-columns:repeat(3,1fr);gap:18px}
-  .emp-grid-wrap{grid-template-columns:repeat(3,1fr);gap:14px}
-  .modal-card{max-width:640px}.modal-chart canvas{height:260px!important}
-}
-
-/* ===== TOAST ===== */
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a1a2e;color:#fff;
-  padding:10px 20px;border-radius:12px;font-size:13px;font-weight:600;z-index:999;
-  box-shadow:0 8px 24px rgba(0,0,0,.2);opacity:0;transition:all .3s;pointer-events:none}
-.toast.show{opacity:1}
+*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;}
+:root{--bg:#F2F6FA;--card:#fff;--primary:#7382F0;--primary2:#5A8AFF;--green:#2DB673;--orange:#FF9F43;--red:#EF5350;--gray:#8A94A6;--dark:#26314D;}
+body{background:var(--bg);color:#26314D;padding-bottom:60px;}
+.hd{background:linear-gradient(135deg,#7382F0,#5A8AFF);color:#fff;padding:18px 20px;position:sticky;top:0;z-index:50;box-shadow:0 2px 12px rgba(90,138,255,.25);}
+.hd .t{font-size:19px;font-weight:700;letter-spacing:.5px;}
+.hd .meta{font-size:11px;opacity:.85;margin-top:4px;}
+.seg{display:flex;gap:6px;margin-top:12px;}
+.seg button{flex:1;border:none;padding:9px 0;border-radius:20px;background:rgba(255,255,255,.16);color:#fff;font-size:14px;font-weight:600;cursor:pointer;transition:.2s;}
+.seg button.on{background:#fff;color:var(--primary);}
+.pick{display:flex;gap:8px;flex-wrap:wrap;padding:12px 16px 0;}
+.pick button{border:1px solid #d8dfe9;background:#fff;padding:7px 14px;border-radius:18px;font-size:13px;color:#4a5670;cursor:pointer;transition:.15s;}
+.pick button.on{background:var(--primary);color:#fff;border-color:var(--primary);}
+.wrap{max-width:980px;margin:0 auto;padding:14px 16px;}
+.tile{background:var(--card);border-radius:14px;padding:16px;box-shadow:0 1px 6px rgba(31,45,75,.06);margin-bottom:14px;}
+.secT{font-size:15px;font-weight:700;color:var(--dark);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.secT .dot{width:8px;height:8px;border-radius:50%;background:var(--primary);}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;}
+.kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;}
+.kcard{background:#f8faff;border-radius:12px;padding:12px;text-align:center;}
+.kcard .k{font-size:11px;color:var(--gray);}
+.kcard .v{font-size:20px;font-weight:800;color:var(--primary);margin-top:3px;}
+.kcard .sub{font-size:11px;color:var(--gray);margin-top:2px;}
+.cat{background:#f8faff;border-radius:12px;padding:12px;text-align:center;position:relative;cursor:pointer;transition:.2s;}
+.cat:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 4px 14px rgba(90,138,255,.18);}
+.cat .n{font-size:12px;color:#4a5670;font-weight:600;}
+.cat .ring{position:relative;width:74px;height:74px;margin:8px auto 6px;}
+.cat .pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;}
+.cat .dv{font-size:11px;color:var(--gray);}
+.cat .g{font-size:11px;color:var(--red);font-weight:600;}
+.alert{display:flex;gap:8px;align-items:flex-start;padding:10px 12px;border-radius:10px;margin-bottom:8px;font-size:13px;}
+.alert.danger{background:#fff2f2;color:#c0392b;border:1px solid #ffd5d5;}
+.alert.warn{background:#fff7e8;color:#b9761a;border:1px solid #ffe2b0;}
+.alert.ok{background:#eafaf1;color:#1e8449;border:1px solid #c6efd8;}
+.alert b{font-weight:700;}
+.tbl{width:100%;border-collapse:collapse;font-size:12.5px;}
+.tbl th{background:#f1f4fb;padding:8px 6px;text-align:center;font-weight:600;color:#4a5670;}
+.tbl td{padding:7px 6px;text-align:center;border-bottom:1px solid #eef1f6;color:#4a5670;}
+.tbl tr td:first-child{font-weight:700;color:var(--dark);text-align:left;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl td.g{color:var(--green);font-weight:700;}
+.tbl td.r{color:var(--red);font-weight:700;}
+.tag{display:inline-block;padding:2px 9px;border-radius:12px;font-size:11px;font-weight:700;color:#fff;}
+.tag-done{background:var(--green);}
+.tag-ahead{background:var(--primary);}
+.tag-on{background:#5A8AFF;}
+.tag-late{background:var(--orange);}
+.tag-bad{background:var(--red);animation:pulse 1.4s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.emp-head{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.emp-ava{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;}
+.emp-ava.bad{background:linear-gradient(135deg,#EF5350,#FF9F43);}
+.emp-ava.ok{background:linear-gradient(135deg,#2DB673,#5A8AFF);}
+.emp-name{font-size:17px;font-weight:800;}
+.emp-tag{font-size:12px;color:var(--gray);margin-top:2px;}
+.foot{text-align:center;font-size:11px;color:var(--gray);padding:16px;}
+.modal{position:fixed;inset:0;background:rgba(20,30,50,.55);z-index:100;display:none;align-items:center;justify-content:center;padding:16px;}
+.modal.show{display:flex;}
+.modal-box{background:#fff;border-radius:14px;width:100%;max-width:520px;max-height:86vh;overflow:auto;padding:18px;}
+.modal-box h3{font-size:15px;margin-bottom:12px;}
+.mbar{height:14px;background:#eef1f6;border-radius:8px;overflow:hidden;margin:4px 0 2px;}
+.mbar i{display:block;height:100%;border-radius:8px;transition:.4s;}
+.mrow{margin-bottom:10px;}
+.mrow .lbl{font-size:12px;color:#4a5670;display:flex;justify-content:space-between;margin-bottom:2px;}
+.chip{font-size:11px;padding:2px 8px;border-radius:10px;background:#eef1f6;color:#4a5670;margin-left:6px;}
+.bars{display:flex;align-items:flex-end;gap:6px;height:110px;margin:10px 0;}
+.bar{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;}
+.bar .bv{background:linear-gradient(180deg,var(--primary),var(--primary2));width:75%;border-radius:6px 6px 0 0;min-height:3px;}
+.bar .bday{font-size:10px;color:#4a5670;margin-top:4px;}
+.hint{font-size:11px;color:var(--gray);margin-top:6px;}
+.empty{text-align:center;color:var(--gray);padding:20px 0;font-size:13px;}
+.small{font-size:11px;color:var(--gray);}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;}
 </style>
 </head>
 <body>
+<div class="hd">
+  <div class="t">华为·李家村万达店 — 业绩考核看板</div>
+  <div class="meta">数据截至 8/8 · 时间进度 <b>25.8%</b> · 版本 v7</div>
+  <div class="seg">
+    <button id="segEmp" class="on" onclick="go('emp')">👨‍💼 员工视角</button>
+    <button id="segShop" onclick="go('shop')">🏪 门店视角</button>
+  </div>
+</div>
+
+<div class="pick" id="pickBar" style="display:block;">
+  <button class="on" data-e="0" onclick="pickEmp(0)">全部</button>
+  <button data-e="1" onclick="pickEmp(1)">邵乐乐</button>
+  <button data-e="2" onclick="pickEmp(2)">杨丽华</button>
+  <button data-e="3" onclick="pickEmp(3)">李泽</button>
+  <button data-e="4" onclick="pickEmp(4)">陈超磊</button>
+  <button data-e="5" onclick="pickEmp(5)">张博晨</button>
+</div>
+
 <div class="wrap">
-
-  <!-- HEADER -->
-  <div class="header anim-in">
-    <div class="header-top">
-      <div>
-        <h1>李家村万达华为 · 8月业绩看板</h1>
-        <div class="sub">陕西省西安市碑林区 ｜ 融合经营考核</div>
-      </div>
-      <div class="time-box">
-        <div class="pct" id="timePct">0%</div>
-        <div class="lab" id="timeLab">时间进度 9/31天</div>
-      </div>
-    </div>
-    <div class="progress-bar"><div class="progress-fill" id="timeBar" style="width:0%"></div></div>
-  </div>
-
-  <!-- VIEW SWITCH -->
-  <div class="view-bar anim-in">
-    <button class="view-btn active" data-view="all">全店视角</button>
-    <button class="view-btn" data-view="邵乐乐">邵乐乐</button>
-    <button class="view-btn" data-view="杨丽华">杨丽华</button>
-    <button class="view-btn" data-view="陈超磊">陈超磊</button>
-    <button class="view-btn" data-view="李泽">李泽</button>
-    <button class="view-btn" data-view="张博晨">张博晨</button>
-  </div>
-
-  <!-- ALERT BANNER -->
-  <div class="alert-card anim-in" id="alertCard">
-    <div class="a-title">今日待关注</div>
-    <div class="a-items" id="alertItems"></div>
-  </div>
-
-  <!-- FORECAST -->
-  <div class="forecast-card anim-in" id="forecastCard">
-    <div class="f-title">趋势预判（按当前节奏）</div>
-    <div class="forecast-row" id="forecastRow"></div>
-  </div>
-
-  <!-- KPI -->
-  <div class="kpi-strip anim-in">
-    <div class="kpi">
-      <div class="k-label">累计毛利</div>
-      <div class="k-val" data-count="35371">¥0</div>
-      <div class="k-sub red" id="kpiLiRate">完成率 17%</div>
-      <button class="share-btn" title="分享" onclick="shareThis(this)">↗</button>
-    </div>
-    <div class="kpi">
-      <div class="k-label">累计销额</div>
-      <div class="k-val" data-count="120533">¥0</div>
-      <div class="k-sub">日均 ¥13,393</div>
-      <button class="share-btn" title="分享" onclick="shareThis(this)">↗</button>
-    </div>
-    <div class="kpi">
-      <div class="k-label">累计单数</div>
-      <div class="k-val" data-count="171">0</div>
-      <div class="k-sub" id="kpiSj">手机 37台</div>
-      <button class="share-btn" title="分享" onclick="shareThis(this)">↗</button>
-    </div>
-  </div>
-
-  <!-- CATEGORIES -->
-  <div class="sec-title anim-in">品类达成 <button class="s-share" title="分享品类" onclick="shareSection('品类达成')">↗</button></div>
-  <div class="cat-grid anim-in" id="catGrid"></div>
-
-  <!-- DAILY TABLE -->
-  <div class="daily-card anim-in">
-    <div class="daily-header">
-      <div class="dh-title">每日达成全览</div>
-      <div class="chips" id="chips">
-        <button class="chip active" data-m="li">毛利</button>
-        <button class="chip" data-m="xj">销额</button>
-        <button class="chip" data-m="cnt">单数</button>
-        <button class="chip" data-m="sj">手机</button>
-      </div>
-    </div>
-    <div class="scroll"><table id="dtable"></table></div>
-  </div>
-
-  <!-- EMPLOYEE -->
-  <div class="sec-title anim-in">员工业绩详情 <button class="s-share" title="分享员工" onclick="shareSection('员工')">↗</button></div>
-  <div class="emp-grid-wrap anim-in" id="empSection"></div>
-
-  <div class="foot">数据取自用友云「门店毛利明细表-华为终端」XS出库明细</div>
+  <div id="viewEmp"></div>
+  <div id="viewShop" style="display:none;"></div>
 </div>
 
-<!-- MODAL -->
-<div class="modal-overlay" id="modal">
-  <div class="modal-card">
-    <div class="modal-header">
-      <div class="m-title" id="modalTitle"></div>
-      <button class="modal-close" onclick="closeModal()">✕</button>
-    </div>
-    <div class="modal-summary" id="modalSummary"></div>
-    <div class="modal-chart"><canvas id="modalChart"></canvas></div>
-    <div class="modal-legend">
-      <span><i class="leg-dot" style="background:var(--blue)"></i>日毛利</span>
-      <span><i class="leg-dot" style="background:var(--green)"></i>累计</span>
-    </div>
-  </div>
+<div class="modal" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box" id="modalBox"></div>
 </div>
 
-<div class="toast" id="toast"></div>
+<div class="foot">纯原生 · 零外部依赖 · 双击即用 · 数据快照 8/9 重制</div>
 
 <script>
-const D={"emps":["邵乐乐","杨丽华","陈超磊","李泽","张博晨"],
-"dates":["08-01","08-02","08-03","08-04","08-05","08-06","08-07","08-08","08-09"],
-"rows":{"邵乐乐":{"08-01":{"li":683.67,"xj":4895,"cnt":6,"sj":2},"08-02":{"li":1036.25,"xj":9811,"cnt":6,"sj":3},"08-03":{"li":0,"xj":0,"cnt":0,"sj":0},"08-04":{"li":367,"xj":1598,"cnt":1,"sj":0},"08-05":{"li":1441.28,"xj":15870.97,"cnt":24,"sj":2},"08-06":{"li":0,"xj":0,"cnt":0,"sj":0},"08-07":{"li":665.27,"xj":3605.33,"cnt":4,"sj":1},"08-08":{"li":647,"xj":4299,"cnt":1,"sj":1},"08-09":{"li":0,"xj":0,"cnt":0,"sj":0}},
-"杨丽华":{"08-01":{"li":2133.92,"xj":19397,"cnt":5,"sj":2},"08-02":{"li":2537.61,"xj":23584.02,"cnt":7,"sj":2},"08-03":{"li":1032.75,"xj":7384,"cnt":9,"sj":1},"08-04":{"li":1565,"xj":6585,"cnt":6,"sj":1},"08-05":{"li":0,"xj":0,"cnt":0,"sj":0},"08-06":{"li":624,"xj":5229,"cnt":3,"sj":1},"08-07":{"li":374,"xj":3128,"cnt":2,"sj":1},"08-08":{"li":2000.04,"xj":21395,"cnt":7,"sj":2},"08-09":{"li":0,"xj":0,"cnt":0,"sj":0}},
-"陈超磊":{"08-01":{"li":1286.1,"xj":13197,"cnt":4,"sj":1},"08-02":{"li":954.08,"xj":6466,"cnt":7,"sj":1},"08-03":{"li":826,"xj":4806,"cnt":4,"sj":1},"08-04":{"li":2515.03,"xj":20596,"cnt":9,"sj":2},"08-05":{"li":1009.97,"xj":8599,"cnt":4,"sj":0},"08-06":{"li":2185.8,"xj":16894,"cnt":9,"sj":3},"08-07":{"li":0,"xj":0,"cnt":0,"sj":0},"08-08":{"li":1948.05,"xj":11984.02,"cnt":7,"sj":2},"08-09":{"li":591.6,"xj":3856,"cnt":4,"sj":0}},
-"李泽":{"08-01":{"li":1032.8,"xj":11998,"cnt":4,"sj":1},"08-02":{"li":1500.29,"xj":15696,"cnt":7,"sj":1},"08-03":{"li":1709.01,"xj":8498,"cnt":5,"sj":2},"08-04":{"li":0,"xj":0,"cnt":0,"sj":0},"08-05":{"li":816.41,"xj":8198,"cnt":6,"sj":2},"08-06":{"li":604,"xj":2198,"cnt":2,"sj":0},"08-07":{"li":1569.8,"xj":5687,"cnt":5,"sj":0},"08-08":{"li":756.41,"xj":4197,"cnt":6,"sj":2},"08-09":{"li":0,"xj":0,"cnt":0,"sj":0}},
-"张博晨":{"08-01":{"li":0,"xj":0,"cnt":0,"sj":0},"08-02":{"li":0,"xj":0,"cnt":0,"sj":0},"08-03":{"li":0,"xj":0,"cnt":0,"sj":0},"08-04":{"li":-18.89,"xj":0,"cnt":1,"sj":0},"08-05":{"li":0,"xj":0,"cnt":0,"sj":0},"08-06":{"li":999,"xj":999,"cnt":1,"sj":0},"08-07":{"li":0,"xj":0,"cnt":0,"sj":0},"08-08":{"li":-21.96,"xj":0,"cnt":1,"sj":0},"08-09":{"li":0,"xj":0,"cnt":0,"sj":0}}}};;
+// ===== 时间进度 =====
+const TP = 0.258;      // 8/8: 25.8%
+const AHEAD = TP*1.1;  // 28.4% 超进度
+const LOW   = TP*0.5;  // 12.9% 严重落后
 
+function statusOf(rate){
+  if(rate==null||isNaN(rate)) return {t:'未分配',c:'late'};
+  if(rate>=1) return {t:'已达成',c:'done'};
+  if(rate>=AHEAD) return {t:'超进度',c:'ahead'};
+  if(rate>=TP*0.9) return {t:'在进度',c:'on'};
+  if(rate<LOW) return {t:'严重落后',c:'bad'};
+  return {t:'不在进度',c:'late'};
+}
+// 安全除法：任务为null/0时返回null
+function rateOf(done, task){
+  if(task==null||task===0||done==null||isNaN(done)) return null;
+  return done/task;
+}
+function tag(st){return '<span class="tag tag-'+st.c+'">'+st.t+'</span>';}
+function pct(r){return r==null?'-':(r*100).toFixed(1)+'%';}
+function num(v,u){return v==null?'-':Number(v).toLocaleString('zh-CN')+(u||'');}
+function C(key){return CATS.find(c=>c.k===key).col;}
+
+// ===== 分类定义（顺序即展示顺序）=====
 const CATS=[
-  {name:'手机',cls:'blue',icon:'📱',task:170,done:37},
-  {name:'PC',cls:'purple',icon:'💻',task:14,done:1},
-  {name:'平板',cls:'teal',icon:'📟',task:34,done:5},
-  {name:'穿戴',cls:'green',icon:'⌚',task:100,done:37},
-  {name:'音频',cls:'amber',icon:'🎧',task:37,done:3},
-  {name:'HD',cls:'rose',icon:'🖥️',task:2,done:0}
+ {k:'g',n:'毛利',unit:'',col:'c1'},
+ {k:'s',n:'手机',unit:'台',col:'c2'},
+ {k:'pc',n:'PC',unit:'台',col:'c3'},
+ {k:'pad',n:'平板',unit:'台',col:'c4'},
+ {k:'wear',n:'穿戴',unit:'台',col:'c1'},
+ {k:'au',n:'音频',unit:'台',col:'c2'},
+ {k:'hd',n:'HD',unit:'台',col:'c3'},
+ {k:'office',n:'智慧办公',unit:'台',col:'c4'},
+ {k:'audio',n:'音频穿戴',unit:'台',col:'c1'},
 ];
-
-const MF={li:{l:'毛利',f:v=>'¥'+fmtN(v)},xj:{l:'销额',f:v=>'¥'+fmtN(v)},cnt:{l:'单数',f:v=>v},sj:{l:'手机',f:v=>v}};
-let curM='li',curView='all';
-function fmtN(v){return Math.round(v).toLocaleString('zh-CN')}
-const EMP_COLORS=['#4F7DF7','#7C5CFC','#2CBBC8','#F5A623','#E8557A'];
-
-// Employee category targets & actuals from 8月任务+李家村8月销售
-const EMP_CATS={
-  '邵乐乐':{毛利:{task:50000,done:4840.47},手机:{task:43,done:9},PC:{task:3,done:0},平板:{task:8,done:0},穿戴:{task:25,done:21},音频:{task:9,done:0},HD:{task:0,done:0}},
-  '杨丽华':{毛利:{task:51000,done:10267.31},手机:{task:43,done:10},PC:{task:3,done:0},平板:{task:8,done:3},穿戴:{task:25,done:5},音频:{task:9,done:0},HD:{task:0,done:0}},
-  '陈超磊':{毛利:{task:52000,done:7988.71},手机:{task:42,done:8},PC:{task:4,done:0},平板:{task:9,done:0},穿戴:{task:25,done:6},音频:{task:9,done:1},HD:{task:1,done:0}},
-  '李泽':{毛利:{task:52000,done:11316.64},手机:{task:42,done:10},PC:{task:4,done:1},平板:{task:9,done:2},穿戴:{task:25,done:5},音频:{task:10,done:2},HD:{task:1,done:0}},
-  '张博晨':{毛利:{task:0,done:958.15},手机:{task:0,done:0},PC:{task:0,done:0},平板:{task:0,done:0},穿戴:{task:0,done:0},音频:{task:0,done:0},HD:{task:0,done:0}}
+// 门店合计（合计行 R9）
+const SHOPD = {
+ g:[205000,35371.28], s:[170,37], pc:[14,1], pad:[34,5], wear:[100,37],
+ au:[37,3], hd:[2,0], office:[48,6], audio:[137,40]
 };
-const STORE_TARGET={毛利:205000};
-
-// ===== NUMBER COUNT UP =====
-function animateCount(el,target,prefix='',suffix=''){
-  const dur=1200;let start=null;
-  function step(ts){if(!start)start=ts;const p=Math.min((ts-start)/dur,1);
-    const ease=1-Math.pow(1-p,3);const v=Math.round(ease*target);
-    el.textContent=prefix+v.toLocaleString('zh-CN')+suffix;
-    if(p<1)requestAnimationFrame(step);}
-  requestAnimationFrame(step);
-}
-
-// ===== SCROLL REVEAL =====
-const observer=new IntersectionObserver((entries)=>{
-  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target);}});
-},{threshold:.15});
-function initObserver(){document.querySelectorAll('.anim-in').forEach(el=>observer.observe(el));}
-
-// ===== ALERTS =====
-function renderAlerts(){
-  const alerts=[];
-  // who is zero today (last date)
-  const today=D.dates[D.dates.length-1];
-  const zeros=[];const lowLi=[];
-  D.emps.forEach(e=>{
-    const c=D.rows[e][today]||{};
-    if(c.cnt===0&&e!=='张博晨')zeros.push(e);
-  });
-  // consecutive zeros (last 2+ days)
-  D.emps.forEach(e=>{
-    const last2=D.dates.slice(-2);
-    const both0=last2.every(d=>(D.rows[e][d]||{}).cnt===0);
-    if(both0&&e!=='张博晨')lowLi.push(e);
-  });
-  if(zeros.length)alerts.push({dot:'r',text:`今日挂零：${zeros.join('、')}`});
-  if(lowLi.length)alerts.push({dot:'r',text:`连续2天挂零：${lowLi.join('、')}，需关注`});
-  // biggest category gap
-  let maxGapCat='';let maxGap=0;
-  CATS.forEach(c=>{const g=c.task-c.done;if(g>maxGap){maxGap=g;maxGapCat=c.name;}});
-  if(maxGapCat)alerts.push({dot:'o',text:`最大缺口品类：${maxGapCat}（差${maxGap}台）`});
-  // li trend (last 3 days store total)
-  const d3=D.dates.slice(-3);
-  const li3=d3.map(d=>D.emps.reduce((s,e)=>s+((D.rows[e][d]||{}).li||0),0));
-  if(li3.length>=2&&li3[li3.length-1]<li3[li3.length-2])alerts.push({dot:'o',text:`门店毛利连续下滑，注意节奏`});
-
-  if(!alerts.length){document.getElementById('alertCard').style.display='none';return;}
-  document.getElementById('alertItems').innerHTML=alerts.map(a=>
-    `<div class="alert-item"><span class="a-dot ${a.dot}"></span>${a.text}</div>`).join('');
-}
-
-// ===== FORECAST =====
-function renderForecast(){
-  const totalLi=D.emps.reduce((s,e)=>{return s+D.dates.reduce((s2,d)=>s2+((D.rows[e][d]||{}).li||0),0);},0);
-  const activeDays=D.dates.filter(d=>D.emps.some(e=>(D.rows[e][d]||{}).cnt>0)).length||1;
-  const dailyAvg=totalLi/activeDays;
-  const remainDays=31-activeDays;
-  const forecastLi=totalLi+dailyAvg*remainDays;
-  const target=205000;
-  const pct=Math.round(forecastLi/target*100);
-  const gap=target-forecastLi;
-  document.getElementById('forecastRow').innerHTML=
-    `<div class="forecast-item"><div class="f-label">日均毛利</div><div class="f-val">¥${fmtN(dailyAvg)}</div></div>`+
-    `<div class="forecast-item"><div class="f-label">预计月底</div><div class="f-val ${gap>0?'danger':'ok'}">¥${fmtN(forecastLi)}</div></div>`+
-    `<div class="forecast-item"><div class="f-label">目标达成</div><div class="f-val ${gap>0?'danger':'ok'}">${pct}%</div></div>`+
-    `<div class="forecast-item"><div class="f-label">仍差</div><div class="f-val danger">¥${fmtN(Math.max(0,gap))}</div></div>`;
-}
-
-// ===== VIEW SWITCH =====
-document.querySelector('.view-bar').addEventListener('click',e=>{
-  if(!e.target.classList.contains('view-btn'))return;
-  document.querySelectorAll('.view-btn').forEach(b=>b.classList.remove('active'));
-  e.target.classList.add('active');
-  curView=e.target.dataset.view;
-  renderDaily();renderEmps();
-});
-
-// ===== CATEGORIES =====
-function renderCats(){
-  const g=document.getElementById('catGrid');const tp=29;
-  g.innerHTML=CATS.map(c=>{
-    const p=Math.round(c.done/c.task*100);const ok=p>=tp;const gap=c.task-c.done;
-    const R=38,C=2*Math.PI*R;
-    const ringColor=ok?'var(--green)':'var(--rose)';
-    return `<div class="cat" onclick="openModal('${c.name}')">
-      <button class="cat-share" title="分享" onclick="event.stopPropagation();shareThis(this)">↗</button>
-      <div class="cat-head"><div class="cat-icon ${c.cls}">${c.icon}</div><div class="cat-name">${c.name}</div></div>
-      <div class="ring-wrap"><svg class="ring-svg" viewBox="0 0 90 90"><circle class="ring-bg" cx="45" cy="45" r="${R}"/>
-        <circle class="ring-fg" cx="45" cy="45" r="${R}" stroke="${ringColor}" stroke-dasharray="${C}" data-target="${C-(p/100)*C}"/></svg>
-        <div class="ring-center"><div class="ring-pct" style="color:${ok?'var(--green)':'var(--red)'}">${p}%</div><div class="ring-lab">完成率</div></div></div>
-      <div class="cat-rows"><div class="cat-row"><span>任务</span><span>${c.task}</span></div>
-        <div class="cat-row"><span>完成</span><span>${c.done}</span></div>
-        <div class="cat-row"><span>缺口</span><span class="gap-val">${gap>0?'−'+gap:'0'}</span></div></div>
-      <div class="cat-tag ${ok?'ok':'warn'}">${ok?'已达标':'未达标'}</div></div>`;
-  }).join('');
-  // animate rings
-  requestAnimationFrame(()=>{document.querySelectorAll('.ring-fg').forEach(r=>{
-    const t=parseFloat(r.dataset.target);r.style.transition='none';r.setAttribute('stroke-dashoffset',2*Math.PI*38);
-    requestAnimationFrame(()=>{r.style.transition='stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1)';r.setAttribute('stroke-dashoffset',t);});
-  });});
-}
-
-// ===== DAILY TABLE =====
-function renderDaily(){
-  const m=MF[curM];const ds=D.dates;
-  const es=curView==='all'?D.emps:[curView].filter(e=>D.emps.includes(e));
-  const maxByD={};ds.forEach(d=>{let mx=0;es.forEach(e=>{const v=(D.rows[e][d]||{})[curM]||0;if(v>mx)mx=v;});maxByD[d]=mx;});
-  const cum={};es.forEach(e=>{let s=0;ds.forEach(d=>s+=(D.rows[e][d]||{})[curM]||0);cum[e]=s;});
-  const sorted=[...es].sort((a,b)=>cum[b]-cum[a]);
-
-  // find consecutive zeros
-  function consecZeros(emp){
-    let c=0,maxc=0;
-    ds.forEach(d=>{if((D.rows[emp][d]||{}).cnt===0){c++;if(c>maxc)maxc=c;}else c=0;});
-    return maxc;
-  }
-
-  let h='<thead><tr><th class="emp">员工</th>';
-  ds.forEach(d=>h+=`<th>${d}</th>`);h+='<th>累计</th></tr></thead><tbody>';
-  sorted.forEach(e=>{
-    let s=0;let tds='';const cz=consecZeros(e);
-    ds.forEach(d=>{
-      const v=(D.rows[e][d]||{})[curM]||0;s+=v;
-      if(v===0)tds+=`<td class="blank">—</td>`;
-      else if(v===maxByD[d]&&maxByD[d]>0)tds+=`<td class="top">${m.f(v)}</td>`;
-      else tds+=`<td class="val">${m.f(v)}</td>`;
-    });
-    const warnTag=cz>=2?`<span style="color:var(--red);font-size:10px;margin-left:4px">⚠${cz}天挂零</span>`:'';
-    h+=`<tr><td class="emp">${e}${warnTag}</td>${tds}<td class="val" style="font-weight:800">${m.f(s)}</td></tr>`;
-  });
-  if(es.length>1){
-    let tots='';let grand=0;
-    ds.forEach(d=>{let t=0;es.forEach(e=>t+=(D.rows[e][d]||{})[curM]||0);grand+=t;
-      tots+=`<td class="val" style="font-weight:700">${t?m.f(t):'—'}</td>`;});
-    h+=`<tr class="total-row"><td class="emp" style="color:var(--ink)">合计</td>${tots}<td class="val" style="font-weight:800">${m.f(grand)}</td></tr>`;
-  }
-  h+='</tbody>';document.getElementById('dtable').innerHTML=h;
-}
-
-document.getElementById('chips').addEventListener('click',e=>{
-  if(!e.target.classList.contains('chip'))return;
-  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
-  e.target.classList.add('active');curM=e.target.dataset.m;renderDaily();
-});
-
-// ===== EMPLOYEE =====
-function renderEmps(){
-  const sec=document.getElementById('empSection');
-  const emps=curView==='all'?D.emps:[curView].filter(e=>D.emps.includes(e));
-  sec.innerHTML=emps.map((e,i)=>{
-    let li=0,xj=0,cnt=0,sj=0;
-    D.dates.forEach(d=>{const c=D.rows[e][d]||{};li+=c.li||0;xj+=c.xj||0;cnt+=c.cnt||0;sj+=c.sj||0;});
-    const days=D.dates.filter(d=>(D.rows[e][d]||{}).cnt>0).length;
-    const col=EMP_COLORS[D.emps.indexOf(e)%EMP_COLORS.length];
-    const empCat=EMP_CATS[e]||{};
-    // Build category detail cells
-    const catNames=['手机','PC','平板','穿戴','音频','HD'];
-    const catCells=catNames.map(cn=>{
-      const d=empCat[cn];if(!d)return '';
-      const task=d.task,done=d.done;
-      if(task===0&&done===0)return '';
-      const pct=task>0?Math.round(done/task*100):0;
-      const gap=task-done;
-      return `<div class="emp-cell"><div class="ec-label">${cn}${task>0?' 任务'+task:''}</div><div class="ec-val ${gap>0?'red':''}">${done}${gap>0?' <span style="font-size:10px;color:var(--dim)">差'+gap+'</span>':''}</div></div>`;
-    }).filter(Boolean).join('');
-    return `<div class="emp-card" onclick="this.classList.toggle('open');openEmpModal('${e}')">
-      <div class="emp-head"><div class="emp-avatar" style="background:${col}">${e[0]}</div>
-        <div class="emp-info"><div class="e-name">${e}</div><div class="e-sum">毛利 ¥${fmtN(li)} · 销额 ¥${fmtN(xj)}</div></div>
-        <span class="emp-arrow">▸</span></div>
-      <div class="emp-body"><div class="emp-grid">${catCells}</div></div></div>`;
-  }).join('');
-}
-
-// ===== MODAL (CATEGORY) =====
-const CAT_DAILY={
-  '手机':{'08-01':3592.07,'08-02':3981.27,'08-03':1926,'08-04':1786,'08-05':1425.67,'08-06':2064,'08-07':577.33,'08-08':3105.02,'08-09':0},
-  'PC':{'08-01':0,'08-02':0,'08-03':0,'08-04':0,'08-05':521,'08-06':0,'08-07':0,'08-08':0,'08-09':0},
-  '平板':{'08-01':0,'08-02':0,'08-03':0,'08-04':391,'08-05':0,'08-06':485,'08-07':0,'08-08':370,'08-09':442},
-  '穿戴':{'08-01':489,'08-02':687.2,'08-03':-94,'08-04':999,'08-05':39.23,'08-06':604,'08-07':711.2,'08-08':478,'08-09':86},
-  '音频':{'08-01':209,'08-02':180.58,'08-03':284,'08-04':0,'08-05':0,'08-06':0,'08-07':0,'08-08':0,'08-09':0},
-  'HD':{'08-01':0,'08-02':0,'08-03':0,'08-04':0,'08-05':0,'08-06':0,'08-07':0,'08-08':0,'08-09':0}
+const SHOPKPI = {
+ xiao:[1600000,270650.34],
+ maoli:[205000,35371.28],
+  phone:37,
+  dan:167
 };
-const CAT_COLORS={'手机':'#4F7DF7','PC':'#7C5CFC','平板':'#2CBBC8','穿戴':'#10B981','音频':'#F5A623','HD':'#E8557A'};
+// 员工板块1数据：[任务,完成]
+const EMP = {
+ sll:{full:'邵乐乐', m:{g:[50000,4840.47],s:[43,9],pc:[3,0],pad:[8,0],wear:[25,21],au:[9,0],hd:[0,0],office:[11,0],audio:[34,0]}},
+ ylh:{full:'杨丽华', m:{g:[51000,10267.31],s:[43,10],pc:[3,0],pad:[8,3],wear:[25,5],au:[9,0],hd:[0,0],office:[11,3],audio:[34,5]}},
+ lz:{full:'李泽', m:{g:[52000,7988.71],s:[42,8],pc:[4,0],pad:[9,0],wear:[25,6],au:[9,1],hd:[1,0],office:[13,0],audio:[34,6]}},
+ ccl:{full:'陈超磊', m:{g:[52000,11316.64],s:[42,10],pc:[4,1],pad:[9,2],wear:[25,5],au:[10,2],hd:[1,0],office:[13,3],audio:[35,7]}},
+ zbc:{full:'张博晨', m:{g:[null,958.15],s:[null,null],pc:[null,null],pad:[null,null],wear:[null,null],au:[null,null],hd:[null,null],office:[null,null],audio:[null,null]}}
+};
+// 板块2 增值/全科生每人：键对应 CATS 之外指标
+const VAS = {
+ sll:{tel:[150,64],care:0.111,ret:0.333,film:0.167,photo:[1,0],model:[3,0],zeng:[14250,1346.56],star:[1,0,1]},
+ ylh:{tel:[150,0],care:0.10,ret:0.40,film:0.944,photo:[1,0],model:[3,0],zeng:[14250,3436.98],star:[1,0,1]},
+ lz:{tel:[150,0],care:0.625,ret:0,film:0.50,photo:[1,0],model:[3,0],zeng:[14250,3257.54],star:[3,2,5]},
+ ccl:{tel:[150,0],care:0.40,ret:0.30,film:0.778,photo:[1,0],model:[3,0],zeng:[14250,2481.71],star:[2,0,2]},
+ zbc:{tel:[null,null],care:0,ret:0,film:0,photo:[null,null],model:[null,null],zeng:[null,958.15],star:[1,0,1]}
+};
+// 08-09 当日达成（板块3）
+const TODAY = {
+ sll:{g:0,s:0,z:0,office:0,audio:0,hd:0,care:0,ret:0,film:0,tel:0,stu:0,photo:0,star1:0,star2:0},
+ ylh:{g:0,s:0,z:0,office:0,audio:0,hd:0,care:0,ret:0,film:0,tel:0,stu:0,photo:0,star1:0,star2:0},
+ lz:{g:0,s:0,z:0,office:0,audio:0,hd:0,care:0,ret:0,film:0,tel:0,stu:0,photo:0,star1:0,star2:0},
+ ccl:{g:591.6,s:0,z:63.6,office:1,audio:2,hd:0,care:1,ret:0,film:0,tel:0,stu:0,photo:0,star1:0,star2:0},
+ zbc:{g:0,s:0,z:0,office:0,audio:0,hd:0,care:0,ret:0,film:0,tel:0,stu:0,photo:0,star1:0,star2:0}
+};
+// 每日任务缺口（板块4）
+const DAILY = {
+ sll:{g:-2258,s:-2,z:-646,office:-1,audio:-1,hd:0,care:-1,ret:1,film:-1,tel:-5,slow:-1,photo:0,star1:1,star2:1},
+ ylh:{g:-2037,s:-2,z:-541,office:-1,audio:-2,hd:0,care:-1,ret:1,film:1,tel:-8,slow:-1,photo:0,star1:1,star2:1},
+ lz:{g:-2201,s:-2,z:-550,office:-1,audio:-2,hd:-1,care:1,ret:-1,film:0,tel:-8,slow:-1,photo:0,star1:1,star2:1},
+ ccl:{g:-2035,s:-2,z:-589,office:-1,audio:-2,hd:-1,care:1,ret:1,film:1,tel:-8,slow:-1,photo:0,star1:1,star2:1},
+ zbc:{g:0,s:0,z:0,office:0,audio:0,hd:0,care:0,ret:0,film:0,tel:0,slow:0,photo:0,star1:0,star2:0}
+};
+const NAMES=['sll','ylh','lz','ccl','zbc'];
+let curEmp=0; let curView='emp';
 
-function openModal(catName){
-  const cat=CATS.find(c=>c.name===catName);if(!cat)return;
-  const data=CAT_DAILY[catName]||{};const dates=D.dates;
-  const vals=dates.map(d=>data[d]||0);
-  const total=vals.reduce((a,b)=>a+b,0);const cnt=vals.filter(v=>v>0).length;
-  const color=CAT_COLORS[catName]||'#4F7DF7';
-  document.getElementById('modalTitle').textContent=catName+' · 日度毛利趋势';
-  document.getElementById('modalSummary').innerHTML=
-    `<div class="ms-item">累计 <span class="ms-val">¥${fmtN(total)}</span></div>`+
-    `<div class="ms-item">出勤 <span class="ms-val">${cnt}天</span></div>`+
-    `<div class="ms-item">日均 <span class="ms-val">¥${fmtN(cnt?total/cnt:0)}</span></div>`+
-    `<div class="ms-item">笔数 <span class="ms-val">${Math.round(total/200)}</span></div>`;
-  document.getElementById('modal').classList.add('show');
-  requestAnimationFrame(()=>drawChart(dates,vals,color));
+function go(v){curView=v;document.getElementById('segEmp').classList.toggle('on',v==='emp');document.getElementById('segShop').classList.toggle('on',v==='shop');document.getElementById('viewEmp').style.display=v==='emp'?'block':'none';document.getElementById('viewShop').style.display=v==='shop'?'block':'none';document.getElementById('pickBar').style.display=v==='emp'?'block':'none';if(v==='emp')renderEmp();else renderShop();}
+function pickEmp(i){curEmp=i;document.querySelectorAll('#pickBar button').forEach(b=>b.classList.toggle('on',parseInt(b.dataset.e)===i));renderEmp();}
+
+// ==================== 通用组件 ====================
+function ringHtml(rate, st){
+  const r = rate==null?0:Math.min(rate,1);
+  const circ = 2*Math.PI*33;
+  const col = st.c==='done'?'#2DB673':st.c==='ahead'?'#7382F0':st.c==='on'?'#5A8AFF':st.c==='bad'?'#EF5350':'#FF9F43';
+  return '<div class="ring">'
+    +'<svg width="74" height="74"><circle cx="37" cy="37" r="33" fill="none" stroke="#e8ecf5" stroke-width="8"/>'
+    +'<circle cx="37" cy="37" r="33" fill="none" stroke="'+col+'" stroke-width="8" stroke-linecap="round" stroke-dasharray="'+circ+'" stroke-dashoffset="'+(circ*(1-r))+'" transform="rotate(-90 37 37)"/></svg>'
+    +'<div class="pct" style="color:'+col+'">'+pct(rate)+'</div></div>';
+}
+function kcard(k, v, sub){return '<div class="kcard"><div class="k">'+k+'</div><div class="v">'+v+'</div><div class="sub">'+sub+'</div></div>';}
+function catCard(n, unit, t, d, rate, col){
+  const st=statusOf(rate);
+  const gap = t - d;
+  return '<div class="cat" onclick="catModal(\''+n+'\','+rate+','+t+','+d+','+(unit||'')+')">'
+    +'<div class="n">'+n+'</div>'
+    +ringHtml(rate, st)
+    +'<div class="dv">任务 '+num(t,unit)+' · 完成 '+num(d,unit)+'</div>'
+    +'<div class="g" style="color:'+(gap>0?'var(--red)':'var(--green)')+'">缺口 '+num(Math.abs(gap),unit)+'</div>'
+    +tag(st)
+    +'</div>';
+}
+function fmt(x){return x==null?'-':Number(x).toLocaleString('zh-CN');}
+
+// ==================== 门店视角 ====================
+function renderShop(){
+  const em = document.getElementById('viewShop');
+  const timeSt = statusOf(TP);
+  const maoliR = SHOPD.g[1]/SHOPD.g[0];
+  const xiaoR = SHOPKPI.xiao[1]/SHOPKPI.xiao[0];
+  let h='';
+  // KPI
+  h+='<div class="tile"><div class="secT"><span class="dot"></span>门店整体 KPI</div><div class="kpi">'
+    +kcard('累计销额', num(SHOPKPI.xiao[1]), '目标 '+num(SHOPKPI.xiao[0])+' · 完成率 '+pct(xiaoR))
+    +kcard('累计毛利', num(SHOPKPI.maoli[1]), '目标 '+num(SHOPKPI.maoli[0])+' · 完成率 '+pct(maoliR))
+    +kcard('手机销量', num(SHOPKPI.phone)+'台', '目标 '+num(SHOPD.s[0])+'台 · 完成率 '+pct(SHOPD.s[1]/SHOPD.s[0]))
+    +kcard('出库单数', num(SHOPKPI.dan)+'单', '时间进度 '+pct(TP)+tag(statusOf(TP)))
+    +'</div></div>';
+  // 店长分析
+  h+='<div class="tile"><div class="secT"><span class="dot"></span>店长分析（门店销售问题）</div>';
+  const lateCats = CATS.filter(c=>{const d=SHOPD[c.k][1],t=SHOPD[c.k][0]; return t>0&&statusOf(d/t).c==='bad';});
+  if(lateCats.length) h+='<div class="alert danger"><b>严重落后品类：</b>'+lateCats.map(c=>c.n).join('、')+'，完成率不足 13%，需重点关注</div>';
+  h+='<div class="alert warn"><b>毛利缺口：</b>累计毛利 '+num(SHOPKPI.maoli[1])+'，缺口 '+num(Math.abs(SHOPKPI.maoli[0]-SHOPKPI.maoli[1]))+'，完成率仅 '+pct(maoliR)+'，距时间进度还有差距</div>';
+  h+='<div class="alert warn"><b>销额承压：</b>累计销额 '+num(SHOPKPI.xiao[1])+'，完成率 '+pct(xiaoR)+'，低于时间进度</div>';
+  // 极低毛利员工
+  const slowEmp = NAMES.filter(k=>{const r=rateOf(EMP[k].m.g[1],EMP[k].m.g[0]); return r!=null&&r<LOW;}).map(k=>EMP[k].full);
+  h+='<div class="alert warn"><b>毛利严重落后：</b>'+(slowEmp.length?slowEmp.join('、')+' 毛利完成率不足 13%':'暂无')+'</div>';
+  h+='</div>';
+  // 品类达成（门店级6卡+全9卡）
+  h+='<div class="tile"><div class="secT"><span class="dot"></span>品类达成（门店级）</div><div class="grid">';
+  CATS.forEach(c=>{const r=SHOPD[c.k][1]/SHOPD[c.k][0]; h+=catCard(c.n, c.unit, SHOPD[c.k][0], SHOPD[c.k][1], r, c.col);});
+  h+='</div></div>';
+  // 全科生/增值（门店级）
+  h+='<div class="tile"><div class="secT"><span class="dot"></span>全科生 / 增值 / 考核项（门店级）</div><div class="grid">';
+  const svas = [
+    {n:'电信积分', t:600, d:64, u:'', r:0.107, col:'c2'},
+    {n:'Care+搭售率', t:null, d:null, u:'', r:0.324, col:'c3'},
+    {n:'回收搭售率', t:null, d:null, u:'', r:0.297, col:'c4'},
+    {n:'贴膜率', t:null, d:null, u:'', r:0.5375, col:'c1'},
+    {n:'摄影课', t:4, d:4, u:'节', r:1, col:'c2'},
+    {n:'考核机型', t:12, d:2, u:'台', r:0.167, col:'c3'},
+    {n:'乐回收', t:null, d:1177, u:'单', r:null, col:'c4'},
+    {n:'太力回收', t:null, d:983, u:'元', r:null, col:'c1'},
+    {n:'增值', t:57000, d:11480.94, u:'', r:0.201, col:'c2'},
+  ];
+  svas.forEach(v=>{h+='<div class="cat" style="background:#f8faff">'
+    +'<div class="n">'+v.n+'</div>'
+    +'<div class="ring"><div class="pct">'+pct(v.r)+'</div></div>'
+    +(v.t!=null?'<div class="dv">任务 '+num(v.t)+' · 完成 '+num(v.d)+'</div>':'<div class="dv">'+num(v.d)+'</div>')
+    +'</div>';});
+  h+='</div></div>';
+  // 每日达成全览（板块3）
+  h+='<div class="tile"><div class="secT"><span class="dot"></span>08-09 当日达成全览</div><table class="tbl"><tr><th>姓名</th><th>毛利</th><th>手机</th><th>增值</th><th>办公</th><th>音频</th><th>HD</th><th>Care+</th></tr>';
+  NAMES.forEach(n=>{const t=TODAY[n]; h+='<tr><td>'+EMP[n].full+'</td><td class="'+(t.g?'g':'')+'">'+t.g+'</td><td>'+t.s+'</td><td>'+t.z+'</td><td>'+t.office+'</td><td>'+t.audio+'</td><td>'+t.hd+'</td><td>'+t.care+'</td></tr>';});
+  h+='</table></div>';
+  // 员工速览
+  h+='<div class="tile"><div class="secT"><span class="dot"></span>员工速览</div><div class="grid">';
+  NAMES.forEach(n=>{const m=EMP[n].m; const st=statusOf(rateOf(m.g[1],m.g[0]));
+    h+='<div class="cat" onclick="empModal(\''+n+'\')"><div class="n">'+EMP[n].full+'</div>'
+    +ringHtml(rateOf(m.g[1],m.g[0]), st)
+    +'<div class="dv">毛利 '+num(m.g[1])+' / '+num(m.g[0])+'</div>'+tag(st)+'</div>';});
+  h+='</div></div>';
+  em.innerHTML=h;
 }
 
-// ===== MODAL (EMPLOYEE) =====
-function openEmpModal(empName){
-  const dates=D.dates;const vals=dates.map(d=>(D.rows[empName][d]||{}).li||0);
-  const total=vals.reduce((a,b)=>a+b,0);const cnt=vals.filter(v=>v>0).length;
-  const col=EMP_COLORS[D.emps.indexOf(empName)%EMP_COLORS.length]||'#4F7DF7';
-  document.getElementById('modalTitle').textContent=empName+' · 日度毛利趋势';
-  document.getElementById('modalSummary').innerHTML=
-    `<div class="ms-item">累计 <span class="ms-val">¥${fmtN(total)}</span></div>`+
-    `<div class="ms-item">出勤 <span class="ms-val">${cnt}天</span></div>`+
-    `<div class="ms-item">日均 <span class="ms-val">¥${fmtN(cnt?total/cnt:0)}</span></div>`+
-    `<div class="ms-item">最高单日 <span class="ms-val">¥${fmtN(Math.max(...vals))}</span></div>`;
-  document.getElementById('modal').classList.add('show');
-  requestAnimationFrame(()=>drawChart(dates,vals,col));
+// ==================== 员工视角 ====================
+function renderEmp(){
+  const em=document.getElementById('viewEmp');
+  if(curEmp===0){renderEmpAll();return;}
+  const k=NAMES[curEmp-1];
+  const m=EMP[k].m;
+  const v=VAS[k];
+  const td=TODAY[k];
+  const dl=DAILY[k];
+  const mr = rateOf(m.g[1],m.g[0]);
+  const avaCls = mr!=null&&mr<LOW?'bad':(mr!=null&&mr>=TP*0.9?'ok':'');
+  let h='';
+  h+='<div class="tile"><div class="emp-head"><div class="emp-ava '+avaCls+'">'+EMP[k].full[0]+'</div><div><div class="emp-name">'+EMP[k].full+' 的看板</div><div class="emp-tag">'+tag(statusOf(rateOf(m.g[1],m.g[0])))+' · 毛利完成率 '+pct(rateOf(m.g[1],m.g[0]))+'</div></div></div></div>';
+  // 今日必做
+  h+='<div class="tile"><div class="secT"><span class="dot"></span>今日必做（今日任务缺口）</div>';
+  const dls=[
+    ['手机',dl.s],['毛利',dl.g],['增值',dl.z],['智慧办公',dl.office],['音频穿戴',dl.audio],['HD',dl.hd],['Care+',dl.care],['回收',dl.ret],['贴膜',dl.film],['电信积分',dl.tel],['滞销',dl.slow]
+  ];
+  dls.forEach(d=>{if(d[1]&&d[1]<0)h+='<div class="alert danger"><b>'+d[0]+'：</b>今日还差 '+num(Math.abs(d[1]))+'</div>';else if(d[1]&&d[1]>0)h+='<div class="alert ok"><b>'+d[0]+'：</b>今日已完成 '+num(d[1])+'</div>';});
+  if(!dls.some(d=>d[1]<0))h+='<div class="alert ok"><b>今日任务全部达成 ✔</b></div>';
+  h+='</div>';
+  // 业绩考核达成
+  h+='<div class="tile"><div class="secT"><span class="dot"></span>业绩考核达成</div><div class="grid">';
+  CATS.forEach(c=>{const [t,d]=m[c.k]; if(t==null||t<=0)return; const r=d/t;
+    h+='<div class="cat"><div class="n">'+c.n+'</div>'+ringHtml(r,statusOf(r))+'<div class="dv">'+fmt(d)+'/'+fmt(t)+'</div>'
+      +'<div class="g" style="color:'+(d<t?'var(--red)':'var(--green)')+'">'+(d<t?'缺 '+num(t-d):'超 '+num(d-t))+'</div>'+tag(statusOf(r))+'</div>';});
+  h+='</div></div>';
+  // 全科生/增值
+  h+='<div class="tile"><div class="secT"><span class="dot"></span>全科生 · 增值 · 考核项</div><div class="grid">';
+  // 任务/完成型
+  const vasC=[
+    ['电信积分',v.tel[0],v.tel[1]],['摄影课',v.photo[0],v.photo[1]],['考核机型',v.model[0],v.model[1]],['增值',v.zeng[0],v.zeng[1]]
+  ];
+  vasC.forEach(x=>{
+    const [n,t,d]=x;
+    if(t==null){h+='<div class="cat"><div class="n">'+n+'</div>'+ringHtml(0,{t:'未分配',c:'late'})+'<div class="dv">完成 '+num(d)+'</div>'+tag({t:'未分配',c:'late'})+'</div>';return;}
+    const rr = (t&&t>0)? d/t : 0;
+    const st=statusOf(rr);
+    h+='<div class="cat"><div class="n">'+n+'</div>'+ringHtml(rr,st)+'<div class="dv">'+(t>0? num(d)+'/'+num(t):'-')+'</div>'+tag(st)+'</div>';
+  });
+  // 搭售率型（显示实际比率，不套完成率状态）
+  const vasR=[['Care+搭售率',v.care],['回收率',v.ret],['贴膜率',v.film],['星联会员',v.star[2]?1:0]];
+  vasR.forEach(x=>{
+    const [n,rr]=x;
+    h+='<div class="cat"><div class="n">'+n+'</div>'+ringHtml(rr,statusOf(rr))+'<div class="dv">'+pct(rr)+'</div>'+tag(statusOf(rr))+'</div>';
+  });
+  h+='</div></div>';
+  // 今日达成
+  h+='<div class="tile"><div class="secT"><span class="dot"></span>今日达成（08-09）</div><table class="tbl"><tr><th>毛利</th><th>手机</th><th>增值</th><th>办公</th><th>音频</th><th>HD</th><th>Care+</th><th>会员</th></tr>'
+    +'<tr><td>'+td.g+'</td><td>'+td.s+'</td><td>'+td.z+'</td><td>'+td.office+'</td><td>'+td.audio+'</td><td>'+td.hd+'</td><td>'+td.care+'</td><td>'+td.star1+'</td></tr></table></div>';
+  em.innerHTML=h;
+}
+function renderEmpAll(){
+  const em=document.getElementById('viewEmp');
+  let h='<div class="tile"><div class="secT"><span class="dot"></span>全员速览 · 点击查看个人详情</div><div class="grid">';
+  NAMES.forEach(n=>{const m=EMP[n].m; const r=rateOf(m.g[1],m.g[0]); const st=statusOf(r);
+    h+='<div class="cat" onclick="pickEmp('+(NAMES.indexOf(n)+1)+')"><div class="n">'+EMP[n].full+'</div>'+ringHtml(r,st)+'<div class="dv">毛利 '+fmt(m.g[1])+'</div>'+tag(st)+'</div>';});
+  h+='</div></div>';
+  em.innerHTML=h;
 }
 
+// ==================== 模态框 ====================
+function catModal(n, rate, task, done, unit){
+  const st=statusOf(rate); const col=st.c==='done'?'#2DB673':st.c==='ahead'?'#7382F0':st.c==='on'?'#5A8AFF':st.c==='bad'?'#EF5350':'#FF9F43';
+  document.getElementById('modalBox').innerHTML='<h3>'+n+' <span class="tag tag-'+st.c+'">'+st.t+'</span></h3>'
+    +'<div class="mrow"><div class="lbl"><span>任务</span><b>'+num(task,unit)+'</b></div></div>'
+    +'<div class="mrow"><div class="lbl"><span>完成</span><b>'+num(done,unit)+'</b></div></div>'
+    +'<div class="mrow"><div class="lbl"><span>完成率</span><b style="color:'+col+'">'+pct(rate)+'</b></div><div class="mbar"><i style="width:'+(rate*100)+'%;background:'+col+'"></i></div></div>'
+    +'<div class="mrow"><div class="lbl"><span>缺口</span><b style="color:var(--red)">'+num(Math.abs(task-done),unit)+'</b></div></div>'
+    +'<p class="hint">判定基准：时间进度 '+pct(TP)+'</p>';
+  document.getElementById('modal').classList.add('show');
+}
+function catModalX(){}
+function catModalEmpty(){}
 function closeModal(){document.getElementById('modal').classList.remove('show');}
-document.getElementById('modal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal();});
-
-function drawChart(dates,vals,strokeColor){
-  const canvas=document.getElementById('modalChart');
-  const dpr=window.devicePixelRatio||1;const w=canvas.clientWidth,h=canvas.clientHeight||200;
-  canvas.width=w*dpr;canvas.height=h*dpr;const ctx=canvas.getContext('2d');ctx.scale(dpr,dpr);
-  const pad={t:20,r:16,b:28,l:52};const cw=w-pad.l-pad.r,ch=h-pad.t-pad.b;
-  const maxV=Math.max(...vals,1)*1.2;
-  ctx.strokeStyle='#F0F1F5';ctx.lineWidth=1;
-  for(let i=0;i<4;i++){const y=pad.t+ch*i/3;ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(w-pad.r,y);ctx.stroke();}
-  ctx.fillStyle='#94a3b8';ctx.font='10px -apple-system,sans-serif';ctx.textAlign='center';
-  dates.forEach((d,i)=>{const x=dates.length===1?pad.l+cw/2:pad.l+cw*i/(dates.length-1);ctx.fillText(d.slice(3),x,h-4);});
-  ctx.textAlign='right';
-  for(let i=0;i<4;i++){const v=Math.round(maxV*(3-i)/3);const y=pad.t+ch*i/3;ctx.fillText(v>=1000?(v/1000).toFixed(1)+'k':v,pad.l-8,y+4);}
-  const pts=vals.map((v,i)=>{const x=vals.length===1?pad.l+cw/2:pad.l+cw*i/(vals.length-1);const y=pad.t+ch-ch*v/maxV;return{x,y};});
-  ctx.beginPath();ctx.moveTo(pts[0].x,pad.t+ch);pts.forEach(p=>ctx.lineTo(p.x,p.y));
-  ctx.lineTo(pts[pts.length-1].x,pad.t+ch);ctx.closePath();ctx.globalAlpha=.08;ctx.fillStyle=strokeColor;ctx.fill();ctx.globalAlpha=1;
-  ctx.beginPath();pts.forEach((p,i)=>i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y));
-  ctx.strokeStyle=strokeColor;ctx.lineWidth=2.5;ctx.lineJoin='round';ctx.lineCap='round';ctx.stroke();
-  pts.forEach(p=>{ctx.beginPath();ctx.arc(p.x,p.y,3.5,0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();ctx.strokeStyle=strokeColor;ctx.lineWidth=2;ctx.stroke();});
-}
-
-// ===== SHARE =====
-function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2000);}
-function shareThis(el){
-  const card=el.closest('.kpi,.cat,.emp-card')||el.parentElement;
-  const text=card?card.textContent.replace(/\s+/g,' ').trim().slice(0,80):'看板数据';
-  if(navigator.clipboard)navigator.clipboard.writeText(text).then(()=>showToast('已复制，可粘贴到微信群'));
-  else showToast('已复制数据');
-}
-function shareSection(name){showToast(`${name}数据已准备分享`);}
-
-// ===== URL VIEW PARAM =====
-function checkUrlView(){
-  const p=new URLSearchParams(location.search);const v=p.get('view');
-  if(v&&D.emps.includes(v)){curView=v;
-    document.querySelectorAll('.view-btn').forEach(b=>{b.classList.toggle('active',b.dataset.view===v);});
-  }
-}
-
-// ===== INIT =====
-checkUrlView();
-
-// Dynamic KPI from D
-(function(){
-  let totalLi=0,totalXj=0,totalCnt=0,totalSj=0;
-  D.emps.forEach(e=>D.dates.forEach(d=>{
-    const c=D.rows[e][d]||{};totalLi+=c.li||0;totalXj+=c.xj||0;totalCnt+=c.cnt||0;totalSj+=c.sj||0;
-  }));
-  const targetLi=205000;
-  const pct=Math.round(totalLi/targetLi*100);
-  // Update KPI DOM
-  const kpis=document.querySelectorAll('.kpi');
-  kpis[0].querySelector('.k-val').dataset.count=Math.round(totalLi);
-  kpis[0].querySelector('.k-sub').textContent='完成率 '+pct+'%';
-  kpis[0].querySelector('.k-sub').className='k-sub '+(pct<50?'red':'green');
-  const activeDays=D.dates.filter(d=>D.emps.some(e=>(D.rows[e][d]||{}).cnt>0)).length||1;
-  kpis[1].querySelector('.k-val').dataset.count=Math.round(totalXj);
-  kpis[1].querySelector('.k-sub').textContent='日均 ¥'+fmtN(totalXj/activeDays);
-  kpis[2].querySelector('.k-val').dataset.count=Math.round(totalCnt);
-  kpis[2].querySelector('.k-sub').textContent='手机 '+totalSj+'台';
-})();
-
-renderAlerts();
-renderForecast();
-renderCats();
-renderDaily();
-renderEmps();
-initObserver();
-
-// animate KPI numbers
-document.querySelectorAll('.k-val[data-count]').forEach(el=>{
-  const t=parseInt(el.dataset.count);const pre=el.textContent.startsWith('¥')?'¥':'';
-  animateCount(el,t,pre);
-});
-
-// animate time progress
-(function(){
-  const now=new Date();const day=now.getDate();const pct=Math.round(day/31*100);
-  setTimeout(()=>{document.getElementById('timePct').textContent=pct+'%';document.getElementById('timeBar').style.width=pct+'%';
-    document.getElementById('timeLab').textContent='时间进度 '+day+'/31天';},300);
-})();
+go('emp');
 </script>
 </body>
 </html>
