@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>华为·李家村万达店 — 业绩考核看板 v7</title>
+<title>华为·李家村万达店 — 业绩考核看板 v7.1</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;}
 :root{--bg:#F2F6FA;--card:#fff;--primary:#7382F0;--primary2:#5A8AFF;--green:#2DB673;--orange:#FF9F43;--red:#EF5350;--gray:#8A94A6;--dark:#26314D;}
@@ -80,7 +80,7 @@ body{background:var(--bg);color:#26314D;padding-bottom:60px;}
 <body>
 <div class="hd">
   <div class="t">华为·李家村万达店 — 业绩考核看板</div>
-  <div class="meta">数据截至 8/9 · 时间进度 <b>29.0%</b> · 版本 v7</div>
+  <div class="meta">数据截至 8/9 · 时间进度 <b>29.0%</b> · 版本 v7.1</div>
   <div class="seg">
     <button id="segEmp" class="on" onclick="go('emp')">👨‍💼 员工视角</button>
     <button id="segShop" onclick="go('shop')">🏪 门店视角</button>
@@ -209,8 +209,8 @@ function vasCard(name, task, done, gap, rate, opts){
   opts=opts||{}; const isPct=!!opts.pct, unit=opts.unit||'';
   const fmtV=(x)=> isPct? (x*100).toFixed(1)+'%' : num(x);
   if(task==null){
-    if(done==null) return '<div class="cat"><div class="n">'+name+'</div>'+ringHtml(null,{t:'未分配',c:'late'})+'<div class="dv">暂无数据</div>'+tag({t:'未分配',c:'late'})+'</div>';
-    return '<div class="cat"><div class="n">'+name+'</div>'+ringHtml(null,{t:'无目标',c:'late'})+'<div class="dv">完成 '+num(done,unit)+'</div>'+tag({t:'无目标',c:'late'})+'</div>';
+    if(done==null) return '<div class="cat"><div class="n">'+name+'</div>'+ringHtml(null,{t:'未分配',c:'gray'})+'<div class="dv">暂无数据</div>'+tag({t:'未分配',c:'gray'})+'</div>';
+    return '<div class="cat"><div class="n">'+name+'</div>'+ringHtml(null,{t:'无目标',c:'gray'})+'<div class="dv">完成 '+num(done,unit)+'</div>'+tag({t:'无目标',c:'gray'})+'</div>';
   }
   const st=statusOf(rate);
   const g = gap!=null? gap : (done-task);
