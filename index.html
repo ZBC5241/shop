@@ -48,10 +48,8 @@ body{background:var(--bg);color:#26314D;padding-bottom:60px;}
 .tbl td.r{color:var(--red);font-weight:700;}
 .tag{display:inline-block;padding:2px 9px;border-radius:12px;font-size:11px;font-weight:700;color:#fff;}
 .tag-done{background:var(--green);}
-.tag-ahead{background:var(--primary);}
-.tag-on{background:#5A8AFF;}
-.tag-late{background:var(--orange);}
-.tag-bad{background:var(--red);animation:pulse 1.4s infinite;}
+.tag-late{background:var(--red);}
+.tag-gray{background:var(--gray);}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
 .emp-head{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
 .emp-ava{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;}
@@ -116,11 +114,8 @@ const AHEAD = TP*1.1;  // 31.9% 超进度
 const LOW   = TP*0.5;  // 14.5% 严重落后
 
 function statusOf(rate){
-  if(rate==null||isNaN(rate)) return {t:'未分配',c:'late'};
-  if(rate>=1) return {t:'已达成',c:'done'};
-  if(rate>=AHEAD) return {t:'超进度',c:'ahead'};
-  if(rate>=TP*0.9) return {t:'在进度',c:'on'};
-  if(rate<LOW) return {t:'严重落后',c:'bad'};
+  if(rate==null||isNaN(rate)) return {t:'未分配',c:'gray'};
+  if(rate>=TP) return {t:'在进度',c:'done'};
   return {t:'不在进度',c:'late'};
 }
 // 安全除法：任务为null/0时返回null
