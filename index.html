@@ -82,7 +82,7 @@ body{background:var(--bg);color:#26314D;padding-bottom:60px;}
 <body>
 <div class="hd">
   <div class="t">华为·李家村万达店 — 业绩考核看板</div>
-  <div class="meta">数据截至 8/8 · 时间进度 <b>25.8%</b> · 版本 v7</div>
+  <div class="meta">数据截至 8/9 · 时间进度 <b>29.0%</b> · 版本 v7</div>
   <div class="seg">
     <button id="segEmp" class="on" onclick="go('emp')">👨‍💼 员工视角</button>
     <button id="segShop" onclick="go('shop')">🏪 门店视角</button>
@@ -107,13 +107,13 @@ body{background:var(--bg);color:#26314D;padding-bottom:60px;}
   <div class="modal-box" id="modalBox"></div>
 </div>
 
-<div class="foot">纯原生 · 零外部依赖 · 双击即用 · 数据快照 8/9 重制</div>
+  <div class="foot">纯原生 · 零外部依赖 · 双击即用 · 数据截至 8/9 · 时间进度 29.0%</div>
 
 <script>
-// ===== 时间进度 =====
-const TP = 0.258;      // 8/8: 25.8%
-const AHEAD = TP*1.1;  // 28.4% 超进度
-const LOW   = TP*0.5;  // 12.9% 严重落后
+// ===== 时间进度（按当前最新日期：8/9 → 9/31）=====
+const TP = 0.2903;     // 8/9: 9/31 ≈ 29.03%
+const AHEAD = TP*1.1;  // 31.9% 超进度
+const LOW   = TP*0.5;  // 14.5% 严重落后
 
 function statusOf(rate){
   if(rate==null||isNaN(rate)) return {t:'未分配',c:'late'};
@@ -164,13 +164,13 @@ const EMP = {
  ccl:{full:'陈超磊', m:{g:[52000,11316.64],s:[42,10],pc:[4,1],pad:[9,2],wear:[25,5],au:[10,2],hd:[1,0],office:[13,3],audio:[35,7]}},
  zbc:{full:'张博晨', m:{g:[null,958.15],s:[null,null],pc:[null,null],pad:[null,null],wear:[null,null],au:[null,null],hd:[null,null],office:[null,null],audio:[null,null]}}
 };
-// 板块2 增值/全科生每人：键对应 CATS 之外指标
+// 板块2 全科生/增值（取值严格对齐用户发的全科生考核表 + 门店任务进度表）
 const VAS = {
- sll:{tel:[150,64],care:0.111,ret:0.333,film:0.167,photo:[1,0],model:[3,0],zeng:[14250,1346.56],star:[1,0,1]},
- ylh:{tel:[150,0],care:0.10,ret:0.40,film:0.944,photo:[1,0],model:[3,0],zeng:[14250,3436.98],star:[1,0,1]},
- lz:{tel:[150,0],care:0.625,ret:0,film:0.50,photo:[1,0],model:[3,0],zeng:[14250,3257.54],star:[3,2,5]},
- ccl:{tel:[150,0],care:0.40,ret:0.30,film:0.778,photo:[1,0],model:[3,0],zeng:[14250,2481.71],star:[2,0,2]},
- zbc:{tel:[null,null],care:0,ret:0,film:0,photo:[null,null],model:[null,null],zeng:[null,958.15],star:[1,0,1]}
+  sll:{tel:{task:150,done:64,gap:-86,rate:0.427},care:{task:0.30,done:0.111,gap:-0.189,rate:0.111},ret:{task:0.20,done:0.333,gap:0.133,rate:0.333},film:{task:0.50,done:0.167,gap:-0.333,rate:0.167},photo:[1,0],model:[3,0],zeng:[14250,1346.56],star:[1,0,1]},
+  ylh:{tel:{task:150,done:0,gap:-150,rate:0},care:{task:0.30,done:0.10,gap:-0.20,rate:0.10},ret:{task:0.20,done:0.40,gap:0.20,rate:0.40},film:{task:0.50,done:0.944,gap:0.444,rate:0.944},photo:[1,0],model:[3,0],zeng:[14250,3436.98],star:[1,0,1]},
+  lz:{tel:{task:150,done:0,gap:-150,rate:0},care:{task:0.30,done:0.625,gap:0.325,rate:0.625},ret:{task:0.20,done:0,gap:-0.20,rate:0},film:{task:0.50,done:0.50,gap:0,rate:0.50},photo:[1,0],model:[3,0],zeng:[14250,3257.54],star:[3,2,5]},
+  ccl:{tel:{task:150,done:0,gap:-150,rate:0},care:{task:0.30,done:0.30,gap:0,rate:0.30},ret:{task:0.20,done:0.30,gap:0.10,rate:0.30},film:{task:0.50,done:0.933,gap:0.433,rate:0.933},photo:[1,0],model:[3,0],zeng:[14250,2481.71],star:[2,0,2]},
+  zbc:{tel:{task:null,done:null},care:{task:null,done:null},ret:{task:null,done:null},film:{task:null,done:null},photo:[null,null],model:[null,null],zeng:[null,958.15],star:[1,0,1]}
 };
 // 08-09 当日达成（板块3）
 const TODAY = {
@@ -195,16 +195,37 @@ function go(v){curView=v;document.getElementById('segEmp').classList.toggle('on'
 function pickEmp(i){curEmp=i;document.querySelectorAll('#pickBar button').forEach(b=>b.classList.toggle('on',parseInt(b.dataset.e)===i));renderEmp();}
 
 // ==================== 通用组件 ====================
+// 达成配色：二态，基于时间进度（≥TP绿色，<TP红色）
+function progColor(rate){
+  if(rate==null) return '#8A94A6';
+  return rate>=TP ? '#2DB673' : '#EF5350';
+}
 function ringHtml(rate, st){
   const r = rate==null?0:Math.min(rate,1);
   const circ = 2*Math.PI*33;
-  const col = st.c==='done'?'#2DB673':st.c==='ahead'?'#7382F0':st.c==='on'?'#5A8AFF':st.c==='bad'?'#EF5350':'#FF9F43';
+  const col = progColor(rate);
   return '<div class="ring">'
     +'<svg width="74" height="74"><circle cx="37" cy="37" r="33" fill="none" stroke="#e8ecf5" stroke-width="8"/>'
     +'<circle cx="37" cy="37" r="33" fill="none" stroke="'+col+'" stroke-width="8" stroke-linecap="round" stroke-dasharray="'+circ+'" stroke-dashoffset="'+(circ*(1-r))+'" transform="rotate(-90 37 37)"/></svg>'
     +'<div class="pct" style="color:'+col+'">'+pct(rate)+'</div></div>';
 }
 function kcard(k, v, sub){return '<div class="kcard"><div class="k">'+k+'</div><div class="v">'+v+'</div><div class="sub">'+sub+'</div></div>';}
+function vasCard(name, task, done, gap, rate, opts){
+  opts=opts||{}; const isPct=!!opts.pct, unit=opts.unit||'';
+  const fmtV=(x)=> isPct? (x*100).toFixed(1)+'%' : num(x);
+  if(task==null){
+    if(done==null) return '<div class="cat"><div class="n">'+name+'</div>'+ringHtml(null,{t:'未分配',c:'late'})+'<div class="dv">暂无数据</div>'+tag({t:'未分配',c:'late'})+'</div>';
+    return '<div class="cat"><div class="n">'+name+'</div>'+ringHtml(null,{t:'无目标',c:'late'})+'<div class="dv">完成 '+num(done,unit)+'</div>'+tag({t:'无目标',c:'late'})+'</div>';
+  }
+  const st=statusOf(rate);
+  const g = gap!=null? gap : (done-task);
+  const gapStr = isPct ? (g>=0?'超 ':'差 ')+(Math.abs(g)*100).toFixed(1)+'pp' : (g>=0?'超 ':'缺 ')+num(Math.abs(g),unit);
+  return '<div class="cat"><div class="n">'+name+'</div>'
+    +ringHtml(rate,st)
+    +'<div class="dv">任务 '+fmtV(task)+' · 完成 '+fmtV(done)+'</div>'
+    +'<div class="g" style="color:'+(g>=0?'var(--green)':'var(--red)')+'">'+gapStr+'</div>'
+    +tag(st)+'</div>';
+}
 function catCard(n, unit, t, d, rate, col){
   const st=statusOf(rate);
   const gap = t - d;
@@ -248,22 +269,17 @@ function renderShop(){
   h+='</div></div>';
   // 全科生/增值（门店级）
   h+='<div class="tile"><div class="secT"><span class="dot"></span>全科生 / 增值 / 考核项（门店级）</div><div class="grid">';
-  const svas = [
-    {n:'电信积分', t:600, d:64, u:'', r:0.107, col:'c2'},
-    {n:'Care+搭售率', t:null, d:null, u:'', r:0.324, col:'c3'},
-    {n:'回收搭售率', t:null, d:null, u:'', r:0.297, col:'c4'},
-    {n:'贴膜率', t:null, d:null, u:'', r:0.5375, col:'c1'},
-    {n:'摄影课', t:4, d:4, u:'节', r:1, col:'c2'},
-    {n:'考核机型', t:12, d:2, u:'台', r:0.167, col:'c3'},
-    {n:'乐回收', t:null, d:1177, u:'单', r:null, col:'c4'},
-    {n:'太力回收', t:null, d:983, u:'元', r:null, col:'c1'},
-    {n:'增值', t:57000, d:11480.94, u:'', r:0.201, col:'c2'},
+  const svas=[
+    {n:'电信积分', task:600, done:64, gap:-536, rate:0.107},
+    {n:'会员搭售率', task:0.30, done:0.297, gap:-0.003, rate:0.297, pct:true},
+    {n:'回收搭售率', task:0.20, done:0.297, gap:0.097, rate:0.297, pct:true},
+    {n:'贴膜率', task:0.50, done:0.558, gap:0.058, rate:0.558, pct:true},
+    {n:'考核机型', task:12, done:2, gap:-10, rate:0.167},
+    {n:'乐回收', task:null, done:1177, rate:null, unit:'单'},
+    {n:'太力回收', task:null, done:983, rate:null, unit:'元'},
+    {n:'增值', task:57000, done:11480.94, gap:-45519.06, rate:0.201},
   ];
-  svas.forEach(v=>{h+='<div class="cat" style="background:#f8faff">'
-    +'<div class="n">'+v.n+'</div>'
-    +'<div class="ring"><div class="pct">'+pct(v.r)+'</div></div>'
-    +(v.t!=null?'<div class="dv">任务 '+num(v.t)+' · 完成 '+num(v.d)+'</div>':'<div class="dv">'+num(v.d)+'</div>')
-    +'</div>';});
+  svas.forEach(v=>{h+=vasCard(v.n,v.task,v.done,v.gap,v.rate,{pct:v.pct,unit:v.unit});});
   h+='</div></div>';
   // 每日达成全览（板块3）
   h+='<div class="tile"><div class="secT"><span class="dot"></span>08-09 当日达成全览</div><table class="tbl"><tr><th>姓名</th><th>毛利</th><th>手机</th><th>增值</th><th>办公</th><th>音频</th><th>HD</th><th>Care+</th></tr>';
@@ -306,25 +322,16 @@ function renderEmp(){
     h+='<div class="cat"><div class="n">'+c.n+'</div>'+ringHtml(r,statusOf(r))+'<div class="dv">'+fmt(d)+'/'+fmt(t)+'</div>'
       +'<div class="g" style="color:'+(d<t?'var(--red)':'var(--green)')+'">'+(d<t?'缺 '+num(t-d):'超 '+num(d-t))+'</div>'+tag(statusOf(r))+'</div>';});
   h+='</div></div>';
-  // 全科生/增值
+  // 全科生/增值（取值对齐用户发的全科生考核表：任务/完成/缺口/完成率，状态对比时间进度）
   h+='<div class="tile"><div class="secT"><span class="dot"></span>全科生 · 增值 · 考核项</div><div class="grid">';
-  // 任务/完成型
   const vasC=[
-    ['电信积分',v.tel[0],v.tel[1]],['摄影课',v.photo[0],v.photo[1]],['考核机型',v.model[0],v.model[1]],['增值',v.zeng[0],v.zeng[1]]
+    ['电信积分', v.tel.task, v.tel.done, v.tel.gap, v.tel.rate, {}],
+    ['考核机型', v.model[0], v.model[1], null, v.model[1]/v.model[0], {}],
+    ['增值', v.zeng[0], v.zeng[1], null, v.zeng[1]/v.zeng[0], {}],
   ];
-  vasC.forEach(x=>{
-    const [n,t,d]=x;
-    if(t==null){h+='<div class="cat"><div class="n">'+n+'</div>'+ringHtml(0,{t:'未分配',c:'late'})+'<div class="dv">完成 '+num(d)+'</div>'+tag({t:'未分配',c:'late'})+'</div>';return;}
-    const rr = (t&&t>0)? d/t : 0;
-    const st=statusOf(rr);
-    h+='<div class="cat"><div class="n">'+n+'</div>'+ringHtml(rr,st)+'<div class="dv">'+(t>0? num(d)+'/'+num(t):'-')+'</div>'+tag(st)+'</div>';
-  });
-  // 搭售率型（显示实际比率，不套完成率状态）
-  const vasR=[['Care+搭售率',v.care],['回收率',v.ret],['贴膜率',v.film],['星联会员',v.star[2]?1:0]];
-  vasR.forEach(x=>{
-    const [n,rr]=x;
-    h+='<div class="cat"><div class="n">'+n+'</div>'+ringHtml(rr,statusOf(rr))+'<div class="dv">'+pct(rr)+'</div>'+tag(statusOf(rr))+'</div>';
-  });
+  vasC.forEach(x=>{h+=vasCard(x[0],x[1],x[2],x[3],x[4],x[5]);});
+  const vasR=[['会员搭售率',v.care],['回收率',v.ret],['贴膜率',v.film]];
+  vasR.forEach(x=>{const o=x[1]; h+=vasCard(x[0],o.task,o.done,o.gap,o.rate,{pct:true});});
   h+='</div></div>';
   // 今日达成
   h+='<div class="tile"><div class="secT"><span class="dot"></span>今日达成（08-09）</div><table class="tbl"><tr><th>毛利</th><th>手机</th><th>增值</th><th>办公</th><th>音频</th><th>HD</th><th>Care+</th><th>会员</th></tr>'
@@ -342,7 +349,7 @@ function renderEmpAll(){
 
 // ==================== 模态框 ====================
 function catModal(n, rate, task, done, unit){
-  const st=statusOf(rate); const col=st.c==='done'?'#2DB673':st.c==='ahead'?'#7382F0':st.c==='on'?'#5A8AFF':st.c==='bad'?'#EF5350':'#FF9F43';
+  const st=statusOf(rate); const col=progColor(rate);
   document.getElementById('modalBox').innerHTML='<h3>'+n+' <span class="tag tag-'+st.c+'">'+st.t+'</span></h3>'
     +'<div class="mrow"><div class="lbl"><span>任务</span><b>'+num(task,unit)+'</b></div></div>'
     +'<div class="mrow"><div class="lbl"><span>完成</span><b>'+num(done,unit)+'</b></div></div>'
