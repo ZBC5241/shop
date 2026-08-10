@@ -1,0 +1,65 @@
+<!-- ===== 顶栏 ===== -->
+<header class="top">
+  <div class="top-row">
+    <div class="logo">华</div>
+    <div class="top-t">
+      <h1 id="storeName">华为李家村万达授权体验店</h1>
+      <p><span id="dataDate">--</span> · <span class="badge-live" id="liveTag">数据已更新</span></p>
+    </div>
+    <div class="icon-btn" id="btnRefresh" title="刷新">↻</div>
+    <div class="icon-btn" id="btnAdmin" title="更新数据">⚙</div>
+  </div>
+  <div class="tp">
+    <div class="tp-h">
+      <span>本月时间进度</span>
+      <span><b id="tpVal">--</b></span>
+    </div>
+    <div class="tp-bar"><div class="tp-fill" id="tpFill" style="width:0"></div></div>
+  </div>
+</header>
+
+<!-- ===== 视图容器 ===== -->
+<div id="app"></div>
+
+<!-- ===== 底部标签 ===== -->
+<nav class="tabs">
+  <div class="tab on" data-v="store"><i>🏪</i><span>门店</span></div>
+  <div class="tab" data-v="rank"><i>🏆</i><span>排行</span></div>
+  <div class="tab" data-v="person"><i>👤</i><span>个人</span></div>
+  <div class="tab" data-v="day"><i>📅</i><span>今日</span></div>
+</nav>
+
+<!-- ===== 管理弹层 ===== -->
+<div class="mask" id="adminMask">
+  <div class="sheet">
+    <div class="grab"></div>
+    <h3>更新数据</h3>
+    <p class="desc">
+      上传最新的《李家村X月任务进度.xlsx》，页面会自动解析并同步到线上，
+      店员刷新即可看到新数据。<br>
+      密钥只保存在你这台设备上，不会写进网页，别人看不到。
+    </p>
+
+    <div class="fld">
+      <label>GitHub 访问密钥</label>
+      <input type="password" id="tokenInput" placeholder="ghp_ 或 github_pat_ 开头" autocomplete="off">
+      <div class="hint">只需填一次，之后自动记住。留空则只在本机预览，不同步线上。</div>
+    </div>
+
+    <div class="fld">
+      <label>选择 Excel 文件</label>
+      <div class="drop" id="dropZone">
+        <div class="ic">📊</div>
+        <div class="t" id="dropTitle">点击选择文件</div>
+        <div class="s" id="dropSub">或把 .xlsx 拖到这里</div>
+      </div>
+      <input type="file" id="fileInput" accept=".xlsx,.xls" style="display:none">
+    </div>
+
+    <button class="btn btn-p" id="btnParse" disabled>解析并更新</button>
+    <button class="btn btn-g" id="btnClose">关闭</button>
+    <div class="log" id="logBox" style="display:none"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>

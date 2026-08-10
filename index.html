@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#0b0f16">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>李家村万达 · 业绩看板</title>
+<style>
+:root{
+  --bg:#0b0f16; --bg2:#111722; --card:#151c28; --card2:#1b2433;
+  --line:rgba(255,255,255,.07); --line2:rgba(255,255,255,.13);
+  --tx:#e8edf5; --tx2:#95a3b8; --tx3:#5f6e85;
+  --red:#e8443a; --redDim:rgba(232,68,58,.13);
+  --green:#22c55e; --greenDim:rgba(34,197,94,.13);
+  --blue:#3b82f6; --blueDim:rgba(59,130,246,.13);
+  --amber:#f59e0b; --amberDim:rgba(245,158,11,.13);
+  --gray:#64748b;
+  --r:14px;
+  --safeT:env(safe-area-inset-top,0px);
+  --safeB:env(safe-area-inset-bottom,0px);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--bg);color:var(--tx)}
+body{
+  font:400 14px/1.5 -apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue","Microsoft YaHei",sans-serif;
+  padding-bottom:calc(78px + var(--safeB));
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+.num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
+
+/* ============ 顶栏 ============ */
+.top{
+  position:sticky;top:0;z-index:60;
+  padding:calc(12px + var(--safeT)) 16px 12px;
+  background:linear-gradient(180deg,#0f1520 0%,#0d121b 100%);
+  border-bottom:1px solid var(--line);
+}
+.top-row{display:flex;align-items:center;gap:10px}
+.logo{
+  width:32px;height:32px;border-radius:9px;flex:0 0 auto;
+  background:linear-gradient(135deg,var(--red),#ff7a5c);
+  display:grid;place-items:center;font-size:15px;font-weight:800;color:#fff;
+  box-shadow:0 3px 12px rgba(232,68,58,.35);
+}
+.top-t{flex:1;min-width:0}
+.top-t h1{font-size:15px;font-weight:700;letter-spacing:.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top-t p{font-size:11px;color:var(--tx3);margin-top:2px}
+.icon-btn{
+  width:32px;height:32px;border-radius:9px;border:1px solid var(--line2);
+  background:rgba(255,255,255,.04);color:var(--tx2);
+  display:grid;place-items:center;cursor:pointer;flex:0 0 auto;font-size:14px;
+}
+.icon-btn:active{background:rgba(255,255,255,.1)}
+
+/* 时间进度条 */
+.tp{margin-top:11px}
+.tp-h{display:flex;justify-content:space-between;font-size:11px;color:var(--tx3);margin-bottom:5px}
+.tp-h b{color:var(--tx2);font-weight:600}
+.tp-bar{height:5px;border-radius:3px;background:rgba(255,255,255,.07);overflow:hidden;position:relative}
+.tp-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,#3b82f6,#60a5fa);transition:width .8s cubic-bezier(.22,1,.36,1)}
+
+/* ============ 标签栏 ============ */
+.tabs{
+  position:fixed;left:0;right:0;bottom:0;z-index:70;
+  display:flex;background:rgba(13,18,27,.94);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-top:1px solid var(--line);
+  padding-bottom:var(--safeB);
+}
+.tab{
+  flex:1;padding:9px 0 8px;text-align:center;cursor:pointer;
+  color:var(--tx3);transition:color .18s;
+}
+.tab i{display:block;font-size:19px;line-height:1.25;font-style:normal;filter:grayscale(1) opacity(.55);transition:.18s}
+.tab span{font-size:10px;font-weight:600;letter-spacing:.3px}
+.tab.on{color:var(--red)}
+.tab.on i{filter:none;transform:translateY(-1px)}
+
+/* ============ 通用 ============ */
+.wrap{padding:14px 14px 20px;animation:fade .3s ease both}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.sec{margin-bottom:18px}
+.sec-h{display:flex;align-items:center;gap:7px;margin-bottom:9px;padding-left:1px}
+.sec-h b{font-size:13px;font-weight:700;letter-spacing:.3px}
+.sec-h .bar{width:3px;height:13px;border-radius:2px;background:var(--red)}
+.sec-h .tail{margin-left:auto;font-size:11px;color:var(--tx3);font-weight:400}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r)}
+.empty{padding:26px 0;text-align:center;color:var(--tx3);font-size:12px}
+
+/* ============ 核心 KPI ============ */
+.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.kpi{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:12px 12px 11px;position:relative;overflow:hidden;
+}
+.kpi::after{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gray)}
+.kpi.s-done::after{background:var(--green)}
+.kpi.s-over::after{background:var(--blue)}
+.kpi.s-on::after{background:var(--amber)}
+.kpi.s-low::after{background:var(--red)}
+.kpi-l{font-size:11px;color:var(--tx3);display:flex;align-items:center;gap:5px}
+.kpi-v{font-size:21px;font-weight:800;margin:5px 0 3px;letter-spacing:-.4px}
+.kpi-s{font-size:10.5px;color:var(--tx3)}
+.kpi-r{
+  position:absolute;right:10px;top:10px;font-size:11px;font-weight:800;
+  padding:2px 6px;border-radius:6px;
+}
+.r-done{background:var(--greenDim);color:var(--green)}
+.r-over{background:var(--blueDim);color:var(--blue)}
+.r-on{background:var(--amberDim);color:var(--amber)}
+.r-low{background:var(--redDim);color:var(--red)}
+.r-na{background:rgba(100,116,139,.15);color:var(--gray)}
+.kpi-bar{height:3px;border-radius:2px;background:rgba(255,255,255,.06);margin-top:8px;overflow:hidden}
+.kpi-bar i{display:block;height:100%;border-radius:2px;transition:width .9s cubic-bezier(.22,1,.36,1)}
+.f-done{background:var(--green)} .f-over{background:var(--blue)}
+.f-on{background:var(--amber)} .f-low{background:var(--red)}
+
+/* ============ 品类行 ============ */
+.rows{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.row{padding:10px 12px;border-bottom:1px solid var(--line);position:relative}
+.row:last-child{border-bottom:none}
+.row-t{display:flex;align-items:baseline;gap:8px;margin-bottom:6px}
+.row-n{font-size:13px;font-weight:600;flex:0 0 auto}
+.row-v{font-size:12px;color:var(--tx2);margin-left:auto}
+.row-v b{color:var(--tx);font-weight:700;font-size:13.5px}
+.row-p{font-size:11px;font-weight:800;padding:1.5px 5px;border-radius:5px;flex:0 0 auto}
+.row-bar{height:4px;border-radius:2px;background:rgba(255,255,255,.06);overflow:hidden;position:relative}
+.row-bar i{display:block;height:100%;border-radius:2px;transition:width .9s cubic-bezier(.22,1,.36,1)}
+.row-bar .mk{position:absolute;top:-2px;bottom:-2px;width:1.5px;background:rgba(255,255,255,.45);border-radius:1px}
+.row-g{font-size:10.5px;color:var(--tx3);margin-top:5px;display:flex;justify-content:space-between}
+.row-g em{font-style:normal;color:var(--red);font-weight:600}
+.row.warn{background:linear-gradient(90deg,rgba(232,68,58,.07),transparent 60%)}
+
+/* ============ 排行 ============ */
+.chips{display:flex;gap:6px;overflow-x:auto;padding:2px 0 9px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{
+  flex:0 0 auto;padding:6px 13px;border-radius:16px;font-size:12px;font-weight:600;
+  background:var(--card);border:1px solid var(--line);color:var(--tx2);cursor:pointer;
+  transition:.16s;white-space:nowrap;
+}
+.chip.on{background:var(--red);border-color:var(--red);color:#fff;box-shadow:0 3px 10px rgba(232,68,58,.3)}
+.rk{
+  display:flex;align-items:center;gap:11px;padding:12px;margin-bottom:8px;
+  background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  position:relative;overflow:hidden;cursor:pointer;transition:.16s;
+}
+.rk:active{transform:scale(.985)}
+.rk-bg{position:absolute;left:0;top:0;bottom:0;opacity:.09;transition:width .9s cubic-bezier(.22,1,.36,1)}
+.rk-no{
+  width:26px;height:26px;border-radius:8px;display:grid;place-items:center;
+  font-size:13px;font-weight:800;flex:0 0 auto;background:rgba(255,255,255,.06);color:var(--tx3);
+  position:relative;z-index:1;
+}
+.rk-no.n1{background:linear-gradient(135deg,#f5c451,#e0a020);color:#3a2a00;box-shadow:0 2px 8px rgba(245,196,81,.3)}
+.rk-no.n2{background:linear-gradient(135deg,#cdd6e2,#9aa8bb);color:#232c38}
+.rk-no.n3{background:linear-gradient(135deg,#d9a273,#b57a49);color:#2e1c0c}
+.rk-m{flex:1;min-width:0;position:relative;z-index:1}
+.rk-n{font-size:14px;font-weight:700;display:flex;align-items:center;gap:6px}
+.rk-n .me{font-size:9.5px;font-weight:700;padding:1px 5px;border-radius:4px;background:var(--redDim);color:var(--red)}
+.rk-sub{font-size:11px;color:var(--tx3);margin-top:3px}
+.rk-r{text-align:right;flex:0 0 auto;position:relative;z-index:1}
+.rk-r .p{font-size:17px;font-weight:800;letter-spacing:-.3px}
+.rk-r .g{font-size:10.5px;color:var(--tx3);margin-top:2px}
+
+/* ============ 今日战报 ============ */
+.day-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.day{
+  background:var(--card);border:1px solid var(--line);border-radius:11px;
+  padding:9px 8px;text-align:center;
+}
+.day-l{font-size:10.5px;color:var(--tx3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.day-v{font-size:17px;font-weight:800;margin-top:3px;letter-spacing:-.3px}
+.day-g{font-size:10px;margin-top:2px;font-weight:600}
+.day.hit{border-color:rgba(34,197,94,.3);background:linear-gradient(180deg,rgba(34,197,94,.08),var(--card))}
+.day.miss .day-g{color:var(--red)}
+.day.ok .day-g{color:var(--green)}
+.day.zero .day-v{color:var(--tx3)}
+
+/* ============ QCS ============ */
+.q-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.q{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:11px}
+.q-l{font-size:11px;color:var(--tx3);margin-bottom:5px}
+.q-v{font-size:18px;font-weight:800;letter-spacing:-.3px}
+.q-v small{font-size:11px;font-weight:600;color:var(--tx3);margin-left:3px}
+.q-s{font-size:10.5px;color:var(--tx3);margin-top:4px;line-height:1.45}
+.q-s em{font-style:normal;font-weight:600}
+.q.wide{grid-column:span 2}
+
+/* ============ 弹层 ============ */
+.mask{
+  position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.65);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  display:none;align-items:flex-end;
+}
+.mask.on{display:flex;animation:fade .2s}
+.sheet{
+  width:100%;max-height:88vh;overflow-y:auto;background:var(--bg2);
+  border-radius:20px 20px 0 0;border-top:1px solid var(--line2);
+  padding:8px 18px calc(24px + var(--safeB));
+  animation:up .32s cubic-bezier(.22,1,.36,1);
+}
+@keyframes up{from{transform:translateY(100%)}to{transform:none}}
+.grab{width:34px;height:4px;border-radius:2px;background:var(--line2);margin:0 auto 14px}
+.sheet h3{font-size:16px;font-weight:700;margin-bottom:4px}
+.sheet .desc{font-size:12px;color:var(--tx3);line-height:1.6;margin-bottom:16px}
+.fld{margin-bottom:13px}
+.fld label{display:block;font-size:12px;color:var(--tx2);margin-bottom:6px;font-weight:600}
+.fld input[type=text],.fld input[type=password]{
+  width:100%;padding:11px 12px;border-radius:10px;font-size:13px;
+  background:var(--card);border:1px solid var(--line2);color:var(--tx);
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+.fld input:focus{outline:none;border-color:var(--red)}
+.fld .hint{font-size:11px;color:var(--tx3);margin-top:5px;line-height:1.5}
+.drop{
+  border:1.5px dashed var(--line2);border-radius:12px;padding:26px 14px;
+  text-align:center;cursor:pointer;transition:.18s;background:var(--card);
+}
+.drop:active,.drop.hover{border-color:var(--red);background:var(--redDim)}
+.drop .ic{font-size:30px;margin-bottom:7px}
+.drop .t{font-size:13px;font-weight:600}
+.drop .s{font-size:11px;color:var(--tx3);margin-top:4px}
+.btn{
+  width:100%;padding:13px;border-radius:11px;border:none;cursor:pointer;
+  font-size:14px;font-weight:700;transition:.16s;margin-top:6px;
+  font-family:inherit;
+}
+.btn-p{background:var(--red);color:#fff}
+.btn-p:active{background:#c93a31}
+.btn-p:disabled{background:#3a4152;color:var(--tx3);cursor:not-allowed}
+.btn-g{background:var(--card2);color:var(--tx2);border:1px solid var(--line2)}
+.log{
+  margin-top:12px;padding:11px;border-radius:10px;background:#0a0e15;
+  border:1px solid var(--line);font-size:11.5px;line-height:1.75;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  max-height:190px;overflow-y:auto;white-space:pre-wrap;word-break:break-all;
+}
+.log .ok{color:var(--green)} .log .er{color:var(--red)}
+.log .wa{color:var(--amber)} .log .in{color:var(--tx3)}
+
+/* ============ 其他 ============ */
+.foot{text-align:center;font-size:10.5px;color:var(--tx3);padding:14px 0 4px;line-height:1.7}
+.badge-live{
+  display:inline-flex;align-items:center;gap:4px;font-size:10px;
+  color:var(--green);font-weight:600;
+}
+.badge-live::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.toast{
+  position:fixed;left:50%;top:calc(50% - 20px);transform:translate(-50%,-50%);
+  background:rgba(20,26,37,.97);border:1px solid var(--line2);
+  padding:13px 22px;border-radius:12px;font-size:13px;z-index:300;
+  display:none;box-shadow:0 10px 40px rgba(0,0,0,.5);max-width:80vw;text-align:center;
+}
+.toast.on{display:block;animation:fade .2s}
+@media(min-width:640px){
+  .wrap{max-width:600px;margin:0 auto}
+  .top{max-width:600px;margin:0 auto}
+  .tabs{max-width:600px;left:50%;transform:translateX(-50%);border-radius:14px 14px 0 0}
+  .kpi-grid{grid-template-columns:repeat(4,1fr)}
+  .day-grid{grid-template-columns:repeat(5,1fr)}
+  .sheet{max-width:600px;margin:0 auto;border-radius:20px;align-self:center}
+  .mask.on{align-items:center}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== 顶栏 ===== -->
+<header class="top">
+  <div class="top-row">
+    <div class="logo">华</div>
+    <div class="top-t">
+      <h1 id="storeName">华为李家村万达授权体验店</h1>
+      <p><span id="dataDate">--</span> · <span class="badge-live" id="liveTag">数据已更新</span></p>
+    </div>
+    <div class="icon-btn" id="btnRefresh" title="刷新">↻</div>
+    <div class="icon-btn" id="btnAdmin" title="更新数据">⚙</div>
+  </div>
+  <div class="tp">
+    <div class="tp-h">
+      <span>本月时间进度</span>
+      <span><b id="tpVal">--</b></span>
+    </div>
+    <div class="tp-bar"><div class="tp-fill" id="tpFill" style="width:0"></div></div>
+  </div>
+</header>
+
+<!-- ===== 视图容器 ===== -->
+<div id="app"></div>
+
+<!-- ===== 底部标签 ===== -->
+<nav class="tabs">
+  <div class="tab on" data-v="store"><i>🏪</i><span>门店</span></div>
+  <div class="tab" data-v="rank"><i>🏆</i><span>排行</span></div>
+  <div class="tab" data-v="person"><i>👤</i><span>个人</span></div>
+  <div class="tab" data-v="day"><i>📅</i><span>今日</span></div>
+</nav>
+
+<!-- ===== 管理弹层 ===== -->
+<div class="mask" id="adminMask">
+  <div class="sheet">
+    <div class="grab"></div>
+    <h3>更新数据</h3>
+    <p class="desc">
+      上传最新的《李家村X月任务进度.xlsx》，页面会自动解析并同步到线上，
+      店员刷新即可看到新数据。<br>
+      密钥只保存在你这台设备上，不会写进网页，别人看不到。
+    </p>
+
+    <div class="fld">
+      <label>GitHub 访问密钥</label>
+      <input type="password" id="tokenInput" placeholder="ghp_ 或 github_pat_ 开头" autocomplete="off">
+      <div class="hint">只需填一次，之后自动记住。留空则只在本机预览，不同步线上。</div>
+    </div>
+
+    <div class="fld">
+      <label>选择 Excel 文件</label>
+      <div class="drop" id="dropZone">
+        <div class="ic">📊</div>
+        <div class="t" id="dropTitle">点击选择文件</div>
+        <div class="s" id="dropSub">或把 .xlsx 拖到这里</div>
+      </div>
+      <input type="file" id="fileInput" accept=".xlsx,.xls" style="display:none">
+    </div>
+
+    <button class="btn btn-p" id="btnParse" disabled>解析并更新</button>
+    <button class="btn btn-g" id="btnClose">关闭</button>
+    <div class="log" id="logBox" style="display:none"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ==========================================================
+   李家村万达 · 业绩看板
+   原则：只展示表格里的原值，不做任何二次计算
+   ========================================================== */
+
+const EMBEDDED_DATA = {"meta":{"storeName":"华为李家村万达授权体验店","date":"2026-08-09","dayTitle":"08-09达成","timeProgress":0.3225806451612903,"remainDays":18,"refDate":"2026-08-10","employees":["邵乐乐","杨丽华","李泽","陈超磊","张博晨"],"sourceFile":"yonyou_raw.tsv","sourceRows":170,"dayRows":18,"generatedAt":"2026-08-10 14:19:25"},"store":{"performance":{"毛利":{"task":205000.0,"done":40464.09,"gap":-164535.91,"rate":0.19738580487804877},"手机":{"task":170.0,"done":42.0,"gap":-128.0,"rate":0.24705882352941178},"PC":{"task":14.0,"done":1.0,"gap":-13.0,"rate":0.07142857142857142},"平板":{"task":34.0,"done":5.0,"gap":-29.0,"rate":0.14705882352941177},"穿戴":{"task":100.0,"done":39.0,"gap":-61.0,"rate":0.39},"音频":{"task":37.0,"done":5.0,"gap":-32.0,"rate":0.13513513513513514},"HD":{"task":2.0,"done":0.0,"gap":-2.0,"rate":0.0},"智慧办公":{"task":48.0,"done":6.0,"gap":-42.0,"rate":0.125},"音频穿戴":{"task":137.0,"done":44.0,"gap":-93.0,"rate":0.32116788321167883},"销额":{"task":1600000.0,"done":312692.34,"gap":-1287307.66,"rate":0.19543271250000002},"绩效":30.358203291678365},"qcs":{"电信积分":{"task":600.0,"done":64.0,"gap":-536.0,"rate":0.10666666666666667},"会员搭售率":{"terminal":42.0,"care":13.0,"gap":0.0,"rate":0.30952380952380953},"回收搭售率":{"orders":9.0,"gap":0.0,"rate":0.21428571428571427},"贴膜率":{"orders":44.0,"gap":23.0,"rate":0.5057471264367817},"考核机型":{"task":12.0,"done":2.0,"gap":-10.0},"乐回收":{"orders":7.0,"amount":0.0,"增值":711.0},"太力回收":{"orders":2.0,"amount":983.0,"增值":137.62},"增值":{"task":57000.0,"done":12725.18,"gap":-44274.82,"rate":0.22324877192982456},"健康度":{"coupon":17774.66,"ratio":0.4392699798759839,"grossMargin":0.12940544050423491,"增值率":0.04069552839062191},"星联会员":{"优享":8.0,"尊享":4.0,"合计":12.0}},"dailyDone":{"手机":5.0,"毛利":5684.4,"增值":1773.83,"智慧办公":1.0,"音频穿戴":6.0,"HD":0.0,"会员":2.0,"回收":0.0,"贴膜":1.0,"电信积分":0.0,"滞销":0.0,"优享/会员":0.0,"尊享/储值":2.0},"dailyGap":{"手机":-8.0,"毛利":-9196.0,"增值":-2515.0,"智慧办公":-4.0,"音频穿戴":-7.0,"HD":-2.0,"Care+":0.0,"回收":0.0,"贴膜":0.0,"电信积分":-32.0,"滞销":-4.0}},"people":{"邵乐乐":{"performance":{"毛利":{"task":50000.0,"done":4840.4800000000005,"gap":-45159.52,"rate":0.09680960000000001},"手机":{"task":43.0,"done":9.0,"gap":-34.0,"rate":0.20930232558139536},"PC":{"task":3.0,"done":0.0,"gap":-3.0,"rate":0.0},"平板":{"task":8.0,"done":0.0,"gap":-8.0,"rate":0.0},"穿戴":{"task":25.0,"done":21.0,"gap":-4.0,"rate":0.84},"音频":{"task":9.0,"done":0.0,"gap":-9.0,"rate":0.0},"HD":{"task":0.0,"done":0.0,"gap":0.0,"rate":1.0},"智慧办公":{"task":11.0,"done":0.0,"gap":-11.0,"rate":0.0},"音频穿戴":{"task":34.0,"done":21.0,"gap":-13.0,"rate":0.6176470588235294},"销额":{"task":400000.0,"done":40079.3,"gap":-359920.7,"rate":0.10019825},"绩效":null},"qcs":{"电信积分":{"task":150.0,"done":64.0,"gap":-86.0,"rate":0.4266666666666667},"会员搭售率":{"terminal":9.0,"care":1.0,"gap":-2.0,"rate":0.1111111111111111},"回收搭售率":{"orders":2.0,"gap":0.0,"rate":0.2222222222222222},"贴膜率":{"orders":5.0,"gap":-10.0,"rate":0.16666666666666666},"考核机型":{"task":3.0,"done":0.0,"gap":-3.0},"乐回收":{"orders":1.0,"amount":0.0,"增值":40.0},"太力回收":{"orders":1.0,"amount":663.0,"增值":92.82000000000001},"增值":{"task":14250.0,"done":1287.57,"gap":-12962.43,"rate":0.09035578947368421},"健康度":{"coupon":3491.7,"ratio":0.7213540805870491,"grossMargin":0.12077256838318035,"增值率":0.03212556107516847},"星联会员":{"优享":1.0,"尊享":0.0,"合计":1.0}},"dailyDone":{"手机":0.0,"毛利":0.0,"增值":0.0,"智慧办公":0.0,"音频穿戴":0.0,"HD":0.0,"会员":0.0,"回收":0.0,"贴膜":0.0,"电信积分":0.0,"滞销":0.0,"优享/会员":0.0,"尊享/储值":0.0},"dailyGap":{"手机":-2.0,"毛利":-2509.0,"增值":-721.0,"智慧办公":-1.0,"音频穿戴":-1.0,"HD":0.0,"Care+":-1.0,"回收":0.0,"贴膜":-1.0,"电信积分":-5.0,"滞销":-1.0}},"杨丽华":{"performance":{"毛利":{"task":51000.0,"done":13249.48,"gap":-37750.520000000004,"rate":0.2597937254901961},"手机":{"task":43.0,"done":13.0,"gap":-30.0,"rate":0.3023255813953488},"PC":{"task":3.0,"done":0.0,"gap":-3.0,"rate":0.0},"平板":{"task":8.0,"done":3.0,"gap":-5.0,"rate":0.375},"穿戴":{"task":25.0,"done":6.0,"gap":-19.0,"rate":0.24},"音频":{"task":9.0,"done":1.0,"gap":-8.0,"rate":0.1111111111111111},"HD":{"task":0.0,"done":0.0,"gap":0.0,"rate":1.0},"智慧办公":{"task":11.0,"done":3.0,"gap":-8.0,"rate":0.2727272727272727},"音频穿戴":{"task":34.0,"done":7.0,"gap":-27.0,"rate":0.20588235294117646},"销额":{"task":400000.0,"done":117998.02,"gap":-282001.98,"rate":0.29499505000000004},"绩效":30.6214790785363},"qcs":{"电信积分":{"task":150.0,"done":0.0,"gap":-150.0,"rate":0.0},"会员搭售率":{"terminal":13.0,"care":1.0,"gap":-3.0,"rate":0.07692307692307693},"回收搭售率":{"orders":3.0,"gap":0.0,"rate":0.23076923076923078},"贴膜率":{"orders":18.0,"gap":7.0,"rate":0.8181818181818182},"考核机型":{"task":3.0,"done":1.0,"gap":-2.0},"乐回收":{"orders":2.0,"amount":0.0,"增值":398.0},"太力回收":{"orders":1.0,"amount":320.0,"增值":44.800000000000004},"增值":{"task":14250.0,"done":4021.1600000000003,"gap":-10228.84,"rate":0.2821866666666667},"健康度":{"coupon":5440.98,"ratio":0.4106561163155082,"grossMargin":0.11228561292808133,"增值率":0.03407819893927034},"星联会员":{"优享":1.0,"尊享":1.0,"合计":2.0}},"dailyDone":{"手机":3.0,"毛利":2982.18,"增值":991.19,"智慧办公":0.0,"音频穿戴":2.0,"HD":0.0,"会员":0.0,"回收":0.0,"贴膜":1.0,"电信积分":0.0,"滞销":0.0,"优享/会员":0.0,"尊享/储值":1.0},"dailyGap":{"手机":-2.0,"毛利":-2098.0,"增值":-569.0,"智慧办公":-1.0,"音频穿戴":-2.0,"HD":0.0,"Care+":-1.0,"回收":0.0,"贴膜":1.0,"电信积分":-9.0,"滞销":-1.0}},"李泽":{"performance":{"毛利":{"task":52000.0,"done":10020.34,"gap":-41979.66,"rate":0.19269884615384616},"手机":{"task":42.0,"done":10.0,"gap":-32.0,"rate":0.23809523809523808},"PC":{"task":4.0,"done":0.0,"gap":-4.0,"rate":0.0},"平板":{"task":9.0,"done":0.0,"gap":-9.0,"rate":0.0},"穿戴":{"task":25.0,"done":7.0,"gap":-18.0,"rate":0.28},"音频":{"task":9.0,"done":2.0,"gap":-7.0,"rate":0.2222222222222222},"HD":{"task":1.0,"done":0.0,"gap":-1.0,"rate":0.0},"智慧办公":{"task":13.0,"done":0.0,"gap":-13.0,"rate":0.0},"音频穿戴":{"task":34.0,"done":9.0,"gap":-25.0,"rate":0.2647058823529412},"销额":{"task":400000.0,"done":66819.0,"gap":-333181.0,"rate":0.1670475},"绩效":27.6260782450631},"qcs":{"电信积分":{"task":150.0,"done":0.0,"gap":-150.0,"rate":0.0},"会员搭售率":{"terminal":10.0,"care":6.0,"gap":3.0,"rate":0.6},"回收搭售率":{"orders":0.0,"gap":-2.0,"rate":0.0},"贴膜率":{"orders":7.0,"gap":-2.0,"rate":0.4117647058823529},"考核机型":{"task":3.0,"done":1.0,"gap":-2.0},"乐回收":{"orders":0.0,"amount":0.0,"增值":0.0},"太力回收":{"orders":0.0,"amount":0.0,"增值":0.0},"增值":{"task":14250.0,"done":3976.5899999999997,"gap":-10273.41,"rate":0.279058947368421},"健康度":{"coupon":4119.0,"ratio":0.41106389603546384,"grossMargin":0.14996243583411903,"增值率":0.05951286310779867},"星联会员":{"优享":3.0,"尊享":3.0,"合计":6.0}},"dailyDone":{"手机":2.0,"毛利":2031.62,"增值":719.04,"智慧办公":0.0,"音频穿戴":2.0,"HD":0.0,"会员":1.0,"回收":0.0,"贴膜":0.0,"电信积分":0.0,"滞销":0.0,"优享/会员":0.0,"尊享/储值":1.0},"dailyGap":{"手机":-2.0,"毛利":-2333.0,"增值":-571.0,"智慧办公":-1.0,"音频穿戴":-2.0,"HD":-1.0,"Care+":1.0,"回收":-1.0,"贴膜":-1.0,"电信积分":-9.0,"滞销":-1.0}},"陈超磊":{"performance":{"毛利":{"task":52000.0,"done":11395.64,"gap":-40604.36,"rate":0.21914692307692307},"手机":{"task":42.0,"done":10.0,"gap":-32.0,"rate":0.23809523809523808},"PC":{"task":4.0,"done":1.0,"gap":-3.0,"rate":0.25},"平板":{"task":9.0,"done":2.0,"gap":-7.0,"rate":0.2222222222222222},"穿戴":{"task":25.0,"done":5.0,"gap":-20.0,"rate":0.2},"音频":{"task":10.0,"done":2.0,"gap":-8.0,"rate":0.2},"HD":{"task":1.0,"done":0.0,"gap":-1.0,"rate":0.0},"智慧办公":{"task":13.0,"done":3.0,"gap":-10.0,"rate":0.23076923076923078},"音频穿戴":{"task":35.0,"done":7.0,"gap":-28.0,"rate":0.2},"销额":{"task":400000.0,"done":86797.02,"gap":-313202.98,"rate":0.21699255},"绩效":32.8270525514357},"qcs":{"电信积分":{"task":150.0,"done":0.0,"gap":-150.0,"rate":0.0},"会员搭售率":{"terminal":10.0,"care":4.0,"gap":1.0,"rate":0.4},"回收搭售率":{"orders":3.0,"gap":1.0,"rate":0.3},"贴膜率":{"orders":14.0,"gap":5.0,"rate":0.7777777777777778},"考核机型":{"task":3.0,"done":0.0,"gap":-3.0},"乐回收":{"orders":3.0,"amount":0.0,"增值":273.0},"太力回收":{"orders":0.0,"amount":0.0,"增值":0.0},"增值":{"task":14250.0,"done":2481.71,"gap":-11768.29,"rate":0.17415508771929825},"健康度":{"coupon":4524.98,"ratio":0.39707993583510887,"grossMargin":0.13129068256029988,"增值率":0.02859211065080345},"星联会员":{"优享":2.0,"尊享":0.0,"合计":2.0}},"dailyDone":{"手机":0.0,"毛利":670.6,"增值":63.6,"智慧办公":1.0,"音频穿戴":2.0,"HD":0.0,"会员":1.0,"回收":0.0,"贴膜":0.0,"电信积分":0.0,"滞销":0.0,"优享/会员":0.0,"尊享/储值":0.0},"dailyGap":{"手机":-2.0,"毛利":-2256.0,"增值":-654.0,"智慧办公":-1.0,"音频穿戴":-2.0,"HD":-1.0,"Care+":1.0,"回收":1.0,"贴膜":1.0,"电信积分":-9.0,"滞销":-1.0}},"张博晨":{"performance":{"毛利":{"task":0.0,"done":958.15,"gap":958.15,"rate":null},"手机":{"task":0.0,"done":0.0,"gap":0.0,"rate":null},"PC":{"task":0.0,"done":0.0,"gap":0.0,"rate":null},"平板":{"task":0.0,"done":0.0,"gap":0.0,"rate":null},"穿戴":{"task":0.0,"done":0.0,"gap":0.0,"rate":null},"音频":{"task":0.0,"done":0.0,"gap":0.0,"rate":null},"HD":{"task":0.0,"done":0.0,"gap":0.0,"rate":1.0},"智慧办公":{"task":0.0,"done":0.0,"gap":0.0,"rate":null},"音频穿戴":{"task":0.0,"done":0.0,"gap":0.0,"rate":null},"销额":{"task":0.0,"done":999.0,"gap":999.0,"rate":null},"绩效":null},"qcs":{"电信积分":{"task":0.0,"done":0.0,"gap":0.0,"rate":null},"会员搭售率":{"terminal":0.0,"care":1.0,"gap":1.0,"rate":null},"回收搭售率":{"orders":1.0,"gap":1.0,"rate":null},"贴膜率":{"orders":0.0,"gap":0.0,"rate":null},"考核机型":{"task":0.0,"done":0.0,"gap":0.0},"乐回收":{"orders":1.0,"amount":0.0,"增值":0.0},"太力回收":{"orders":0.0,"amount":0.0,"增值":0.0},"增值":{"task":0.0,"done":958.15,"gap":958.15,"rate":null},"健康度":{"coupon":198.0,"ratio":0.2066482283567291,"grossMargin":0.9591091091091091,"增值率":0.9591091091091091},"星联会员":{"优享":1.0,"尊享":0.0,"合计":1.0}},"dailyDone":{"手机":0.0,"毛利":0.0,"增值":0.0,"智慧办公":0.0,"音频穿戴":0.0,"HD":0.0,"会员":0.0,"回收":0.0,"贴膜":0.0,"电信积分":0.0,"滞销":0.0,"优享/会员":0.0,"尊享/储值":0.0},"dailyGap":{}}}};
+
+const CFG = {
+  repo   : 'ZBC5241/shop',
+  branch : 'main',
+  dataFile: 'data.json',
+  // 达成率相对时间进度的判定门槛
+  th     : { on: 0.85, low: 0.55 }
+};
+
+let DATA = EMBEDDED_DATA;
+let VIEW = 'store';
+let RANK_BY = '毛利';
+let PERSON = null;
+
+/* ---------------- 工具 ---------------- */
+const $  = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const isNum = v => typeof v === 'number' && isFinite(v);
+
+function money(v, dec){
+  if(!isNum(v)) return '—';
+  const d = dec === undefined ? (Math.abs(v) >= 10000 ? 0 : 0) : dec;
+  return '¥' + v.toLocaleString('zh-CN', {minimumFractionDigits:d, maximumFractionDigits:d});
+}
+function moneyShort(v){
+  if(!isNum(v)) return '—';
+  const a = Math.abs(v);
+  if(a >= 10000) return (v/10000).toFixed(1).replace(/\.0$/,'') + '万';
+  return Math.round(v).toLocaleString('zh-CN');
+}
+function cnt(v){ return isNum(v) ? String(Math.round(v)) : '—'; }
+function pct(v, dec){
+  if(!isNum(v)) return '—';
+  return (v*100).toFixed(dec === undefined ? 1 : dec) + '%';
+}
+function esc(s){
+  return String(s).replace(/[&<>"']/g, c =>
+    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+/* 状态判定：done / over / on / low / na */
+function stat(rate){
+  const tp = DATA.meta.timeProgress;
+  if(!isNum(rate)) return 'na';
+  if(rate >= 1) return 'done';
+  if(!isNum(tp) || tp <= 0) return 'on';
+  if(rate >= tp) return 'over';
+  if(rate >= tp * CFG.th.on)  return 'on';
+  if(rate >= tp * CFG.th.low) return 'low';
+  return 'low';
+}
+function isCritical(rate){
+  const tp = DATA.meta.timeProgress;
+  return isNum(rate) && isNum(tp) && tp > 0 && rate < tp * CFG.th.low;
+}
+const STAT_TXT = { done:'已达成', over:'超进度', on:'跟得上', low:'落后', na:'无任务' };
+
+/* 是否有任务 */
+function hasTask(k){ return k && isNum(k.task) && k.task !== 0; }
+
+/* 单位：哪些指标是金额 */
+const MONEY_KEYS = new Set(['毛利','销额','增值']);
+
+/* 同一行内统一单位：完成量和任务量都上万才换算成"万"，否则一律用元 */
+function unitOf(key, k){
+  if(!MONEY_KEYS.has(key)) return 'cnt';
+  if(!k) return 'yuan';
+  const d = isNum(k.done) ? Math.abs(k.done) : 0;
+  const t = isNum(k.task) ? Math.abs(k.task) : d;
+  return (d >= 10000 && t >= 10000) ? 'wan' : 'yuan';
+}
+function fmtU(v, u){
+  if(!isNum(v)) return '—';
+  if(u === 'cnt')  return String(Math.round(v));
+  if(u === 'wan')  return (v/10000).toFixed(1).replace(/\.0$/,'') + '万';
+  return Math.round(v).toLocaleString('zh-CN');
+}
+
+/* ---------------- 渲染：进度条组件 ---------------- */
+function barHTML(rate, s){
+  const tp = DATA.meta.timeProgress;
+  const w  = isNum(rate) ? Math.min(rate, 1) * 100 : 0;
+  const mk = isNum(tp) ? Math.min(tp, 1) * 100 : null;
+  return '<div class="row-bar"><i class="f-' + s + '" style="width:' + w.toFixed(1) + '%"></i>'
+       + (mk !== null ? '<span class="mk" style="left:' + mk.toFixed(1) + '%"></span>' : '')
+       + '</div>';
+}
+
+/* ---------------- 视图 1：门店 ---------------- */
+const CORE = [
+  {k:'毛利', label:'毛利'},
+  {k:'销额', label:'销售额'},
+  {k:'手机', label:'手机'},
+];
+const CATS = ['手机','PC','平板','穿戴','音频','HD','智慧办公','音频穿戴'];
+
+function kpiCard(label, k, key){
+  if(!k) return '';
+  const s = hasTask(k) ? stat(k.rate) : 'na';
+  const rateTxt = hasTask(k) ? pct(k.rate,1) : '无任务';
+  const u = unitOf(key, k);
+  return '<div class="kpi s-' + s + '">'
+    + '<div class="kpi-r r-' + s + '">' + rateTxt + '</div>'
+    + '<div class="kpi-l">' + esc(label) + '</div>'
+    + '<div class="kpi-v num">' + fmtU(k.done, u) + '</div>'
+    + '<div class="kpi-s num">任务 ' + (hasTask(k) ? fmtU(k.task, u) : '—')
+    + (isNum(k.gap) && hasTask(k) ? ' · 缺 ' + fmtU(Math.abs(k.gap), u) : '') + '</div>'
+    + '<div class="kpi-bar"><i class="f-' + s + '" style="width:'
+    + (isNum(k.rate) ? Math.min(k.rate,1)*100 : 0).toFixed(1) + '%"></i></div>'
+    + '</div>';
+}
+
+function catRow(name, k, key){
+  if(!k) return '';
+  const has = hasTask(k);
+  const s   = has ? stat(k.rate) : 'na';
+  const crit = has && isCritical(k.rate);
+  const u = unitOf(key, k);
+  return '<div class="row' + (crit ? ' warn' : '') + '">'
+    + '<div class="row-t">'
+      + '<span class="row-n">' + esc(name) + '</span>'
+      + '<span class="row-p r-' + s + '">' + (has ? pct(k.rate,0) : '无任务') + '</span>'
+      + '<span class="row-v num"><b>' + fmtU(k.done, u) + '</b>'
+      + (has ? ' / ' + fmtU(k.task, u) : '') + '</span>'
+    + '</div>'
+    + barHTML(k.rate, s)
+    + (has && isNum(k.gap) && k.gap < 0
+        ? '<div class="row-g"><span>' + STAT_TXT[s] + '</span><em>还差 ' + fmtU(Math.abs(k.gap), u) + '</em></div>'
+        : (has && isNum(k.gap) && k.gap >= 0
+            ? '<div class="row-g"><span>' + STAT_TXT[s] + '</span><span style="color:var(--green)">超出 ' + fmtU(k.gap, u) + '</span></div>'
+            : ''))
+    + '</div>';
+}
+
+function renderStore(){
+  const P = DATA.store.performance || {};
+  const Q = DATA.store.qcs || {};
+  let h = '<div class="wrap">';
+
+  /* 核心 KPI */
+  h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>核心指标</b>'
+     + '<span class="tail">时间进度 ' + pct(DATA.meta.timeProgress,1) + '</span></div>';
+  h += '<div class="kpi-grid">';
+  h += kpiCard('毛利', P['毛利'], '毛利');
+  h += kpiCard('销售额', P['销额'], '销额');
+  h += kpiCard('增值', Q['增值'], '增值');
+  h += kpiCard('手机', P['手机'], '手机');
+  h += '</div></div>';
+
+  /* 品类达成 */
+  h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>品类达成</b>'
+     + '<span class="tail">白线 = 时间进度</span></div><div class="rows">';
+  CATS.forEach(c => { h += catRow(c, P[c], c); });
+  h += catRow('增值', Q['增值'], '增值');
+  h += '</div></div>';
+
+  /* 考核机型（独立板块） */
+  h += assessHTML(Q['考核机型'], DATA.meta.employees);
+
+  /* 全科生 */
+  h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>全科生</b></div>';
+  h += qcsHTML(Q);
+  h += '</div>';
+
+  /* 绩效 */
+  if(isNum(P['绩效'])){
+    h += '<div class="sec"><div class="card" style="padding:14px;text-align:center">'
+       + '<div style="font-size:11px;color:var(--tx3)">门店综合绩效得分</div>'
+       + '<div style="font-size:30px;font-weight:800;margin-top:4px;letter-spacing:-1px" class="num">'
+       + P['绩效'].toFixed(2) + '</div></div></div>';
+  }
+
+  h += foot();
+  h += '</div>';
+  return h;
+}
+
+/* 考核机型 —— 独立板块
+   names 传入姓名数组则逐人列出；不传只显示单条 */
+function assessHTML(kh, names){
+  if(!kh) return '';
+  const gc = v => (isNum(v) && v < 0) ? 'var(--red)' : 'var(--green)';
+  let h = '<div class="sec"><div class="sec-h"><span class="bar"></span><b>考核机型</b>'
+        + '<span class="tail">未完成 −100/台</span></div>';
+  h += '<div class="card" style="padding:13px 14px">';
+
+  h += '<div style="display:flex;align-items:baseline;gap:7px;flex-wrap:wrap">'
+     + '<span style="font-size:11.5px;color:var(--tx3)">' + (names ? '门店任务' : '任务') + '</span>'
+     + '<b class="num" style="font-size:24px;letter-spacing:-.5px">' + cnt(kh.task) + '</b>'
+     + '<span style="font-size:11.5px;color:var(--tx3)">台</span>'
+     + '<span style="flex:1"></span>'
+     + '<span style="font-size:11.5px;color:var(--tx3)">缺口</span>'
+     + '<b class="num" style="font-size:20px;color:' + gc(kh.gap) + '">' + cnt(kh.gap) + '</b>'
+     + '</div>';
+
+  if(names && names.length){
+    h += '<div style="margin-top:11px;border-top:1px solid var(--line);padding-top:4px">';
+    names.forEach(n => {
+      const p = DATA.people[n];
+      const k = p && p.qcs && p.qcs['考核机型'];
+      if(!k) return;
+      const noTask = !isNum(k.task) || k.task === 0;
+      h += '<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--line)">'
+         + '<span style="flex:1;font-size:13px;font-weight:600">' + esc(n) + '</span>'
+         + '<span class="num" style="font-size:12.5px;color:var(--tx2)">任务 '
+         + (noTask ? '<em style="color:var(--tx3);font-style:normal">—</em>' : cnt(k.task)) + '</span>'
+         + '<span class="num" style="font-size:13px;font-weight:700;min-width:42px;text-align:right;color:'
+         + (noTask ? 'var(--tx3)' : gc(k.gap)) + '">' + (noTask ? '—' : cnt(k.gap)) + '</span>'
+         + '</div>';
+    });
+    h += '</div>';
+  }
+
+  h += '</div></div>';
+  return h;
+}
+
+/* QCS 卡片组 */
+function qcsHTML(Q){
+  if(!Q) return '<div class="empty">暂无数据</div>';
+  let h = '<div class="q-grid">';
+
+  const dx = Q['电信积分'];
+  if(dx){
+    const s = hasTask(dx) ? stat(dx.rate) : 'na';
+    h += '<div class="q"><div class="q-l">电信积分（5分）</div>'
+      + '<div class="q-v num">' + cnt(dx.done) + '<small>/ ' + cnt(dx.task) + '</small></div>'
+      + '<div class="q-s">达成 <em class="r-' + s + '" style="padding:1px 4px;border-radius:4px">' + pct(dx.rate,0) + '</em></div></div>';
+  }
+
+  const hy = Q['会员搭售率'];
+  if(hy){
+    h += '<div class="q"><div class="q-l">会员搭售率（30%）</div>'
+      + '<div class="q-v num">' + pct(hy.rate,1) + '</div>'
+      + '<div class="q-s">Care+ ' + cnt(hy.care) + ' / 终端 ' + cnt(hy.terminal)
+      + (isNum(hy.gap) ? ' · 缺 <em style="color:' + (hy.gap<0?'var(--red)':'var(--green)') + '">' + cnt(hy.gap) + '</em>' : '')
+      + '</div></div>';
+  }
+
+  const hs = Q['回收搭售率'];
+  if(hs){
+    h += '<div class="q"><div class="q-l">回收搭售率（20%）</div>'
+      + '<div class="q-v num">' + pct(hs.rate,1) + '</div>'
+      + '<div class="q-s">单数 ' + cnt(hs.orders)
+      + (isNum(hs.gap) ? ' · 缺 <em style="color:' + (hs.gap<0?'var(--red)':'var(--green)') + '">' + cnt(hs.gap) + '</em>' : '')
+      + '</div></div>';
+  }
+
+  const tm = Q['贴膜率'];
+  if(tm){
+    h += '<div class="q"><div class="q-l">贴膜率（50%）</div>'
+      + '<div class="q-v num">' + pct(tm.rate,1) + '</div>'
+      + '<div class="q-s">单数 ' + cnt(tm.orders)
+      + (isNum(tm.gap) ? ' · 缺 <em style="color:' + (tm.gap<0?'var(--red)':'var(--green)') + '">' + cnt(tm.gap) + '</em>' : '')
+      + '</div></div>';
+  }
+
+  const lh = Q['乐回收'], th = Q['太力回收'];
+  if(lh || th){
+    h += '<div class="q wide"><div class="q-l">回收业务</div><div class="q-s" style="margin-top:2px;font-size:12px">';
+    if(lh) h += '乐回收 <b class="num">' + cnt(lh.orders) + '</b> 单'
+              + (isNum(lh.amount) ? ' · ' + money(lh.amount) : '') + '<br>';
+    if(th) h += '太力回收 <b class="num">' + cnt(th.orders) + '</b> 单'
+              + (isNum(th.amount) ? ' · ' + money(th.amount) : '')
+              + (isNum(th['增值']) ? ' · 增值 ' + money(th['增值']) : '');
+    h += '</div></div>';
+  }
+
+  const xl = Q['星联会员'];
+  if(xl){
+    h += '<div class="q"><div class="q-l">星联会员</div>'
+      + '<div class="q-v num">' + cnt(xl['合计']) + '</div>'
+      + '<div class="q-s">优享 ' + cnt(xl['优享']) + ' · 尊享 ' + cnt(xl['尊享']) + '</div></div>';
+  }
+
+  const jk = Q['健康度'];
+  if(jk){
+    h += '<div class="q"><div class="q-l">健康度</div>'
+      + '<div class="q-v num">' + pct(jk.grossMargin,1) + '<small>毛利率</small></div>'
+      + '<div class="q-s">券 ' + moneyShort(jk.coupon) + ' · 占比 ' + pct(jk.ratio,0)
+      + '<br>增值率 ' + pct(jk['增值率'],1) + '</div></div>';
+  }
+
+  h += '</div>';
+  return h;
+}
+
+
+/* ---------------- 视图 2：排行 ---------------- */
+const RANK_DIMS = [
+  {k:'毛利',   src:'performance'},
+  {k:'销额',   src:'performance', label:'销售额'},
+  {k:'手机',   src:'performance'},
+  {k:'音频穿戴', src:'performance'},
+  {k:'穿戴',   src:'performance'},
+  {k:'增值',   src:'qcs'},
+  {k:'电信积分', src:'qcs'},
+];
+
+function renderRank(){
+  const dim = RANK_DIMS.find(d => d.k === RANK_BY) || RANK_DIMS[0];
+  const list = DATA.meta.employees.map(n => {
+    const p = DATA.people[n] || {};
+    const k = ((p[dim.src] || {})[dim.k]) || null;
+    return { name:n, k:k, done: (k && isNum(k.done)) ? k.done : -Infinity,
+             rate:(k && isNum(k.rate)) ? k.rate : null, has: hasTask(k) };
+  });
+  // 排序：有任务的按达成率，没任务的按完成量垫底
+  list.sort((a,b) => {
+    if(a.has !== b.has) return a.has ? -1 : 1;
+    if(a.has) return (b.rate||0) - (a.rate||0);
+    return b.done - a.done;
+  });
+
+  let h = '<div class="wrap">';
+  h += '<div class="chips">';
+  RANK_DIMS.forEach(d => {
+    h += '<div class="chip' + (d.k === RANK_BY ? ' on' : '') + '" data-dim="' + d.k + '">'
+       + esc(d.label || d.k) + '</div>';
+  });
+  h += '</div>';
+
+  h += '<div class="sec-h"><span class="bar"></span><b>' + esc(dim.label||dim.k) + ' 排行</b>'
+     + '<span class="tail">共 ' + list.length + ' 人</span></div>';
+
+  list.forEach((it, i) => {
+    const s = it.has ? stat(it.rate) : 'na';
+    const colorVar = {done:'--green',over:'--blue',on:'--amber',low:'--red',na:'--gray'}[s];
+    const w = it.has && isNum(it.rate) ? Math.min(it.rate,1)*100 : 0;
+    h += '<div class="rk" data-person="' + esc(it.name) + '">'
+      + '<div class="rk-bg" style="width:' + w.toFixed(1) + '%;background:var(' + colorVar + ')"></div>'
+      + '<div class="rk-no' + (it.has && i<3 ? ' n'+(i+1) : '') + '">' + (it.has ? (i+1) : '—') + '</div>'
+      + '<div class="rk-m">'
+        + '<div class="rk-n">' + esc(it.name) + '</div>'
+        + '<div class="rk-sub num">' + fmtU(it.k ? it.k.done : null, unitOf(dim.k, it.k))
+        + (it.has ? ' / ' + fmtU(it.k.task, unitOf(dim.k, it.k)) : ' · 未分配任务') + '</div>'
+      + '</div>'
+      + '<div class="rk-r">'
+        + '<div class="p num" style="color:var(' + colorVar + ')">' + (it.has ? pct(it.rate,0) : '—') + '</div>'
+        + '<div class="g">' + (it.has && it.k && isNum(it.k.gap)
+            ? (it.k.gap < 0 ? '差 ' + fmtU(Math.abs(it.k.gap), unitOf(dim.k, it.k))
+                            : '超 ' + fmtU(it.k.gap, unitOf(dim.k, it.k)))
+            : STAT_TXT[s]) + '</div>'
+      + '</div>'
+      + '</div>';
+  });
+
+  h += '<div style="font-size:11px;color:var(--tx3);text-align:center;padding:8px 0 2px;line-height:1.7">'
+     + '点任意一行查看该员工完整数据</div>';
+  h += foot();
+  h += '</div>';
+  return h;
+}
+
+/* ---------------- 视图 3：个人 ---------------- */
+function renderPerson(){
+  if(!PERSON) PERSON = DATA.meta.employees[0];
+  const p = DATA.people[PERSON];
+  let h = '<div class="wrap">';
+
+  h += '<div class="chips">';
+  DATA.meta.employees.forEach(n => {
+    h += '<div class="chip' + (n === PERSON ? ' on' : '') + '" data-p="' + esc(n) + '">' + esc(n) + '</div>';
+  });
+  h += '</div>';
+
+  if(!p){ return h + '<div class="empty">无此人数据</div></div>'; }
+
+  const P = p.performance || {}, Q = p.qcs || {};
+  const noTask = !hasTask(P['毛利']);
+
+  if(noTask){
+    h += '<div class="card" style="padding:12px;margin-bottom:14px;'
+       + 'border-color:rgba(245,158,11,.3);background:linear-gradient(90deg,rgba(245,158,11,.08),var(--card))">'
+       + '<div style="font-size:12px;color:var(--amber);font-weight:600">⚠ 本月未分配任务</div>'
+       + '<div style="font-size:11px;color:var(--tx3);margin-top:4px;line-height:1.6">'
+       + '表格中该员工的任务列为空，因此不计算达成率，仅显示已完成的量。</div></div>';
+  }
+
+  /* 核心 */
+  h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>核心指标</b>'
+     + '<span class="tail">' + esc(PERSON) + '</span></div><div class="kpi-grid">';
+  h += kpiCard('毛利', P['毛利'], '毛利');
+  h += kpiCard('销售额', P['销额'], '销额');
+  h += kpiCard('增值', Q['增值'], '增值');
+  h += kpiCard('手机', P['手机'], '手机');
+  h += '</div></div>';
+
+  /* 品类 */
+  h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>品类达成</b></div><div class="rows">';
+  CATS.forEach(c => { h += catRow(c, P[c], c); });
+  h += catRow('增值', Q['增值'], '增值');
+  h += '</div></div>';
+
+  /* 考核机型（独立板块） */
+  h += assessHTML(Q['考核机型'], null);
+
+  /* 全科生 */
+  h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>全科生</b></div>';
+  h += qcsHTML(Q);
+  h += '</div>';
+
+  /* 今日 */
+  h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>今日达成</b>'
+     + '<span class="tail">' + esc(DATA.meta.dayTitle || '') + '</span></div>';
+  h += dayHTML(p.dailyDone, p.dailyGap);
+  h += '</div>';
+
+  /* 绩效 */
+  if(isNum(P['绩效'])){
+    h += '<div class="sec"><div class="card" style="padding:14px;text-align:center">'
+       + '<div style="font-size:11px;color:var(--tx3)">个人绩效得分</div>'
+       + '<div style="font-size:30px;font-weight:800;margin-top:4px;letter-spacing:-1px" class="num">'
+       + P['绩效'].toFixed(2) + '</div></div></div>';
+  }
+
+  h += foot();
+  h += '</div>';
+  return h;
+}
+
+/* ---------------- 视图 4：今日 ---------------- */
+const DAY_ORDER = ['毛利','增值','手机','音频穿戴','智慧办公','HD','会员','回收','贴膜','电信积分','滞销','优享/会员','尊享/储值'];
+const GAP_ALIAS = { '会员':'Care+' };
+
+function dayHTML(done, gap){
+  done = done || {}; gap = gap || {};
+  const keys = DAY_ORDER.filter(k => k in done || (GAP_ALIAS[k] || k) in gap);
+  if(!keys.length) return '<div class="empty">暂无今日数据</div>';
+  let h = '<div class="day-grid">';
+  keys.forEach(k => {
+    const dv = done[k];
+    const gk = (GAP_ALIAS[k] && (GAP_ALIAS[k] in gap)) ? GAP_ALIAS[k] : k;
+    const gv = gap[gk];
+    const isM = MONEY_KEYS.has(k);
+    const hit = isNum(gv) && gv >= 0;
+    const zero = !isNum(dv) || dv === 0;
+    let cls = 'day';
+    if(hit) cls += ' hit ok'; else if(isNum(gv)) cls += ' miss';
+    if(zero) cls += ' zero';
+    h += '<div class="' + cls + '">'
+      + '<div class="day-l">' + esc(k) + '</div>'
+      + '<div class="day-v num">' + (isM ? moneyShort(dv) : cnt(dv)) + '</div>'
+      + '<div class="day-g num">' + (isNum(gv)
+          ? (gv >= 0 ? '达标 +' + (isM ? moneyShort(gv) : cnt(gv))
+                     : (isM ? moneyShort(gv) : cnt(gv)))
+          : '&nbsp;') + '</div>'
+      + '</div>';
+  });
+  h += '</div>';
+  return h;
+}
+
+function renderDay(){
+  let h = '<div class="wrap">';
+  h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>全店今日达成</b>'
+     + '<span class="tail">' + esc(DATA.meta.dayTitle || DATA.meta.date) + '</span></div>';
+  h += dayHTML(DATA.store.dailyDone, DATA.store.dailyGap);
+  h += '<div style="font-size:10.5px;color:var(--tx3);padding:9px 2px 0;line-height:1.7">'
+     + '大数字＝今天已完成；下方＝距每日任务的差额（负数表示还差）</div>';
+  h += '</div>';
+
+  /* 每人今日 */
+  h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>每人今日</b></div>';
+  DATA.meta.employees.forEach(n => {
+    const p = DATA.people[n]; if(!p) return;
+    const d = p.dailyDone || {};
+    const items = [
+      ['毛利', moneyShort(d['毛利'])],
+      ['增值', moneyShort(d['增值'])],
+      ['手机', cnt(d['手机'])],
+      ['音频穿戴', cnt(d['音频穿戴'])],
+      ['贴膜', cnt(d['贴膜'])],
+    ];
+    const allZero = ['毛利','增值','手机','音频穿戴','贴膜'].every(k => !isNum(d[k]) || d[k] === 0);
+    h += '<div class="card" style="padding:11px 12px;margin-bottom:8px'
+       + (allZero ? ';border-color:rgba(232,68,58,.22)' : '') + '">'
+      + '<div style="display:flex;align-items:center;gap:7px;margin-bottom:7px">'
+        + '<b style="font-size:13px">' + esc(n) + '</b>'
+        + (allZero ? '<span style="font-size:10px;color:var(--red);background:var(--redDim);padding:1px 6px;border-radius:5px;font-weight:600">今日零开单</span>' : '')
+      + '</div>'
+      + '<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:5px">';
+    items.forEach(([l,v]) => {
+      h += '<div style="text-align:center">'
+        + '<div style="font-size:10px;color:var(--tx3)">' + l + '</div>'
+        + '<div style="font-size:13.5px;font-weight:700;margin-top:2px" class="num">' + v + '</div></div>';
+    });
+    h += '</div></div>';
+  });
+  h += '</div>';
+
+  h += foot();
+  h += '</div>';
+  return h;
+}
+
+/* ---------------- 页脚 ---------------- */
+function foot(){
+  const m = DATA.meta;
+  return '<div class="foot">'
+    + '数据来源：' + esc(m.sourceFile || '任务进度表') + '<br>'
+    + '生成时间 ' + esc(m.generatedAt || '—')
+    + '</div>';
+}
+
+/* ---------------- 主渲染 ---------------- */
+function render(){
+  const m = DATA.meta || {};
+  $('#storeName').textContent = m.storeName || '门店看板';
+  $('#dataDate').textContent  = (m.date || '') + (m.dayTitle ? ' · ' + m.dayTitle : '');
+  const tp = m.timeProgress;
+  $('#tpVal').textContent = isNum(tp) ? pct(tp,1) : '—';
+  requestAnimationFrame(() => {
+    $('#tpFill').style.width = (isNum(tp) ? Math.min(tp,1)*100 : 0).toFixed(1) + '%';
+  });
+
+  const fn = { store:renderStore, rank:renderRank, person:renderPerson, day:renderDay }[VIEW];
+  $('#app').innerHTML = fn();
+  bindDynamic();
+  window.scrollTo(0,0);
+}
+
+function bindDynamic(){
+  $$('.chip[data-dim]').forEach(c => c.onclick = () => { RANK_BY = c.dataset.dim; render(); });
+  $$('.chip[data-p]').forEach(c => c.onclick = () => { PERSON = c.dataset.p; render(); });
+  $$('.rk[data-person]').forEach(c => c.onclick = () => {
+    PERSON = c.dataset.person; VIEW = 'person';
+    $$('.tab').forEach(t => t.classList.toggle('on', t.dataset.v === 'person'));
+    render();
+  });
+}
+
+$$('.tab').forEach(t => t.onclick = () => {
+  $$('.tab').forEach(x => x.classList.remove('on'));
+  t.classList.add('on');
+  VIEW = t.dataset.v;
+  render();
+});
+
+
+/* ==========================================================
+   数据加载：优先读线上 data.json，失败则用内嵌快照
+   ========================================================== */
+function loadRemote(silent){
+  const url = CFG.dataFile + '?t=' + Date.now();
+  return fetch(url, {cache:'no-store'})
+    .then(r => r.ok ? r.json() : Promise.reject(r.status))
+    .then(j => {
+      if(j && j.meta && j.store && j.people){
+        DATA = j;
+        render();
+        $('#liveTag').textContent = '数据已更新';
+        if(!silent) toast('已拉取最新数据');
+        return true;
+      }
+      throw new Error('格式不对');
+    })
+    .catch(() => {
+      $('#liveTag').textContent = '本地快照';
+      if(!silent) toast('拉取失败，显示本地快照');
+      return false;
+    });
+}
+
+/* ==========================================================
+   浏览器端 Excel 解析 —— 与 build_data.py 保持完全一致
+   ========================================================== */
+const SHEET_NAME = '李家村销售';
+const PEOPLE_ORDER = ['邵乐乐','杨丽华','李泽','陈超磊','张博晨'];
+const P1_ROWS = {'邵乐乐':4,'杨丽华':5,'李泽':6,'陈超磊':7,'张博晨':8}, P1_TOTAL = 9;
+const P2_ROWS = {'邵乐乐':14,'杨丽华':15,'李泽':16,'陈超磊':17,'张博晨':18}, P2_TOTAL = 19;
+const P3_ROWS = {'邵乐乐':28,'杨丽华':29,'李泽':30,'陈超磊':31,'张博晨':32}, P3_TOTAL = 33, P3_LABEL = 26;
+const P4_ROWS = {'邵乐乐':38,'杨丽华':39,'李泽':40,'陈超磊':41}, P4_TOTAL = 42, P4_LABEL = 36;
+const P1_BLOCKS = [['毛利',1],['手机',5],['PC',9],['平板',13],['穿戴',17],
+                   ['音频',21],['HD',25],['智慧办公',29],['音频穿戴',33],['销额',37]];
+const P1_SCORE = 41;
+
+function xnum(v){
+  if(v === null || v === undefined) return null;
+  if(typeof v === 'number') return isFinite(v) ? v : null;
+  if(typeof v === 'boolean') return null;
+  if(v instanceof Date) return null;
+  let s = String(v).trim();
+  if(s === '' || s[0] === '#') return null;
+  s = s.replace(/,/g,'').replace(/[¥￥]/g,'');
+  const isPct = s.endsWith('%');
+  if(isPct) s = s.slice(0,-1);
+  const f = parseFloat(s);
+  if(!isFinite(f)) return null;
+  return isPct ? f/100 : f;
+}
+/* g(grid, 1-based行, 0-based列) */
+function g(grid, row, col){
+  const r = grid[row-1];
+  if(!r) return null;
+  return xnum(r[col]);
+}
+function g4(grid, row, col){
+  return { task:g(grid,row,col), done:g(grid,row,col+1),
+           gap:g(grid,row,col+2), rate:g(grid,row,col+3) };
+}
+function readPerf(grid, row){
+  const d = {};
+  P1_BLOCKS.forEach(([n,c]) => d[n] = g4(grid,row,c));
+  d['绩效'] = g(grid,row,P1_SCORE);
+  return d;
+}
+function readQcs(grid, row){
+  const G = c => g(grid,row,c);
+  return {
+    '电信积分':  {task:G(1),done:G(2),gap:G(3),rate:G(4)},
+    '会员搭售率':{terminal:G(5),care:G(6),gap:G(7),rate:G(8)},
+    '回收搭售率':{orders:G(9),gap:G(10),rate:G(11)},
+    '贴膜率':    {orders:G(12),gap:G(13),rate:G(14)},
+    '考核机型':  {task:G(17),gap:G(18)},
+    '乐回收':    {orders:G(19),amount:G(20),'增值':G(21)},
+    '太力回收':  {orders:G(22),amount:G(23),'增值':G(24)},
+    '增值':      {task:G(25),done:G(26),gap:G(27),rate:G(28)},
+    '健康度':    {coupon:G(29),ratio:G(30),grossMargin:G(31),'增值率':G(32)},
+    '星联会员':  {'优享':G(33),'尊享':G(34),'合计':G(35)}
+  };
+}
+function readLabels(grid, labelRow, start, end){
+  const r = grid[labelRow-1] || [];
+  const out = [];
+  for(let c = start; c < end; c++){
+    const v = r[c];
+    out.push(v === null || v === undefined || String(v).trim() === '' ? null : String(v).trim());
+  }
+  return out;
+}
+const DROP_KEYS = new Set(['摄影课']);
+function readFlat(grid, row, labels, start){
+  const d = {};
+  labels.forEach((lab,i) => { if(lab && !DROP_KEYS.has(lab)) d[lab] = g(grid,row,start+i); });
+  return d;
+}
+
+function parseWorkbook(ab, fileName){
+  const wb = XLSX.read(ab, {type:'array', cellDates:true});
+  if(wb.SheetNames.indexOf(SHEET_NAME) < 0)
+    throw new Error('找不到工作表「' + SHEET_NAME + '」，该文件包含：' + wb.SheetNames.slice(0,8).join('、'));
+  const ws = wb.Sheets[SHEET_NAME];
+  const grid = XLSX.utils.sheet_to_json(ws, {header:1, defval:null, raw:true, blankrows:true});
+
+  /* 结构校验：防止模板被改动导致静默错位 */
+  const nameCol = r => { const x = grid[r-1]; return x && x[0] ? String(x[0]).trim() : ''; };
+  const bad = [];
+  PEOPLE_ORDER.forEach(n => {
+    if(nameCol(P1_ROWS[n]) !== n) bad.push('业绩考核区第' + P1_ROWS[n] + '行应为「' + n + '」，实为「' + nameCol(P1_ROWS[n]) + '」');
+    if(nameCol(P2_ROWS[n]) !== n) bad.push('全科生区第' + P2_ROWS[n] + '行应为「' + n + '」，实为「' + nameCol(P2_ROWS[n]) + '」');
+  });
+  if(nameCol(P1_TOTAL) !== '合计') bad.push('第' + P1_TOTAL + '行应为「合计」');
+  if(bad.length) throw new Error('表格结构和预期不一致，为避免读出错数已中止：\n· ' + bad.slice(0,4).join('\n· '));
+
+  /* 元信息 */
+  let dateStr = '';
+  const rawDate = (grid[0] || [])[1];
+  if(rawDate instanceof Date){
+    const p = n => String(n).padStart(2,'0');
+    dateStr = rawDate.getFullYear() + '-' + p(rawDate.getMonth()+1) + '-' + p(rawDate.getDate());
+  }else if(rawDate){
+    dateStr = String(rawDate).trim().slice(0,10);
+  }
+  const tp = g(grid,1,8);
+  const dayTitle = ((grid[24] || [])[1]) ? String(grid[24][1]).trim() : '';
+  const d3 = readLabels(grid, P3_LABEL, 1, 15);
+  const d4 = readLabels(grid, P4_LABEL, 1, 15);
+
+  const now = new Date();
+  const pad = n => String(n).padStart(2,'0');
+  const out = {
+    meta:{
+      storeName:'华为李家村万达授权体验店',
+      date:dateStr, dayTitle:dayTitle, timeProgress:tp,
+      employees:PEOPLE_ORDER.slice(),
+      sourceFile:fileName,
+      generatedAt: now.getFullYear() + '-' + pad(now.getMonth()+1) + '-' + pad(now.getDate())
+                 + ' ' + pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds())
+    },
+    store:{
+      performance: readPerf(grid, P1_TOTAL),
+      qcs:         readQcs(grid, P2_TOTAL),
+      dailyDone:   readFlat(grid, P3_TOTAL, d3, 1),
+      dailyGap:    readFlat(grid, P4_TOTAL, d4, 1)
+    },
+    people:{}
+  };
+  PEOPLE_ORDER.forEach(n => {
+    out.people[n] = {
+      performance: readPerf(grid, P1_ROWS[n]),
+      qcs:         readQcs(grid, P2_ROWS[n]),
+      dailyDone:   readFlat(grid, P3_ROWS[n], d3, 1),
+      dailyGap:    P4_ROWS[n] ? readFlat(grid, P4_ROWS[n], d4, 1) : {}
+    };
+  });
+  return out;
+}
+
+/* ==========================================================
+   GitHub 同步
+   ========================================================== */
+function b64(str){
+  const bytes = new TextEncoder().encode(str);
+  let bin = '';
+  const CH = 0x8000;
+  for(let i = 0; i < bytes.length; i += CH){
+    bin += String.fromCharCode.apply(null, bytes.subarray(i, i+CH));
+  }
+  return btoa(bin);
+}
+
+async function pushToGitHub(token, json, log){
+  const api = 'https://api.github.com/repos/' + CFG.repo + '/contents/' + CFG.dataFile;
+  const hd  = { 'Authorization':'Bearer ' + token, 'Accept':'application/vnd.github+json' };
+
+  log('连接 GitHub…', 'in');
+  let sha = null;
+  const gr = await fetch(api + '?ref=' + CFG.branch, {headers:hd, cache:'no-store'});
+  if(gr.status === 200){
+    sha = (await gr.json()).sha;
+    log('找到现有 data.json', 'in');
+  }else if(gr.status === 404){
+    log('线上还没有 data.json，将新建', 'wa');
+  }else if(gr.status === 401){
+    throw new Error('密钥无效或已过期（401）');
+  }else if(gr.status === 403){
+    throw new Error('没有权限访问该仓库（403）');
+  }else{
+    throw new Error('读取失败：HTTP ' + gr.status);
+  }
+
+  const body = {
+    message: '更新看板数据 ' + (json.meta.date || '') + ' via 看板上传',
+    content: b64(JSON.stringify(json, null, 1)),
+    branch : CFG.branch
+  };
+  if(sha) body.sha = sha;
+
+  log('上传中…', 'in');
+  const pr = await fetch(api, {method:'PUT', headers:hd, body:JSON.stringify(body)});
+  if(!pr.ok){
+    let msg = 'HTTP ' + pr.status;
+    try{ const e = await pr.json(); if(e.message) msg += ' · ' + e.message; }catch(_){}
+    throw new Error('上传失败：' + msg);
+  }
+  log('✓ 已同步到线上', 'ok');
+  return true;
+}
+
+/* 动态加载 SheetJS（多源兜底，国内优先） */
+const XLSX_CDNS = [
+  'https://registry.npmmirror.com/xlsx/0.18.5/files/dist/xlsx.full.min.js',
+  'https://cdn.staticfile.org/xlsx/0.18.5/xlsx.full.min.js',
+  'https://cdn.bootcdn.net/ajax/libs/xlsx/0.18.5/xlsx.full.min.js',
+  'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js'
+];
+function loadXLSX(log){
+  if(window.XLSX) return Promise.resolve();
+  let i = 0;
+  return new Promise((res, rej) => {
+    const tryNext = () => {
+      if(i >= XLSX_CDNS.length) return rej(new Error('解析组件加载失败，请检查网络后重试'));
+      const url = XLSX_CDNS[i++];
+      log('加载解析组件…（源 ' + i + '）', 'in');
+      const s = document.createElement('script');
+      s.src = url;
+      s.onload  = () => window.XLSX ? res() : tryNext();
+      s.onerror = tryNext;
+      document.head.appendChild(s);
+    };
+    tryNext();
+  });
+}
+
+
+/* ==========================================================
+   交互：管理弹层 / 上传 / Toast
+   ========================================================== */
+let pickedFile = null;
+
+function toast(msg, ms){
+  const t = $('#toast');
+  t.textContent = msg;
+  t.classList.add('on');
+  clearTimeout(t._tm);
+  t._tm = setTimeout(() => t.classList.remove('on'), ms || 1800);
+}
+
+function log(msg, type){
+  const box = $('#logBox');
+  box.style.display = 'block';
+  const cls = type || 'in';
+  box.innerHTML += '<span class="' + cls + '">' + esc(msg) + '</span>\n';
+  box.scrollTop = box.scrollHeight;
+}
+
+/* 打开 / 关闭 */
+$('#btnAdmin').onclick = () => {
+  $('#adminMask').classList.add('on');
+  const t = localStorage.getItem('gh_token');
+  if(t) $('#tokenInput').value = t;
+};
+$('#btnClose').onclick = () => $('#adminMask').classList.remove('on');
+$('#adminMask').onclick = e => { if(e.target.id === 'adminMask') $('#adminMask').classList.remove('on'); };
+
+$('#btnRefresh').onclick = () => {
+  $('#btnRefresh').style.transform = 'rotate(360deg)';
+  $('#btnRefresh').style.transition = 'transform .5s';
+  setTimeout(() => { $('#btnRefresh').style.transform = ''; $('#btnRefresh').style.transition = ''; }, 520);
+  loadRemote(false);
+};
+
+/* 选文件 */
+const dz = $('#dropZone'), fi = $('#fileInput');
+dz.onclick = () => fi.click();
+dz.ondragover = e => { e.preventDefault(); dz.classList.add('hover'); };
+dz.ondragleave = () => dz.classList.remove('hover');
+dz.ondrop = e => {
+  e.preventDefault(); dz.classList.remove('hover');
+  if(e.dataTransfer.files.length) setFile(e.dataTransfer.files[0]);
+};
+fi.onchange = () => { if(fi.files.length) setFile(fi.files[0]); };
+
+function setFile(f){
+  if(!/\.xlsx?$/i.test(f.name)){ toast('请选择 .xlsx 文件'); return; }
+  pickedFile = f;
+  $('#dropTitle').textContent = f.name;
+  $('#dropSub').textContent = (f.size/1024).toFixed(0) + ' KB · 点击可重选';
+  $('#btnParse').disabled = false;
+}
+
+/* 解析 + 同步 */
+$('#btnParse').onclick = async () => {
+  if(!pickedFile) return;
+  const btn = $('#btnParse');
+  btn.disabled = true; btn.textContent = '处理中…';
+  $('#logBox').innerHTML = '';
+
+  try{
+    await loadXLSX(log);
+    log('读取文件…', 'in');
+    const ab = await pickedFile.arrayBuffer();
+
+    log('解析表格…', 'in');
+    const json = parseWorkbook(ab, pickedFile.name);
+
+    const gm = json.store.performance['毛利'];
+    log('✓ 解析成功', 'ok');
+    log('  数据日期 ' + (json.meta.date || '未知'), 'in');
+    log('  时间进度 ' + (isNum(json.meta.timeProgress) ? pct(json.meta.timeProgress,1) : '—'), 'in');
+    log('  门店毛利 ' + money(gm.done) + ' / ' + money(gm.task) + '（' + pct(gm.rate,1) + '）', 'in');
+    PEOPLE_ORDER.forEach(n => {
+      const p = json.people[n].performance['毛利'];
+      log('  ' + n + '：' + money(p.done) + (hasTaskRaw(p) ? '' : '（未分配任务）'), 'in');
+    });
+
+    /* 先本地生效 */
+    DATA = json;
+    render();
+    $('#liveTag').textContent = '本机预览';
+    log('✓ 页面已刷新', 'ok');
+
+    /* 同步线上 */
+    const token = $('#tokenInput').value.trim();
+    if(token){
+      localStorage.setItem('gh_token', token);
+      await pushToGitHub(token, json, log);
+      $('#liveTag').textContent = '数据已更新';
+      log('店员刷新页面即可看到新数据', 'ok');
+      toast('已更新，店员刷新可见');
+    }else{
+      log('未填密钥，仅本机生效，店员看到的还是旧数据', 'wa');
+      toast('仅本机预览');
+    }
+  }catch(err){
+    log('✗ ' + (err.message || err), 'er');
+    toast('处理失败，看下方提示');
+  }finally{
+    btn.disabled = false; btn.textContent = '解析并更新';
+  }
+};
+
+function hasTaskRaw(k){ return k && typeof k.task === 'number' && isFinite(k.task) && k.task !== 0; }
+
+/* ==========================================================
+   启动
+   ========================================================== */
+render();
+if(location.protocol === 'http:' || location.protocol === 'https:'){
+  loadRemote(true);
+}else{
+  $('#liveTag').textContent = '本地文件';
+}
+</script>
+</body>
+</html>
