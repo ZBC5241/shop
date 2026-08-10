@@ -233,6 +233,122 @@ function foot(){
     + '</div>';
 }
 
+/* ---------------- 视图 5：店长洞察 ---------------- */
+const LV_COLOR = { danger:'--red', warn:'--amber', good:'--green', mid:'--blue', none:'--gray' };
+const LV_TAG   = { danger:'急', warn:'追', good:'稳', mid:'跟得上', none:'无任务' };
+
+function renderInsight(){
+  const I = DATA.insights;
+  if(!I) return '<div class="wrap"><div class="empty">暂无洞察数据，请重新生成看板</div></div>';
+  const m = DATA.meta || {};
+  const tp = I.timeProgress || 0;
+  let h = '<div class="wrap">';
+
+  /* ---- 1. 今日战况 ---- */
+  const T = I.today || {sold:[],idle:[]};
+  h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>今日战况</b>'
+     + '<span class="tail">' + esc(m.dayTitle || '') + '</span></div>';
+  h += '<div class="bt">'
+     + '<div class="bt-c"><div class="bt-v num">' + (T.totalOrders||0) + '</div><div class="bt-l">上账笔数</div></div>'
+     + '<div class="bt-c"><div class="bt-v num">' + money(T.totalGross||0,0) + '</div><div class="bt-l">今日毛利</div></div>'
+     + '<div class="bt-c"><div class="bt-v num" style="color:var('
+       + ((T.idle||[]).length ? '--red' : '--green') + ')">'
+       + (T.sold||[]).length + '<span style="font-size:12px;color:var(--tx3)">/'
+       + ((T.sold||[]).length + (T.idle||[]).length) + '</span></div>'
+     + '<div class="bt-l">已开单人数</div></div>'
+     + '</div>';
+
+  h += '<div class="who">';
+  (T.sold||[]).forEach(s => {
+    h += '<div class="who-i on"><span class="n">' + esc(s.name) + '</span>'
+       + '<span class="s num">' + s.orders + '单 · ' + money(s.gross,0) + '</span></div>';
+  });
+  (T.idle||[]).forEach(n => {
+    h += '<div class="who-i off"><span class="n">' + esc(n) + '</span>'
+       + '<span class="s">暂无上账</span></div>';
+  });
+  if(!(T.sold||[]).length && !(T.idle||[]).length) h += '<div class="empty">今日暂无数据</div>';
+  h += '</div></div>';
+
+  /* ---- 2. 经营建议 ---- */
+  const A = I.advices || [];
+  if(A.length){
+    h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>经营建议</b>'
+       + '<span class="tail">' + A.length + ' 条 · 自动诊断</span></div>';
+    A.forEach(a => {
+      h += '<div class="adv ' + esc(a.level) + '">'
+         + '<div class="adv-t"><i>' + esc(a.icon||'') + '</i>' + esc(a.title) + '</div>'
+         + '<div class="adv-b">' + esc(a.body) + '</div></div>';
+    });
+    h += '</div>';
+  }
+
+  /* ---- 3. 品类体检 ---- */
+  const C = I.categories || [];
+  h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>品类体检</b>'
+     + '<span class="tail">时间进度 ' + pct(tp,0) + ' · 剩 ' + (I.remainDays||0) + ' 天</span></div>';
+  C.forEach(c => {
+    if(!c.task) return;
+    const cv = LV_COLOR[c.level] || '--gray';
+    const w  = Math.min((c.rate||0)/Math.max(tp,0.01),1)*100;   // 相对时间进度的完成度
+    let sub;
+    if(c.done <= 0)                sub = '本月零成交';
+    else if(c.coldDays === 0)      sub = '今天有成交';
+    else if(c.coldDays >= 3)       sub = '已 ' + c.coldDays + ' 天没卖（最后 ' + c.lastDate.slice(5) + '）';
+    else                           sub = c.coldDays + ' 天前卖过';
+    h += '<div class="ct">'
+       + '<div class="ct-bg" style="width:' + w.toFixed(0) + '%;background:var(' + cv + ')"></div>'
+       + '<div class="ct-r">'
+         + '<div class="ct-n">' + esc(c.name) + '</div>'
+         + '<div class="ct-tag" style="background:var(' + cv + ');color:#fff">'
+           + esc(LV_TAG[c.level]||'') + '</div>'
+         + '<div class="ct-m"><div class="ct-v num" style="color:var(' + cv + ')">'
+           + pct(c.rate,0) + '</div>'
+         + '<div class="ct-s num">' + cnt(c.done) + '/' + cnt(c.task) + esc(c.unit)
+           + ' · 日均需 ' + cnt(c.needPerDay) + '</div></div>'
+       + '</div>'
+       + '<div class="ct-x">' + esc(sub)
+         + (c.zeroPeople && c.zeroPeople.length
+             ? ' · 挂零：<b>' + c.zeroPeople.map(esc).join('、') + '</b>' : '')
+       + '</div></div>';
+  });
+  h += '</div>';
+
+  /* ---- 4. 员工体检 ---- */
+  const P = I.people || [];
+  h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>员工体检</b>'
+     + '<span class="tail">综合进度排名</span></div>';
+  P.forEach(p => {
+    const cv = LV_COLOR[p.level] || '--gray';
+    h += '<div class="pf">'
+       + '<div class="pf-r">'
+         + '<div class="pf-no' + (p.rank===1?' n1':'') + '">' + p.rank + '</div>'
+         + '<div><div class="pf-n">' + esc(p.name) + '</div>'
+         + '<div class="pf-kl">综合 <b class="num" style="color:var(' + cv + ')">'
+           + pct(p.score,0) + '</b>' + (isNum(p.毛利率) ? ' · 毛利率 ' + pct(p.毛利率,1) : '') + '</div></div>'
+         + '<div class="pf-m">'
+           + '<div class="pf-k"><div class="pf-kv num">' + pct(p.毛利.rate,0) + '</div><div class="pf-kl">毛利</div></div>'
+           + '<div class="pf-k"><div class="pf-kv num">' + pct(p.手机.rate,0) + '</div><div class="pf-kl">手机</div></div>'
+           + '<div class="pf-k"><div class="pf-kv num">' + pct(p.增值.rate,0) + '</div><div class="pf-kl">增值</div></div>'
+         + '</div>'
+       + '</div>';
+    if((p.strong||[]).length || (p.weak||[]).length){
+      h += '<div class="pf-x">';
+      (p.strong||[]).forEach(s => h += '<span class="pf-t g">强 ' + esc(s) + '</span>');
+      (p.weak||[]).forEach(s   => h += '<span class="pf-t b">弱 ' + esc(s) + '</span>');
+      h += '</div>';
+    }
+    h += '</div>';
+  });
+  h += '<div style="font-size:10.5px;color:var(--tx3);text-align:center;padding:6px 0 2px;line-height:1.7">'
+     + '综合分 = 毛利 50% + 手机 30% + 增值 20%，与时间进度 ' + pct(tp,0) + ' 对比</div>';
+  h += '</div>';
+
+  h += foot();
+  h += '</div>';
+  return h;
+}
+
 /* ---------------- 主渲染 ---------------- */
 function render(){
   const m = DATA.meta || {};
@@ -245,7 +361,8 @@ function render(){
     $('#tpFill').style.width = (isNum(tp) ? Math.min(tp,1)*100 : 0).toFixed(1) + '%';
   });
 
-  const fn = { store:renderStore, rank:renderRank, person:renderPerson, day:renderDay }[VIEW];
+  const fn = { store:renderStore, rank:renderRank, person:renderPerson,
+               day:renderDay, insight:renderInsight }[VIEW];
   $('#app').innerHTML = fn();
   bindDynamic();
   window.scrollTo(0,0);

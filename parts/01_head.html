@@ -71,12 +71,13 @@ body{
   padding-bottom:var(--safeB);
 }
 .tab{
-  flex:1;padding:9px 0 8px;text-align:center;cursor:pointer;
-  color:var(--tx3);transition:color .18s;
+  flex:1;padding:8px 0 7px;text-align:center;cursor:pointer;
+  color:var(--tx3);transition:color .18s;min-width:0;
 }
-.tab i{display:block;font-size:19px;line-height:1.25;font-style:normal;filter:grayscale(1) opacity(.55);transition:.18s}
-.tab span{font-size:10px;font-weight:600;letter-spacing:.3px}
+.tab i{display:block;font-size:17px;line-height:1.25;font-style:normal;filter:grayscale(1) opacity(.55);transition:.18s}
+.tab span{display:block;font-size:9px;font-weight:600;letter-spacing:.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 2px}
 .tab.on{color:var(--red)}
+@media (max-width:360px){.tab span{display:none}}
 .tab.on i{filter:none;transform:translateY(-1px)}
 
 /* ============ 通用 ============ */
@@ -89,6 +90,63 @@ body{
 .sec-h .tail{margin-left:auto;font-size:11px;color:var(--tx3);font-weight:400}
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r)}
 .empty{padding:26px 0;text-align:center;color:var(--tx3);font-size:12px}
+
+/* ============ 店长洞察 ============ */
+/* 今日战况 */
+.bt{display:flex;gap:8px;margin-bottom:9px}
+.bt-c{flex:1;background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+      padding:10px 11px;text-align:center}
+.bt-v{font-size:19px;font-weight:800;letter-spacing:-.4px;line-height:1.15}
+.bt-l{font-size:10px;color:var(--tx3);margin-top:3px}
+.who{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}
+.who-i{display:flex;align-items:center;gap:5px;padding:5px 9px;border-radius:8px;
+       font-size:11.5px;background:var(--card2);border:1px solid var(--line)}
+.who-i b{font-weight:700}
+.who-i.on{background:var(--greenDim);border-color:rgba(34,197,94,.30)}
+.who-i.off{background:var(--redDim);border-color:rgba(232,68,58,.30);color:var(--red)}
+.who-i .n{font-weight:600}
+.who-i .s{color:var(--tx3);font-size:10.5px}
+.who-i.off .s{color:var(--red);opacity:.75}
+
+/* 建议卡 */
+.adv{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--tx3);
+     border-radius:var(--r);padding:10px 12px;margin-bottom:8px}
+.adv.danger{border-left-color:var(--red);background:rgba(232,68,58,.05)}
+.adv.warn{border-left-color:var(--amber);background:rgba(245,158,11,.05)}
+.adv.good{border-left-color:var(--green);background:rgba(34,197,94,.05)}
+.adv-t{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;margin-bottom:4px}
+.adv-t i{font-style:normal;font-size:13px}
+.adv-b{font-size:11.5px;line-height:1.75;color:var(--tx2)}
+
+/* 品类体检行 */
+.ct{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+    padding:9px 11px;margin-bottom:7px;position:relative;overflow:hidden}
+.ct-bg{position:absolute;left:0;top:0;bottom:0;opacity:.09;border-radius:var(--r) 0 0 var(--r)}
+.ct-r{position:relative;display:flex;align-items:center;gap:8px}
+.ct-n{font-size:12.5px;font-weight:700;min-width:58px}
+.ct-tag{font-size:9.5px;padding:1.5px 5px;border-radius:4px;font-weight:700;white-space:nowrap}
+.ct-m{margin-left:auto;text-align:right}
+.ct-v{font-size:12px;font-weight:700;letter-spacing:-.2px}
+.ct-s{font-size:10px;color:var(--tx3);margin-top:1px}
+.ct-x{position:relative;font-size:10.5px;color:var(--tx3);margin-top:6px;line-height:1.65}
+.ct-x b{color:var(--red);font-weight:600}
+
+/* 员工体检行 */
+.pf{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+    padding:10px 11px;margin-bottom:7px}
+.pf-r{display:flex;align-items:center;gap:9px}
+.pf-no{width:19px;height:19px;border-radius:6px;background:var(--card2);color:var(--tx3);
+       font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none}
+.pf-no.n1{background:var(--amber);color:#fff}
+.pf-n{font-size:12.5px;font-weight:700}
+.pf-m{margin-left:auto;display:flex;gap:11px;text-align:right}
+.pf-k{min-width:40px}
+.pf-kv{font-size:12px;font-weight:700;letter-spacing:-.2px}
+.pf-kl{font-size:9.5px;color:var(--tx3);margin-top:1px}
+.pf-x{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+.pf-t{font-size:10px;padding:2px 6px;border-radius:5px;font-weight:600}
+.pf-t.g{background:var(--greenDim);color:var(--green)}
+.pf-t.b{background:var(--redDim);color:var(--red)}
 
 /* ============ 上账时效提示条 ============ */
 .lag-tip{

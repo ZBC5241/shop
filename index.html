@@ -71,12 +71,13 @@ body{
   padding-bottom:var(--safeB);
 }
 .tab{
-  flex:1;padding:9px 0 8px;text-align:center;cursor:pointer;
-  color:var(--tx3);transition:color .18s;
+  flex:1;padding:8px 0 7px;text-align:center;cursor:pointer;
+  color:var(--tx3);transition:color .18s;min-width:0;
 }
-.tab i{display:block;font-size:19px;line-height:1.25;font-style:normal;filter:grayscale(1) opacity(.55);transition:.18s}
-.tab span{font-size:10px;font-weight:600;letter-spacing:.3px}
+.tab i{display:block;font-size:17px;line-height:1.25;font-style:normal;filter:grayscale(1) opacity(.55);transition:.18s}
+.tab span{display:block;font-size:9px;font-weight:600;letter-spacing:.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 2px}
 .tab.on{color:var(--red)}
+@media (max-width:360px){.tab span{display:none}}
 .tab.on i{filter:none;transform:translateY(-1px)}
 
 /* ============ 通用 ============ */
@@ -89,6 +90,63 @@ body{
 .sec-h .tail{margin-left:auto;font-size:11px;color:var(--tx3);font-weight:400}
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r)}
 .empty{padding:26px 0;text-align:center;color:var(--tx3);font-size:12px}
+
+/* ============ 店长洞察 ============ */
+/* 今日战况 */
+.bt{display:flex;gap:8px;margin-bottom:9px}
+.bt-c{flex:1;background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+      padding:10px 11px;text-align:center}
+.bt-v{font-size:19px;font-weight:800;letter-spacing:-.4px;line-height:1.15}
+.bt-l{font-size:10px;color:var(--tx3);margin-top:3px}
+.who{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}
+.who-i{display:flex;align-items:center;gap:5px;padding:5px 9px;border-radius:8px;
+       font-size:11.5px;background:var(--card2);border:1px solid var(--line)}
+.who-i b{font-weight:700}
+.who-i.on{background:var(--greenDim);border-color:rgba(34,197,94,.30)}
+.who-i.off{background:var(--redDim);border-color:rgba(232,68,58,.30);color:var(--red)}
+.who-i .n{font-weight:600}
+.who-i .s{color:var(--tx3);font-size:10.5px}
+.who-i.off .s{color:var(--red);opacity:.75}
+
+/* 建议卡 */
+.adv{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--tx3);
+     border-radius:var(--r);padding:10px 12px;margin-bottom:8px}
+.adv.danger{border-left-color:var(--red);background:rgba(232,68,58,.05)}
+.adv.warn{border-left-color:var(--amber);background:rgba(245,158,11,.05)}
+.adv.good{border-left-color:var(--green);background:rgba(34,197,94,.05)}
+.adv-t{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;margin-bottom:4px}
+.adv-t i{font-style:normal;font-size:13px}
+.adv-b{font-size:11.5px;line-height:1.75;color:var(--tx2)}
+
+/* 品类体检行 */
+.ct{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+    padding:9px 11px;margin-bottom:7px;position:relative;overflow:hidden}
+.ct-bg{position:absolute;left:0;top:0;bottom:0;opacity:.09;border-radius:var(--r) 0 0 var(--r)}
+.ct-r{position:relative;display:flex;align-items:center;gap:8px}
+.ct-n{font-size:12.5px;font-weight:700;min-width:58px}
+.ct-tag{font-size:9.5px;padding:1.5px 5px;border-radius:4px;font-weight:700;white-space:nowrap}
+.ct-m{margin-left:auto;text-align:right}
+.ct-v{font-size:12px;font-weight:700;letter-spacing:-.2px}
+.ct-s{font-size:10px;color:var(--tx3);margin-top:1px}
+.ct-x{position:relative;font-size:10.5px;color:var(--tx3);margin-top:6px;line-height:1.65}
+.ct-x b{color:var(--red);font-weight:600}
+
+/* 员工体检行 */
+.pf{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+    padding:10px 11px;margin-bottom:7px}
+.pf-r{display:flex;align-items:center;gap:9px}
+.pf-no{width:19px;height:19px;border-radius:6px;background:var(--card2);color:var(--tx3);
+       font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none}
+.pf-no.n1{background:var(--amber);color:#fff}
+.pf-n{font-size:12.5px;font-weight:700}
+.pf-m{margin-left:auto;display:flex;gap:11px;text-align:right}
+.pf-k{min-width:40px}
+.pf-kv{font-size:12px;font-weight:700;letter-spacing:-.2px}
+.pf-kl{font-size:9.5px;color:var(--tx3);margin-top:1px}
+.pf-x{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+.pf-t{font-size:10px;padding:2px 6px;border-radius:5px;font-weight:600}
+.pf-t.g{background:var(--greenDim);color:var(--green)}
+.pf-t.b{background:var(--redDim);color:var(--red)}
 
 /* ============ 上账时效提示条 ============ */
 .lag-tip{
@@ -311,6 +369,7 @@ body{
   <div class="tab" data-v="rank"><i>🏆</i><span>排行</span></div>
   <div class="tab" data-v="person"><i>👤</i><span>个人</span></div>
   <div class="tab" data-v="day"><i>📅</i><span>今日</span></div>
+  <div class="tab" data-v="insight"><i>🔍</i><span>洞察</span></div>
 </nav>
 
 <!-- ===== 管理弹层 ===== -->
@@ -354,7 +413,7 @@ body{
    原则：只展示表格里的原值，不做任何二次计算
    ========================================================== */
 
-const EMBEDDED_DATA = {"meta":{"storeName":"华为李家村万达授权体验店","date":"2026-08-10","dayTitle":"08-10达成","timeProgress":0.3225806451612903,"remainDays":18,"refDate":"2026-08-10","isToday":true,"lagDays":0,"todayLabel":"08-10","fetchTime":"20:47","employees":["邵乐乐","杨丽华","李泽","陈超磊","张博晨"],"sourceFile":"yonyou_raw.tsv","sourceRows":179,"dayRows":9,"generatedAt":"2026-08-10 20:47:09"},"store":{"performance":{"毛利":{"task":205000.0,"done":42333.04,"gap":-162666.96,"rate":0.20650263414634146},"手机":{"task":170.0,"done":44.0,"gap":-126.0,"rate":0.25882352941176473},"PC":{"task":14.0,"done":1.0,"gap":-13.0,"rate":0.07142857142857142},"平板":{"task":34.0,"done":5.0,"gap":-29.0,"rate":0.14705882352941177},"穿戴":{"task":100.0,"done":40.0,"gap":-60.0,"rate":0.4},"音频":{"task":37.0,"done":5.0,"gap":-32.0,"rate":0.13513513513513514},"HD":{"task":2.0,"done":0.0,"gap":-2.0,"rate":0.0},"智慧办公":{"task":48.0,"done":6.0,"gap":-42.0,"rate":0.125},"音频穿戴":{"task":137.0,"done":45.0,"gap":-92.0,"rate":0.3284671532846715},"销额":{"task":1600000.0,"done":332009.34,"gap":-1267990.66,"rate":0.2075058375},"绩效":30.358203291678365},"qcs":{"电信积分":{"task":600.0,"done":64.0,"gap":-536.0,"rate":0.10666666666666667},"会员搭售率":{"terminal":44.0,"care":14.0,"gap":0.0,"rate":0.3181818181818182},"回收搭售率":{"orders":9.0,"gap":0.0,"rate":0.20454545454545456},"贴膜率":{"orders":47.0,"gap":25.0,"rate":0.5222222222222223},"考核机型":{"task":12.0,"done":2.0,"gap":-10.0},"乐回收":{"orders":7.0,"amount":0.0,"增值":711.0},"太力回收":{"orders":2.0,"amount":983.0,"增值":137.62},"增值":{"task":57000.0,"done":12928.23,"gap":-44071.770000000004,"rate":0.22681105263157894},"健康度":{"coupon":17774.66,"ratio":0.41987676765004356,"grossMargin":0.1275055695722295,"增值率":0.03893935634461367},"星联会员":{"优享":8.0,"尊享":4.0,"合计":12.0}},"dailyDone":{"手机":2.0,"毛利":1868.95,"增值":203.05,"智慧办公":0.0,"音频穿戴":1.0,"HD":0.0,"会员":0.0,"回收":0.0,"贴膜":3.0,"电信积分":0.0,"滞销":0.0,"优享/会员":0.0,"尊享/储值":0.0},"dailyGap":{"手机":-8.0,"毛利":-9093.0,"增值":-2504.0,"智慧办公":-4.0,"音频穿戴":-7.0,"HD":-2.0,"Care+":0.0,"回收":-1.0,"贴膜":0.0,"电信积分":-32.0,"滞销":-4.0}},"people":{"邵乐乐":{"performance":{"毛利":{"task":50000.0,"done":4840.4800000000005,"gap":-45159.52,"rate":0.09680960000000001},"手机":{"task":43.0,"done":9.0,"gap":-34.0,"rate":0.20930232558139536},"PC":{"task":3.0,"done":0.0,"gap":-3.0,"rate":0.0},"平板":{"task":8.0,"done":0.0,"gap":-8.0,"rate":0.0},"穿戴":{"task":25.0,"done":21.0,"gap":-4.0,"rate":0.84},"音频":{"task":9.0,"done":0.0,"gap":-9.0,"rate":0.0},"HD":{"task":0.0,"done":0.0,"gap":0.0,"rate":1.0},"智慧办公":{"task":11.0,"done":0.0,"gap":-11.0,"rate":0.0},"音频穿戴":{"task":34.0,"done":21.0,"gap":-13.0,"rate":0.6176470588235294},"销额":{"task":400000.0,"done":40079.3,"gap":-359920.7,"rate":0.10019825},"绩效":null},"qcs":{"电信积分":{"task":150.0,"done":64.0,"gap":-86.0,"rate":0.4266666666666667},"会员搭售率":{"terminal":9.0,"care":1.0,"gap":-2.0,"rate":0.1111111111111111},"回收搭售率":{"orders":2.0,"gap":0.0,"rate":0.2222222222222222},"贴膜率":{"orders":5.0,"gap":-10.0,"rate":0.16666666666666666},"考核机型":{"task":3.0,"done":0.0,"gap":-3.0},"乐回收":{"orders":1.0,"amount":0.0,"增值":40.0},"太力回收":{"orders":1.0,"amount":663.0,"增值":92.82000000000001},"增值":{"task":14250.0,"done":1287.57,"gap":-12962.43,"rate":0.09035578947368421},"健康度":{"coupon":3491.7,"ratio":0.7213540805870491,"grossMargin":0.12077256838318035,"增值率":0.03212556107516847},"星联会员":{"优享":1.0,"尊享":0.0,"合计":1.0}},"dailyDone":{"手机":0.0,"毛利":0.0,"增值":0.0,"智慧办公":0.0,"音频穿戴":0.0,"HD":0.0,"会员":0.0,"回收":0.0,"贴膜":0.0,"电信积分":0.0,"滞销":0.0,"优享/会员":0.0,"尊享/储值":0.0},"dailyGap":{"手机":-2.0,"毛利":-2509.0,"增值":-721.0,"智慧办公":-1.0,"音频穿戴":-1.0,"HD":0.0,"Care+":-1.0,"回收":0.0,"贴膜":-1.0,"电信积分":-5.0,"滞销":-1.0}},"杨丽华":{"performance":{"毛利":{"task":51000.0,"done":14330.39,"gap":-36669.61,"rate":0.28098803921568627},"手机":{"task":43.0,"done":14.0,"gap":-29.0,"rate":0.32558139534883723},"PC":{"task":3.0,"done":0.0,"gap":-3.0,"rate":0.0},"平板":{"task":8.0,"done":3.0,"gap":-5.0,"rate":0.375},"穿戴":{"task":25.0,"done":6.0,"gap":-19.0,"rate":0.24},"音频":{"task":9.0,"done":1.0,"gap":-8.0,"rate":0.1111111111111111},"HD":{"task":0.0,"done":0.0,"gap":0.0,"rate":1.0},"智慧办公":{"task":11.0,"done":3.0,"gap":-8.0,"rate":0.2727272727272727},"音频穿戴":{"task":34.0,"done":7.0,"gap":-27.0,"rate":0.20588235294117646},"销额":{"task":400000.0,"done":131797.02000000002,"gap":-268202.98,"rate":0.32949255000000005},"绩效":30.6214790785363},"qcs":{"电信积分":{"task":150.0,"done":0.0,"gap":-150.0,"rate":0.0},"会员搭售率":{"terminal":14.0,"care":1.0,"gap":-4.0,"rate":0.07142857142857142},"回收搭售率":{"orders":3.0,"gap":0.0,"rate":0.21428571428571427},"贴膜率":{"orders":18.0,"gap":6.0,"rate":0.782608695652174},"考核机型":{"task":3.0,"done":1.0,"gap":-2.0},"乐回收":{"orders":2.0,"amount":0.0,"增值":398.0},"太力回收":{"orders":1.0,"amount":320.0,"增值":44.800000000000004},"增值":{"task":14250.0,"done":4021.1600000000003,"gap":-10228.84,"rate":0.2821866666666667},"健康度":{"coupon":5440.98,"ratio":0.37968122291158857,"grossMargin":0.10873075885934293,"增值率":0.030510249776512396},"星联会员":{"优享":1.0,"尊享":1.0,"合计":2.0}},"dailyDone":{"手机":1.0,"毛利":1080.91,"增值":0.0,"智慧办公":0.0,"音频穿戴":0.0,"HD":0.0,"会员":0.0,"回收":0.0,"贴膜":0.0,"电信积分":0.0,"滞销":0.0,"优享/会员":0.0,"尊享/储值":0.0},"dailyGap":{"手机":-2.0,"毛利":-2038.0,"增值":-569.0,"智慧办公":-1.0,"音频穿戴":-2.0,"HD":0.0,"Care+":-1.0,"回收":0.0,"贴膜":1.0,"电信积分":-9.0,"滞销":-1.0}},"李泽":{"performance":{"毛利":{"task":52000.0,"done":10020.34,"gap":-41979.66,"rate":0.19269884615384616},"手机":{"task":42.0,"done":10.0,"gap":-32.0,"rate":0.23809523809523808},"PC":{"task":4.0,"done":0.0,"gap":-4.0,"rate":0.0},"平板":{"task":9.0,"done":0.0,"gap":-9.0,"rate":0.0},"穿戴":{"task":25.0,"done":7.0,"gap":-18.0,"rate":0.28},"音频":{"task":9.0,"done":2.0,"gap":-7.0,"rate":0.2222222222222222},"HD":{"task":1.0,"done":0.0,"gap":-1.0,"rate":0.0},"智慧办公":{"task":13.0,"done":0.0,"gap":-13.0,"rate":0.0},"音频穿戴":{"task":34.0,"done":9.0,"gap":-25.0,"rate":0.2647058823529412},"销额":{"task":400000.0,"done":66819.0,"gap":-333181.0,"rate":0.1670475},"绩效":27.6260782450631},"qcs":{"电信积分":{"task":150.0,"done":0.0,"gap":-150.0,"rate":0.0},"会员搭售率":{"terminal":10.0,"care":6.0,"gap":3.0,"rate":0.6},"回收搭售率":{"orders":0.0,"gap":-2.0,"rate":0.0},"贴膜率":{"orders":7.0,"gap":-2.0,"rate":0.4117647058823529},"考核机型":{"task":3.0,"done":1.0,"gap":-2.0},"乐回收":{"orders":0.0,"amount":0.0,"增值":0.0},"太力回收":{"orders":0.0,"amount":0.0,"增值":0.0},"增值":{"task":14250.0,"done":3976.5899999999997,"gap":-10273.41,"rate":0.279058947368421},"健康度":{"coupon":4119.0,"ratio":0.41106389603546384,"grossMargin":0.14996243583411903,"增值率":0.05951286310779867},"星联会员":{"优享":3.0,"尊享":3.0,"合计":6.0}},"dailyDone":{"手机":0.0,"毛利":0.0,"增值":0.0,"智慧办公":0.0,"音频穿戴":0.0,"HD":0.0,"会员":0.0,"回收":0.0,"贴膜":0.0,"电信积分":0.0,"滞销":0.0,"优享/会员":0.0,"尊享/储值":0.0},"dailyGap":{"手机":-2.0,"毛利":-2333.0,"增值":-571.0,"智慧办公":-1.0,"音频穿戴":-2.0,"HD":-1.0,"Care+":1.0,"回收":-1.0,"贴膜":-1.0,"电信积分":-9.0,"滞销":-1.0}},"陈超磊":{"performance":{"毛利":{"task":52000.0,"done":12183.679999999998,"gap":-39816.32,"rate":0.23430153846153842},"手机":{"task":42.0,"done":11.0,"gap":-31.0,"rate":0.2619047619047619},"PC":{"task":4.0,"done":1.0,"gap":-3.0,"rate":0.25},"平板":{"task":9.0,"done":2.0,"gap":-7.0,"rate":0.2222222222222222},"穿戴":{"task":25.0,"done":6.0,"gap":-19.0,"rate":0.24},"音频":{"task":10.0,"done":2.0,"gap":-8.0,"rate":0.2},"HD":{"task":1.0,"done":0.0,"gap":-1.0,"rate":0.0},"智慧办公":{"task":13.0,"done":3.0,"gap":-10.0,"rate":0.23076923076923078},"音频穿戴":{"task":35.0,"done":8.0,"gap":-27.0,"rate":0.22857142857142856},"销额":{"task":400000.0,"done":92315.02,"gap":-307684.98,"rate":0.23078755},"绩效":32.8270525514357},"qcs":{"电信积分":{"task":150.0,"done":0.0,"gap":-150.0,"rate":0.0},"会员搭售率":{"terminal":11.0,"care":5.0,"gap":1.0,"rate":0.45454545454545453},"回收搭售率":{"orders":3.0,"gap":0.0,"rate":0.2727272727272727},"贴膜率":{"orders":17.0,"gap":7.0,"rate":0.85},"考核机型":{"task":3.0,"done":0.0,"gap":-3.0},"乐回收":{"orders":3.0,"amount":0.0,"增值":273.0},"太力回收":{"orders":0.0,"amount":0.0,"增值":0.0},"增值":{"task":14250.0,"done":2684.7599999999998,"gap":-11565.24,"rate":0.18840421052631579},"健康度":{"coupon":4524.98,"ratio":0.37139681935178864,"grossMargin":0.13197938970278073,"增值率":0.02908259132695849},"星联会员":{"优享":2.0,"尊享":0.0,"合计":2.0}},"dailyDone":{"手机":1.0,"毛利":788.04,"增值":203.05,"智慧办公":0.0,"音频穿戴":1.0,"HD":0.0,"会员":0.0,"回收":0.0,"贴膜":3.0,"电信积分":0.0,"滞销":0.0,"优享/会员":0.0,"尊享/储值":0.0},"dailyGap":{"手机":-2.0,"毛利":-2213.0,"增值":-643.0,"智慧办公":-1.0,"音频穿戴":-2.0,"HD":-1.0,"Care+":1.0,"回收":0.0,"贴膜":1.0,"电信积分":-9.0,"滞销":-1.0}},"张博晨":{"performance":{"毛利":{"task":0.0,"done":958.15,"gap":958.15,"rate":null},"手机":{"task":0.0,"done":0.0,"gap":0.0,"rate":null},"PC":{"task":0.0,"done":0.0,"gap":0.0,"rate":null},"平板":{"task":0.0,"done":0.0,"gap":0.0,"rate":null},"穿戴":{"task":0.0,"done":0.0,"gap":0.0,"rate":null},"音频":{"task":0.0,"done":0.0,"gap":0.0,"rate":null},"HD":{"task":0.0,"done":0.0,"gap":0.0,"rate":1.0},"智慧办公":{"task":0.0,"done":0.0,"gap":0.0,"rate":null},"音频穿戴":{"task":0.0,"done":0.0,"gap":0.0,"rate":null},"销额":{"task":0.0,"done":999.0,"gap":999.0,"rate":null},"绩效":null},"qcs":{"电信积分":{"task":0.0,"done":0.0,"gap":0.0,"rate":null},"会员搭售率":{"terminal":0.0,"care":1.0,"gap":1.0,"rate":null},"回收搭售率":{"orders":1.0,"gap":1.0,"rate":null},"贴膜率":{"orders":0.0,"gap":0.0,"rate":null},"考核机型":{"task":0.0,"done":0.0,"gap":0.0},"乐回收":{"orders":1.0,"amount":0.0,"增值":0.0},"太力回收":{"orders":0.0,"amount":0.0,"增值":0.0},"增值":{"task":0.0,"done":958.15,"gap":958.15,"rate":null},"健康度":{"coupon":198.0,"ratio":0.2066482283567291,"grossMargin":0.9591091091091091,"增值率":0.9591091091091091},"星联会员":{"优享":1.0,"尊享":0.0,"合计":1.0}},"dailyDone":{"手机":0.0,"毛利":0.0,"增值":0.0,"智慧办公":0.0,"音频穿戴":0.0,"HD":0.0,"会员":0.0,"回收":0.0,"贴膜":0.0,"电信积分":0.0,"滞销":0.0,"优享/会员":0.0,"尊享/储值":0.0},"dailyGap":{}}}};
+const EMBEDDED_DATA = {"meta":{"storeName":"华为李家村万达授权体验店","date":"2026-08-10","dayTitle":"08-10达成","timeProgress":0.3225806451612903,"remainDays":18,"refDate":"2026-08-10","isToday":true,"lagDays":0,"todayLabel":"08-10","fetchTime":"21:48","employees":["邵乐乐","杨丽华","李泽","陈超磊","张博晨"],"sourceFile":"yonyou_raw.tsv","sourceRows":185,"dayRows":15,"generatedAt":"2026-08-10 21:48:44"},"store":{"performance":{"毛利":{"task":205000.0,"done":43748.52,"gap":-161251.48,"rate":0.21340741463414634},"手机":{"task":170.0,"done":45.0,"gap":-125.0,"rate":0.2647058823529412},"PC":{"task":14.0,"done":1.0,"gap":-13.0,"rate":0.07142857142857142},"平板":{"task":34.0,"done":5.0,"gap":-29.0,"rate":0.14705882352941177},"穿戴":{"task":100.0,"done":41.0,"gap":-59.0,"rate":0.41},"音频":{"task":37.0,"done":5.0,"gap":-32.0,"rate":0.13513513513513514},"HD":{"task":2.0,"done":0.0,"gap":-2.0,"rate":0.0},"智慧办公":{"task":48.0,"done":6.0,"gap":-42.0,"rate":0.125},"音频穿戴":{"task":137.0,"done":46.0,"gap":-91.0,"rate":0.3357664233576642},"销额":{"task":1600000.0,"done":340681.36,"gap":-1259318.6400000001,"rate":0.21292585},"绩效":30.358203291678365},"qcs":{"电信积分":{"task":600.0,"done":64.0,"gap":-536.0,"rate":0.10666666666666667},"会员搭售率":{"terminal":45.0,"care":14.0,"gap":0.0,"rate":0.3111111111111111},"回收搭售率":{"orders":9.0,"gap":0.0,"rate":0.2},"贴膜率":{"orders":50.0,"gap":27.0,"rate":0.5434782608695652},"考核机型":{"task":12.0,"done":2.0,"gap":-10.0},"乐回收":{"orders":7.0,"amount":0.0,"增值":711.0},"太力回收":{"orders":2.0,"amount":983.0,"增值":137.62},"增值":{"task":57000.0,"done":13172.69,"gap":-43827.31,"rate":0.23109982456140352},"健康度":{"coupon":17774.66,"ratio":0.4062916871245016,"grossMargin":0.1284147744390829,"增值率":0.038665719779913996},"星联会员":{"优享":8.0,"尊享":4.0,"合计":12.0}},"dailyDone":{"手机":3.0,"毛利":3284.4300000000003,"增值":447.51,"智慧办公":0.0,"音频穿戴":2.0,"HD":0.0,"会员":0.0,"回收":0.0,"贴膜":6.0,"电信积分":0.0,"滞销":0.0,"优享/会员":0.0,"尊享/储值":0.0},"dailyGap":{"手机":-8.0,"毛利":-9013.0,"增值":-2490.0,"智慧办公":-4.0,"音频穿戴":-7.0,"HD":-2.0,"Care+":0.0,"回收":-1.0,"贴膜":0.0,"电信积分":-32.0,"滞销":-4.0}},"people":{"邵乐乐":{"performance":{"毛利":{"task":50000.0,"done":4840.4800000000005,"gap":-45159.52,"rate":0.09680960000000001},"手机":{"task":43.0,"done":9.0,"gap":-34.0,"rate":0.20930232558139536},"PC":{"task":3.0,"done":0.0,"gap":-3.0,"rate":0.0},"平板":{"task":8.0,"done":0.0,"gap":-8.0,"rate":0.0},"穿戴":{"task":25.0,"done":21.0,"gap":-4.0,"rate":0.84},"音频":{"task":9.0,"done":0.0,"gap":-9.0,"rate":0.0},"HD":{"task":0.0,"done":0.0,"gap":0.0,"rate":1.0},"智慧办公":{"task":11.0,"done":0.0,"gap":-11.0,"rate":0.0},"音频穿戴":{"task":34.0,"done":21.0,"gap":-13.0,"rate":0.6176470588235294},"销额":{"task":400000.0,"done":40079.3,"gap":-359920.7,"rate":0.10019825},"绩效":null},"qcs":{"电信积分":{"task":150.0,"done":64.0,"gap":-86.0,"rate":0.4266666666666667},"会员搭售率":{"terminal":9.0,"care":1.0,"gap":-2.0,"rate":0.1111111111111111},"回收搭售率":{"orders":2.0,"gap":0.0,"rate":0.2222222222222222},"贴膜率":{"orders":5.0,"gap":-10.0,"rate":0.16666666666666666},"考核机型":{"task":3.0,"done":0.0,"gap":-3.0},"乐回收":{"orders":1.0,"amount":0.0,"增值":40.0},"太力回收":{"orders":1.0,"amount":663.0,"增值":92.82000000000001},"增值":{"task":14250.0,"done":1287.57,"gap":-12962.43,"rate":0.09035578947368421},"健康度":{"coupon":3491.7,"ratio":0.7213540805870491,"grossMargin":0.12077256838318035,"增值率":0.03212556107516847},"星联会员":{"优享":1.0,"尊享":0.0,"合计":1.0}},"dailyDone":{"手机":0.0,"毛利":0.0,"增值":0.0,"智慧办公":0.0,"音频穿戴":0.0,"HD":0.0,"会员":0.0,"回收":0.0,"贴膜":0.0,"电信积分":0.0,"滞销":0.0,"优享/会员":0.0,"尊享/储值":0.0},"dailyGap":{"手机":-2.0,"毛利":-2509.0,"增值":-721.0,"智慧办公":-1.0,"音频穿戴":-1.0,"HD":0.0,"Care+":-1.0,"回收":0.0,"贴膜":-1.0,"电信积分":-5.0,"滞销":-1.0}},"杨丽华":{"performance":{"毛利":{"task":51000.0,"done":15543.87,"gap":-35456.13,"rate":0.30478176470588236},"手机":{"task":43.0,"done":15.0,"gap":-28.0,"rate":0.3488372093023256},"PC":{"task":3.0,"done":0.0,"gap":-3.0,"rate":0.0},"平板":{"task":8.0,"done":3.0,"gap":-5.0,"rate":0.375},"穿戴":{"task":25.0,"done":6.0,"gap":-19.0,"rate":0.24},"音频":{"task":9.0,"done":1.0,"gap":-8.0,"rate":0.1111111111111111},"HD":{"task":0.0,"done":0.0,"gap":0.0,"rate":1.0},"智慧办公":{"task":11.0,"done":3.0,"gap":-8.0,"rate":0.2727272727272727},"音频穿戴":{"task":34.0,"done":7.0,"gap":-27.0,"rate":0.20588235294117646},"销额":{"task":400000.0,"done":139470.04,"gap":-260529.96,"rate":0.3486751},"绩效":30.6214790785363},"qcs":{"电信积分":{"task":150.0,"done":0.0,"gap":-150.0,"rate":0.0},"会员搭售率":{"terminal":15.0,"care":1.0,"gap":-4.0,"rate":0.06666666666666667},"回收搭售率":{"orders":3.0,"gap":0.0,"rate":0.2},"贴膜率":{"orders":21.0,"gap":9.0,"rate":0.875},"考核机型":{"task":3.0,"done":1.0,"gap":-2.0},"乐回收":{"orders":2.0,"amount":0.0,"增值":398.0},"太力回收":{"orders":1.0,"amount":320.0,"增值":44.800000000000004},"增值":{"task":14250.0,"done":4265.620000000001,"gap":-9984.38,"rate":0.29934175438596494},"健康度":{"coupon":5440.98,"ratio":0.35004024094385755,"grossMargin":0.11144952708122834,"增值率":0.03058448968681733},"星联会员":{"优享":1.0,"尊享":1.0,"合计":2.0}},"dailyDone":{"手机":2.0,"毛利":2294.3900000000003,"增值":244.45999999999998,"智慧办公":0.0,"音频穿戴":0.0,"HD":0.0,"会员":0.0,"回收":0.0,"贴膜":3.0,"电信积分":0.0,"滞销":0.0,"优享/会员":0.0,"尊享/储值":0.0},"dailyGap":{"手机":-2.0,"毛利":-1970.0,"增值":-555.0,"智慧办公":-1.0,"音频穿戴":-2.0,"HD":0.0,"Care+":-1.0,"回收":0.0,"贴膜":1.0,"电信积分":-9.0,"滞销":-1.0}},"李泽":{"performance":{"毛利":{"task":52000.0,"done":10020.34,"gap":-41979.66,"rate":0.19269884615384616},"手机":{"task":42.0,"done":10.0,"gap":-32.0,"rate":0.23809523809523808},"PC":{"task":4.0,"done":0.0,"gap":-4.0,"rate":0.0},"平板":{"task":9.0,"done":0.0,"gap":-9.0,"rate":0.0},"穿戴":{"task":25.0,"done":7.0,"gap":-18.0,"rate":0.28},"音频":{"task":9.0,"done":2.0,"gap":-7.0,"rate":0.2222222222222222},"HD":{"task":1.0,"done":0.0,"gap":-1.0,"rate":0.0},"智慧办公":{"task":13.0,"done":0.0,"gap":-13.0,"rate":0.0},"音频穿戴":{"task":34.0,"done":9.0,"gap":-25.0,"rate":0.2647058823529412},"销额":{"task":400000.0,"done":66819.0,"gap":-333181.0,"rate":0.1670475},"绩效":27.6260782450631},"qcs":{"电信积分":{"task":150.0,"done":0.0,"gap":-150.0,"rate":0.0},"会员搭售率":{"terminal":10.0,"care":6.0,"gap":3.0,"rate":0.6},"回收搭售率":{"orders":0.0,"gap":-2.0,"rate":0.0},"贴膜率":{"orders":7.0,"gap":-2.0,"rate":0.4117647058823529},"考核机型":{"task":3.0,"done":1.0,"gap":-2.0},"乐回收":{"orders":0.0,"amount":0.0,"增值":0.0},"太力回收":{"orders":0.0,"amount":0.0,"增值":0.0},"增值":{"task":14250.0,"done":3976.5899999999997,"gap":-10273.41,"rate":0.279058947368421},"健康度":{"coupon":4119.0,"ratio":0.41106389603546384,"grossMargin":0.14996243583411903,"增值率":0.05951286310779867},"星联会员":{"优享":3.0,"尊享":3.0,"合计":6.0}},"dailyDone":{"手机":0.0,"毛利":0.0,"增值":0.0,"智慧办公":0.0,"音频穿戴":0.0,"HD":0.0,"会员":0.0,"回收":0.0,"贴膜":0.0,"电信积分":0.0,"滞销":0.0,"优享/会员":0.0,"尊享/储值":0.0},"dailyGap":{"手机":-2.0,"毛利":-2333.0,"增值":-571.0,"智慧办公":-1.0,"音频穿戴":-2.0,"HD":-1.0,"Care+":1.0,"回收":-1.0,"贴膜":-1.0,"电信积分":-9.0,"滞销":-1.0}},"陈超磊":{"performance":{"毛利":{"task":52000.0,"done":12385.679999999998,"gap":-39614.32,"rate":0.23818615384615383},"手机":{"task":42.0,"done":11.0,"gap":-31.0,"rate":0.2619047619047619},"PC":{"task":4.0,"done":1.0,"gap":-3.0,"rate":0.25},"平板":{"task":9.0,"done":2.0,"gap":-7.0,"rate":0.2222222222222222},"穿戴":{"task":25.0,"done":7.0,"gap":-18.0,"rate":0.28},"音频":{"task":10.0,"done":2.0,"gap":-8.0,"rate":0.2},"HD":{"task":1.0,"done":0.0,"gap":-1.0,"rate":0.0},"智慧办公":{"task":13.0,"done":3.0,"gap":-10.0,"rate":0.23076923076923078},"音频穿戴":{"task":35.0,"done":9.0,"gap":-26.0,"rate":0.2571428571428571},"销额":{"task":400000.0,"done":93314.02,"gap":-306685.98,"rate":0.23328505000000002},"绩效":32.8270525514357},"qcs":{"电信积分":{"task":150.0,"done":0.0,"gap":-150.0,"rate":0.0},"会员搭售率":{"terminal":11.0,"care":5.0,"gap":1.0,"rate":0.45454545454545453},"回收搭售率":{"orders":3.0,"gap":0.0,"rate":0.2727272727272727},"贴膜率":{"orders":17.0,"gap":6.0,"rate":0.8095238095238095},"考核机型":{"task":3.0,"done":0.0,"gap":-3.0},"乐回收":{"orders":3.0,"amount":0.0,"增值":273.0},"太力回收":{"orders":0.0,"amount":0.0,"增值":0.0},"增值":{"task":14250.0,"done":2684.7599999999998,"gap":-11565.24,"rate":0.18840421052631579},"健康度":{"coupon":4524.98,"ratio":0.3653396503058371,"grossMargin":0.13273118015920865,"增值率":0.028771239305733474},"星联会员":{"优享":2.0,"尊享":0.0,"合计":2.0}},"dailyDone":{"手机":1.0,"毛利":990.04,"增值":203.05,"智慧办公":0.0,"音频穿戴":2.0,"HD":0.0,"会员":0.0,"回收":0.0,"贴膜":3.0,"电信积分":0.0,"滞销":0.0,"优享/会员":0.0,"尊享/储值":0.0},"dailyGap":{"手机":-2.0,"毛利":-2201.0,"增值":-643.0,"智慧办公":-1.0,"音频穿戴":-2.0,"HD":-1.0,"Care+":1.0,"回收":0.0,"贴膜":1.0,"电信积分":-9.0,"滞销":-1.0}},"张博晨":{"performance":{"毛利":{"task":0.0,"done":958.15,"gap":958.15,"rate":null},"手机":{"task":0.0,"done":0.0,"gap":0.0,"rate":null},"PC":{"task":0.0,"done":0.0,"gap":0.0,"rate":null},"平板":{"task":0.0,"done":0.0,"gap":0.0,"rate":null},"穿戴":{"task":0.0,"done":0.0,"gap":0.0,"rate":null},"音频":{"task":0.0,"done":0.0,"gap":0.0,"rate":null},"HD":{"task":0.0,"done":0.0,"gap":0.0,"rate":1.0},"智慧办公":{"task":0.0,"done":0.0,"gap":0.0,"rate":null},"音频穿戴":{"task":0.0,"done":0.0,"gap":0.0,"rate":null},"销额":{"task":0.0,"done":999.0,"gap":999.0,"rate":null},"绩效":null},"qcs":{"电信积分":{"task":0.0,"done":0.0,"gap":0.0,"rate":null},"会员搭售率":{"terminal":0.0,"care":1.0,"gap":1.0,"rate":null},"回收搭售率":{"orders":1.0,"gap":1.0,"rate":null},"贴膜率":{"orders":0.0,"gap":0.0,"rate":null},"考核机型":{"task":0.0,"done":0.0,"gap":0.0},"乐回收":{"orders":1.0,"amount":0.0,"增值":0.0},"太力回收":{"orders":0.0,"amount":0.0,"增值":0.0},"增值":{"task":0.0,"done":958.15,"gap":958.15,"rate":null},"健康度":{"coupon":198.0,"ratio":0.2066482283567291,"grossMargin":0.9591091091091091,"增值率":0.9591091091091091},"星联会员":{"优享":1.0,"尊享":0.0,"合计":1.0}},"dailyDone":{"手机":0.0,"毛利":0.0,"增值":0.0,"智慧办公":0.0,"音频穿戴":0.0,"HD":0.0,"会员":0.0,"回收":0.0,"贴膜":0.0,"电信积分":0.0,"滞销":0.0,"优享/会员":0.0,"尊享/储值":0.0},"dailyGap":{}}},"insights":{"categories":[{"key":"HD","name":"HD 智慧屏","unit":"台","task":2.0,"done":0.0,"rate":0,"lag":-0.3225806451612903,"level":"danger","lastDate":null,"coldDays":null,"needPerDay":1.0,"sellers":{},"zeroPeople":["李泽","陈超磊"]},{"key":"PC","name":"电脑","unit":"台","task":14.0,"done":1.0,"rate":0.07142857142857142,"lag":-0.25115207373271886,"level":"danger","lastDate":"2026-08-05","coldDays":5,"needPerDay":1.0,"sellers":{"陈超磊":1.0},"zeroPeople":["邵乐乐","杨丽华","李泽"]},{"key":"音频","name":"音频","unit":"件","task":37.0,"done":5.0,"rate":0.13513513513513514,"lag":-0.18744551002615517,"level":"danger","lastDate":"2026-08-09","coldDays":1,"needPerDay":2.0,"sellers":{"杨丽华":1.0,"李泽":2.0,"陈超磊":2.0},"zeroPeople":["邵乐乐"]},{"key":"平板","name":"平板","unit":"台","task":34.0,"done":5.0,"rate":0.14705882352941177,"lag":-0.17552182163187854,"level":"danger","lastDate":"2026-08-09","coldDays":1,"needPerDay":2.0,"sellers":{"杨丽华":3.0,"陈超磊":2.0},"zeroPeople":["邵乐乐","李泽"]},{"key":"手机","name":"手机","unit":"台","task":170.0,"done":45.0,"rate":0.2647058823529412,"lag":-0.057874762808349134,"level":"warn","lastDate":"2026-08-10","coldDays":0,"needPerDay":7.0,"sellers":{"邵乐乐":9.0,"杨丽华":15.0,"李泽":10.0,"陈超磊":11.0},"zeroPeople":[]},{"key":"穿戴","name":"穿戴","unit":"件","task":100.0,"done":41.0,"rate":0.41,"lag":0.08741935483870966,"level":"good","lastDate":"2026-08-10","coldDays":0,"needPerDay":4.0,"sellers":{"邵乐乐":21.0,"杨丽华":6.0,"李泽":7.0,"陈超磊":7.0},"zeroPeople":[]}],"people":[{"name":"杨丽华","score":0.3169103960208319,"毛利":{"done":15543.87,"task":51000.0,"rate":0.30478176470588236},"手机":{"done":15.0,"task":43.0,"rate":0.3488372093023256},"增值":{"done":4265.620000000001,"task":14250.0,"rate":0.29934175438596494},"毛利率":0.11144952708122834,"券占比":0.35004024094385755,"strong":["手机","平板"],"weak":["电脑","音频"],"todayGross":2294.3900000000003,"todayPhone":2.0,"rank":1,"level":"warn"},{"name":"陈超磊","score":0.23534534759976863,"毛利":{"done":12385.679999999998,"task":52000.0,"rate":0.23818615384615383},"手机":{"done":11.0,"task":42.0,"rate":0.2619047619047619},"增值":{"done":2684.7599999999998,"task":14250.0,"rate":0.18840421052631579},"毛利率":0.13273118015920865,"券占比":0.3653396503058371,"strong":[],"weak":["HD 智慧屏"],"todayGross":990.04,"todayPhone":1.0,"rank":2,"level":"warn"},{"name":"李泽","score":0.22358978397917872,"毛利":{"done":10020.34,"task":52000.0,"rate":0.19269884615384616},"手机":{"done":10.0,"task":42.0,"rate":0.23809523809523808},"增值":{"done":3976.5899999999997,"task":14250.0,"rate":0.279058947368421},"毛利率":0.14996243583411903,"券占比":0.41106389603546384,"strong":[],"weak":["电脑","平板","HD 智慧屏"],"todayGross":0.0,"todayPhone":0.0,"rank":3,"level":"warn"},{"name":"邵乐乐","score":0.12926665556915545,"毛利":{"done":4840.4800000000005,"task":50000.0,"rate":0.09680960000000001},"手机":{"done":9.0,"task":43.0,"rate":0.20930232558139536},"增值":{"done":1287.57,"task":14250.0,"rate":0.09035578947368421},"毛利率":0.12077256838318035,"券占比":0.7213540805870491,"strong":["穿戴"],"weak":["电脑","平板","音频"],"todayGross":0.0,"todayPhone":0.0,"rank":4,"level":"danger"}],"today":{"sold":[{"name":"杨丽华","orders":6,"gross":2294.3900000000003},{"name":"陈超磊","orders":9,"gross":990.04}],"idle":["邵乐乐","李泽"],"totalOrders":15,"totalGross":3284.4300000000003},"advices":[{"level":"danger","icon":"🚨","title":"整月零成交品类","body":"HD 智慧屏（任务 2台） 本月一台没出。建议今天就定人盯：指定专人负责，每天至少推 3 组客户，样机摆到主动线。"},{"level":"warn","icon":"🧊","title":"断销品类","body":"电脑（5天，最后 08-05） 已经连续多天零动销。先查三件事：样机是否在位、有没有货、店员会不会讲卖点。"},{"level":"warn","icon":"📉","title":"进度落后（时间已过 32%）","body":"电脑 还差 13台，日均要 1台；音频 还差 32件，日均要 2件；平板 还差 29台，日均要 2台。建议把这几项拆到人头，早会点名报进度。"},{"level":"warn","icon":"👤","title":"需要重点帮扶","body":"邵乐乐（毛利 10%） 综合进度明显掉队。别只催结果，先看是客流少、接待量少，还是成交率低——三种病不同药。"},{"level":"warn","icon":"⏰","title":"今日还没开单","body":"邵乐乐、李泽 今天暂无上账记录。先确认是没卖还是没及时上账，卖了要立刻补账。"},{"level":"warn","icon":"💰","title":"毛利率偏低","body":"全店毛利率 12.8%，低于 13% 参考线。优惠券占比 41% 偏高，多推增值和配件搭售，比单纯冲机器数划算。"},{"level":"good","icon":"✅","title":"进度健康","body":"穿戴 41% 已跑赢时间进度，保持节奏就行。"}],"timeProgress":0.3225806451612903,"remainDays":18}};
 
 const CFG = {
   repo   : 'ZBC5241/shop',
@@ -877,6 +936,122 @@ function foot(){
     + '</div>';
 }
 
+/* ---------------- 视图 5：店长洞察 ---------------- */
+const LV_COLOR = { danger:'--red', warn:'--amber', good:'--green', mid:'--blue', none:'--gray' };
+const LV_TAG   = { danger:'急', warn:'追', good:'稳', mid:'跟得上', none:'无任务' };
+
+function renderInsight(){
+  const I = DATA.insights;
+  if(!I) return '<div class="wrap"><div class="empty">暂无洞察数据，请重新生成看板</div></div>';
+  const m = DATA.meta || {};
+  const tp = I.timeProgress || 0;
+  let h = '<div class="wrap">';
+
+  /* ---- 1. 今日战况 ---- */
+  const T = I.today || {sold:[],idle:[]};
+  h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>今日战况</b>'
+     + '<span class="tail">' + esc(m.dayTitle || '') + '</span></div>';
+  h += '<div class="bt">'
+     + '<div class="bt-c"><div class="bt-v num">' + (T.totalOrders||0) + '</div><div class="bt-l">上账笔数</div></div>'
+     + '<div class="bt-c"><div class="bt-v num">' + money(T.totalGross||0,0) + '</div><div class="bt-l">今日毛利</div></div>'
+     + '<div class="bt-c"><div class="bt-v num" style="color:var('
+       + ((T.idle||[]).length ? '--red' : '--green') + ')">'
+       + (T.sold||[]).length + '<span style="font-size:12px;color:var(--tx3)">/'
+       + ((T.sold||[]).length + (T.idle||[]).length) + '</span></div>'
+     + '<div class="bt-l">已开单人数</div></div>'
+     + '</div>';
+
+  h += '<div class="who">';
+  (T.sold||[]).forEach(s => {
+    h += '<div class="who-i on"><span class="n">' + esc(s.name) + '</span>'
+       + '<span class="s num">' + s.orders + '单 · ' + money(s.gross,0) + '</span></div>';
+  });
+  (T.idle||[]).forEach(n => {
+    h += '<div class="who-i off"><span class="n">' + esc(n) + '</span>'
+       + '<span class="s">暂无上账</span></div>';
+  });
+  if(!(T.sold||[]).length && !(T.idle||[]).length) h += '<div class="empty">今日暂无数据</div>';
+  h += '</div></div>';
+
+  /* ---- 2. 经营建议 ---- */
+  const A = I.advices || [];
+  if(A.length){
+    h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>经营建议</b>'
+       + '<span class="tail">' + A.length + ' 条 · 自动诊断</span></div>';
+    A.forEach(a => {
+      h += '<div class="adv ' + esc(a.level) + '">'
+         + '<div class="adv-t"><i>' + esc(a.icon||'') + '</i>' + esc(a.title) + '</div>'
+         + '<div class="adv-b">' + esc(a.body) + '</div></div>';
+    });
+    h += '</div>';
+  }
+
+  /* ---- 3. 品类体检 ---- */
+  const C = I.categories || [];
+  h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>品类体检</b>'
+     + '<span class="tail">时间进度 ' + pct(tp,0) + ' · 剩 ' + (I.remainDays||0) + ' 天</span></div>';
+  C.forEach(c => {
+    if(!c.task) return;
+    const cv = LV_COLOR[c.level] || '--gray';
+    const w  = Math.min((c.rate||0)/Math.max(tp,0.01),1)*100;   // 相对时间进度的完成度
+    let sub;
+    if(c.done <= 0)                sub = '本月零成交';
+    else if(c.coldDays === 0)      sub = '今天有成交';
+    else if(c.coldDays >= 3)       sub = '已 ' + c.coldDays + ' 天没卖（最后 ' + c.lastDate.slice(5) + '）';
+    else                           sub = c.coldDays + ' 天前卖过';
+    h += '<div class="ct">'
+       + '<div class="ct-bg" style="width:' + w.toFixed(0) + '%;background:var(' + cv + ')"></div>'
+       + '<div class="ct-r">'
+         + '<div class="ct-n">' + esc(c.name) + '</div>'
+         + '<div class="ct-tag" style="background:var(' + cv + ');color:#fff">'
+           + esc(LV_TAG[c.level]||'') + '</div>'
+         + '<div class="ct-m"><div class="ct-v num" style="color:var(' + cv + ')">'
+           + pct(c.rate,0) + '</div>'
+         + '<div class="ct-s num">' + cnt(c.done) + '/' + cnt(c.task) + esc(c.unit)
+           + ' · 日均需 ' + cnt(c.needPerDay) + '</div></div>'
+       + '</div>'
+       + '<div class="ct-x">' + esc(sub)
+         + (c.zeroPeople && c.zeroPeople.length
+             ? ' · 挂零：<b>' + c.zeroPeople.map(esc).join('、') + '</b>' : '')
+       + '</div></div>';
+  });
+  h += '</div>';
+
+  /* ---- 4. 员工体检 ---- */
+  const P = I.people || [];
+  h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>员工体检</b>'
+     + '<span class="tail">综合进度排名</span></div>';
+  P.forEach(p => {
+    const cv = LV_COLOR[p.level] || '--gray';
+    h += '<div class="pf">'
+       + '<div class="pf-r">'
+         + '<div class="pf-no' + (p.rank===1?' n1':'') + '">' + p.rank + '</div>'
+         + '<div><div class="pf-n">' + esc(p.name) + '</div>'
+         + '<div class="pf-kl">综合 <b class="num" style="color:var(' + cv + ')">'
+           + pct(p.score,0) + '</b>' + (isNum(p.毛利率) ? ' · 毛利率 ' + pct(p.毛利率,1) : '') + '</div></div>'
+         + '<div class="pf-m">'
+           + '<div class="pf-k"><div class="pf-kv num">' + pct(p.毛利.rate,0) + '</div><div class="pf-kl">毛利</div></div>'
+           + '<div class="pf-k"><div class="pf-kv num">' + pct(p.手机.rate,0) + '</div><div class="pf-kl">手机</div></div>'
+           + '<div class="pf-k"><div class="pf-kv num">' + pct(p.增值.rate,0) + '</div><div class="pf-kl">增值</div></div>'
+         + '</div>'
+       + '</div>';
+    if((p.strong||[]).length || (p.weak||[]).length){
+      h += '<div class="pf-x">';
+      (p.strong||[]).forEach(s => h += '<span class="pf-t g">强 ' + esc(s) + '</span>');
+      (p.weak||[]).forEach(s   => h += '<span class="pf-t b">弱 ' + esc(s) + '</span>');
+      h += '</div>';
+    }
+    h += '</div>';
+  });
+  h += '<div style="font-size:10.5px;color:var(--tx3);text-align:center;padding:6px 0 2px;line-height:1.7">'
+     + '综合分 = 毛利 50% + 手机 30% + 增值 20%，与时间进度 ' + pct(tp,0) + ' 对比</div>';
+  h += '</div>';
+
+  h += foot();
+  h += '</div>';
+  return h;
+}
+
 /* ---------------- 主渲染 ---------------- */
 function render(){
   const m = DATA.meta || {};
@@ -889,7 +1064,8 @@ function render(){
     $('#tpFill').style.width = (isNum(tp) ? Math.min(tp,1)*100 : 0).toFixed(1) + '%';
   });
 
-  const fn = { store:renderStore, rank:renderRank, person:renderPerson, day:renderDay }[VIEW];
+  const fn = { store:renderStore, rank:renderRank, person:renderPerson,
+               day:renderDay, insight:renderInsight }[VIEW];
   $('#app').innerHTML = fn();
   bindDynamic();
   window.scrollTo(0,0);

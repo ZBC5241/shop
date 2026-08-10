@@ -371,6 +371,189 @@ def total_qcs(people, sp):
     }
 
 
+# ============================ 店长洞察 ============================
+# 看板品类 → 明细筛选条件（用于算最后成交日 / 断销天数）
+CAT_FILTER = {
+    "手机":  ("D", "01手机"),
+    "PC":    ("D", "05电脑"),
+    "平板":  ("D", "06平板电脑"),
+    "穿戴":  ("D", "08穿戴"),
+    "音频":  ("D", "07音频"),
+    "HD":    ("F", "12*"),
+}
+CAT_UNIT = {"手机": "台", "PC": "台", "平板": "台", "穿戴": "件", "音频": "件", "HD": "台"}
+CAT_ALIAS = {"PC": "电脑", "HD": "HD 智慧屏"}
+
+
+def last_sold(xs, cond, name=None):
+    """某品类（可限定业务员）最后一次成交的日期。没卖过返回 None。"""
+    col, pat = cond
+    best = None
+    for r in xs:
+        if not hit(r[C[col]], pat):
+            continue
+        if name and r[C["P"]].strip() != name:
+            continue
+        if num(r[C["I"]]) <= 0:          # 只认正向出货，退货不算动销
+            continue
+        d = day_of(r)
+        if best is None or d > best:
+            best = d
+    return best
+
+
+def build_insights(xs, rxs, people, store, ref, tp, rd):
+    """把明细 + 复算结果，翻译成店长看得懂的判断和建议。"""
+
+    # ---------- 1. 品类体检 ----------
+    cats = []
+    for key, cond in CAT_FILTER.items():
+        b = store["performance"].get(key) or {}
+        task, done = b.get("task", 0), b.get("done", 0)
+        rate = b.get("rate") or 0
+        ld = last_sold(xs, cond)
+        cold = (ref - datetime.date.fromisoformat(ld)).days if ld else None
+        # 谁卖过这个品类
+        sellers = {}
+        for n in TASK_PEOPLE:
+            v = people[n]["performance"].get(key, {}).get("done", 0)
+            if v:
+                sellers[n] = v
+        if task <= 0:
+            level = "none"
+        elif done <= 0:
+            level = "danger"                 # 整月零成交
+        elif rate < tp * 0.5:
+            level = "danger"                 # 进度不到时间的一半
+        elif rate < tp * 0.85:
+            level = "warn"
+        elif rate >= tp:
+            level = "good"
+        else:
+            level = "mid"
+        cats.append({
+            "key": key,
+            "name": CAT_ALIAS.get(key, key),
+            "unit": CAT_UNIT.get(key, ""),
+            "task": task, "done": done, "rate": rate,
+            "lag": rate - tp,
+            "level": level,
+            "lastDate": ld,
+            "coldDays": cold,
+            "needPerDay": roundup(max(0, task - done) / rd) if task else 0,
+            "sellers": sellers,
+            "zeroPeople": [n for n in TASK_PEOPLE
+                           if people[n]["performance"].get(key, {}).get("task", 0) > 0
+                           and not people[n]["performance"].get(key, {}).get("done", 0)],
+        })
+    cats.sort(key=lambda c: (c["level"] not in ("danger", "warn"), c["rate"]))
+
+    # ---------- 2. 员工体检 ----------
+    W = {"毛利": 0.5, "手机": 0.3}          # 综合分权重：毛利为主，手机为辅
+    plist = []
+    for n in TASK_PEOPLE:
+        pp, pq = people[n]["performance"], people[n]["qcs"]
+        r_gross = pp["毛利"].get("rate") or 0
+        r_phone = pp["手机"].get("rate") or 0
+        r_add = (pq.get("增值") or {}).get("rate") or 0
+        score = r_gross * W["毛利"] + r_phone * W["手机"] + r_add * 0.2
+        weak = [CAT_ALIAS.get(k, k) for k in CAT_FILTER
+                if pp.get(k, {}).get("task", 0) > 0 and (pp[k].get("rate") or 0) < tp * 0.5]
+        strong = [CAT_ALIAS.get(k, k) for k in CAT_FILTER
+                  if pp.get(k, {}).get("task", 0) > 0 and (pp[k].get("rate") or 0) >= tp]
+        plist.append({
+            "name": n, "score": score,
+            "毛利": {"done": pp["毛利"]["done"], "task": pp["毛利"]["task"], "rate": r_gross},
+            "手机": {"done": pp["手机"]["done"], "task": pp["手机"]["task"], "rate": r_phone},
+            "增值": {"done": (pq.get("增值") or {}).get("done", 0),
+                    "task": (pq.get("增值") or {}).get("task", 0), "rate": r_add},
+            "毛利率": (pq.get("健康度") or {}).get("grossMargin"),
+            "券占比": (pq.get("健康度") or {}).get("ratio"),
+            "strong": strong, "weak": weak,
+            "todayGross": people[n]["dailyDone"].get("毛利", 0),
+            "todayPhone": people[n]["dailyDone"].get("手机", 0),
+        })
+    plist.sort(key=lambda x: -x["score"])
+    for i, p in enumerate(plist):
+        p["rank"] = i + 1
+        p["level"] = "good" if p["score"] >= tp else ("warn" if p["score"] >= tp * 0.6 else "danger")
+
+    # ---------- 3. 今日谁卖了谁没卖 ----------
+    orders, gross = {}, {}
+    for r in rxs:
+        n = r[C["P"]].strip()
+        orders[n] = orders.get(n, 0) + 1
+        gross[n] = gross.get(n, 0.0) + num(r[C["N"]])
+    sold = sorted(({"name": n, "orders": orders[n], "gross": gross[n]}
+                   for n in orders if n in PEOPLE_ORDER),
+                  key=lambda x: -x["gross"])
+    idle = [n for n in TASK_PEOPLE if n not in orders]
+
+    # ---------- 4. 自动建议 ----------
+    adv = []
+
+    zero_cat = [c for c in cats if c["task"] > 0 and c["done"] <= 0]
+    if zero_cat:
+        names = "、".join(f"{c['name']}（任务 {c['task']:.0f}{c['unit']}）" for c in zero_cat)
+        adv.append({"level": "danger", "icon": "🚨", "title": "整月零成交品类",
+                    "body": f"{names} 本月一台没出。建议今天就定人盯：指定专人负责，"
+                            f"每天至少推 3 组客户，样机摆到主动线。"})
+
+    cold = [c for c in cats if c["coldDays"] and c["coldDays"] >= 3 and c["done"] > 0]
+    if cold:
+        s = "、".join(f"{c['name']}（{c['coldDays']}天，最后 {c['lastDate'][5:]}）" for c in cold)
+        adv.append({"level": "warn", "icon": "🧊", "title": "断销品类",
+                    "body": f"{s} 已经连续多天零动销。先查三件事：样机是否在位、"
+                            f"有没有货、店员会不会讲卖点。"})
+
+    behind = [c for c in cats if c["task"] > 0 and 0 < c["rate"] < tp * 0.6]
+    if behind:
+        s = "；".join(f"{c['name']} 还差 {c['task']-c['done']:.0f}{c['unit']}，"
+                      f"日均要 {c['needPerDay']:.0f}{c['unit']}" for c in behind[:3])
+        adv.append({"level": "warn", "icon": "📉", "title": f"进度落后（时间已过 {tp:.0%}）",
+                    "body": f"{s}。建议把这几项拆到人头，早会点名报进度。"})
+
+    lag_p = [p for p in plist if p["level"] == "danger"]
+    if lag_p:
+        s = "、".join(f"{p['name']}（毛利 {p['毛利']['rate']:.0%}）" for p in lag_p)
+        adv.append({"level": "warn", "icon": "👤", "title": "需要重点帮扶",
+                    "body": f"{s} 综合进度明显掉队。别只催结果，先看是客流少、"
+                            f"接待量少，还是成交率低——三种病不同药。"})
+
+    if idle:
+        adv.append({"level": "warn", "icon": "⏰", "title": "今日还没开单",
+                    "body": f"{'、'.join(idle)} 今天暂无上账记录。"
+                            f"先确认是没卖还是没及时上账，卖了要立刻补账。"})
+
+    top = plist[0] if plist else None
+    if top and top["score"] >= tp:
+        adv.append({"level": "good", "icon": "🏆", "title": "本月标杆",
+                    "body": f"{top['name']} 综合进度领先（毛利 {top['毛利']['rate']:.0%}"
+                            f"、手机 {top['手机']['rate']:.0%}）。"
+                            f"让他在早会讲两句怎么谈的，比店长讲管用。"})
+
+    gm = (store["qcs"].get("健康度") or {}).get("grossMargin")
+    cp = (store["qcs"].get("健康度") or {}).get("ratio")
+    if gm is not None and gm < 0.13:
+        adv.append({"level": "warn", "icon": "💰", "title": "毛利率偏低",
+                    "body": f"全店毛利率 {gm:.1%}，低于 13% 参考线。"
+                            + (f"优惠券占比 {cp:.0%} 偏高，" if cp and cp > 0.3 else "")
+                            + "多推增值和配件搭售，比单纯冲机器数划算。"})
+
+    hot = [c for c in cats if c["level"] == "good"]
+    if hot:
+        adv.append({"level": "good", "icon": "✅", "title": "进度健康",
+                    "body": "、".join(f"{c['name']} {c['rate']:.0%}" for c in hot)
+                            + " 已跑赢时间进度，保持节奏就行。"})
+
+    return {"categories": cats, "people": plist,
+            "today": {"sold": sold, "idle": idle,
+                      "totalOrders": len(rxs),
+                      "totalGross": sum(gross.values())},
+            "advices": adv,
+            "timeProgress": tp, "remainDays": rd}
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("tsv")
@@ -443,6 +626,7 @@ def main():
         },
         "store": store,
         "people": people,
+        "insights": build_insights(xs, rxs, people, store, ref, ref.day / last_day, rd),
     }
 
     with open(a.out, "w", encoding="utf-8") as f:
