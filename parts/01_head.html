@@ -90,6 +90,18 @@ body{
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r)}
 .empty{padding:26px 0;text-align:center;color:var(--tx3);font-size:12px}
 
+/* ============ 上账时效提示条 ============ */
+.lag-tip{
+  display:flex;flex-direction:column;gap:3px;
+  background:var(--card);border:1px solid var(--line);
+  border-left:3px solid var(--blue);
+  border-radius:10px;padding:9px 12px;margin-bottom:14px;
+}
+.lag-tip b{font-size:12px;color:var(--tx2);font-weight:600;line-height:1.5}
+.lag-tip span{font-size:10.5px;color:var(--tx3);line-height:1.65}
+.lag-tip.warn{border-left-color:var(--amber);background:var(--amberDim)}
+.lag-tip.warn b{color:var(--amber)}
+
 /* ============ 核心 KPI ============ */
 .kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 .kpi{

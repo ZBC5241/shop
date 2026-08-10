@@ -6,6 +6,10 @@
   "timeProgress": 0.3225806451612903,
   "remainDays": 18,
   "refDate": "2026-08-10",
+  "isToday": true,
+  "lagDays": 0,
+  "todayLabel": "08-10",
+  "fetchTime": "20:47",
   "employees": [
    "邵乐乐",
    "杨丽华",
@@ -16,7 +20,7 @@
   "sourceFile": "yonyou_raw.tsv",
   "sourceRows": 179,
   "dayRows": 9,
-  "generatedAt": "2026-08-10 19:23:28"
+  "generatedAt": "2026-08-10 20:47:09"
  },
  "store": {
   "performance": {

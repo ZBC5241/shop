@@ -430,6 +430,11 @@ def main():
             "timeProgress": ref.day / last_day,
             "remainDays": rd,
             "refDate": ref.isoformat(),
+            # 上账时效：店员销售后才上账，可能滞后，但当天必补齐
+            "isToday": base == ref,
+            "lagDays": (ref - base).days,
+            "todayLabel": f"{ref.month:02d}-{ref.day:02d}",
+            "fetchTime": datetime.datetime.now().strftime("%H:%M"),
             "employees": PEOPLE_ORDER,
             "sourceFile": os.path.basename(a.tsv),
             "sourceRows": len(xs),

@@ -164,8 +164,25 @@ function dayHTML(done, gap){
   return h;
 }
 
+/* 上账时效提示：卖了不等于已上账，但当天一定补齐 */
+function postingBanner(){
+  const m = DATA.meta || {};
+  const t = m.fetchTime ? ('，' + esc(m.fetchTime) + ' 更新') : '';
+  if(m.isToday === false && m.lagDays >= 1){
+    return '<div class="lag-tip warn">'
+      + '<b>今天（' + esc(m.todayLabel || '') + '）还没有上账记录</b>'
+      + '<span>下面是 ' + esc(m.date || '') + ' 的数据' + t + '。已卖出但未上账的单不会显示，上完账刷新就有。</span>'
+      + '</div>';
+  }
+  return '<div class="lag-tip">'
+    + '<b>数据以「已上账」为准' + t + '</b>'
+    + '<span>卖了还没上账的单暂不计入，补账后刷新即可显示。</span>'
+    + '</div>';
+}
+
 function renderDay(){
   let h = '<div class="wrap">';
+  h += postingBanner();
   h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>全店今日达成</b>'
      + '<span class="tail">' + esc(DATA.meta.dayTitle || DATA.meta.date) + '</span></div>';
   h += dayHTML(DATA.store.dailyDone, DATA.store.dailyGap);
@@ -190,7 +207,7 @@ function renderDay(){
        + (allZero ? ';border-color:rgba(232,68,58,.22)' : '') + '">'
       + '<div style="display:flex;align-items:center;gap:7px;margin-bottom:7px">'
         + '<b style="font-size:13px">' + esc(n) + '</b>'
-        + (allZero ? '<span style="font-size:10px;color:var(--red);background:var(--redDim);padding:1px 6px;border-radius:5px;font-weight:600">今日零开单</span>' : '')
+        + (allZero ? '<span style="font-size:10px;color:var(--tx3);background:var(--card2);padding:1px 6px;border-radius:5px;font-weight:600">暂无上账</span>' : '')
       + '</div>'
       + '<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:5px">';
     items.forEach(([l,v]) => {
@@ -220,7 +237,8 @@ function foot(){
 function render(){
   const m = DATA.meta || {};
   $('#storeName').textContent = m.storeName || '门店看板';
-  $('#dataDate').textContent  = (m.date || '') + (m.dayTitle ? ' · ' + m.dayTitle : '');
+  $('#dataDate').textContent  = (m.date || '')
+    + (m.fetchTime ? ' · ' + m.fetchTime + ' 更新' : (m.dayTitle ? ' · ' + m.dayTitle : ''));
   const tp = m.timeProgress;
   $('#tpVal').textContent = isNum(tp) ? pct(tp,1) : '—';
   requestAnimationFrame(() => {

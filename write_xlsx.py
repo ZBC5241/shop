@@ -125,6 +125,32 @@ def build_rows(rows, rowattr, styles, extra_cols):
     return "".join(buf)
 
 
+# RXS 原生动态数组公式：从 XS 自动筛出日期最大的那一天
+RXS_FORMULA = "_xlfn._xlws.FILTER(XS!A2:S3000,XS!C2:C3000=MAX(XS!C2:C3000))"
+
+
+def restore_rxs_formula(xml, n_rows):
+    """把 RXS 的 A2 还原成 FILTER 动态数组公式（保留缓存值，供不打开表格时读取）。
+
+    RXS 本质是 XS 的派生视图，绝不能写死成静态数据，
+    否则 XS 更新后「当日达成」不会跟着变。
+    """
+    ref = "A2:S%d" % (n_rows + 1)
+    pat = re.compile(r'<c r="A2"([^>]*?)(?:\s*/>|>(.*?)</c>)', re.S)
+    m = pat.search(xml)
+    if not m:
+        return xml
+    attrs, inner = m.group(1), m.group(2) or ""
+    style = re.search(r'\s*s="(\d+)"', attrs)
+    sa = ' s="%s"' % style.group(1) if style else ""
+    # 从 inlineStr 或 <v> 里取出缓存值
+    cv = re.search(r"<t[^>]*>(.*?)</t>", inner, re.S) or re.search(r"<v>(.*?)</v>", inner, re.S)
+    cache = cv.group(1) if cv else ""
+    new = ('<c r="A2"%s t="str" cm="1"><f t="array" ref="%s">%s</f><v>%s</v></c>'
+           % (sa, ref, RXS_FORMULA, cache))
+    return xml[:m.start()] + new + xml[m.end():]
+
+
 def rewrite_sheet(xml, rows):
     rowattr, styles = extract_template(xml)
     extra = {k: v for k, v in styles.items()
@@ -206,7 +232,11 @@ def main():
             if item.filename == xs_path:
                 data = rewrite_sheet(data.decode("utf-8"), rows).encode("utf-8")
             elif item.filename == rxs_path:
-                data = rewrite_sheet(data.decode("utf-8"), day_rows).encode("utf-8")
+                # RXS 是 XS 的派生视图：先写缓存值（供不打开表格时读取），
+                # 再把 A2 还原成 FILTER 动态数组公式，保证 XS 变时 RXS 跟着变
+                s = rewrite_sheet(data.decode("utf-8"), day_rows)
+                s = restore_rxs_formula(s, len(day_rows))
+                data = s.encode("utf-8")
             elif item.filename == "xl/workbook.xml":
                 s = data.decode("utf-8")
                 if "fullCalcOnLoad" not in s:
