@@ -105,9 +105,9 @@ function renderPerson(){
   h += '</div></div>';
 
   /* 品类 */
-  h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>品类达成</b></div><div class="rows">';
-  CATS.forEach(c => { h += catRow(c, P[c], c); });
-  h += catRow('增值', Q['增值'], '增值');
+  h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>品类达成</b><span class="tail">点品类行展开明细</span></div><div class="rows">';
+  CATS.forEach(c => { h += catRow(c, P[c], c, PERSON); });
+  h += catRow('增值', Q['增值'], '增值', PERSON);
   h += '</div></div>';
 
   h += '</div>'; /* /cols 上半 */
@@ -383,6 +383,8 @@ function bindDynamic(){
     $$('.tab').forEach(t => t.classList.toggle('on', t.dataset.v === 'person'));
     render();
   });
+  /* 品类达成：点击品类行下钻明细 */
+  $$('.cat-click').forEach(c => c.onclick = () => { toggleDetail(c.dataset.cat, c.dataset.person || null); });
   /* 点击总览进度环：达成即撒彩带庆祝 */
   const ring = $('.ring');
   if(ring) ring.onclick = () => {

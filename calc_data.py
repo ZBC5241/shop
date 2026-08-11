@@ -219,6 +219,40 @@ def calc_perf(xs, name, task):
     }
 
 
+# ============================ 复算：品类销售明细（点击展开用）============================
+# 复用 calc_perf 的归类口径，把每一行出库明细归入对应品类，供前端「品类达成」点击下钻。
+DET_CATS = {
+    "手机":     lambda r: r[C["D"]] == "01手机",
+    "PC":       lambda r: r[C["D"]] == "05电脑",
+    "平板":     lambda r: r[C["D"]] == "06平板电脑",
+    "穿戴":     lambda r: r[C["D"]] == "08穿戴",
+    "音频":     lambda r: r[C["D"]] == "07音频",
+    "HD":       lambda r: (r[C["F"]] or "").startswith("12"),
+    "智慧办公": lambda r: r[C["D"]] in ("05电脑", "06平板电脑"),
+    "音频穿戴": lambda r: r[C["D"]] in ("08穿戴", "07音频"),
+    "增值":     lambda r: "增值" in (r[C["D"]] or ""),
+}
+
+def row_detail(r):
+    return {
+        "date":   r[C["C"]],
+        "name":   r[C["G"]],
+        "qty":    num(r[C["I"]]),
+        "amount": num(r[C["M"]]),
+        "profit": num(r[C["N"]]),
+        "emp":    r[C["P"]],
+        "sku":    r[C["F"]],
+    }
+
+def build_details(xs):
+    out = {}
+    for cat, cond in DET_CATS.items():
+        rows = [row_detail(r) for r in xs if cond(r)]
+        rows.sort(key=lambda x: (x["date"] or ""), reverse=True)
+        out[cat] = rows
+    return out
+
+
 # ============================ 复算：全科生 / 增值 ============================
 def calc_qcs(xs, name, task, perf, lehui, taili):
     P = ("P", name)
@@ -630,6 +664,7 @@ def main():
         "store": store,
         "people": people,
         "insights": build_insights(xs, rxs, people, store, ref, ref.day / last_day, rd),
+        "details": build_details(xs),
     }
 
     with open(a.out, "w", encoding="utf-8") as f:

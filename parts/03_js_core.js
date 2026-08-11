@@ -117,18 +117,20 @@ function kpiCard(label, k, key){
     + '</div>';
 }
 
-function catRow(name, k, key){
+function catRow(name, k, key, person){
   if(!k) return '';
   const has = hasTask(k);
   const s   = has ? stat(k.rate) : 'na';
   const crit = has && isCritical(k.rate);
   const u = unitOf(key, k);
-  return '<div class="row' + (crit ? ' warn' : '') + '">'
+  const pc = person ? ' data-person="' + esc(person) + '"' : '';
+  return '<div class="row cat-click' + (crit ? ' warn' : '') + '" data-cat="' + esc(name) + '"' + pc + '>'
     + '<div class="row-t">'
       + '<span class="row-n">' + esc(name) + '</span>'
       + '<span class="row-p r-' + s + '">' + (has ? pct(k.rate,0) : '无任务') + '</span>'
       + '<span class="row-v num"><b>' + fmtU(k.done, u) + '</b>'
       + (has ? ' / ' + fmtU(k.task, u) : '') + '</span>'
+      + '<span class="chev">' + ic('chev') + '</span>'
     + '</div>'
     + barHTML(k.rate, s)
     + (has && isNum(k.gap) && k.gap < 0
@@ -136,7 +138,47 @@ function catRow(name, k, key){
         : (has && isNum(k.gap) && k.gap >= 0
             ? '<div class="row-g"><span>' + STAT_TXT[s] + '</span><span style="color:var(--green)">超出 ' + fmtU(k.gap, u) + '</span></div>'
             : ''))
-    + '</div>';
+    + '</div>'
+    + '<div class="cat-det" data-cat="' + esc(name) + '"' + pc + '></div>';
+}
+
+function money(v){ v = (v == null ? 0 : v); return v.toLocaleString('zh-CN', {maximumFractionDigits:2}); }
+
+/* 品类销售明细（点击品类行下钻） */
+function detailRowsHTML(cat, person){
+  let rows = (DATA.details && DATA.details[cat]) || [];
+  if(person) rows = rows.filter(r => r.emp === person);
+  if(!rows.length) return '<div class="det-empty">该品类暂无销售明细</div>';
+  let h = '<div class="det-list">';
+  rows.forEach(r => {
+    const neg = (r.amount || 0) < 0;
+    h += '<div class="det-item' + (neg ? ' neg' : '') + '">'
+      + '<div class="det-top"><span class="det-name">' + esc(r.name || '—') + '</span>'
+      + '<span class="det-date num">' + esc(r.date || '') + '</span></div>'
+      + '<div class="det-meta"><span class="det-emp">' + esc(r.emp || '—') + '</span>'
+      + (r.sku ? '<span class="det-sku">' + esc(r.sku) + '</span>' : '') + '</div>'
+      + '<div class="det-nums num"><span class="det-qty">×' + (r.qty || 0) + '</span>'
+      + '<span>¥' + money(r.amount) + '</span>'
+      + '<span class="det-profit">毛利 ' + money(r.profit) + '</span></div>'
+      + '</div>';
+  });
+  h += '</div>';
+  return h;
+}
+
+function toggleDetail(cat, person){
+  person = person || '';
+  const det = document.querySelector('.cat-det[data-cat="' + cat + '"][data-person="' + person + '"]');
+  if(!det) return;
+  const rc  = document.querySelector('.cat-click[data-cat="' + cat + '"][data-person="' + person + '"]');
+  const open = det.classList.contains('open');
+  // 逐层展开：关掉其它已展开项，保持界面干净
+  document.querySelectorAll('.cat-det.open').forEach(d => { if(d !== det){ d.classList.remove('open'); d.innerHTML = ''; }});
+  document.querySelectorAll('.cat-click.on').forEach(d => { if(d !== rc) d.classList.remove('on'); });
+  if(open){ det.classList.remove('open'); det.innerHTML = ''; if(rc) rc.classList.remove('on'); return; }
+  det.innerHTML = detailRowsHTML(cat, person);
+  det.classList.add('open');
+  if(rc) rc.classList.add('on');
 }
 
 /* 环形进度 */
@@ -163,7 +205,8 @@ const ICONS = {
   qudao:'<path d="M3 10l9-6 9 6M4 10v9h16v-9M9 19v-5h6v5"/>',
   warn:'<path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17v.5"/>',
   fire:'<path d="M12 3s5 4 5 9a5 5 0 0 1-10 0c0-2 1-3 1-3s.5 2 2 2c0-3 2-5 2-8z"/>',
-  spark:'<path d="M12 3l2 6 6 2-6 2-2 6-2-6-6-2 6-2z"/>'
+  spark:'<path d="M12 3l2 6 6 2-6 2-2 6-2-6-6-2 6-2z"/>',
+  chev:'<path d="M9 6l6 6-6 6"/>'
 };
 function ic(name, size){
   return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"'
@@ -260,7 +303,7 @@ function renderStore(){
 
   /* 品类达成 */
   h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>品类达成</b>'
-     + '<span class="tail">紫线 = 时间进度</span></div><div class="rows">';
+     + '<span class="tail">点品类行展开明细</span></div><div class="rows">';
   CATS.forEach(c => { h += catRow(c, P[c], c); });
   h += catRow('增值', Q['增值'], '增值');
   h += '</div></div>';
