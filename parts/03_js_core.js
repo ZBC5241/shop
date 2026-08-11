@@ -247,11 +247,11 @@ function heroRow(label, k){
 }
 
 function storeHero(P, Q){
-  const sales = P['销额'] || {};
-  const s = hasTask(sales) ? stat(sales.rate) : 'na';
+  const zeng = Q['增值'] || {};
+  const s = hasTask(zeng) ? stat(zeng.rate) : 'na';
   let h = '<div class="sec"><div class="hero">';
-  h += '<div class="ring">' + ringSVG(sales.rate, s, 100)
-     + '<div class="ring-c"><b class="num">' + pct(sales.rate, 0) + '</b><span>销售额达成</span></div></div>';
+  h += '<div class="ring">' + ringSVG(zeng.rate, s, 100)
+     + '<div class="ring-c"><b class="num">' + pct(zeng.rate, 0) + '</b><span>增值达成</span></div></div>';
   h += '<div class="hero-r">'
      + '<div class="hero-t">整体进度一览</div>'
      + heroRow('销售额', P['销额'])
