@@ -4,9 +4,9 @@
 poster_build.py —— 动态生成当日「今日达成日报」高清海报 PNG。
 
 读 data.json（看板复算）+ yonyou_raw.tsv（算每人单量），
-按 poster_v3 的版式动态填当日真实数据，调用 render_poster.js 截成 2x 高清无框 PNG。
+按竖版版式动态填当日真实数据，调用 render_poster.js 截成 4x 高清无框 PNG。
 
-版式：横版单屏（手机横屏 19.5:9），CSS 1416x658 → 渲染 2x = 2832x1316。
+版式：竖版（手机竖屏友好），CSS 760 宽 → 渲染 4x。
 
 用法:
   python3 poster_build.py                 # 生成 poster_today.png 并打印路径
@@ -135,9 +135,9 @@ def build_html(d):
             '      <div class="r-name">{}</div>\n'
             '      <div class="r-mid"><div class="meta">{}</div>'
             '<div class="track"><div class="fill" style="width:{}%;background:linear-gradient(90deg,{});"></div></div></div>\n'
-        '      <div class="r-rate" style="color:{};">{}</div>\n'
-        '    </div>\n'
-    ).format(name, meta_txt, round(w), color, color.split(",")[1], rate_fmt(rate))
+            '      <div class="r-rate" style="color:{};">{}</div>\n'
+            '    </div>\n'
+        ).format(name, meta_txt, round(w), color, color.split(",")[1], rate_fmt(rate))
 
     # 人员（开单在前，按销额降序）
     people_sorted = sorted(
@@ -232,95 +232,92 @@ def build_html(d):
   * {{ margin:0; padding:0; box-sizing:border-box; }}
   body {{ background:#f5f6f9; font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
           display:flex; justify-content:center; -webkit-font-smoothing:antialiased; }}
-  .phone {{ width:1416px; height:658px; background:#f5f6f9; display:flex; flex-direction:column; overflow:hidden; }}
-  .hero {{ height:98px; flex:none; background:linear-gradient(135deg,#131c33 0%,#1f2f52 55%,#274072 100%);
-           display:flex; align-items:center; justify-content:space-between; padding:0 38px; color:#fff; position:relative; }}
-  .hero::after {{ content:""; position:absolute; right:-40px; top:-40px; width:160px; height:160px;
+  .phone {{ width:720px; background:#f5f6f9; display:flex; flex-direction:column; overflow:hidden; }}
+  .hero {{ background:linear-gradient(135deg,#131c33 0%,#1f2f52 55%,#274072 100%);
+           padding:30px 34px 26px; color:#fff; position:relative; }}
+  .hero::after {{ content:""; position:absolute; right:-30px; top:-30px; width:150px; height:150px;
                  background:radial-gradient(circle,rgba(120,160,255,.16),transparent 70%); border-radius:50%; }}
+  .hero .top {{ display:flex; align-items:center; justify-content:space-between; }}
   .hero .kicker {{ font-size:13px; letter-spacing:4px; color:#8fb0e6; font-weight:600; }}
-  .hero h1 {{ font-size:30px; font-weight:800; margin-top:5px; letter-spacing:1px; }}
-  .hero .sub {{ margin-top:4px; font-size:14px; color:#b6c6e6; font-weight:500; }}
-  .ring {{ width:68px; height:68px; border-radius:50%; flex:none; position:relative;
+  .hero h1 {{ font-size:30px; font-weight:800; margin-top:6px; letter-spacing:1px; }}
+  .hero .sub {{ margin-top:8px; font-size:14px; color:#b6c6e6; font-weight:500; }}
+  .ring {{ width:74px; height:74px; border-radius:50%; flex:none; position:relative;
            background:conic-gradient(#f5a623 0% {ov}%, rgba(255,255,255,.13) {ov}% 100%); }}
-  .ring .in {{ position:absolute; inset:8px; border-radius:50%; background:#16203b;
+  .ring .in {{ position:absolute; inset:9px; border-radius:50%; background:#16203b;
                display:flex; flex-direction:column; align-items:center; justify-content:center; }}
-  .ring .in b {{ font-size:21px; font-weight:800; color:#fff; line-height:1; }}
+  .ring .in b {{ font-size:23px; font-weight:800; color:#fff; line-height:1; }}
   .ring .in span {{ font-size:9px; color:#f5a623; margin-top:3px; font-weight:600; }}
-  .body {{ flex:1; display:flex; gap:16px; padding:16px; overflow:hidden; }}
-  .col-l {{ width:430px; flex:none; display:flex; flex-direction:column; gap:12px; }}
-  .col-r {{ flex:1; display:flex; flex-direction:column; gap:10px; overflow:hidden; }}
+  .body {{ padding:18px; display:flex; flex-direction:column; gap:14px; }}
   .kpis {{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }}
-  .kpi {{ background:#fff; border-radius:14px; padding:14px 18px; position:relative; box-shadow:0 6px 16px rgba(30,45,80,.06); }}
-  .kpi::before {{ content:""; position:absolute; left:18px; top:0; width:28px; height:4px; border-radius:0 0 3px 3px; background:#2f6bff; }}
-  .kpi .lab {{ font-size:15px; color:#9aa3b3; font-weight:600; }}
-  .kpi .val {{ font-size:27px; font-weight:800; color:#1c2230; margin-top:4px; letter-spacing:.3px; }}
-  .kpi .u {{ font-size:14px; color:#9aa3b3; font-weight:600; }}
-  .sec-t {{ font-size:17px; font-weight:800; color:#1c2230; display:flex; align-items:center; gap:8px; margin-bottom:4px; }}
-  .sec-t .bar {{ width:6px; height:16px; border-radius:3px; background:#2f6bff; }}
-  .rows {{ background:#fff; border-radius:14px; padding:10px 18px; box-shadow:0 6px 16px rgba(30,45,80,.05); }}
-  .row {{ display:flex; align-items:center; padding:7px 0; border-bottom:1px solid #eef0f4; }}
+  .kpi {{ background:#fff; border-radius:16px; padding:16px 20px; position:relative; box-shadow:0 6px 16px rgba(30,45,80,.06); }}
+  .kpi::before {{ content:""; position:absolute; left:20px; top:0; width:30px; height:4px; border-radius:0 0 3px 3px; background:#2f6bff; }}
+  .kpi .lab {{ font-size:16px; color:#9aa3b3; font-weight:600; }}
+  .kpi .val {{ font-size:30px; font-weight:800; color:#1c2230; margin-top:5px; letter-spacing:.3px; }}
+  .kpi .u {{ font-size:15px; color:#9aa3b3; font-weight:600; }}
+  .card {{ background:#fff; border-radius:16px; padding:16px 20px; box-shadow:0 6px 16px rgba(30,45,80,.05); }}
+  .sec-t {{ font-size:18px; font-weight:800; color:#1c2230; display:flex; align-items:center; gap:8px; margin-bottom:8px; }}
+  .sec-t .bar {{ width:6px; height:17px; border-radius:3px; background:#2f6bff; }}
+  .row {{ display:flex; align-items:center; padding:9px 0; border-bottom:1px solid #eef0f4; }}
   .row:last-child {{ border-bottom:none; }}
-  .r-name {{ width:52px; font-size:16px; font-weight:700; color:#2a3242; }}
-  .r-mid {{ flex:1; padding:0 14px; }}
-  .r-mid .meta {{ font-size:13px; color:#9aa3b3; margin-bottom:5px; }}
-  .track {{ height:8px; border-radius:5px; background:#edeff4; overflow:hidden; }}
+  .r-name {{ width:56px; font-size:17px; font-weight:700; color:#2a3242; }}
+  .r-mid {{ flex:1; padding:0 16px; }}
+  .r-mid .meta {{ font-size:14px; color:#9aa3b3; margin-bottom:6px; }}
+  .track {{ height:9px; border-radius:5px; background:#edeff4; overflow:hidden; }}
   .fill {{ height:100%; border-radius:5px; }}
-  .r-rate {{ width:52px; text-align:right; font-size:17px; font-weight:800; }}
-  .people {{ display:flex; gap:10px; flex-wrap:wrap; }}
-  .p {{ display:flex; align-items:center; gap:9px; background:#fff; border-radius:12px; padding:9px 12px;
-         box-shadow:0 5px 14px rgba(30,45,80,.05); }}
-  .ava {{ width:36px; height:36px; border-radius:50%; color:#fff; font-size:16px; font-weight:800;
+  .r-rate {{ width:56px; text-align:right; font-size:18px; font-weight:800; }}
+  .people {{ display:flex; flex-wrap:wrap; gap:10px; }}
+  .p {{ display:flex; align-items:center; gap:9px; background:#f7f9fc; border-radius:13px; padding:9px 13px; width:calc(50% - 5px); }}
+  .ava {{ width:38px; height:38px; border-radius:50%; color:#fff; font-size:17px; font-weight:800;
           display:flex; align-items:center; justify-content:center; flex:none; }}
   .p .nm {{ font-size:16px; font-weight:700; color:#1c2230; }}
   .p .info {{ font-size:12px; color:#8b94a6; line-height:1.35; }}
   .pill {{ font-size:13px; font-weight:800; padding:4px 11px; border-radius:16px; }}
   .ok {{ background:#e7f7ef; color:#1fb574; }}
   .zero {{ background:#fdeaec; color:#ff5b6e; }}
-  .qd {{ background:#fff; border-radius:12px; padding:11px 16px; font-size:13px; color:#434a5c;
-         box-shadow:0 5px 14px rgba(30,45,80,.05); }}
-  .qd-sum {{ margin-bottom:7px; }}
+  .qd {{ font-size:14px; color:#434a5c; }}
+  .qd-sum {{ margin-bottom:8px; }}
   .qd-sum b {{ color:#1c2230; font-weight:800; }}
   .qd .lag {{ color:#ff5b6e; font-weight:800; }}
-  .qd-row {{ display:inline-block; margin:2px 10px 2px 0; font-size:13px; }}
+  .qd-row {{ display:inline-block; margin:3px 12px 3px 0; font-size:14px; }}
   .qd-nm {{ font-weight:700; color:#1c2230; }}
   .qd-st {{ color:#8b94a6; }}
   .qd-row.zero .qd-st {{ color:#ff5b6e; font-weight:800; }}
-  .review {{ background:#fff; border-radius:12px; padding:12px 16px; border-left:5px solid #f5a623;
-             box-shadow:0 5px 14px rgba(30,45,80,.05); }}
-  .review h3 {{ font-size:15px; color:#b9802a; font-weight:800; margin-bottom:5px; }}
-  .review p {{ font-size:13px; color:#434a5c; line-height:1.5; }}
+  .review {{ border-left:5px solid #f5a623; border-radius:0 12px 12px 0; }}
+  .review h3 {{ font-size:16px; color:#b9802a; font-weight:800; margin-bottom:6px; }}
+  .review p {{ font-size:14px; color:#434a5c; line-height:1.6; }}
 </style></head>
 <body>
 <div class="phone">
   <div class="hero">
-    <div>
-      <div class="kicker">DAILY REPORT</div>
-      <h1>李家村门店 · 今日达成</h1>
-      <div class="sub">{label}　以已上账为准　·　更新 {ftime}</div>
+    <div class="top">
+      <div>
+        <div class="kicker">DAILY REPORT</div>
+        <h1>李家村门店 · 今日达成</h1>
+        <div class="sub">{label}　以已上账为准　·　更新 {ftime}</div>
+      </div>
+      <div class="ring"><div class="in"><b>{ov_pct}</b><span>综合达成</span></div></div>
     </div>
-    <div class="ring"><div class="in"><b>{ov_pct}</b><span>综合达成</span></div></div>
   </div>
   <div class="body">
-    <div class="col-l">
-      <div class="kpis">
-        <div class="kpi"><div class="lab">销额</div><div class="val">{amt}</div></div>
-        <div class="kpi"><div class="lab">毛利</div><div class="val">{gp}</div></div>
-        <div class="kpi"><div class="lab">增值</div><div class="val">{va}</div></div>
-        <div class="kpi"><div class="lab">手机</div><div class="val">{phone}<span class="u"> 台</span></div></div>
-      </div>
-      <div class="sec-t"><span class="bar"></span>各板块达成 · 当日任务</div>
-      <div class="rows">
-{rows_html}      </div>
+    <div class="kpis">
+      <div class="kpi"><div class="lab">销额</div><div class="val">{amt}</div></div>
+      <div class="kpi"><div class="lab">毛利</div><div class="val">{gp}</div></div>
+      <div class="kpi"><div class="lab">增值</div><div class="val">{va}</div></div>
+      <div class="kpi"><div class="lab">手机</div><div class="val">{phone}<span class="u"> 台</span></div></div>
     </div>
-    <div class="col-r">
+    <div class="card">
+      <div class="sec-t"><span class="bar"></span>各板块达成 · 当日任务</div>
+{rows_html}    </div>
+    <div class="card">
       <div class="sec-t"><span class="bar"></span>人员战况</div>
       <div class="people">
 {people_html}      </div>
-{qd_html}
-      <div class="review">
-        <h3>核心复盘</h3>
-        <p>{review_txt}</p>
-      </div>
+    </div>
+{sep}    <div class="card qd">
+{qd_html}    </div>
+    <div class="card review">
+      <h3>核心复盘</h3>
+      <p>{review_txt}</p>
     </div>
   </div>
 </div>
@@ -328,7 +325,7 @@ def build_html(d):
         ov=round(overall), label=label, ftime=ftime, ov_pct=rate_fmt(overall),
         amt=money(amt), gp=money(gp), va=money(va), phone="{:.0f}".format(phone),
         rows_html=rows_html, people_html=people_html, qd_html=qd_html,
-        review_txt=review_txt,
+        review_txt=review_txt, sep=("    </div>\n" if qd_html else ""),
     )
     return html
 
