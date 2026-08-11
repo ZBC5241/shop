@@ -445,38 +445,56 @@ svg{display:block}
   .mask.on{align-items:center}
 }
 
-/* ============ 电脑：≥1024 左侧固定边栏 + 多栏 ============ */
+/* ============ 电脑：≥1024 左侧固定边栏 + 流式多栏 ============ */
 @media(min-width:1024px){
+  /* 超宽屏收窄侧栏留白，让内容把屏幕用满（融外部看板「断点改列数 + 流式网格」思路） */
+  :root{--sideW:248px}
   body{padding-bottom:22px}
   .side{
-    position:fixed;left:0;top:0;bottom:0;width:230px;z-index:60;
+    position:fixed;left:0;top:0;bottom:0;width:var(--sideW);z-index:60;
     display:flex;flex-direction:column;align-items:stretch;
     background:linear-gradient(180deg,#ffffff,#fbfbff);
     border-right:1px solid var(--line);border-bottom:none;
-    padding:22px 14px;box-shadow:2px 0 22px rgba(70,60,130,.05);
+    padding:24px 16px;box-shadow:2px 0 22px rgba(70,60,130,.05);
     backdrop-filter:none;
   }
-  .top{position:static;padding:0 6px 14px;max-width:none;margin:0;background:transparent;border:none;box-shadow:none}
-  .top-row{flex-wrap:wrap}
-  .top-t{flex:1 0 100%;order:3;margin-top:10px}
-  .top-t h1{white-space:normal;font-size:14px;line-height:1.4}
-  .tp{margin-top:14px}
+  .top{position:static;padding:0 8px 16px;max-width:none;margin:0;background:transparent;border:none;box-shadow:none}
+  .top-row{flex-wrap:wrap;gap:12px}
+  .logo{width:38px;height:38px}
+  .logo svg{width:22px;height:22px}
+  .icon-btn{width:38px;height:38px}
+  .icon-btn svg{width:19px;height:19px}
+  .top-t{flex:1 0 100%;order:3;margin-top:12px}
+  .top-t h1{white-space:normal;font-size:16px;line-height:1.45;letter-spacing:.3px}
+  .top-t p{font-size:12px;margin-top:3px}
+  .tp{margin-top:16px}
+  .tp-bar{height:8px}
   .tabs{
     position:static;flex-direction:column;background:transparent;border-top:none;
-    box-shadow:none;padding:6px 0 0;margin:0;gap:4px;border-bottom:none;
+    box-shadow:none;padding:8px 0 0;margin:0;gap:6px;border-bottom:none;
     flex:1;overflow-y:auto;
   }
-  .tab{flex:none;flex-direction:row;justify-content:flex-start;gap:11px;padding:12px 14px;border-radius:11px;font-size:14px;text-align:left}
-  .tab svg{width:19px;height:19px}
-  .tab span{display:block!important;font-size:14px;text-align:left}
+  .tab{flex:none;flex-direction:row;justify-content:flex-start;gap:12px;padding:13px 15px;border-radius:12px;font-size:15px;text-align:left;transition:.16s}
+  .tab svg{width:20px;height:20px}
+  .tab span{display:block!important;font-size:15px;text-align:left}
   .tab.on{background:var(--purpleDim)}
   .tab.on::after{display:none}
-  #app{margin-left:230px}
-  .wrap{max-width:1080px;margin:0 auto;padding:26px 28px 40px}
-  .kpi-grid{grid-template-columns:repeat(4,1fr)}
-  .day-grid{grid-template-columns:repeat(7,1fr)}
-  /* 桌面：把相邻区块并成两列 */
-  .cols{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
+  #app{margin-left:var(--sideW)}
+  /* 内容宽度随屏幕伸缩：小屏铺满，超大屏封顶 1480 保证可读性 */
+  .wrap{max-width:min(1480px,100%);margin:0 auto;padding:30px 40px 52px}
+  /* KPI / 今日战报：流式列数，屏幕越宽卡越多，绝不浪费 */
+  .kpi-grid{grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+  .day-grid{grid-template-columns:repeat(auto-fit,minmax(116px,1fr))}
+  .kpi-v{font-size:26px}
+  .kpi-l{font-size:12px}
+  .sec-h b{font-size:15px}
+  .hero{padding:20px 22px;gap:22px}
+  .ring{width:118px;height:118px}
+  .ring-c b{font-size:27px}
+  .mc-bars{height:140px}
+  .mc-track{height:118px}
+  /* 桌面：相邻区块并两列（minmax(0,1fr) 防止内容撑破） */
+  .cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start}
   .cols>.sec{margin-bottom:0}
   .sheet{max-width:560px;margin:0 auto;border-radius:22px;align-self:center}
   .mask.on{align-items:center}
