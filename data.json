@@ -1,9 +1,9 @@
 {
  "meta": {
   "storeName": "华为李家村万达授权体验店",
-  "date": "2026-08-09",
+  "date": "2026-08-11",
   "dayTitle": "08-09达成",
-  "timeProgress": 0.290322580645161,
+  "timeProgress": 0.3548387096774194,
   "employees": [
    "邵乐乐",
    "杨丽华",
@@ -12,7 +12,7 @@
    "张博晨"
   ],
   "sourceFile": "李家村8月任务进度.xlsx",
-  "generatedAt": "2026-08-11 11:45:06"
+  "generatedAt": "2026-08-11 12:23:43"
  },
  "store": {
   "performance": {
@@ -903,8 +903,8 @@
   }
  },
  "qudao": {
-  "timeDate": "2026-08-09",
-  "timeRate": 0.290322580645161,
+  "timeDate": "2026-08-11",
+  "timeRate": 0.3548387096774194,
   "total": {
    "task": 120000.0,
    "done": 19697.0,

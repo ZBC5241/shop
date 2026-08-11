@@ -10,8 +10,17 @@
 用法：
     python build_data.py /path/to/李家村8月任务进度.xlsx [输出.json]
 """
-import sys, os, json, datetime
+import sys, os, json, datetime, calendar
 import openpyxl
+
+
+def _days_in_month(d):
+    return calendar.monthrange(d.year, d.month)[1]
+
+
+def _is_formula(cell):
+    v = cell.value
+    return isinstance(v, str) and v.startswith("=")
 
 SHEET = "李家村销售"
 
@@ -118,19 +127,30 @@ def read_labels(ws, label_row, start=1, end=15):
     return out
 
 
-def read_qudao(wb):
-    """读取「渠道挂账」sheet：时间进度 + 合计行 + 逐人。只提取不计算。"""
+def read_qudao(wb, wb_f=None):
+    """读取「渠道挂账」sheet：时间进度 + 合计行 + 逐人。只提取不计算。
+    wb_f 为 data_only=False 的工作簿，用于识别 B1/E1 是否为公式(=TODAY())，
+    若是则按今天取值，避免读到陈旧缓存。"""
     name = "渠道挂账"
     if name not in wb.sheetnames:
         return None
     ws = wb[name]
+    ws_f = wb_f[name] if (wb_f and name in wb_f.sheetnames) else None
+    today = datetime.date.today()
+
     # 时间进度：B1=日期, E1=进度率
-    raw_date = ws.cell(1, 2).value
-    if isinstance(raw_date, (datetime.datetime, datetime.date)):
-        date_str = raw_date.strftime("%Y-%m-%d")
+    if ws_f and _is_formula(ws_f.cell(1, 2)):
+        date_str = today.strftime("%Y-%m-%d")
     else:
-        date_str = str(raw_date).strip()[:10] if raw_date else ""
-    tp = num(ws.cell(1, 5).value)
+        raw_date = ws.cell(1, 2).value
+        if isinstance(raw_date, (datetime.datetime, datetime.date)):
+            date_str = raw_date.strftime("%Y-%m-%d")
+        else:
+            date_str = str(raw_date).strip()[:10] if raw_date else ""
+    if ws_f and _is_formula(ws_f.cell(1, 5)):
+        tp = today.day / _days_in_month(today)
+    else:
+        tp = num(ws.cell(1, 5).value)
 
     # 定位表头行（B列=任务 且 C列=完成）
     hrow = None
@@ -189,18 +209,28 @@ def main():
         os.path.dirname(os.path.abspath(__file__)), "data.json")
 
     wb = openpyxl.load_workbook(src, data_only=True)
+    wb_f = openpyxl.load_workbook(src, data_only=False)  # 仅用于识别公式
     if SHEET not in wb.sheetnames:
         print(f"❌ 找不到工作表「{SHEET}」，现有：{wb.sheetnames}")
         sys.exit(1)
     ws = wb[SHEET]
+    ws_f = wb_f[SHEET]
+    today = datetime.date.today()
 
     # --- 元信息 ---
-    raw_date = ws.cell(ROW_TIME, 2).value
-    if isinstance(raw_date, (datetime.datetime, datetime.date)):
-        date_str = raw_date.strftime("%Y-%m-%d")
+    # B1/I1 若为公式(=TODAY() 等)，按今天取值，避免读到陈旧缓存值
+    if _is_formula(ws_f.cell(ROW_TIME, 2)):
+        date_str = today.strftime("%Y-%m-%d")
     else:
-        date_str = str(raw_date).strip()[:10] if raw_date else ""
-    tp = num(ws.cell(ROW_TIME, 9).value)
+        raw_date = ws.cell(ROW_TIME, 2).value
+        if isinstance(raw_date, (datetime.datetime, datetime.date)):
+            date_str = raw_date.strftime("%Y-%m-%d")
+        else:
+            date_str = str(raw_date).strip()[:10] if raw_date else ""
+    if _is_formula(ws_f.cell(ROW_TIME, 9)):
+        tp = today.day / _days_in_month(today)
+    else:
+        tp = num(ws.cell(ROW_TIME, 9).value)
 
     d3_labels = read_labels(ws, P3_LABEL_ROW)
     d4_labels = read_labels(ws, P4_LABEL_ROW)
@@ -233,7 +263,7 @@ def main():
             "dailyGap":    read_flat(ws, P4_ROWS[name], d4_labels) if name in P4_ROWS else {},
         }
 
-    qd = read_qudao(wb)
+    qd = read_qudao(wb, wb_f)
     if qd:
         data["qudao"] = qd
 
