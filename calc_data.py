@@ -234,14 +234,18 @@ DET_CATS = {
 }
 
 def row_detail(r):
+    amt = num(r[C["M"]])   # 金额
+    pf  = num(r[C["N"]])   # 毛利
+    gpr = round(pf / amt, 4) if amt else None   # 毛利率 = 毛利 / 金额
     return {
         "date":      r[C["C"]],
         "name":      r[C["G"]],
         "qty":       num(r[C["I"]]),
         "origPrice": num(r[C["K"]]),   # 原价
         "discPrice": num(r[C["L"]]),   # 折扣价
-        "amount":    num(r[C["M"]]),   # 金额
-        "profit":    num(r[C["N"]]),   # 毛利
+        "amount":    amt,
+        "profit":    pf,
+        "gpr":       gpr,              # 毛利率（自算）
         "so":        (r[C["O"]] or "").strip(),  # SO激励
         "cost":      num(r[C["S"]]),   # 销售成本
         "emp":       r[C["P"]],
