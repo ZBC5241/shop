@@ -97,6 +97,42 @@ function readFlat(grid, row, labels, start){
   return d;
 }
 
+/* 渠道挂账：时间进度(B1/E1) + 合计行 + 逐人 */
+function readQudao(grid){
+  if(!grid || !grid.length) return null;
+  const rawDate = (grid[0] || [])[1];
+  let dateStr = '';
+  if(rawDate instanceof Date){
+    const p = n => String(n).padStart(2,'0');
+    dateStr = rawDate.getFullYear() + '-' + p(rawDate.getMonth()+1) + '-' + p(rawDate.getDate());
+  }else if(rawDate){
+    dateStr = String(rawDate).trim().slice(0,10);
+  }
+  const tp = g(grid, 1, 4);   // E1 (0-based col 4)
+
+  let hrow = null;
+  for(let r = 1; r < Math.min(grid.length, 40); r++){
+    const row = grid[r-1] || [];
+    if(String(row[1] || '').trim() === '任务' && String(row[2] || '').trim() === '完成'){ hrow = r; break; }
+  }
+  if(!hrow) return null;
+
+  const people = [];
+  let total = null;
+  for(let r = hrow + 1; r <= grid.length; r++){
+    const cell0 = grid[r-1] ? grid[r-1][0] : null;
+    if(cell0 === null || cell0 === undefined) continue;
+    const name = String(cell0).trim();
+    if(name === '') continue;
+    if(name === '合计'){
+      total = { task:g(grid,r,1), done:g(grid,r,2), gap:g(grid,r,3), rate:g(grid,r,4) };
+      continue;
+    }
+    people.push({ name:name, task:g(grid,r,1), done:g(grid,r,2), gap:g(grid,r,3), rate:g(grid,r,4) });
+  }
+  return { timeDate:dateStr, timeRate:tp, total:total, people:people };
+}
+
 function parseWorkbook(ab, fileName){
   const wb = XLSX.read(ab, {type:'array', cellDates:true});
   if(wb.SheetNames.indexOf(SHEET_NAME) < 0)
@@ -155,6 +191,15 @@ function parseWorkbook(ab, fileName){
       dailyGap:    P4_ROWS[n] ? readFlat(grid, P4_ROWS[n], d4, 1) : {}
     };
   });
+
+  /* 渠道挂账（独立 sheet） */
+  const qdName = '渠道挂账';
+  if(wb.SheetNames.indexOf(qdName) >= 0){
+    const qdWs = wb.Sheets[qdName];
+    const qdGrid = XLSX.utils.sheet_to_json(qdWs, {header:1, defval:null, raw:true, blankrows:true});
+    out.qudao = readQudao(qdGrid);
+  }
+
   return out;
 }
 

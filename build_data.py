@@ -118,6 +118,56 @@ def read_labels(ws, label_row, start=1, end=15):
     return out
 
 
+def read_qudao(wb):
+    """读取「渠道挂账」sheet：时间进度 + 合计行 + 逐人。只提取不计算。"""
+    name = "渠道挂账"
+    if name not in wb.sheetnames:
+        return None
+    ws = wb[name]
+    # 时间进度：B1=日期, E1=进度率
+    raw_date = ws.cell(1, 2).value
+    if isinstance(raw_date, (datetime.datetime, datetime.date)):
+        date_str = raw_date.strftime("%Y-%m-%d")
+    else:
+        date_str = str(raw_date).strip()[:10] if raw_date else ""
+    tp = num(ws.cell(1, 5).value)
+
+    # 定位表头行（B列=任务 且 C列=完成）
+    hrow = None
+    for r in range(1, min(ws.max_row, 40) + 1):
+        if (str(ws.cell(r, 2).value or "").strip() == "任务"
+                and str(ws.cell(r, 3).value or "").strip() == "完成"):
+            hrow = r
+            break
+    if not hrow:
+        return None
+
+    people, total = [], None
+    for r in range(hrow + 1, ws.max_row + 1):
+        nm = ws.cell(r, 1).value
+        if nm is None:
+            continue
+        nm = str(nm).strip()
+        if nm == "":
+            continue
+        if nm == "合计":
+            total = {
+                "task": num(ws.cell(r, 2).value),
+                "done": num(ws.cell(r, 3).value),
+                "gap":  num(ws.cell(r, 4).value),
+                "rate": num(ws.cell(r, 5).value),
+            }
+            continue
+        people.append({
+            "name": nm,
+            "task": num(ws.cell(r, 2).value),
+            "done": num(ws.cell(r, 3).value),
+            "gap":  num(ws.cell(r, 4).value),
+            "rate": num(ws.cell(r, 5).value),
+        })
+    return {"timeDate": date_str, "timeRate": tp, "total": total, "people": people}
+
+
 # 不再提取的指标（按需求剔除）
 DROP_KEYS = {"摄影课"}
 
@@ -182,6 +232,10 @@ def main():
             "dailyDone":   read_flat(ws, P3_ROWS[name], d3_labels),
             "dailyGap":    read_flat(ws, P4_ROWS[name], d4_labels) if name in P4_ROWS else {},
         }
+
+    qd = read_qudao(wb)
+    if qd:
+        data["qudao"] = qd
 
     with open(out, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=1)

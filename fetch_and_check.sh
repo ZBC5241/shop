@@ -22,9 +22,11 @@ TODAY=$(date +%Y-%m-%d)
 
 echo "🕐 [$(date '+%H:%M')] 开始检查 $TODAY 上账情况…"
 
-# 1) 抓数
+# 1) 抓 XS 明细
 if [ "$NO_FETCH" = "0" ]; then
   "$BASE/fetch_yonyou.sh" "$TSV" || { echo "❌ 抓取失败"; exit 1; }
+  # 1.5) 同步抓「销售分析」并导入其 sheet（与 XS 导表逻辑一致）
+  "$BASE/fetch_sales_analysis.sh" || echo "⚠️ 销售分析导入未成功（不影响主流程）"
 fi
 
 # 2) 复算（刷新 data.json，含 meta.isToday / lagDays）
@@ -33,12 +35,10 @@ fi
 # 3) 今天是否已上账？
 TODAY_HAS=$("$PY" -c "import json;print(1 if json.load(open('$BASE/data.json'))['meta'].get('isToday') else 0)")
 if [ "$TODAY_HAS" = "1" ]; then
-  echo "✅ 今天已上账，无需提醒"
-  exit 0
-fi
-
-# 4) 今天 0 单 → 历史对比（近7天不含今天，每天是否有单）
-HIST=$("$PY" - "$TSV" "$TODAY" <<'PY'
+  echo "✅ 今天已上账"
+else
+  # 4) 今天 0 单 → 历史对比（近7天不含今天，每天是否有单）
+  HIST=$("$PY" - "$TSV" "$TODAY" <<'PY'
 import sys,csv,collections,datetime
 rows=list(csv.reader(open(sys.argv[1],encoding='utf-8-sig'),delimiter='\t'))
 body=[r for r in rows[1:] if r and r[0].strip()]
@@ -49,12 +49,16 @@ print(sum(1 for x in last7 if cnt.get(x,0)>0))
 PY
 )
 
-if [ "$HIST" -ge 6 ]; then
-  "$BASE/notify.sh" "⚠️ 李家村今日未上账" \
-    "今天($TODAY)至今 0 单上账。近7天同时段每天都有销售，疑似未及时上账，请提醒店员尽快上账。"
-elif [ "$HIST" -ge 3 ]; then
-  "$BASE/notify.sh" "📋 李家村今日暂无上账" \
-    "今天($TODAY)至今 0 单。近7天有 $HIST 天有销售，可能还没上账，也可能今天确实没卖，留意一下。"
-else
-  echo "今天 0 单，但近7天也常无销售（$HIST 天），可能真没卖，不提醒（属门店销售分析项）。"
+  if [ "$HIST" -ge 6 ]; then
+    "$BASE/notify.sh" "⚠️ 李家村今日未上账" \
+      "今天($TODAY)至今 0 单上账。近7天同时段每天都有销售，疑似未及时上账，请提醒店员尽快上账。"
+  elif [ "$HIST" -ge 3 ]; then
+    "$BASE/notify.sh" "📋 李家村今日暂无上账" \
+      "今天($TODAY)至今 0 单。近7天有 $HIST 天有销售，可能还没上账，也可能今天确实没卖，留意一下。"
+  else
+    echo "今天 0 单，但近7天也常无销售（$HIST 天），可能真没卖，不提醒（属门店销售分析项）。"
+  fi
 fi
+
+# 5) 推送今日战报到企业微信（定时任务反馈，手机可看）
+"$PY" "$BASE/wecom_report.py" || true

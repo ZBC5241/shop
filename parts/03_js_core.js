@@ -139,10 +139,71 @@ function catRow(name, k, key){
     + '</div>';
 }
 
+/* 环形进度 */
+function ringSVG(rate, s, size){
+  const r = (size - 16) / 2, c = 2 * Math.PI * r;
+  const w = isNum(rate) ? Math.min(rate, 1) : 0;
+  const off = c * (1 - w);
+  const col = {done:'#2dd4a7', over:'#4d9bff', on:'#ffb02e', low:'#ff4d4f', na:'#64748b'}[s] || '#64748b';
+  return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">'
+    + '<circle cx="' + (size/2) + '" cy="' + (size/2) + '" r="' + r + '" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="10"/>'
+    + '<circle cx="' + (size/2) + '" cy="' + (size/2) + '" r="' + r + '" fill="none" stroke="' + col + '" stroke-width="10" stroke-linecap="round"'
+    + ' stroke-dasharray="' + c.toFixed(1) + '" stroke-dashoffset="' + off.toFixed(1) + '"'
+    + ' transform="rotate(-90 ' + (size/2) + ' ' + (size/2) + ')" style="transition:stroke-dashoffset 1s cubic-bezier(.22,1,.36,1)"/>'
+    + '</svg>';
+}
+
+function heroRow(label, k){
+  const s = hasTask(k) ? stat(k.rate) : 'na';
+  const col = {done:'var(--green)', over:'var(--blue)', on:'var(--amber)', low:'var(--red)', na:'var(--gray)'}[s];
+  return '<div class="hero-row"><span>' + esc(label) + '</span>'
+       + '<b class="num" style="color:' + col + '">' + pct(k && k.rate, 1) + '</b></div>';
+}
+
+function storeHero(P, Q){
+  const sales = P['销额'] || {};
+  const s = hasTask(sales) ? stat(sales.rate) : 'na';
+  let h = '<div class="sec"><div class="hero">';
+  h += '<div class="ring">' + ringSVG(sales.rate, s, 100)
+     + '<div class="ring-c"><b class="num">' + pct(sales.rate, 0) + '</b><span>销售额达成</span></div></div>';
+  h += '<div class="hero-r">'
+     + '<div class="hero-t">整体进度一览</div>'
+     + heroRow('销售额', P['销额'])
+     + heroRow('毛利', P['毛利'])
+     + heroRow('手机', P['手机'])
+     + heroRow('增值', Q['增值'])
+     + '<div class="hero-tp">时间进度 <b class="num">' + pct(DATA.meta.timeProgress, 1) + '</b></div>'
+     + '</div>';
+  h += '</div></div>';
+  return h;
+}
+
+function catChartHTML(P){
+  const cats = CATS.concat(['增值']);
+  const tp = DATA.meta.timeProgress;
+  const tpPct = isNum(tp) ? Math.min(tp, 1) * 100 : 0;
+  let bars = '';
+  cats.forEach(c => {
+    const k = P[c];
+    const rate = (k && isNum(k.rate)) ? Math.min(k.rate, 1) : 0;
+    const s = k && hasTask(k) ? stat(k.rate) : 'na';
+    const col = {done:'var(--green)', over:'var(--blue)', on:'var(--amber)', low:'var(--red)', na:'var(--gray)'}[s];
+    bars += '<div class="mc-b"><div class="mc-track">'
+          + '<div class="mc-f" style="height:' + (rate*100).toFixed(0) + '%;background:' + col + '"></div>'
+          + (tpPct > 0 ? '<div class="mc-mk" style="bottom:' + tpPct.toFixed(0) + '%"></div>' : '')
+          + '</div><span class="mc-l">' + esc(c) + '</span></div>';
+  });
+  return '<div class="mc"><div class="mc-bars">' + bars + '</div>'
+       + '<div class="mc-leg"><span class="mc-dot"></span>蓝虚线 = 时间进度 ' + pct(tp, 0) + '</div></div>';
+}
+
 function renderStore(){
   const P = DATA.store.performance || {};
   const Q = DATA.store.qcs || {};
   let h = '<div class="wrap">';
+
+  /* 总览 hero */
+  h += storeHero(P, Q);
 
   /* 核心 KPI */
   h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>核心指标</b>'
@@ -153,6 +214,10 @@ function renderStore(){
   h += kpiCard('增值', Q['增值'], '增值');
   h += kpiCard('手机', P['手机'], '手机');
   h += '</div></div>';
+
+  /* 品类速览（柱状图） */
+  h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>品类速览</b>'
+     + '<span class="tail">柱高 = 达成率</span></div>' + catChartHTML(P) + '</div>';
 
   /* 品类达成 */
   h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>品类达成</b>'
@@ -288,6 +353,62 @@ function qcsHTML(Q){
       + '<br>增值率 ' + pct(jk['增值率'],1) + '</div></div>';
   }
 
+  h += '</div>';
+  return h;
+}
+
+/* ---------------- 视图：渠道挂账 ---------------- */
+function renderQudao(){
+  const Q = DATA.qudao;
+  if(!Q) return '<div class="wrap"><div class="empty">暂无渠道挂账数据</div></div>';
+  const t = Q.total || {};
+  const tp = Q.timeRate;
+  const s = isNum(t.rate) ? stat(t.rate) : 'na';
+  let h = '<div class="wrap">';
+
+  /* 汇总卡 */
+  h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>渠道挂账</b>'
+     + '<span class="tail">时间进度 ' + pct(tp,1) + '</span></div>';
+  h += '<div class="card" style="padding:15px">';
+  h += '<div style="display:flex;align-items:baseline;gap:8px">'
+     + '<b class="num" style="font-size:28px;font-weight:800;letter-spacing:-.5px">' + moneyShort(t.done) + '</b>'
+     + '<span style="font-size:12px;color:var(--tx3)">/ ' + moneyShort(t.task) + ' 目标</span>'
+     + '<span style="flex:1"></span>'
+     + '<span class="r-' + s + '" style="font-size:13px;font-weight:800;padding:3px 9px;border-radius:8px">' + pct(t.rate,1) + '</span>'
+     + '</div>';
+  h += '<div class="kpi-bar" style="margin-top:12px"><i class="f-' + s + '" style="width:'
+     + (isNum(t.rate) ? Math.min(t.rate,1)*100 : 0).toFixed(1) + '%"></i></div>';
+  const lag = isNum(t.rate) && isNum(tp) && t.rate < tp;
+  h += '<div style="margin-top:10px;font-size:11.5px;color:var(--tx3);line-height:1.6">'
+     + '数据日期 ' + esc(Q.timeDate || '—') + ' · 已过 ' + pct(tp,1)
+     + (lag ? ' <span style="color:var(--amber);font-weight:700">⚠ 进度落后</span>'
+            : ' <span style="color:var(--green);font-weight:700">跟上节奏</span>')
+     + '</div>';
+  h += '</div></div>';
+
+  /* 逐人 */
+  h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>逐人进度</b></div><div class="rows">';
+  (Q.people || []).forEach(p => {
+    const has = isNum(p.task) && p.task !== 0;
+    const ps = has ? stat(p.rate) : 'na';
+    const crit = has && isCritical(p.rate);
+    h += '<div class="row' + (crit ? ' warn' : '') + '">'
+      + '<div class="row-t">'
+        + '<span class="row-n">' + esc(p.name) + '</span>'
+        + '<span class="row-p r-' + ps + '">' + (has ? pct(p.rate,0) : '无任务') + '</span>'
+        + '<span class="row-v num"><b>' + moneyShort(p.done) + '</b>' + (has ? ' / ' + moneyShort(p.task) : '') + '</span>'
+      + '</div>'
+      + barHTML(p.rate, ps)
+      + (has && isNum(p.gap) && p.gap < 0
+          ? '<div class="row-g"><span>' + STAT_TXT[ps] + '</span><em>还差 ' + moneyShort(Math.abs(p.gap)) + '</em></div>'
+          : (has && isNum(p.gap) && p.gap >= 0
+              ? '<div class="row-g"><span>' + STAT_TXT[ps] + '</span><span style="color:var(--green)">超出 ' + moneyShort(p.gap) + '</span></div>'
+              : (has ? '<div class="row-g"><span>' + STAT_TXT[ps] + '</span></div>' : '')))
+      + '</div>';
+  });
+  h += '</div></div>';
+
+  h += foot();
   h += '</div>';
   return h;
 }

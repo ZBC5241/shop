@@ -133,7 +133,7 @@ function renderPerson(){
 }
 
 /* ---------------- 视图 4：今日 ---------------- */
-const DAY_ORDER = ['毛利','增值','手机','音频穿戴','智慧办公','HD','会员','回收','贴膜','电信积分','滞销','优享/会员','尊享/储值'];
+const DAY_ORDER = ['毛利','销额','增值','手机','音频穿戴','智慧办公','HD','会员','回收','贴膜','电信积分','滞销','优享/会员','尊享/储值'];
 const GAP_ALIAS = { '会员':'Care+' };
 
 function dayHTML(done, gap){
@@ -196,13 +196,13 @@ function renderDay(){
     const p = DATA.people[n]; if(!p) return;
     const d = p.dailyDone || {};
     const items = [
+      ['销额', moneyShort(d['销额'])],
       ['毛利', moneyShort(d['毛利'])],
       ['增值', moneyShort(d['增值'])],
       ['手机', cnt(d['手机'])],
       ['音频穿戴', cnt(d['音频穿戴'])],
-      ['贴膜', cnt(d['贴膜'])],
     ];
-    const allZero = ['毛利','增值','手机','音频穿戴','贴膜'].every(k => !isNum(d[k]) || d[k] === 0);
+    const allZero = ['销额','毛利','增值','手机','音频穿戴'].every(k => !isNum(d[k]) || d[k] === 0);
     h += '<div class="card" style="padding:11px 12px;margin-bottom:8px'
        + (allZero ? ';border-color:rgba(232,68,58,.22)' : '') + '">'
       + '<div style="display:flex;align-items:center;gap:7px;margin-bottom:7px">'
@@ -362,7 +362,7 @@ function render(){
   });
 
   const fn = { store:renderStore, rank:renderRank, person:renderPerson,
-               day:renderDay, insight:renderInsight }[VIEW];
+               day:renderDay, insight:renderInsight, qudao:renderQudao }[VIEW];
   $('#app').innerHTML = fn();
   bindDynamic();
   window.scrollTo(0,0);
