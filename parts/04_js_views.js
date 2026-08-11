@@ -36,9 +36,10 @@ function renderRank(){
   h += '<div class="sec-h"><span class="bar"></span><b>' + esc(dim.label||dim.k) + ' 排行</b>'
      + '<span class="tail">共 ' + list.length + ' 人</span></div>';
 
+  h += '<div class="cols">';
   list.forEach((it, i) => {
     const s = it.has ? stat(it.rate) : 'na';
-    const colorVar = {done:'--green',over:'--blue',on:'--amber',low:'--red',na:'--gray'}[s];
+    const colorVar = {done:'--green',over:'--purple',on:'--amber',low:'--red',na:'--gray'}[s];
     const w = it.has && isNum(it.rate) ? Math.min(it.rate,1)*100 : 0;
     h += '<div class="rk" data-person="' + esc(it.name) + '">'
       + '<div class="rk-bg" style="width:' + w.toFixed(1) + '%;background:var(' + colorVar + ')"></div>'
@@ -57,6 +58,7 @@ function renderRank(){
       + '</div>'
       + '</div>';
   });
+  h += '</div>'; /* /cols */
 
   h += '<div style="font-size:11px;color:var(--tx3);text-align:center;padding:8px 0 2px;line-height:1.7">'
      + '点任意一行查看该员工完整数据</div>';
@@ -84,11 +86,14 @@ function renderPerson(){
 
   if(noTask){
     h += '<div class="card" style="padding:12px;margin-bottom:14px;'
-       + 'border-color:rgba(245,158,11,.3);background:linear-gradient(90deg,rgba(245,158,11,.08),var(--card))">'
-       + '<div style="font-size:12px;color:var(--amber);font-weight:600">⚠ 本月未分配任务</div>'
+       + 'border-color:rgba(245,158,11,.3);background:linear-gradient(90deg,var(--amberDim),transparent)">'
+       + '<div style="font-size:12px;color:#b45309;font-weight:600;display:flex;align-items:center;gap:5px">' + ic('warn',14) + ' 本月未分配任务</div>'
        + '<div style="font-size:11px;color:var(--tx3);margin-top:4px;line-height:1.6">'
        + '表格中该员工的任务列为空，因此不计算达成率，仅显示已完成的量。</div></div>';
   }
+
+  /* 多栏容器（桌面并排） */
+  h += '<div class="cols">';
 
   /* 核心 */
   h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>核心指标</b>'
@@ -105,7 +110,9 @@ function renderPerson(){
   h += catRow('增值', Q['增值'], '增值');
   h += '</div></div>';
 
-  /* 考核机型（独立板块） */
+  h += '</div>'; /* /cols 上半 */
+
+  /* 考核机型（独立板块，整宽） */
   h += assessHTML(Q['考核机型'], null);
 
   /* 全科生 */
@@ -122,9 +129,9 @@ function renderPerson(){
   /* 绩效 */
   if(isNum(P['绩效'])){
     h += '<div class="sec"><div class="card" style="padding:14px;text-align:center">'
-       + '<div style="font-size:11px;color:var(--tx3)">个人绩效得分</div>'
-       + '<div style="font-size:30px;font-weight:800;margin-top:4px;letter-spacing:-1px" class="num">'
-       + P['绩效'].toFixed(2) + '</div></div></div>';
+      + '<div style="font-size:11px;color:var(--tx3)">个人绩效得分</div>'
+      + '<div style="font-size:30px;font-weight:800;margin-top:4px;letter-spacing:-1px" class="num">'
+      + P['绩效'].toFixed(2) + '</div></div></div>';
   }
 
   h += foot();
@@ -376,6 +383,13 @@ function bindDynamic(){
     $$('.tab').forEach(t => t.classList.toggle('on', t.dataset.v === 'person'));
     render();
   });
+  /* 点击总览进度环：达成即撒彩带庆祝 */
+  const ring = $('.ring');
+  if(ring) ring.onclick = () => {
+    const P = (DATA.store && DATA.store.performance) || {};
+    const sales = P['销额'] || {};
+    if(hasTask(sales) && isNum(sales.rate) && sales.rate >= 1){ confetti(); toast('销售额已达成，撒花庆祝'); }
+  };
 }
 
 $$('.tab').forEach(t => t.onclick = () => {

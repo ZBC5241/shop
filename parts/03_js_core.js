@@ -144,18 +144,56 @@ function ringSVG(rate, s, size){
   const r = (size - 16) / 2, c = 2 * Math.PI * r;
   const w = isNum(rate) ? Math.min(rate, 1) : 0;
   const off = c * (1 - w);
-  const col = {done:'#2dd4a7', over:'#4d9bff', on:'#ffb02e', low:'#ff4d4f', na:'#64748b'}[s] || '#64748b';
+  const col = {done:'#22c55e', over:'#7c3aed', on:'#f59e0b', low:'#ef4444', na:'#9aa0bd'}[s] || '#9aa0bd';
   return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">'
-    + '<circle cx="' + (size/2) + '" cy="' + (size/2) + '" r="' + r + '" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="10"/>'
+    + '<circle cx="' + (size/2) + '" cy="' + (size/2) + '" r="' + r + '" fill="none" stroke="rgba(30,28,60,.07)" stroke-width="10"/>'
     + '<circle cx="' + (size/2) + '" cy="' + (size/2) + '" r="' + r + '" fill="none" stroke="' + col + '" stroke-width="10" stroke-linecap="round"'
     + ' stroke-dasharray="' + c.toFixed(1) + '" stroke-dashoffset="' + off.toFixed(1) + '"'
     + ' transform="rotate(-90 ' + (size/2) + ' ' + (size/2) + ')" style="transition:stroke-dashoffset 1s cubic-bezier(.22,1,.36,1)"/>'
     + '</svg>';
 }
 
+/* 内联 SVG 图标库（无 emoji、无外部资源） */
+const ICONS = {
+  store:'<path d="M3 9l9-6 9 6v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 21V12h6v9"/>',
+  rank:'<path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0z"/><path d="M7 4H4v2a3 3 0 0 0 3 3M17 4h3v2a3 3 0 0 1-3 3"/>',
+  person:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+  day:'<rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/>',
+  insight:'<circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/>',
+  qudao:'<path d="M3 10l9-6 9 6M4 10v9h16v-9M9 19v-5h6v5"/>',
+  warn:'<path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17v.5"/>',
+  fire:'<path d="M12 3s5 4 5 9a5 5 0 0 1-10 0c0-2 1-3 1-3s.5 2 2 2c0-3 2-5 2-8z"/>',
+  spark:'<path d="M12 3l2 6 6 2-6 2-2 6-2-6-6-2 6-2z"/>'
+};
+function ic(name, size){
+  return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"'
+    + (size ? ' style="width:'+size+'px;height:'+size+'px"' : '') + '>' + (ICONS[name] || '') + '</svg>';
+}
+function warnIcon(){ return ic('warn'); }
+
+/* 彩带动效（纯 DOM，无 canvas，无外部库） */
+function confetti(n){
+  n = n || 110;
+  const box = document.createElement('div');
+  box.className = 'confetti';
+  const cols = ['#7c3aed','#a855f7','#22c55e','#ef4444','#f59e0b','#6366f1'];
+  for(let i = 0; i < n; i++){
+    const s = document.createElement('i');
+    s.style.left = (Math.random() * 100) + '%';
+    s.style.background = cols[i % cols.length];
+    s.style.setProperty('--x', (Math.random() * 220 - 110) + 'px');
+    s.style.setProperty('--r', (Math.random() * 720 - 360) + 'deg');
+    s.style.animationDelay = (Math.random() * 0.4) + 's';
+    s.style.transform = 'rotate(' + (Math.random() * 360) + 'deg)';
+    box.appendChild(s);
+  }
+  document.body.appendChild(box);
+  setTimeout(() => box.remove(), 3000);
+}
+
 function heroRow(label, k){
   const s = hasTask(k) ? stat(k.rate) : 'na';
-  const col = {done:'var(--green)', over:'var(--blue)', on:'var(--amber)', low:'var(--red)', na:'var(--gray)'}[s];
+  const col = {done:'var(--green)', over:'var(--purple)', on:'var(--amber)', low:'var(--red)', na:'var(--gray)'}[s];
   return '<div class="hero-row"><span>' + esc(label) + '</span>'
        + '<b class="num" style="color:' + col + '">' + pct(k && k.rate, 1) + '</b></div>';
 }
@@ -187,14 +225,14 @@ function catChartHTML(P){
     const k = P[c];
     const rate = (k && isNum(k.rate)) ? Math.min(k.rate, 1) : 0;
     const s = k && hasTask(k) ? stat(k.rate) : 'na';
-    const col = {done:'var(--green)', over:'var(--blue)', on:'var(--amber)', low:'var(--red)', na:'var(--gray)'}[s];
+    const col = {done:'var(--green)', over:'var(--purple)', on:'var(--amber)', low:'var(--red)', na:'var(--gray)'}[s];
     bars += '<div class="mc-b"><div class="mc-track">'
           + '<div class="mc-f" style="height:' + (rate*100).toFixed(0) + '%;background:' + col + '"></div>'
           + (tpPct > 0 ? '<div class="mc-mk" style="bottom:' + tpPct.toFixed(0) + '%"></div>' : '')
           + '</div><span class="mc-l">' + esc(c) + '</span></div>';
   });
   return '<div class="mc"><div class="mc-bars">' + bars + '</div>'
-       + '<div class="mc-leg"><span class="mc-dot"></span>蓝虚线 = 时间进度 ' + pct(tp, 0) + '</div></div>';
+       + '<div class="mc-leg"><span class="mc-dot"></span>紫线 = 时间进度 ' + pct(tp, 0) + '</div></div>';
 }
 
 function renderStore(){
@@ -215,24 +253,26 @@ function renderStore(){
   h += kpiCard('手机', P['手机'], '手机');
   h += '</div></div>';
 
-  /* 品类速览（柱状图） */
+  /* 品类速览（柱状图） + 品类达成 → 桌面并排 */
+  h += '<div class="cols">';
   h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>品类速览</b>'
      + '<span class="tail">柱高 = 达成率</span></div>' + catChartHTML(P) + '</div>';
 
   /* 品类达成 */
   h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>品类达成</b>'
-     + '<span class="tail">白线 = 时间进度</span></div><div class="rows">';
+     + '<span class="tail">紫线 = 时间进度</span></div><div class="rows">';
   CATS.forEach(c => { h += catRow(c, P[c], c); });
   h += catRow('增值', Q['增值'], '增值');
   h += '</div></div>';
+  h += '</div>'; /* /cols */
 
-  /* 考核机型（独立板块） */
+  /* 考核机型 + 全科生 → 桌面并排 */
+  h += '<div class="cols">';
   h += assessHTML(Q['考核机型'], DATA.meta.employees);
-
-  /* 全科生 */
   h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>全科生</b></div>';
   h += qcsHTML(Q);
   h += '</div>';
+  h += '</div>'; /* /cols */
 
   /* 绩效 */
   if(isNum(P['绩效'])){
@@ -381,8 +421,9 @@ function renderQudao(){
   const lag = isNum(t.rate) && isNum(tp) && t.rate < tp;
   h += '<div style="margin-top:10px;font-size:11.5px;color:var(--tx3);line-height:1.6">'
      + '数据日期 ' + esc(Q.timeDate || '—') + ' · 已过 ' + pct(tp,1)
-     + (lag ? ' <span style="color:var(--amber);font-weight:700">⚠ 进度落后</span>'
-            : ' <span style="color:var(--green);font-weight:700">跟上节奏</span>')
+     + (lag ? ' <span style="color:#b45309;font-weight:700;display:inline-flex;align-items:center;gap:3px">'
+              + ic('warn',13) + ' 进度落后</span>'
+            : ' <span style="color:#15803d;font-weight:700">跟上节奏</span>')
      + '</div>';
   h += '</div></div>';
 

@@ -30,9 +30,10 @@ $('#btnClose').onclick = () => $('#adminMask').classList.remove('on');
 $('#adminMask').onclick = e => { if(e.target.id === 'adminMask') $('#adminMask').classList.remove('on'); };
 
 $('#btnRefresh').onclick = () => {
-  $('#btnRefresh').style.transform = 'rotate(360deg)';
-  $('#btnRefresh').style.transition = 'transform .5s';
-  setTimeout(() => { $('#btnRefresh').style.transform = ''; $('#btnRefresh').style.transition = ''; }, 520);
+  const svg = $('#btnRefresh svg') || $('#btnRefresh');
+  svg.style.transition = 'transform .5s';
+  svg.style.transform = 'rotate(360deg)';
+  setTimeout(() => { svg.style.transform = ''; svg.style.transition = ''; }, 520);
   loadRemote(false);
 };
 
@@ -112,6 +113,16 @@ function hasTaskRaw(k){ return k && typeof k.task === 'number' && isFinite(k.tas
    启动
    ========================================================== */
 render();
+
+/* 首次加载：若有目标已 100% 达成，撒一次彩带 */
+(function celebrateIfAchieved(){
+  const P = (DATA.store && DATA.store.performance) || {};
+  const Q = (DATA.store && DATA.store.qcs) || {};
+  const check = [P['销额'], P['毛利'], P['手机'], Q['增值']];
+  const done = check.some(k => k && hasTask(k) && isNum(k.rate) && k.rate >= 1);
+  if(done) setTimeout(() => confetti(90), 400);
+})();
+
 if(location.protocol === 'http:' || location.protocol === 'https:'){
   loadRemote(true);
 }else{

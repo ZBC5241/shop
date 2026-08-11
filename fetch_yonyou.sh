@@ -4,6 +4,12 @@
 # 依赖: agent-browser CLI、macOS 钥匙串中已存 service=yonyou 的密码
 set -e
 
+# [auto-fix] macOS 12.7.6 上 agent-browser 自带的 Chrome 151 因 VideoToolbox 符号缺失无法启动，
+# 改用系统已装的 Chrome 150；同时走直连用友云（已验证直连可达），避免本地代理偶发 ERR_NO_SUPPORTED_PROXIES。
+export AGENT_BROWSER_EXECUTABLE_PATH="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+unset HTTP_PROXY HTTPS_PROXY ALL_PROXY
+agent-browser close --all 2>/dev/null || true
+
 OUT="${1:-/Users/mac/WorkBuddy/Claw/yonyou_raw.tsv}"
 ACCOUNT="18161914293"
 REPORT_ID="a76e21a0-fe9b-4366-9b8e-2c9327c15ab9"   # 门店毛利明细表-华为终端

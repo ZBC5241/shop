@@ -2,23 +2,26 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1,user-scalable=no">
-<meta name="theme-color" content="#070b12">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f6f7fb">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <title>李家村万达 · 业绩看板</title>
 <style>
 :root{
-  --bg:#070b12; --bg2:#0d121c; --card:rgba(255,255,255,.045); --card2:rgba(255,255,255,.07);
-  --line:rgba(255,255,255,.08); --line2:rgba(255,255,255,.16);
-  --tx:#eef2f8; --tx2:#9aa7bd; --tx3:#5d6b82;
-  --red:#ff4d4f; --red2:#ff7a5c; --redDim:rgba(255,77,79,.14);
-  --green:#2dd4a7; --greenDim:rgba(45,212,167,.14);
-  --blue:#4d9bff; --blueDim:rgba(77,155,255,.14);
-  --amber:#ffb02e; --amberDim:rgba(255,176,46,.14);
-  --cyan:#22d3ee;
-  --gray:#64748b;
+  --bg:#f6f7fb; --panel:#ffffff; --soft:#eef0fb;
+  --line:#e7e9f2; --line2:#dcdfee;
+  --tx:#1f2233; --tx2:#5b6180; --tx3:#8a90ab;
+  --purple:#7c3aed; --purple2:#a855f7; --purpleDim:rgba(124,58,237,.10);
+  --red:#ef4444; --red2:#f87171; --redDim:rgba(239,68,68,.12);
+  --green:#22c55e; --greenDim:rgba(34,197,94,.13);
+  --amber:#f59e0b; --amberDim:rgba(245,158,11,.14);
+  --blue:#6366f1; --blueDim:rgba(99,102,241,.12);
+  --gray:#9aa0bd; --grayDim:rgba(154,160,189,.14);
+  --grad:linear-gradient(135deg,var(--purple),var(--purple2));
   --r:16px;
+  --shadow:0 8px 26px rgba(70,60,130,.10);
+  --shadow-s:0 4px 14px rgba(70,60,130,.07);
   --safeT:env(safe-area-inset-top,0px);
   --safeB:env(safe-area-inset-bottom,0px);
 }
@@ -26,69 +29,78 @@
 html,body{background:var(--bg);color:var(--tx)}
 body{
   font:400 14px/1.5 -apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue","Microsoft YaHei",sans-serif;
-  padding-bottom:calc(80px + var(--safeB));
+  padding-bottom:calc(78px + var(--safeB));
   -webkit-font-smoothing:antialiased;
   overflow-x:hidden;
   background:
-    radial-gradient(1100px 560px at 50% -12%, rgba(255,77,79,.12), transparent 60%),
-    radial-gradient(900px 520px at 100% -4%, rgba(77,155,255,.07), transparent 55%),
+    radial-gradient(1100px 520px at 50% -10%, rgba(124,58,237,.10), transparent 60%),
+    radial-gradient(820px 460px at 100% -2%, rgba(168,85,247,.07), transparent 55%),
     var(--bg);
   background-attachment:fixed;
 }
 .num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
+svg{display:block}
+
+/* ============ 布局骨架（响应式核心）============ */
+/* 手机：side 里的顶栏吸顶、Tab 固定底部；contents 让二者各自定位 */
+.side{display:contents}
 
 /* ============ 顶栏 ============ */
 .top{
   position:sticky;top:0;z-index:60;
   padding:calc(12px + var(--safeT)) 16px 12px;
-  background:linear-gradient(180deg, rgba(18,24,35,.96), rgba(11,16,24,.90));
+  background:linear-gradient(180deg, rgba(255,255,255,.96), rgba(246,247,251,.90));
   border-bottom:1px solid var(--line);
-  backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
-  box-shadow:0 8px 28px rgba(0,0,0,.38);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  box-shadow:0 6px 22px rgba(70,60,130,.06);
 }
 .top-row{display:flex;align-items:center;gap:11px}
 .logo{
   width:34px;height:34px;border-radius:10px;flex:0 0 auto;
-  background:linear-gradient(135deg,var(--red),var(--red2));
-  display:grid;place-items:center;font-size:16px;font-weight:800;color:#fff;
-  box-shadow:0 4px 14px rgba(255,77,79,.45);
+  background:var(--grad);
+  display:grid;place-items:center;color:#fff;
+  box-shadow:0 4px 14px rgba(124,58,237,.38);
 }
+.logo svg{width:20px;height:20px;stroke:#fff}
 .top-t{flex:1;min-width:0}
 .top-t h1{font-size:15px;font-weight:700;letter-spacing:.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .top-t p{font-size:11px;color:var(--tx3);margin-top:2px}
 .icon-btn{
-  width:34px;height:34px;border-radius:10px;border:1px solid var(--line2);
-  background:rgba(255,255,255,.05);color:var(--tx2);
-  display:grid;place-items:center;cursor:pointer;flex:0 0 auto;font-size:15px;
+  width:34px;height:34px;border-radius:10px;border:1px solid var(--line);
+  background:var(--soft);color:var(--tx2);
+  display:grid;place-items:center;cursor:pointer;flex:0 0 auto;
   transition:.16s;
 }
-.icon-btn:active{background:rgba(255,255,255,.12);transform:scale(.94)}
+.icon-btn svg{width:18px;height:18px;stroke:currentColor}
+.icon-btn:hover{color:var(--purple);border-color:var(--line2)}
+.icon-btn:active{background:var(--purpleDim);transform:scale(.94)}
 
 /* 时间进度条 */
 .tp{margin-top:11px}
 .tp-h{display:flex;justify-content:space-between;font-size:11px;color:var(--tx3);margin-bottom:5px}
 .tp-h b{color:var(--tx);font-weight:700}
-.tp-bar{height:6px;border-radius:4px;background:rgba(255,255,255,.08);overflow:hidden;position:relative;box-shadow:inset 0 1px 2px rgba(0,0,0,.4)}
-.tp-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,#3b82f6,#22d3ee);box-shadow:0 0 12px rgba(34,211,238,.55);transition:width 1s cubic-bezier(.22,1,.36,1)}
+.tp-bar{height:7px;border-radius:5px;background:var(--soft);overflow:hidden;position:relative}
+.tp-fill{height:100%;border-radius:5px;background:var(--grad);box-shadow:0 0 10px rgba(124,58,237,.35);transition:width 1s cubic-bezier(.22,1,.36,1)}
 
 /* ============ 标签栏 ============ */
 .tabs{
   position:fixed;left:0;right:0;bottom:0;z-index:70;
-  display:flex;background:rgba(9,13,20,.92);
-  backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
+  display:flex;background:rgba(255,255,255,.94);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
   border-top:1px solid var(--line);
   padding-bottom:var(--safeB);
-  box-shadow:0 -8px 28px rgba(0,0,0,.4);
+  box-shadow:0 -6px 22px rgba(70,60,130,.07);
 }
 .tab{
-  flex:1;padding:9px 0 8px;text-align:center;cursor:pointer;
+  flex:1;padding:8px 0 7px;text-align:center;cursor:pointer;
   color:var(--tx3);transition:.18s;min-width:0;position:relative;
+  display:flex;flex-direction:column;align-items:center;gap:2px;
 }
-.tab i{display:block;font-size:17px;line-height:1.25;font-style:normal;filter:grayscale(1) opacity(.55);transition:.18s}
-.tab span{display:block;font-size:9px;font-weight:600;letter-spacing:.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 2px;transition:.18s}
-.tab.on{color:var(--red)}
-.tab.on::after{content:"";position:absolute;top:4px;left:50%;transform:translateX(-50%);width:22px;height:3px;border-radius:2px;background:linear-gradient(90deg,var(--red),var(--red2));box-shadow:0 0 10px rgba(255,77,79,.6)}
-.tab.on i{filter:none;transform:translateY(-1px)}
+.tab svg{width:21px;height:21px;stroke:currentColor;transition:.18s}
+.tab span{display:block;font-size:9.5px;font-weight:600;letter-spacing:.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 2px;transition:.18s}
+.tab.on{color:var(--purple)}
+.tab.on::after{content:"";position:absolute;top:3px;left:50%;transform:translateX(-50%);width:22px;height:3px;border-radius:2px;background:var(--grad);box-shadow:0 0 9px rgba(124,58,237,.5)}
+.tab.on svg{transform:translateY(-1px)}
 @media (max-width:360px){.tab span{display:none}}
 
 /* ============ 通用 ============ */
@@ -97,49 +109,48 @@ body{
 .sec{margin-bottom:20px}
 .sec-h{display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-left:1px}
 .sec-h b{font-size:13.5px;font-weight:800;letter-spacing:.3px}
-.sec-h .bar{width:3px;height:14px;border-radius:2px;background:linear-gradient(180deg,var(--red),var(--red2));box-shadow:0 0 8px rgba(255,77,79,.5)}
+.sec-h .bar{width:3px;height:14px;border-radius:2px;background:var(--grad)}
 .sec-h .tail{margin-left:auto;font-size:11px;color:var(--tx3);font-weight:400}
 .card{
-  background:var(--card);border:1px solid var(--line);border-radius:var(--r);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.04), 0 8px 22px rgba(0,0,0,.28);
-  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--r);
+  box-shadow:var(--shadow-s);
 }
 .empty{padding:26px 0;text-align:center;color:var(--tx3);font-size:12px}
 
 /* ============ 店长洞察 ============ */
 /* 今日战况 */
 .bt{display:flex;gap:9px;margin-bottom:9px}
-.bt-c{flex:1;background:var(--card);border:1px solid var(--line);border-radius:var(--r);
-      padding:11px 11px;text-align:center;box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 6px 16px rgba(0,0,0,.22)}
+.bt-c{flex:1;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);
+      padding:11px 11px;text-align:center;box-shadow:var(--shadow-s)}
 .bt-v{font-size:20px;font-weight:800;letter-spacing:-.4px;line-height:1.15}
 .bt-l{font-size:10px;color:var(--tx3);margin-top:3px}
 .who{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}
 .who-i{display:flex;align-items:center;gap:5px;padding:5px 9px;border-radius:9px;
-       font-size:11.5px;background:var(--card2);border:1px solid var(--line)}
+       font-size:11.5px;background:var(--soft);border:1px solid var(--line)}
 .who-i b{font-weight:700}
-.who-i.on{background:var(--greenDim);border-color:rgba(45,212,167,.32)}
-.who-i.off{background:var(--redDim);border-color:rgba(255,77,79,.32);color:var(--red)}
+.who-i.on{background:var(--greenDim);border-color:rgba(34,197,94,.30)}
+.who-i.off{background:var(--redDim);border-color:rgba(239,68,68,.30);color:var(--red)}
 .who-i .n{font-weight:600}
 .who-i .s{color:var(--tx3);font-size:10.5px}
-.who-i.off .s{color:var(--red);opacity:.78}
+.who-i.off .s{color:var(--red);opacity:.82}
 
 /* 建议卡 */
-.adv{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--tx3);
-     border-radius:var(--r);padding:11px 13px;margin-bottom:9px;box-shadow:0 6px 16px rgba(0,0,0,.2)}
-.adv.danger{border-left-color:var(--red);background:rgba(255,77,79,.07)}
-.adv.warn{border-left-color:var(--amber);background:rgba(255,176,46,.07)}
-.adv.good{border-left-color:var(--green);background:rgba(45,212,167,.07)}
+.adv{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--tx3);
+     border-radius:var(--r);padding:11px 13px;margin-bottom:9px;box-shadow:var(--shadow-s)}
+.adv.danger{border-left-color:var(--red);background:var(--redDim)}
+.adv.warn{border-left-color:var(--amber);background:var(--amberDim)}
+.adv.good{border-left-color:var(--green);background:var(--greenDim)}
 .adv-t{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:800;margin-bottom:4px}
-.adv-t i{font-style:normal;font-size:13px}
+.adv-t svg{width:15px;height:15px}
 .adv-b{font-size:11.5px;line-height:1.75;color:var(--tx2)}
 
 /* 品类体检行 */
-.ct{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
-    padding:10px 12px;margin-bottom:8px;position:relative;overflow:hidden;box-shadow:0 6px 16px rgba(0,0,0,.2)}
-.ct-bg{position:absolute;left:0;top:0;bottom:0;opacity:.10;border-radius:var(--r) 0 0 var(--r)}
+.ct{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);
+    padding:10px 12px;margin-bottom:8px;position:relative;overflow:hidden;box-shadow:var(--shadow-s)}
+.ct-bg{position:absolute;left:0;top:0;bottom:0;opacity:.12;border-radius:var(--r) 0 0 var(--r)}
 .ct-r{position:relative;display:flex;align-items:center;gap:8px}
 .ct-n{font-size:12.5px;font-weight:800;min-width:58px}
-.ct-tag{font-size:9.5px;padding:1.5px 6px;border-radius:5px;font-weight:800;white-space:nowrap}
+.ct-tag{font-size:9.5px;padding:1.5px 6px;border-radius:5px;font-weight:800;white-space:nowrap;color:#fff}
 .ct-m{margin-left:auto;text-align:right}
 .ct-v{font-size:12px;font-weight:800;letter-spacing:-.2px}
 .ct-s{font-size:10px;color:var(--tx3);margin-top:1px}
@@ -147,12 +158,12 @@ body{
 .ct-x b{color:var(--red);font-weight:700}
 
 /* 员工体检行 */
-.pf{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
-    padding:11px 12px;margin-bottom:8px;box-shadow:0 6px 16px rgba(0,0,0,.2)}
+.pf{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);
+    padding:11px 12px;margin-bottom:8px;box-shadow:var(--shadow-s)}
 .pf-r{display:flex;align-items:center;gap:10px}
-.pf-no{width:20px;height:20px;border-radius:7px;background:var(--card2);color:var(--tx3);
+.pf-no{width:20px;height:20px;border-radius:7px;background:var(--soft);color:var(--tx3);
        font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none}
-.pf-no.n1{background:linear-gradient(135deg,#ffc451,#e0a020);color:#3a2a00;box-shadow:0 2px 8px rgba(255,196,81,.35)}
+.pf-no.n1{background:linear-gradient(135deg,#ffd257,#f0a723);color:#4a3400;box-shadow:0 2px 8px rgba(240,167,35,.32)}
 .pf-n{font-size:12.5px;font-weight:800}
 .pf-m{margin-left:auto;display:flex;gap:12px;text-align:right}
 .pf-k{min-width:42px}
@@ -160,32 +171,32 @@ body{
 .pf-kl{font-size:9.5px;color:var(--tx3);margin-top:1px}
 .pf-x{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
 .pf-t{font-size:10px;padding:2px 7px;border-radius:6px;font-weight:700}
-.pf-t.g{background:var(--greenDim);color:var(--green)}
+.pf-t.g{background:var(--greenDim);color:#15803d}
 .pf-t.b{background:var(--redDim);color:var(--red)}
 
 /* ============ 上账时效提示条 ============ */
 .lag-tip{
   display:flex;flex-direction:column;gap:3px;
-  background:var(--card);border:1px solid var(--line);
+  background:var(--panel);border:1px solid var(--line);
   border-left:3px solid var(--blue);
   border-radius:11px;padding:10px 13px;margin-bottom:15px;
-  box-shadow:0 6px 16px rgba(0,0,0,.2);
+  box-shadow:var(--shadow-s);
 }
 .lag-tip b{font-size:12px;color:var(--tx2);font-weight:700;line-height:1.5}
 .lag-tip span{font-size:10.5px;color:var(--tx3);line-height:1.65}
 .lag-tip.warn{border-left-color:var(--amber);background:var(--amberDim)}
-.lag-tip.warn b{color:var(--amber)}
+.lag-tip.warn b{color:#b45309}
 
 /* ============ 核心 KPI ============ */
 .kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .kpi{
-  background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--r);
   padding:13px 13px 12px;position:relative;overflow:hidden;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.04), 0 8px 20px rgba(0,0,0,.3);
+  box-shadow:var(--shadow-s);
 }
 .kpi::after{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gray)}
 .kpi.s-done::after{background:var(--green)}
-.kpi.s-over::after{background:var(--blue)}
+.kpi.s-over::after{background:var(--purple)}
 .kpi.s-on::after{background:var(--amber)}
 .kpi.s-low::after{background:var(--red)}
 .kpi-l{font-size:11px;color:var(--tx3);display:flex;align-items:center;gap:5px}
@@ -195,20 +206,21 @@ body{
   position:absolute;right:11px;top:11px;font-size:11px;font-weight:800;
   padding:2px 7px;border-radius:7px;
 }
-.r-done{background:var(--greenDim);color:var(--green)}
-.r-over{background:var(--blueDim);color:var(--blue)}
-.r-on{background:var(--amberDim);color:var(--amber)}
+.r-done{background:var(--greenDim);color:#15803d}
+.r-over{background:var(--purpleDim);color:var(--purple)}
+.r-on{background:var(--amberDim);color:#b45309}
 .r-low{background:var(--redDim);color:var(--red)}
-.r-na{background:rgba(100,116,139,.16);color:var(--gray)}
-.kpi-bar{height:4px;border-radius:3px;background:rgba(255,255,255,.07);margin-top:9px;overflow:hidden}
+.r-na{background:var(--grayDim);color:var(--gray)}
+.kpi-bar{height:5px;border-radius:3px;background:var(--soft);margin-top:9px;overflow:hidden}
 .kpi-bar i{display:block;height:100%;border-radius:3px;transition:width .9s cubic-bezier(.22,1,.36,1)}
-.f-done{background:var(--green)} .f-over{background:var(--blue)}
+.f-done{background:var(--green)} .f-over{background:var(--purple)}
 .f-on{background:var(--amber)} .f-low{background:var(--red)}
+.f-na{background:var(--gray)}
 
 /* ============ 总览 hero + 图表 ============ */
-.hero{display:flex;gap:15px;align-items:center;background:var(--card);border:1px solid var(--line);
-  border-radius:var(--r);padding:16px;box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 8px 22px rgba(0,0,0,.28)}
-.ring{position:relative;width:100px;height:100px;flex:0 0 auto}
+.hero{display:flex;gap:15px;align-items:center;background:var(--panel);border:1px solid var(--line);
+  border-radius:var(--r);padding:16px;box-shadow:var(--shadow)}
+.ring{position:relative;width:100px;height:100px;flex:0 0 auto;cursor:pointer}
 .ring-c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
 .ring-c b{font-size:23px;font-weight:800;letter-spacing:-.6px}
 .ring-c span{font-size:9.5px;color:var(--tx3);margin-top:1px}
@@ -218,23 +230,23 @@ body{
 .hero-row span{color:var(--tx3)}
 .hero-row b{font-weight:800}
 .hero-tp{margin-top:9px;font-size:11.5px;color:var(--tx3)}
-.hero-tp b{color:var(--blue);font-weight:800}
+.hero-tp b{color:var(--purple);font-weight:800}
 
 /* 品类速览柱状图 */
-.mc{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
-  padding:14px 12px 10px;box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 8px 20px rgba(0,0,0,.25)}
+.mc{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);
+  padding:14px 12px 10px;box-shadow:var(--shadow-s)}
 .mc-bars{display:flex;align-items:flex-end;gap:6px;height:122px}
 .mc-b{flex:1;display:flex;flex-direction:column;align-items:center;min-width:0}
-.mc-track{position:relative;width:100%;max-width:28px;height:100px;background:rgba(255,255,255,.05);
+.mc-track{position:relative;width:100%;max-width:28px;height:100px;background:var(--soft);
   border-radius:7px;overflow:hidden;display:flex;align-items:flex-end}
 .mc-f{width:100%;border-radius:7px 7px 0 0;transition:height .9s cubic-bezier(.22,1,.36,1)}
-.mc-mk{position:absolute;left:-4px;right:-4px;height:0;border-top:1.5px dashed var(--blue);opacity:.85}
+.mc-mk{position:absolute;left:-4px;right:-4px;height:0;border-top:1.5px dashed var(--purple);opacity:.8}
 .mc-l{font-size:9px;color:var(--tx3);margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 .mc-leg{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--tx3);margin-top:9px}
-.mc-dot{width:8px;height:8px;border-radius:50%;display:inline-block;background:var(--blue)}
+.mc-dot{width:8px;height:8px;border-radius:50%;display:inline-block;background:var(--purple)}
 
 /* ============ 品类行 ============ */
-.rows{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:0 8px 20px rgba(0,0,0,.25)}
+.rows{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow-s)}
 .row{padding:11px 13px;border-bottom:1px solid var(--line);position:relative}
 .row:last-child{border-bottom:none}
 .row-t{display:flex;align-items:baseline;gap:8px;margin-bottom:7px}
@@ -242,41 +254,41 @@ body{
 .row-v{font-size:12px;color:var(--tx2);margin-left:auto}
 .row-v b{color:var(--tx);font-weight:800;font-size:14px}
 .row-p{font-size:11px;font-weight:800;padding:1.5px 6px;border-radius:6px;flex:0 0 auto}
-.row-bar{height:5px;border-radius:3px;background:rgba(255,255,255,.07);overflow:hidden;position:relative}
+.row-bar{height:6px;border-radius:3px;background:var(--soft);overflow:hidden;position:relative}
 .row-bar i{display:block;height:100%;border-radius:3px;transition:width .9s cubic-bezier(.22,1,.36,1)}
-.row-bar .mk{position:absolute;top:-2px;bottom:-2px;width:2px;background:rgba(255,255,255,.5);border-radius:1px;box-shadow:0 0 6px rgba(255,255,255,.5)}
+.row-bar .mk{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--purple);border-radius:1px;opacity:.7}
 .row-g{font-size:10.5px;color:var(--tx3);margin-top:6px;display:flex;justify-content:space-between}
 .row-g em{font-style:normal;color:var(--red);font-weight:700}
-.row.warn{background:linear-gradient(90deg,rgba(255,77,79,.08),transparent 60%)}
+.row.warn{background:linear-gradient(90deg,var(--redDim),transparent 60%)}
 
 /* ============ 排行 ============ */
 .chips{display:flex;gap:7px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:none}
 .chips::-webkit-scrollbar{display:none}
 .chip{
   flex:0 0 auto;padding:7px 14px;border-radius:18px;font-size:12px;font-weight:700;
-  background:var(--card);border:1px solid var(--line);color:var(--tx2);cursor:pointer;
+  background:var(--panel);border:1px solid var(--line);color:var(--tx2);cursor:pointer;
   transition:.16s;white-space:nowrap;
 }
-.chip.on{background:linear-gradient(135deg,var(--red),var(--red2));border-color:transparent;color:#fff;box-shadow:0 4px 14px rgba(255,77,79,.35)}
+.chip.on{background:var(--grad);border-color:transparent;color:#fff;box-shadow:0 4px 14px rgba(124,58,237,.32)}
 .rk{
   display:flex;align-items:center;gap:12px;padding:13px;margin-bottom:9px;
-  background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--r);
   position:relative;overflow:hidden;cursor:pointer;transition:.16s;
-  box-shadow:0 8px 20px rgba(0,0,0,.25);
+  box-shadow:var(--shadow-s);
 }
 .rk:active{transform:scale(.985)}
 .rk-bg{position:absolute;left:0;top:0;bottom:0;opacity:.10;transition:width .9s cubic-bezier(.22,1,.36,1)}
 .rk-no{
   width:28px;height:28px;border-radius:9px;display:grid;place-items:center;
-  font-size:13px;font-weight:800;flex:0 0 auto;background:rgba(255,255,255,.07);color:var(--tx3);
+  font-size:13px;font-weight:800;flex:0 0 auto;background:var(--soft);color:var(--tx3);
   position:relative;z-index:1;
 }
-.rk-no.n1{background:linear-gradient(135deg,#f5c451,#e0a020);color:#3a2a00;box-shadow:0 2px 8px rgba(245,196,81,.35)}
-.rk-no.n2{background:linear-gradient(135deg,#cdd6e2,#9aa8bb);color:#232c38}
-.rk-no.n3{background:linear-gradient(135deg,#d9a273,#b57a49);color:#2e1c0c}
+.rk-no.n1{background:linear-gradient(135deg,#ffd257,#f0a723);color:#4a3400;box-shadow:0 2px 8px rgba(240,167,35,.32)}
+.rk-no.n2{background:linear-gradient(135deg,#d6dbe8,#a9b3c6);color:#333c4c}
+.rk-no.n3{background:linear-gradient(135deg,#e0b389,#c08a56);color:#3a2410}
 .rk-m{flex:1;min-width:0;position:relative;z-index:1}
 .rk-n{font-size:14px;font-weight:800;display:flex;align-items:center;gap:6px}
-.rk-n .me{font-size:9.5px;font-weight:800;padding:1px 6px;border-radius:5px;background:var(--redDim);color:var(--red)}
+.rk-n .me{font-size:9.5px;font-weight:800;padding:1px 6px;border-radius:5px;background:var(--purpleDim);color:var(--purple)}
 .rk-sub{font-size:11px;color:var(--tx3);margin-top:3px}
 .rk-r{text-align:right;flex:0 0 auto;position:relative;z-index:1}
 .rk-r .p{font-size:18px;font-weight:800;letter-spacing:-.3px}
@@ -285,20 +297,20 @@ body{
 /* ============ 今日战报 ============ */
 .day-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .day{
-  background:var(--card);border:1px solid var(--line);border-radius:12px;
-  padding:10px 8px;text-align:center;box-shadow:0 6px 16px rgba(0,0,0,.2);
+  background:var(--panel);border:1px solid var(--line);border-radius:12px;
+  padding:10px 8px;text-align:center;box-shadow:var(--shadow-s);
 }
 .day-l{font-size:10.5px;color:var(--tx3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .day-v{font-size:18px;font-weight:800;margin-top:3px;letter-spacing:-.3px}
 .day-g{font-size:10px;margin-top:2px;font-weight:700}
-.day.hit{border-color:rgba(45,212,167,.35);background:linear-gradient(180deg,rgba(45,212,167,.10),var(--card))}
+.day.hit{border-color:rgba(34,197,94,.35);background:linear-gradient(180deg,var(--greenDim),var(--panel))}
 .day.miss .day-g{color:var(--red)}
-.day.ok .day-g{color:var(--green)}
+.day.ok .day-g{color:#15803d}
 .day.zero .day-v{color:var(--tx3)}
 
 /* ============ QCS ============ */
 .q-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-.q{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:12px;box-shadow:0 6px 16px rgba(0,0,0,.22)}
+.q{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:12px;box-shadow:var(--shadow-s)}
 .q-l{font-size:11px;color:var(--tx3);margin-bottom:6px}
 .q-v{font-size:19px;font-weight:800;letter-spacing:-.3px}
 .q-v small{font-size:11px;font-weight:700;color:var(--tx3);margin-left:3px}
@@ -308,17 +320,17 @@ body{
 
 /* ============ 弹层 ============ */
 .mask{
-  position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.68);
-  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  position:fixed;inset:0;z-index:200;background:rgba(40,36,80,.42);
+  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
   display:none;align-items:flex-end;
 }
 .mask.on{display:flex;animation:fade .2s}
 .sheet{
-  width:100%;max-height:88vh;overflow-y:auto;background:var(--bg2);
-  border-radius:22px 22px 0 0;border-top:1px solid var(--line2);
+  width:100%;max-height:88vh;overflow-y:auto;background:var(--panel);
+  border-radius:22px 22px 0 0;border-top:1px solid var(--line);
   padding:8px 18px calc(24px + var(--safeB));
   animation:up .34s cubic-bezier(.22,1,.36,1);
-  box-shadow:0 -10px 40px rgba(0,0,0,.5);
+  box-shadow:0 -12px 44px rgba(40,36,80,.28);
 }
 @keyframes up{from{transform:translateY(100%)}to{transform:none}}
 .grab{width:34px;height:4px;border-radius:2px;background:var(--line2);margin:0 auto 14px}
@@ -328,17 +340,18 @@ body{
 .fld label{display:block;font-size:12px;color:var(--tx2);margin-bottom:6px;font-weight:700}
 .fld input[type=text],.fld input[type=password]{
   width:100%;padding:11px 12px;border-radius:11px;font-size:13px;
-  background:var(--card);border:1px solid var(--line2);color:var(--tx);
+  background:#fcfcff;border:1px solid var(--line2);color:var(--tx);
   font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
 }
-.fld input:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 3px var(--redDim)}
+.fld input:focus{outline:none;border-color:var(--purple);box-shadow:0 0 0 3px var(--purpleDim)}
 .fld .hint{font-size:11px;color:var(--tx3);margin-top:5px;line-height:1.5}
 .drop{
   border:1.5px dashed var(--line2);border-radius:13px;padding:28px 14px;
-  text-align:center;cursor:pointer;transition:.18s;background:var(--card);
+  text-align:center;cursor:pointer;transition:.18s;background:#fcfcff;
 }
-.drop:active,.drop.hover{border-color:var(--red);background:var(--redDim)}
-.drop .ic{font-size:32px;margin-bottom:8px}
+.drop:active,.drop.hover{border-color:var(--purple);background:var(--purpleDim)}
+.drop .ic{color:var(--purple);margin:0 auto 8px;width:34px;height:34px}
+.drop .ic svg{width:34px;height:34px;stroke:var(--purple)}
 .drop .t{font-size:13px;font-weight:700}
 .drop .s{font-size:11px;color:var(--tx3);margin-top:4px}
 .btn{
@@ -346,79 +359,161 @@ body{
   font-size:14px;font-weight:800;transition:.16s;margin-top:6px;
   font-family:inherit;
 }
-.btn-p{background:linear-gradient(135deg,var(--red),var(--red2));color:#fff;box-shadow:0 6px 18px rgba(255,77,79,.4)}
-.btn-p:active{filter:brightness(.92)}
-.btn-p:disabled{background:#3a4152;color:var(--tx3);cursor:not-allowed;box-shadow:none}
-.btn-g{background:var(--card2);color:var(--tx2);border:1px solid var(--line2)}
+.btn-p{background:var(--grad);color:#fff;box-shadow:0 6px 18px rgba(124,58,237,.32)}
+.btn-p:active{filter:brightness(.94)}
+.btn-p:disabled{background:var(--soft);color:var(--tx3);cursor:not-allowed;box-shadow:none}
+.btn-g{background:var(--soft);color:var(--tx2);border:1px solid var(--line)}
 .log{
-  margin-top:12px;padding:11px;border-radius:11px;background:#06090f;
+  margin-top:12px;padding:11px;border-radius:11px;background:#1b1e30;
   border:1px solid var(--line);font-size:11.5px;line-height:1.75;
   font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
-  max-height:190px;overflow-y:auto;white-space:pre-wrap;word-break:break-all;
+  max-height:190px;overflow-y:auto;white-space:pre-wrap;word-break:break-all;color:#cdd2ea;
 }
-.log .ok{color:var(--green)} .log .er{color:var(--red)}
-.log .wa{color:var(--amber)} .log .in{color:var(--tx3)}
+.log .ok{color:#4ade80} .log .er{color:#f87171}
+.log .wa{color:#fbbf24} .log .in{color:#8a90ab}
 
 /* ============ 其他 ============ */
 .foot{text-align:center;font-size:10.5px;color:var(--tx3);padding:14px 0 4px;line-height:1.7}
 .badge-live{
   display:inline-flex;align-items:center;gap:4px;font-size:10px;
-  color:var(--green);font-weight:700;
+  color:#15803d;font-weight:700;
 }
 .badge-live::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:blink 2s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 .toast{
   position:fixed;left:50%;top:calc(50% - 20px);transform:translate(-50%,-50%);
-  background:rgba(18,24,35,.98);border:1px solid var(--line2);
+  background:#1f2233;color:#fff;border:1px solid rgba(255,255,255,.1);
   padding:13px 22px;border-radius:13px;font-size:13px;z-index:300;
-  display:none;box-shadow:0 12px 44px rgba(0,0,0,.55);max-width:80vw;text-align:center;
+  display:none;box-shadow:0 12px 44px rgba(40,36,80,.4);max-width:80vw;text-align:center;
 }
 .toast.on{display:block;animation:fade .2s}
-@media(min-width:640px){
-  .wrap{max-width:600px;margin:0 auto}
-  .top{max-width:600px;margin:0 auto}
-  .tabs{max-width:600px;left:50%;transform:translateX(-50%);border-radius:16px 16px 0 0}
+
+/* ============ 彩带 ============ */
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden}
+.confetti i{position:absolute;top:-14px;width:8px;height:15px;border-radius:2px;animation:fall 2.5s ease-in forwards}
+@keyframes fall{to{transform:translateY(112vh) translateX(var(--x)) rotate(var(--r));opacity:.5}}
+
+/* 桌面多栏（默认单列，≥1024 时启用） */
+.cols{display:block}
+
+/* ============ 平板：≥768 顶部横向导航 ============ */
+@media(min-width:768px){
+  body{padding-bottom:22px}
+  .side{
+    display:block;position:sticky;top:0;z-index:60;
+    background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(246,247,251,.92));
+    backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+    box-shadow:0 6px 22px rgba(70,60,130,.06);
+  }
+  .top{position:static;box-shadow:none;border-bottom:none;padding:16px 20px 12px;max-width:820px;margin:0 auto}
+  .tabs{
+    position:static;flex:none;background:transparent;border-top:none;box-shadow:none;
+    padding:0 20px 12px;max-width:820px;margin:0 auto;gap:6px;
+    border-bottom:1px solid var(--line);
+  }
+  .tab{flex:none;flex-direction:row;gap:7px;padding:9px 16px;border-radius:11px;font-size:13px}
+  .tab svg{width:18px;height:18px}
+  .tab span{display:block!important;font-size:13px}
+  .tab.on{background:var(--purpleDim)}
+  .tab.on::after{display:none}
+  .wrap{max-width:820px;margin:0 auto}
   .kpi-grid{grid-template-columns:repeat(4,1fr)}
   .day-grid{grid-template-columns:repeat(5,1fr)}
   .sheet{max-width:600px;margin:0 auto;border-radius:22px;align-self:center}
+  .mask.on{align-items:center}
+}
+
+/* ============ 电脑：≥1024 左侧固定边栏 + 多栏 ============ */
+@media(min-width:1024px){
+  body{padding-bottom:22px}
+  .side{
+    position:fixed;left:0;top:0;bottom:0;width:230px;z-index:60;
+    display:flex;flex-direction:column;align-items:stretch;
+    background:linear-gradient(180deg,#ffffff,#fbfbff);
+    border-right:1px solid var(--line);border-bottom:none;
+    padding:22px 14px;box-shadow:2px 0 22px rgba(70,60,130,.05);
+    backdrop-filter:none;
+  }
+  .top{position:static;padding:0 6px 14px;max-width:none;margin:0;background:transparent;border:none;box-shadow:none}
+  .top-row{flex-wrap:wrap}
+  .top-t{flex:1 0 100%;order:3;margin-top:10px}
+  .top-t h1{white-space:normal;font-size:14px;line-height:1.4}
+  .tp{margin-top:14px}
+  .tabs{
+    position:static;flex-direction:column;background:transparent;border-top:none;
+    box-shadow:none;padding:6px 0 0;margin:0;gap:4px;border-bottom:none;
+    flex:1;overflow-y:auto;
+  }
+  .tab{flex:none;flex-direction:row;justify-content:flex-start;gap:11px;padding:12px 14px;border-radius:11px;font-size:14px;text-align:left}
+  .tab svg{width:19px;height:19px}
+  .tab span{display:block!important;font-size:14px;text-align:left}
+  .tab.on{background:var(--purpleDim)}
+  .tab.on::after{display:none}
+  #app{margin-left:230px}
+  .wrap{max-width:1080px;margin:0 auto;padding:26px 28px 40px}
+  .kpi-grid{grid-template-columns:repeat(4,1fr)}
+  .day-grid{grid-template-columns:repeat(7,1fr)}
+  /* 桌面：把相邻区块并成两列 */
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
+  .cols>.sec{margin-bottom:0}
+  .sheet{max-width:560px;margin:0 auto;border-radius:22px;align-self:center}
   .mask.on{align-items:center}
 }
 </style>
 </head>
 <body>
 
-<!-- ===== 顶栏 ===== -->
-<header class="top">
-  <div class="top-row">
-    <div class="logo">华</div>
-    <div class="top-t">
-      <h1 id="storeName">华为李家村万达授权体验店</h1>
-      <p><span id="dataDate">--</span> · <span class="badge-live" id="liveTag">数据已更新</span></p>
+<!-- ===== 侧边栏：顶栏 + 标签导航（响应式容器） ===== -->
+<div class="side" id="side">
+  <header class="top">
+    <div class="top-row">
+      <div class="logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-6 9 6v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 21V12h6v9"/></svg>
+      </div>
+      <div class="top-t">
+        <h1 id="storeName">华为李家村万达授权体验店</h1>
+        <p><span id="dataDate">--</span> · <span class="badge-live" id="liveTag">数据已更新</span></p>
+      </div>
+      <div class="icon-btn" id="btnRefresh" title="刷新">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>
+      </div>
+      <div class="icon-btn" id="btnAdmin" title="更新数据">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1l2-1.5-2-3.4-2.3 1a7 7 0 0 0-1.7-1l-.3-2.6h-4l-.3 2.6a7 7 0 0 0-1.7 1l-2.3-1-2 3.4 2 1.5a7 7 0 0 0 0 2l-2 1.5 2 3.4 2.3-1a7 7 0 0 0 1.7 1l.3 2.6h4l.3-2.6a7 7 0 0 0 1.7-1l2.3 1 2-3.4-2-1.5a7 7 0 0 0 .1-1z"/></svg>
+      </div>
     </div>
-    <div class="icon-btn" id="btnRefresh" title="刷新">↻</div>
-    <div class="icon-btn" id="btnAdmin" title="更新数据">⚙</div>
-  </div>
-  <div class="tp">
-    <div class="tp-h">
-      <span>本月时间进度</span>
-      <span><b id="tpVal">--</b></span>
+    <div class="tp">
+      <div class="tp-h">
+        <span>本月时间进度</span>
+        <span><b id="tpVal">--</b></span>
+      </div>
+      <div class="tp-bar"><div class="tp-fill" id="tpFill" style="width:0"></div></div>
     </div>
-    <div class="tp-bar"><div class="tp-fill" id="tpFill" style="width:0"></div></div>
-  </div>
-</header>
+  </header>
+
+  <nav class="tabs">
+    <div class="tab on" data-v="store">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-6 9 6v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 21V12h6v9"/></svg><span>门店</span>
+    </div>
+    <div class="tab" data-v="rank">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0z"/><path d="M7 4H4v2a3 3 0 0 0 3 3M17 4h3v2a3 3 0 0 1-3 3"/></svg><span>排行</span>
+    </div>
+    <div class="tab" data-v="person">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>个人</span>
+    </div>
+    <div class="tab" data-v="day">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></svg><span>今日</span>
+    </div>
+    <div class="tab" data-v="insight">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><span>洞察</span>
+    </div>
+    <div class="tab" data-v="qudao">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l9-6 9 6M4 10v9h16v-9M9 19v-5h6v5"/></svg><span>渠道</span>
+    </div>
+  </nav>
+</div>
 
 <!-- ===== 视图容器 ===== -->
-<div id="app"></div>
-
-<!-- ===== 底部标签 ===== -->
-<nav class="tabs">
-  <div class="tab on" data-v="store"><i>🏪</i><span>门店</span></div>
-  <div class="tab" data-v="rank"><i>🏆</i><span>排行</span></div>
-  <div class="tab" data-v="person"><i>👤</i><span>个人</span></div>
-  <div class="tab" data-v="day"><i>📅</i><span>今日</span></div>
-  <div class="tab" data-v="insight"><i>🔍</i><span>洞察</span></div>
-  <div class="tab" data-v="qudao"><i>🏦</i><span>渠道</span></div>
-</nav>
+<main id="app"></main>
 
 <!-- ===== 管理弹层 ===== -->
 <div class="mask" id="adminMask">
@@ -440,7 +535,9 @@ body{
     <div class="fld">
       <label>选择 Excel 文件</label>
       <div class="drop" id="dropZone">
-        <div class="ic">📊</div>
+        <div class="ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M12 18v-6M9 15l3 3 3-3"/></svg>
+        </div>
         <div class="t" id="dropTitle">点击选择文件</div>
         <div class="s" id="dropSub">或把 .xlsx 拖到这里</div>
       </div>
@@ -461,7 +558,7 @@ body{
    原则：只展示表格里的原值，不做任何二次计算
    ========================================================== */
 
-const EMBEDDED_DATA = {"meta":{"storeName":"华为李家村万达授权体验店","date":"2026-08-11","dayTitle":"08-09达成","timeProgress":0.3548387096774194,"employees":["邵乐乐","杨丽华","李泽","陈超磊","张博晨"],"sourceFile":"李家村8月任务进度.xlsx","generatedAt":"2026-08-11 12:23:43"},"store":{"performance":{"毛利":{"task":205000.0,"done":29016.1733,"gap":-175983.8267,"rate":0.141542308780488},"手机":{"task":170.0,"done":30.0,"gap":-140.0,"rate":0.176470588235294},"PC":{"task":14.0,"done":1.0,"gap":-13.0,"rate":0.0714285714285714},"平板":{"task":34.0,"done":2.0,"gap":-32.0,"rate":0.0588235294117647},"穿戴":{"task":100.0,"done":34.0,"gap":-66.0,"rate":0.34},"音频":{"task":37.0,"done":3.0,"gap":-34.0,"rate":0.0810810810810811},"HD":{"task":2.0,"done":0.0,"gap":-2.0,"rate":0.0},"智慧办公":{"task":48.0,"done":3.0,"gap":-45.0,"rate":0.0625},"音频穿戴":{"task":137.0,"done":37.0,"gap":-100.0,"rate":0.27007299270073},"销额":{"task":1600000.0,"done":224919.32,"gap":-1375080.68,"rate":0.140574575},"绩效":30.3582032916784},"qcs":{"电信积分":{"task":600.0,"done":64.0,"gap":-536.0,"rate":0.106666666666667},"会员搭售率":{"terminal":30.0,"care":9.0,"gap":0.0,"rate":0.3},"回收搭售率":{"orders":9.0,"gap":3.0,"rate":0.3},"贴膜率":{"orders":38.0,"gap":23.0,"rate":0.567164179104478},"考核机型":{"task":12.0,"gap":-11.0},"乐回收":{"orders":7.0,"amount":0.0,"增值":711.0},"太力回收":{"orders":2.0,"amount":983.0,"增值":137.62},"增值":{"task":57000.0,"done":9574.8533,"gap":-47425.1467,"rate":0.16797988245614},"健康度":{"coupon":12015.51,"ratio":0.414096989143637,"grossMargin":0.129007029276098,"增值率":0.0425701682718941},"星联会员":{"优享":7.0,"尊享":2.0,"合计":9.0}},"dailyDone":{"手机":2.0,"毛利":2609.0663,"增值":1255.5363,"智慧办公":0.0,"音频穿戴":4.0,"HD":0.0,"会员":1.0,"回收":0.0,"贴膜":2.0,"电信积分":0.0,"滞销":0.0,"优享/会员":0.0,"尊享/储值":1.0},"dailyGap":{"手机":-8.0,"毛利":-9316.0,"增值":-2551.0,"智慧办公":-4.0,"音频穿戴":-7.0,"HD":-2.0,"Care+":-2.0,"回收":1.0,"贴膜":0.0,"电信积分":-29.0,"滞销":-4.0,"优享/会员":4.0,"尊享/储值":4.0}},"people":{"邵乐乐":{"performance":{"毛利":{"task":50000.0,"done":4193.4773,"gap":-45806.5227,"rate":0.083869546},"手机":{"task":43.0,"done":8.0,"gap":-35.0,"rate":0.186046511627907},"PC":{"task":3.0,"done":0.0,"gap":-3.0,"rate":0.0},"平板":{"task":8.0,"done":0.0,"gap":-8.0,"rate":0.0},"穿戴":{"task":25.0,"done":21.0,"gap":-4.0,"rate":0.84},"音频":{"task":9.0,"done":0.0,"gap":-9.0,"rate":0.0},"HD":{"task":0.0,"done":0.0,"gap":0.0,"rate":1.0},"智慧办公":{"task":11.0,"done":0.0,"gap":-11.0,"rate":0.0},"音频穿戴":{"task":34.0,"done":21.0,"gap":-13.0,"rate":0.617647058823529},"销额":{"task":400000.0,"done":35780.3,"gap":-364219.7,"rate":0.08945075},"绩效":30.6214790785363},"qcs":{"电信积分":{"task":150.0,"done":64.0,"gap":-86.0,"rate":0.426666666666667},"会员搭售率":{"terminal":8.0,"care":1.0,"gap":-2.0,"rate":0.125},"回收搭售率":{"orders":2.0,"gap":0.0,"rate":0.25},"贴膜率":{"orders":5.0,"gap":-10.0,"rate":0.172413793103448},"考核机型":{"task":3.0,"gap":-3.0},"乐回收":{"orders":1.0,"amount":null,"增值":40.0},"太力回收":{"orders":1.0,"amount":663.0,"增值":92.82},"增值":{"task":14250.0,"done":1287.5673,"gap":-12962.4327,"rate":0.0903556},"健康度":{"coupon":3112.03,"ratio":0.742112041479275,"grossMargin":0.117200730569615,"增值率":0.0359853690438593},"星联会员":{"优享":1.0,"尊享":0.0,"合计":1.0}},"dailyDone":{"手机":1.0,"毛利":665.2663,"增值":361.9363,"智慧办公":0.0,"音频穿戴":1.0,"HD":0.0,"会员":0.0,"回收":null,"贴膜":2.0,"电信积分":0.0,"滞销":0.0,"优享/会员":0.0,"尊享/储值":0.0},"dailyGap":{"手机":-2.0,"毛利":-2411.0,"增值":-683.0,"智慧办公":-1.0,"音频穿戴":-1.0,"HD":0.0,"Care+":-1.0,"回收":0.0,"贴膜":-1.0,"电信积分":-5.0,"滞销":-1.0,"优享/会员":1.0,"尊享/储值":1.0}},"杨丽华":{"performance":{"毛利":{"task":51000.0,"done":8217.2731,"gap":-42782.7269,"rate":0.161123001960784},"手机":{"task":43.0,"done":8.0,"gap":-35.0,"rate":0.186046511627907},"PC":{"task":3.0,"done":0.0,"gap":-3.0,"rate":0.0},"平板":{"task":8.0,"done":1.0,"gap":-7.0,"rate":0.125},"穿戴":{"task":25.0,"done":5.0,"gap":-20.0,"rate":0.2},"音频":{"task":9.0,"done":0.0,"gap":-9.0,"rate":0.0},"HD":{"task":0.0,"done":0.0,"gap":0.0,"rate":1.0},"智慧办公":{"task":11.0,"done":1.0,"gap":-10.0,"rate":0.0909090909090909},"音频穿戴":{"task":34.0,"done":5.0,"gap":-29.0,"rate":0.147058823529412},"销额":{"task":400000.0,"done":65307.02,"gap":-334692.98,"rate":0.16326755},"绩效":27.6260782450631},"qcs":{"电信积分":{"task":150.0,"done":0.0,"gap":-150.0,"rate":0.0},"会员搭售率":{"terminal":8.0,"care":0.0,"gap":-3.0,"rate":0.0},"回收搭售率":{"orders":3.0,"gap":1.0,"rate":0.375},"贴膜率":{"orders":17.0,"gap":10.0,"rate":1.21428571428571},"考核机型":{"task":3.0,"gap":-3.0},"乐回收":{"orders":2.0,"amount":null,"增值":398.0},"太力回收":{"orders":1.0,"amount":320.0,"增值":44.8},"增值":{"task":14250.0,"done":2141.9431,"gap":-12108.0569,"rate":0.150311796491228},"健康度":{"coupon":2143.98,"ratio":0.260911372167976,"grossMargin":0.125825265032764,"增值率":0.0327980529505097},"星联会员":{"优享":0.0,"尊享":0.0,"合计":0.0}},"dailyDone":{"手机":1.0,"毛利":374.0,"增值":0.0,"智慧办公":0.0,"音频穿戴":0.0,"HD":0.0,"会员":0.0,"回收":null,"贴膜":0.0,"电信积分":0.0,"滞销":0.0,"优享/会员":0.0,"尊享/储值":0.0},"dailyGap":{"手机":-2.0,"毛利":-2252.0,"增值":-638.0,"智慧办公":-1.0,"音频穿戴":-2.0,"HD":0.0,"Care+":-1.0,"回收":1.0,"贴膜":1.0,"电信积分":-8.0,"滞销":-1.0,"优享/会员":1.0,"尊享/储值":1.0}},"李泽":{"performance":{"毛利":{"task":52000.0,"done":6948.3242,"gap":-45051.6758,"rate":0.133621619230769},"手机":{"task":42.0,"done":6.0,"gap":-36.0,"rate":0.142857142857143},"PC":{"task":4.0,"done":0.0,"gap":-4.0,"rate":0.0},"平板":{"task":9.0,"done":0.0,"gap":-9.0,"rate":0.0},"穿戴":{"task":25.0,"done":6.0,"gap":-19.0,"rate":0.24},"音频":{"task":9.0,"done":1.0,"gap":-8.0,"rate":0.111111111111111},"HD":{"task":1.0,"done":0.0,"gap":-1.0,"rate":0.0},"智慧办公":{"task":13.0,"done":0.0,"gap":-13.0,"rate":0.0},"音频穿戴":{"task":34.0,"done":7.0,"gap":-27.0,"rate":0.205882352941176},"销额":{"task":400000.0,"done":52275.0,"gap":-347725.0,"rate":0.1306875},"绩效":32.8270525514357},"qcs":{"电信积分":{"task":150.0,"done":0.0,"gap":-150.0,"rate":0.0},"会员搭售率":{"terminal":6.0,"care":5.0,"gap":3.0,"rate":0.833333333333333},"回收搭售率":{"orders":0.0,"gap":-2.0,"rate":0.0},"贴膜率":{"orders":4.0,"gap":-2.0,"rate":0.333333333333333},"考核机型":{"task":3.0,"gap":-2.0},"乐回收":{"orders":null,"amount":null,"增值":null},"太力回收":{"orders":0.0,"amount":0.0,"增值":0.0},"增值":{"task":14250.0,"done":3039.1542,"gap":-11210.8458,"rate":0.213273978947368},"健康度":{"coupon":2783.5,"ratio":0.400600190762544,"grossMargin":0.132918683883309,"增值率":0.0581378134863702},"星联会员":{"优享":3.0,"尊享":2.0,"合计":5.0}},"dailyDone":{"手机":0.0,"毛利":1569.8,"增值":893.6,"智慧办公":0.0,"音频穿戴":3.0,"HD":0.0,"会员":1.0,"回收":null,"贴膜":0.0,"电信积分":0.0,"滞销":0.0,"优享/会员":0.0,"尊享/储值":1.0},"dailyGap":{"手机":-2.0,"毛利":-2372.0,"增值":-591.0,"智慧办公":-1.0,"音频穿戴":-2.0,"HD":-1.0,"Care+":1.0,"回收":-1.0,"贴膜":-1.0,"电信积分":-8.0,"滞销":-1.0,"优享/会员":1.0,"尊享/储值":1.0}},"陈超磊":{"performance":{"毛利":{"task":52000.0,"done":8676.9865,"gap":-43323.0135,"rate":0.166865125},"手机":{"task":42.0,"done":8.0,"gap":-34.0,"rate":0.19047619047619},"PC":{"task":4.0,"done":1.0,"gap":-3.0,"rate":0.25},"平板":{"task":9.0,"done":1.0,"gap":-8.0,"rate":0.111111111111111},"穿戴":{"task":25.0,"done":2.0,"gap":-23.0,"rate":0.08},"音频":{"task":10.0,"done":2.0,"gap":-8.0,"rate":0.2},"HD":{"task":1.0,"done":0.0,"gap":-1.0,"rate":0.0},"智慧办公":{"task":13.0,"done":2.0,"gap":-11.0,"rate":0.153846153846154},"音频穿戴":{"task":35.0,"done":4.0,"gap":-31.0,"rate":0.114285714285714},"销额":{"task":400000.0,"done":70558.0,"gap":-329442.0,"rate":0.176395},"绩效":null},"qcs":{"电信积分":{"task":150.0,"done":0.0,"gap":-150.0,"rate":0.0},"会员搭售率":{"terminal":8.0,"care":2.0,"gap":-1.0,"rate":0.25},"回收搭售率":{"orders":3.0,"gap":1.0,"rate":0.375},"贴膜率":{"orders":12.0,"gap":6.0,"rate":1.0},"考核机型":{"task":3.0,"gap":-3.0},"乐回收":{"orders":3.0,"amount":null,"增值":273.0},"太力回收":{"orders":0.0,"amount":0.0,"增值":0.0},"增值":{"task":14250.0,"done":2126.0765,"gap":-12123.9235,"rate":0.149198350877193},"健康度":{"coupon":3877.0,"ratio":0.446814109944737,"grossMargin":0.122976650415261,"增值率":0.0301323237620114},"星联会员":{"优享":2.0,"尊享":0.0,"合计":2.0}},"dailyDone":{"手机":0.0,"毛利":0.0,"增值":0.0,"智慧办公":0.0,"音频穿戴":0.0,"HD":0.0,"会员":0.0,"回收":null,"贴膜":0.0,"电信积分":0.0,"滞销":0.0,"优享/会员":0.0,"尊享/储值":0.0},"dailyGap":{"手机":-2.0,"毛利":-2281.0,"增值":-639.0,"智慧办公":-1.0,"音频穿戴":-2.0,"HD":-1.0,"Care+":-1.0,"回收":1.0,"贴膜":1.0,"电信积分":-8.0,"滞销":-1.0,"优享/会员":1.0,"尊享/储值":1.0}},"张博晨":{"performance":{"毛利":{"task":null,"done":980.1122,"gap":980.1122,"rate":null},"手机":{"task":null,"done":0.0,"gap":0.0,"rate":null},"PC":{"task":null,"done":0.0,"gap":0.0,"rate":null},"平板":{"task":null,"done":0.0,"gap":0.0,"rate":null},"穿戴":{"task":null,"done":0.0,"gap":0.0,"rate":null},"音频":{"task":null,"done":0.0,"gap":0.0,"rate":null},"HD":{"task":null,"done":0.0,"gap":0.0,"rate":1.0},"智慧办公":{"task":null,"done":0.0,"gap":0.0,"rate":null},"音频穿戴":{"task":null,"done":0.0,"gap":0.0,"rate":null},"销额":{"task":null,"done":999.0,"gap":999.0,"rate":null},"绩效":null},"qcs":{"电信积分":{"task":null,"done":null,"gap":null,"rate":null},"会员搭售率":{"terminal":0.0,"care":1.0,"gap":1.0,"rate":null},"回收搭售率":{"orders":1.0,"gap":1.0,"rate":null},"贴膜率":{"orders":0.0,"gap":0.0,"rate":null},"考核机型":{"task":null,"gap":0.0},"乐回收":{"orders":1.0,"amount":null,"增值":null},"太力回收":{"orders":null,"amount":null,"增值":null},"增值":{"task":null,"done":980.1122,"gap":980.1122,"rate":null},"健康度":{"coupon":99.0,"ratio":null,"grossMargin":0.981093293293293,"增值率":0.981093293293293},"星联会员":{"优享":1.0,"尊享":0.0,"合计":1.0}},"dailyDone":{"手机":0.0,"毛利":0.0,"增值":0.0,"智慧办公":0.0,"音频穿戴":0.0,"HD":0.0,"会员":0.0,"回收":null,"贴膜":0.0,"电信积分":0.0,"滞销":0.0,"优享/会员":0.0,"尊享/储值":0.0},"dailyGap":{}}},"qudao":{"timeDate":"2026-08-11","timeRate":0.3548387096774194,"total":{"task":120000.0,"done":19697.0,"gap":-100303.0,"rate":0.164141666666667},"people":[{"name":"邵乐乐","task":30000.0,"done":0.0,"gap":-30000.0,"rate":0.0},{"name":"杨丽华","task":30000.0,"done":0.0,"gap":-30000.0,"rate":0.0},{"name":"李泽","task":30000.0,"done":0.0,"gap":-30000.0,"rate":0.0},{"name":"陈超磊","task":30000.0,"done":19697.0,"gap":-10303.0,"rate":0.656566666666667},{"name":"张博晨","task":null,"done":0.0,"gap":0.0,"rate":null}]}};
+const EMBEDDED_DATA = {"meta":{"storeName":"华为李家村万达授权体验店","date":"2026-08-11","dayTitle":"08-09达成","timeProgress":0.3548387096774194,"employees":["邵乐乐","杨丽华","李泽","陈超磊","张博晨"],"sourceFile":"李家村8月任务进度.xlsx","fetchTime":"21:07","isToday":true,"generatedAt":"2026-08-11 21:07:23"},"store":{"performance":{"毛利":{"task":205000.0,"done":29016.1733,"gap":-175983.8267,"rate":0.141542308780488},"手机":{"task":170.0,"done":30.0,"gap":-140.0,"rate":0.176470588235294},"PC":{"task":14.0,"done":1.0,"gap":-13.0,"rate":0.0714285714285714},"平板":{"task":34.0,"done":2.0,"gap":-32.0,"rate":0.0588235294117647},"穿戴":{"task":100.0,"done":34.0,"gap":-66.0,"rate":0.34},"音频":{"task":37.0,"done":3.0,"gap":-34.0,"rate":0.0810810810810811},"HD":{"task":2.0,"done":0.0,"gap":-2.0,"rate":0.0},"智慧办公":{"task":48.0,"done":3.0,"gap":-45.0,"rate":0.0625},"音频穿戴":{"task":137.0,"done":37.0,"gap":-100.0,"rate":0.27007299270073},"销额":{"task":1600000.0,"done":224919.32,"gap":-1375080.68,"rate":0.140574575},"绩效":30.3582032916784},"qcs":{"电信积分":{"task":600.0,"done":64.0,"gap":-536.0,"rate":0.106666666666667},"会员搭售率":{"terminal":30.0,"care":9.0,"gap":0.0,"rate":0.3},"回收搭售率":{"orders":9.0,"gap":3.0,"rate":0.3},"贴膜率":{"orders":38.0,"gap":23.0,"rate":0.567164179104478},"考核机型":{"task":12.0,"gap":-11.0},"乐回收":{"orders":7.0,"amount":0.0,"增值":711.0},"太力回收":{"orders":2.0,"amount":983.0,"增值":137.62},"增值":{"task":57000.0,"done":9574.8533,"gap":-47425.1467,"rate":0.16797988245614},"健康度":{"coupon":12015.51,"ratio":0.414096989143637,"grossMargin":0.129007029276098,"增值率":0.0425701682718941},"星联会员":{"优享":7.0,"尊享":2.0,"合计":9.0}},"dailyDone":{"手机":2.0,"毛利":2609.0663,"增值":1255.5363,"智慧办公":0.0,"音频穿戴":4.0,"HD":0.0,"会员":1.0,"回收":0.0,"贴膜":2.0,"电信积分":0.0,"滞销":0.0,"优享/会员":0.0,"尊享/储值":1.0},"dailyGap":{"手机":-8.0,"毛利":-9316.0,"增值":-2551.0,"智慧办公":-4.0,"音频穿戴":-7.0,"HD":-2.0,"Care+":-2.0,"回收":1.0,"贴膜":0.0,"电信积分":-29.0,"滞销":-4.0,"优享/会员":4.0,"尊享/储值":4.0}},"people":{"邵乐乐":{"performance":{"毛利":{"task":50000.0,"done":4193.4773,"gap":-45806.5227,"rate":0.083869546},"手机":{"task":43.0,"done":8.0,"gap":-35.0,"rate":0.186046511627907},"PC":{"task":3.0,"done":0.0,"gap":-3.0,"rate":0.0},"平板":{"task":8.0,"done":0.0,"gap":-8.0,"rate":0.0},"穿戴":{"task":25.0,"done":21.0,"gap":-4.0,"rate":0.84},"音频":{"task":9.0,"done":0.0,"gap":-9.0,"rate":0.0},"HD":{"task":0.0,"done":0.0,"gap":0.0,"rate":1.0},"智慧办公":{"task":11.0,"done":0.0,"gap":-11.0,"rate":0.0},"音频穿戴":{"task":34.0,"done":21.0,"gap":-13.0,"rate":0.617647058823529},"销额":{"task":400000.0,"done":35780.3,"gap":-364219.7,"rate":0.08945075},"绩效":30.6214790785363},"qcs":{"电信积分":{"task":150.0,"done":64.0,"gap":-86.0,"rate":0.426666666666667},"会员搭售率":{"terminal":8.0,"care":1.0,"gap":-2.0,"rate":0.125},"回收搭售率":{"orders":2.0,"gap":0.0,"rate":0.25},"贴膜率":{"orders":5.0,"gap":-10.0,"rate":0.172413793103448},"考核机型":{"task":3.0,"gap":-3.0},"乐回收":{"orders":1.0,"amount":null,"增值":40.0},"太力回收":{"orders":1.0,"amount":663.0,"增值":92.82},"增值":{"task":14250.0,"done":1287.5673,"gap":-12962.4327,"rate":0.0903556},"健康度":{"coupon":3112.03,"ratio":0.742112041479275,"grossMargin":0.117200730569615,"增值率":0.0359853690438593},"星联会员":{"优享":1.0,"尊享":0.0,"合计":1.0}},"dailyDone":{"手机":1.0,"毛利":665.2663,"增值":361.9363,"智慧办公":0.0,"音频穿戴":1.0,"HD":0.0,"会员":0.0,"回收":null,"贴膜":2.0,"电信积分":0.0,"滞销":0.0,"优享/会员":0.0,"尊享/储值":0.0},"dailyGap":{"手机":-2.0,"毛利":-2411.0,"增值":-683.0,"智慧办公":-1.0,"音频穿戴":-1.0,"HD":0.0,"Care+":-1.0,"回收":0.0,"贴膜":-1.0,"电信积分":-5.0,"滞销":-1.0,"优享/会员":1.0,"尊享/储值":1.0}},"杨丽华":{"performance":{"毛利":{"task":51000.0,"done":8217.2731,"gap":-42782.7269,"rate":0.161123001960784},"手机":{"task":43.0,"done":8.0,"gap":-35.0,"rate":0.186046511627907},"PC":{"task":3.0,"done":0.0,"gap":-3.0,"rate":0.0},"平板":{"task":8.0,"done":1.0,"gap":-7.0,"rate":0.125},"穿戴":{"task":25.0,"done":5.0,"gap":-20.0,"rate":0.2},"音频":{"task":9.0,"done":0.0,"gap":-9.0,"rate":0.0},"HD":{"task":0.0,"done":0.0,"gap":0.0,"rate":1.0},"智慧办公":{"task":11.0,"done":1.0,"gap":-10.0,"rate":0.0909090909090909},"音频穿戴":{"task":34.0,"done":5.0,"gap":-29.0,"rate":0.147058823529412},"销额":{"task":400000.0,"done":65307.02,"gap":-334692.98,"rate":0.16326755},"绩效":27.6260782450631},"qcs":{"电信积分":{"task":150.0,"done":0.0,"gap":-150.0,"rate":0.0},"会员搭售率":{"terminal":8.0,"care":0.0,"gap":-3.0,"rate":0.0},"回收搭售率":{"orders":3.0,"gap":1.0,"rate":0.375},"贴膜率":{"orders":17.0,"gap":10.0,"rate":1.21428571428571},"考核机型":{"task":3.0,"gap":-3.0},"乐回收":{"orders":2.0,"amount":null,"增值":398.0},"太力回收":{"orders":1.0,"amount":320.0,"增值":44.8},"增值":{"task":14250.0,"done":2141.9431,"gap":-12108.0569,"rate":0.150311796491228},"健康度":{"coupon":2143.98,"ratio":0.260911372167976,"grossMargin":0.125825265032764,"增值率":0.0327980529505097},"星联会员":{"优享":0.0,"尊享":0.0,"合计":0.0}},"dailyDone":{"手机":1.0,"毛利":374.0,"增值":0.0,"智慧办公":0.0,"音频穿戴":0.0,"HD":0.0,"会员":0.0,"回收":null,"贴膜":0.0,"电信积分":0.0,"滞销":0.0,"优享/会员":0.0,"尊享/储值":0.0},"dailyGap":{"手机":-2.0,"毛利":-2252.0,"增值":-638.0,"智慧办公":-1.0,"音频穿戴":-2.0,"HD":0.0,"Care+":-1.0,"回收":1.0,"贴膜":1.0,"电信积分":-8.0,"滞销":-1.0,"优享/会员":1.0,"尊享/储值":1.0}},"李泽":{"performance":{"毛利":{"task":52000.0,"done":6948.3242,"gap":-45051.6758,"rate":0.133621619230769},"手机":{"task":42.0,"done":6.0,"gap":-36.0,"rate":0.142857142857143},"PC":{"task":4.0,"done":0.0,"gap":-4.0,"rate":0.0},"平板":{"task":9.0,"done":0.0,"gap":-9.0,"rate":0.0},"穿戴":{"task":25.0,"done":6.0,"gap":-19.0,"rate":0.24},"音频":{"task":9.0,"done":1.0,"gap":-8.0,"rate":0.111111111111111},"HD":{"task":1.0,"done":0.0,"gap":-1.0,"rate":0.0},"智慧办公":{"task":13.0,"done":0.0,"gap":-13.0,"rate":0.0},"音频穿戴":{"task":34.0,"done":7.0,"gap":-27.0,"rate":0.205882352941176},"销额":{"task":400000.0,"done":52275.0,"gap":-347725.0,"rate":0.1306875},"绩效":32.8270525514357},"qcs":{"电信积分":{"task":150.0,"done":0.0,"gap":-150.0,"rate":0.0},"会员搭售率":{"terminal":6.0,"care":5.0,"gap":3.0,"rate":0.833333333333333},"回收搭售率":{"orders":0.0,"gap":-2.0,"rate":0.0},"贴膜率":{"orders":4.0,"gap":-2.0,"rate":0.333333333333333},"考核机型":{"task":3.0,"gap":-2.0},"乐回收":{"orders":null,"amount":null,"增值":null},"太力回收":{"orders":0.0,"amount":0.0,"增值":0.0},"增值":{"task":14250.0,"done":3039.1542,"gap":-11210.8458,"rate":0.213273978947368},"健康度":{"coupon":2783.5,"ratio":0.400600190762544,"grossMargin":0.132918683883309,"增值率":0.0581378134863702},"星联会员":{"优享":3.0,"尊享":2.0,"合计":5.0}},"dailyDone":{"手机":0.0,"毛利":1569.8,"增值":893.6,"智慧办公":0.0,"音频穿戴":3.0,"HD":0.0,"会员":1.0,"回收":null,"贴膜":0.0,"电信积分":0.0,"滞销":0.0,"优享/会员":0.0,"尊享/储值":1.0},"dailyGap":{"手机":-2.0,"毛利":-2372.0,"增值":-591.0,"智慧办公":-1.0,"音频穿戴":-2.0,"HD":-1.0,"Care+":1.0,"回收":-1.0,"贴膜":-1.0,"电信积分":-8.0,"滞销":-1.0,"优享/会员":1.0,"尊享/储值":1.0}},"陈超磊":{"performance":{"毛利":{"task":52000.0,"done":8676.9865,"gap":-43323.0135,"rate":0.166865125},"手机":{"task":42.0,"done":8.0,"gap":-34.0,"rate":0.19047619047619},"PC":{"task":4.0,"done":1.0,"gap":-3.0,"rate":0.25},"平板":{"task":9.0,"done":1.0,"gap":-8.0,"rate":0.111111111111111},"穿戴":{"task":25.0,"done":2.0,"gap":-23.0,"rate":0.08},"音频":{"task":10.0,"done":2.0,"gap":-8.0,"rate":0.2},"HD":{"task":1.0,"done":0.0,"gap":-1.0,"rate":0.0},"智慧办公":{"task":13.0,"done":2.0,"gap":-11.0,"rate":0.153846153846154},"音频穿戴":{"task":35.0,"done":4.0,"gap":-31.0,"rate":0.114285714285714},"销额":{"task":400000.0,"done":70558.0,"gap":-329442.0,"rate":0.176395},"绩效":null},"qcs":{"电信积分":{"task":150.0,"done":0.0,"gap":-150.0,"rate":0.0},"会员搭售率":{"terminal":8.0,"care":2.0,"gap":-1.0,"rate":0.25},"回收搭售率":{"orders":3.0,"gap":1.0,"rate":0.375},"贴膜率":{"orders":12.0,"gap":6.0,"rate":1.0},"考核机型":{"task":3.0,"gap":-3.0},"乐回收":{"orders":3.0,"amount":null,"增值":273.0},"太力回收":{"orders":0.0,"amount":0.0,"增值":0.0},"增值":{"task":14250.0,"done":2126.0765,"gap":-12123.9235,"rate":0.149198350877193},"健康度":{"coupon":3877.0,"ratio":0.446814109944737,"grossMargin":0.122976650415261,"增值率":0.0301323237620114},"星联会员":{"优享":2.0,"尊享":0.0,"合计":2.0}},"dailyDone":{"手机":0.0,"毛利":0.0,"增值":0.0,"智慧办公":0.0,"音频穿戴":0.0,"HD":0.0,"会员":0.0,"回收":null,"贴膜":0.0,"电信积分":0.0,"滞销":0.0,"优享/会员":0.0,"尊享/储值":0.0},"dailyGap":{"手机":-2.0,"毛利":-2281.0,"增值":-639.0,"智慧办公":-1.0,"音频穿戴":-2.0,"HD":-1.0,"Care+":-1.0,"回收":1.0,"贴膜":1.0,"电信积分":-8.0,"滞销":-1.0,"优享/会员":1.0,"尊享/储值":1.0}},"张博晨":{"performance":{"毛利":{"task":null,"done":980.1122,"gap":980.1122,"rate":null},"手机":{"task":null,"done":0.0,"gap":0.0,"rate":null},"PC":{"task":null,"done":0.0,"gap":0.0,"rate":null},"平板":{"task":null,"done":0.0,"gap":0.0,"rate":null},"穿戴":{"task":null,"done":0.0,"gap":0.0,"rate":null},"音频":{"task":null,"done":0.0,"gap":0.0,"rate":null},"HD":{"task":null,"done":0.0,"gap":0.0,"rate":1.0},"智慧办公":{"task":null,"done":0.0,"gap":0.0,"rate":null},"音频穿戴":{"task":null,"done":0.0,"gap":0.0,"rate":null},"销额":{"task":null,"done":999.0,"gap":999.0,"rate":null},"绩效":null},"qcs":{"电信积分":{"task":null,"done":null,"gap":null,"rate":null},"会员搭售率":{"terminal":0.0,"care":1.0,"gap":1.0,"rate":null},"回收搭售率":{"orders":1.0,"gap":1.0,"rate":null},"贴膜率":{"orders":0.0,"gap":0.0,"rate":null},"考核机型":{"task":null,"gap":0.0},"乐回收":{"orders":1.0,"amount":null,"增值":null},"太力回收":{"orders":null,"amount":null,"增值":null},"增值":{"task":null,"done":980.1122,"gap":980.1122,"rate":null},"健康度":{"coupon":99.0,"ratio":null,"grossMargin":0.981093293293293,"增值率":0.981093293293293},"星联会员":{"优享":1.0,"尊享":0.0,"合计":1.0}},"dailyDone":{"手机":0.0,"毛利":0.0,"增值":0.0,"智慧办公":0.0,"音频穿戴":0.0,"HD":0.0,"会员":0.0,"回收":null,"贴膜":0.0,"电信积分":0.0,"滞销":0.0,"优享/会员":0.0,"尊享/储值":0.0},"dailyGap":{}}},"qudao":{"timeDate":"2026-08-11","timeRate":0.3548387096774194,"total":{"task":120000.0,"done":19697.0,"gap":-100303.0,"rate":0.164141666666667},"people":[{"name":"邵乐乐","task":30000.0,"done":0.0,"gap":-30000.0,"rate":0.0},{"name":"杨丽华","task":30000.0,"done":0.0,"gap":-30000.0,"rate":0.0},{"name":"李泽","task":30000.0,"done":0.0,"gap":-30000.0,"rate":0.0},{"name":"陈超磊","task":30000.0,"done":19697.0,"gap":-10303.0,"rate":0.656566666666667},{"name":"张博晨","task":null,"done":0.0,"gap":0.0,"rate":null}]}};
 
 const CFG = {
   repo   : 'ZBC5241/shop',
@@ -601,18 +698,56 @@ function ringSVG(rate, s, size){
   const r = (size - 16) / 2, c = 2 * Math.PI * r;
   const w = isNum(rate) ? Math.min(rate, 1) : 0;
   const off = c * (1 - w);
-  const col = {done:'#2dd4a7', over:'#4d9bff', on:'#ffb02e', low:'#ff4d4f', na:'#64748b'}[s] || '#64748b';
+  const col = {done:'#22c55e', over:'#7c3aed', on:'#f59e0b', low:'#ef4444', na:'#9aa0bd'}[s] || '#9aa0bd';
   return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">'
-    + '<circle cx="' + (size/2) + '" cy="' + (size/2) + '" r="' + r + '" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="10"/>'
+    + '<circle cx="' + (size/2) + '" cy="' + (size/2) + '" r="' + r + '" fill="none" stroke="rgba(30,28,60,.07)" stroke-width="10"/>'
     + '<circle cx="' + (size/2) + '" cy="' + (size/2) + '" r="' + r + '" fill="none" stroke="' + col + '" stroke-width="10" stroke-linecap="round"'
     + ' stroke-dasharray="' + c.toFixed(1) + '" stroke-dashoffset="' + off.toFixed(1) + '"'
     + ' transform="rotate(-90 ' + (size/2) + ' ' + (size/2) + ')" style="transition:stroke-dashoffset 1s cubic-bezier(.22,1,.36,1)"/>'
     + '</svg>';
 }
 
+/* 内联 SVG 图标库（无 emoji、无外部资源） */
+const ICONS = {
+  store:'<path d="M3 9l9-6 9 6v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 21V12h6v9"/>',
+  rank:'<path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0z"/><path d="M7 4H4v2a3 3 0 0 0 3 3M17 4h3v2a3 3 0 0 1-3 3"/>',
+  person:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+  day:'<rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/>',
+  insight:'<circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/>',
+  qudao:'<path d="M3 10l9-6 9 6M4 10v9h16v-9M9 19v-5h6v5"/>',
+  warn:'<path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17v.5"/>',
+  fire:'<path d="M12 3s5 4 5 9a5 5 0 0 1-10 0c0-2 1-3 1-3s.5 2 2 2c0-3 2-5 2-8z"/>',
+  spark:'<path d="M12 3l2 6 6 2-6 2-2 6-2-6-6-2 6-2z"/>'
+};
+function ic(name, size){
+  return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"'
+    + (size ? ' style="width:'+size+'px;height:'+size+'px"' : '') + '>' + (ICONS[name] || '') + '</svg>';
+}
+function warnIcon(){ return ic('warn'); }
+
+/* 彩带动效（纯 DOM，无 canvas，无外部库） */
+function confetti(n){
+  n = n || 110;
+  const box = document.createElement('div');
+  box.className = 'confetti';
+  const cols = ['#7c3aed','#a855f7','#22c55e','#ef4444','#f59e0b','#6366f1'];
+  for(let i = 0; i < n; i++){
+    const s = document.createElement('i');
+    s.style.left = (Math.random() * 100) + '%';
+    s.style.background = cols[i % cols.length];
+    s.style.setProperty('--x', (Math.random() * 220 - 110) + 'px');
+    s.style.setProperty('--r', (Math.random() * 720 - 360) + 'deg');
+    s.style.animationDelay = (Math.random() * 0.4) + 's';
+    s.style.transform = 'rotate(' + (Math.random() * 360) + 'deg)';
+    box.appendChild(s);
+  }
+  document.body.appendChild(box);
+  setTimeout(() => box.remove(), 3000);
+}
+
 function heroRow(label, k){
   const s = hasTask(k) ? stat(k.rate) : 'na';
-  const col = {done:'var(--green)', over:'var(--blue)', on:'var(--amber)', low:'var(--red)', na:'var(--gray)'}[s];
+  const col = {done:'var(--green)', over:'var(--purple)', on:'var(--amber)', low:'var(--red)', na:'var(--gray)'}[s];
   return '<div class="hero-row"><span>' + esc(label) + '</span>'
        + '<b class="num" style="color:' + col + '">' + pct(k && k.rate, 1) + '</b></div>';
 }
@@ -644,14 +779,14 @@ function catChartHTML(P){
     const k = P[c];
     const rate = (k && isNum(k.rate)) ? Math.min(k.rate, 1) : 0;
     const s = k && hasTask(k) ? stat(k.rate) : 'na';
-    const col = {done:'var(--green)', over:'var(--blue)', on:'var(--amber)', low:'var(--red)', na:'var(--gray)'}[s];
+    const col = {done:'var(--green)', over:'var(--purple)', on:'var(--amber)', low:'var(--red)', na:'var(--gray)'}[s];
     bars += '<div class="mc-b"><div class="mc-track">'
           + '<div class="mc-f" style="height:' + (rate*100).toFixed(0) + '%;background:' + col + '"></div>'
           + (tpPct > 0 ? '<div class="mc-mk" style="bottom:' + tpPct.toFixed(0) + '%"></div>' : '')
           + '</div><span class="mc-l">' + esc(c) + '</span></div>';
   });
   return '<div class="mc"><div class="mc-bars">' + bars + '</div>'
-       + '<div class="mc-leg"><span class="mc-dot"></span>蓝虚线 = 时间进度 ' + pct(tp, 0) + '</div></div>';
+       + '<div class="mc-leg"><span class="mc-dot"></span>紫线 = 时间进度 ' + pct(tp, 0) + '</div></div>';
 }
 
 function renderStore(){
@@ -672,24 +807,26 @@ function renderStore(){
   h += kpiCard('手机', P['手机'], '手机');
   h += '</div></div>';
 
-  /* 品类速览（柱状图） */
+  /* 品类速览（柱状图） + 品类达成 → 桌面并排 */
+  h += '<div class="cols">';
   h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>品类速览</b>'
      + '<span class="tail">柱高 = 达成率</span></div>' + catChartHTML(P) + '</div>';
 
   /* 品类达成 */
   h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>品类达成</b>'
-     + '<span class="tail">白线 = 时间进度</span></div><div class="rows">';
+     + '<span class="tail">紫线 = 时间进度</span></div><div class="rows">';
   CATS.forEach(c => { h += catRow(c, P[c], c); });
   h += catRow('增值', Q['增值'], '增值');
   h += '</div></div>';
+  h += '</div>'; /* /cols */
 
-  /* 考核机型（独立板块） */
+  /* 考核机型 + 全科生 → 桌面并排 */
+  h += '<div class="cols">';
   h += assessHTML(Q['考核机型'], DATA.meta.employees);
-
-  /* 全科生 */
   h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>全科生</b></div>';
   h += qcsHTML(Q);
   h += '</div>';
+  h += '</div>'; /* /cols */
 
   /* 绩效 */
   if(isNum(P['绩效'])){
@@ -838,8 +975,9 @@ function renderQudao(){
   const lag = isNum(t.rate) && isNum(tp) && t.rate < tp;
   h += '<div style="margin-top:10px;font-size:11.5px;color:var(--tx3);line-height:1.6">'
      + '数据日期 ' + esc(Q.timeDate || '—') + ' · 已过 ' + pct(tp,1)
-     + (lag ? ' <span style="color:var(--amber);font-weight:700">⚠ 进度落后</span>'
-            : ' <span style="color:var(--green);font-weight:700">跟上节奏</span>')
+     + (lag ? ' <span style="color:#b45309;font-weight:700;display:inline-flex;align-items:center;gap:3px">'
+              + ic('warn',13) + ' 进度落后</span>'
+            : ' <span style="color:#15803d;font-weight:700">跟上节奏</span>')
      + '</div>';
   h += '</div></div>';
 
@@ -908,9 +1046,10 @@ function renderRank(){
   h += '<div class="sec-h"><span class="bar"></span><b>' + esc(dim.label||dim.k) + ' 排行</b>'
      + '<span class="tail">共 ' + list.length + ' 人</span></div>';
 
+  h += '<div class="cols">';
   list.forEach((it, i) => {
     const s = it.has ? stat(it.rate) : 'na';
-    const colorVar = {done:'--green',over:'--blue',on:'--amber',low:'--red',na:'--gray'}[s];
+    const colorVar = {done:'--green',over:'--purple',on:'--amber',low:'--red',na:'--gray'}[s];
     const w = it.has && isNum(it.rate) ? Math.min(it.rate,1)*100 : 0;
     h += '<div class="rk" data-person="' + esc(it.name) + '">'
       + '<div class="rk-bg" style="width:' + w.toFixed(1) + '%;background:var(' + colorVar + ')"></div>'
@@ -929,6 +1068,7 @@ function renderRank(){
       + '</div>'
       + '</div>';
   });
+  h += '</div>'; /* /cols */
 
   h += '<div style="font-size:11px;color:var(--tx3);text-align:center;padding:8px 0 2px;line-height:1.7">'
      + '点任意一行查看该员工完整数据</div>';
@@ -956,11 +1096,14 @@ function renderPerson(){
 
   if(noTask){
     h += '<div class="card" style="padding:12px;margin-bottom:14px;'
-       + 'border-color:rgba(245,158,11,.3);background:linear-gradient(90deg,rgba(245,158,11,.08),var(--card))">'
-       + '<div style="font-size:12px;color:var(--amber);font-weight:600">⚠ 本月未分配任务</div>'
+       + 'border-color:rgba(245,158,11,.3);background:linear-gradient(90deg,var(--amberDim),transparent)">'
+       + '<div style="font-size:12px;color:#b45309;font-weight:600;display:flex;align-items:center;gap:5px">' + ic('warn',14) + ' 本月未分配任务</div>'
        + '<div style="font-size:11px;color:var(--tx3);margin-top:4px;line-height:1.6">'
        + '表格中该员工的任务列为空，因此不计算达成率，仅显示已完成的量。</div></div>';
   }
+
+  /* 多栏容器（桌面并排） */
+  h += '<div class="cols">';
 
   /* 核心 */
   h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>核心指标</b>'
@@ -977,7 +1120,9 @@ function renderPerson(){
   h += catRow('增值', Q['增值'], '增值');
   h += '</div></div>';
 
-  /* 考核机型（独立板块） */
+  h += '</div>'; /* /cols 上半 */
+
+  /* 考核机型（独立板块，整宽） */
   h += assessHTML(Q['考核机型'], null);
 
   /* 全科生 */
@@ -994,9 +1139,9 @@ function renderPerson(){
   /* 绩效 */
   if(isNum(P['绩效'])){
     h += '<div class="sec"><div class="card" style="padding:14px;text-align:center">'
-       + '<div style="font-size:11px;color:var(--tx3)">个人绩效得分</div>'
-       + '<div style="font-size:30px;font-weight:800;margin-top:4px;letter-spacing:-1px" class="num">'
-       + P['绩效'].toFixed(2) + '</div></div></div>';
+      + '<div style="font-size:11px;color:var(--tx3)">个人绩效得分</div>'
+      + '<div style="font-size:30px;font-weight:800;margin-top:4px;letter-spacing:-1px" class="num">'
+      + P['绩效'].toFixed(2) + '</div></div></div>';
   }
 
   h += foot();
@@ -1248,6 +1393,13 @@ function bindDynamic(){
     $$('.tab').forEach(t => t.classList.toggle('on', t.dataset.v === 'person'));
     render();
   });
+  /* 点击总览进度环：达成即撒彩带庆祝 */
+  const ring = $('.ring');
+  if(ring) ring.onclick = () => {
+    const P = (DATA.store && DATA.store.performance) || {};
+    const sales = P['销额'] || {};
+    if(hasTask(sales) && isNum(sales.rate) && sales.rate >= 1){ confetti(); toast('销售额已达成，撒花庆祝'); }
+  };
 }
 
 $$('.tab').forEach(t => t.onclick = () => {
@@ -1570,9 +1722,10 @@ $('#btnClose').onclick = () => $('#adminMask').classList.remove('on');
 $('#adminMask').onclick = e => { if(e.target.id === 'adminMask') $('#adminMask').classList.remove('on'); };
 
 $('#btnRefresh').onclick = () => {
-  $('#btnRefresh').style.transform = 'rotate(360deg)';
-  $('#btnRefresh').style.transition = 'transform .5s';
-  setTimeout(() => { $('#btnRefresh').style.transform = ''; $('#btnRefresh').style.transition = ''; }, 520);
+  const svg = $('#btnRefresh svg') || $('#btnRefresh');
+  svg.style.transition = 'transform .5s';
+  svg.style.transform = 'rotate(360deg)';
+  setTimeout(() => { svg.style.transform = ''; svg.style.transition = ''; }, 520);
   loadRemote(false);
 };
 
@@ -1652,6 +1805,16 @@ function hasTaskRaw(k){ return k && typeof k.task === 'number' && isFinite(k.tas
    启动
    ========================================================== */
 render();
+
+/* 首次加载：若有目标已 100% 达成，撒一次彩带 */
+(function celebrateIfAchieved(){
+  const P = (DATA.store && DATA.store.performance) || {};
+  const Q = (DATA.store && DATA.store.qcs) || {};
+  const check = [P['销额'], P['毛利'], P['手机'], Q['增值']];
+  const done = check.some(k => k && hasTask(k) && isNum(k.rate) && k.rate >= 1);
+  if(done) setTimeout(() => confetti(90), 400);
+})();
+
 if(location.protocol === 'http:' || location.protocol === 'https:'){
   loadRemote(true);
 }else{

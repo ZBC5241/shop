@@ -285,6 +285,7 @@ def calc_daily(rxs, name, labels):
     v = {
         "手机":     sumifs(rxs, "I", P, ("F", "01.001*")),
         "毛利":     sumifs(rxs, "N", P),
+        "销额":     sumifs(rxs, "M", P),
         "增值":     sumifs(rxs, "N", P, ("D", "*增值*")),
         "智慧办公": sumifs(rxs, "I", P, ("F", "05.001*")) + sumifs(rxs, "I", P, ("F", "06.001*")),
         "音频穿戴": sumifs(rxs, "I", P, ("F", "08.001*")) + sumifs(rxs, "I", P, ("F", "07.001*")),
@@ -298,7 +299,9 @@ def calc_daily(rxs, name, labels):
         "优享/会员": sumifs(rxs, "I", P, ("G", "*新自由*")) + sumifs(rxs, "I", P, ("G", "星联优享*")),
         "尊享/储值": sumifs(rxs, "I", P, ("G", "新自由*")) + sumifs(rxs, "I", P, ("G", "星联尊享*")),
     }
-    return {k: v.get(k, 0.0) for k in labels if k and k != "摄影课"}
+    out = {k: v.get(k, 0.0) for k in labels if k and k != "摄影课"}
+    out["销额"] = v["销额"]          # 当日销额（金额列 M），不依赖表格日达成标签，强制计入
+    return out
 
 
 # ============================ 复算：每日缺口 ============================

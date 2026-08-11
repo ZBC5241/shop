@@ -244,6 +244,8 @@ def main():
             "timeProgress": tp,
             "employees": PEOPLE_ORDER,
             "sourceFile": os.path.basename(src),
+            "fetchTime": datetime.datetime.now().strftime("%H:%M"),
+            "isToday": (date_str == today.strftime("%Y-%m-%d")),
             "generatedAt": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         },
         "store": {

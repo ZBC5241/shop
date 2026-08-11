@@ -11,8 +11,11 @@ BASE="/Users/mac/WorkBuddy/Claw"
 osascript -e "display notification \"$BODY\" with title \"$TITLE\"" 2>/dev/null || true
 echo "🔔 系统通知已发送: $TITLE — $BODY"
 
-# 2) 企业微信群机器人（可选，填了 WECOM_WEBHOOK 才发）
+# 2) 企业微信群机器人（可选；WECOM_WEBHOOK 环境变量优先，否则读 .wecom_webhook 配置）
 WEBHOOK="${WECOM_WEBHOOK:-}"
+if [ -z "$WEBHOOK" ] && [ -f "$BASE/.wecom_webhook" ]; then
+  WEBHOOK="$(cat "$BASE/.wecom_webhook")"
+fi
 if [ -n "$WEBHOOK" ]; then
   /usr/bin/curl -s -o /dev/null -X POST "$WEBHOOK" \
     -H "Content-Type: application/json" \
