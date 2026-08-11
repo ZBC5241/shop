@@ -1,0 +1,14 @@
+# 业务数据（含商业信息，禁止入库）
+data.json
+yonyou_raw.tsv
+dashboard_data.json
+
+# 企业微信 webhook 密钥（禁止入库）
+.wecom_webhook
+
+# Python 缓存
+__pycache__/
+*.pyc
+
+# 本地记忆/配置（禁止入库）
+.workbuddy/

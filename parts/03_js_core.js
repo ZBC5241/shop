@@ -157,14 +157,13 @@ function detailRowsHTML(cat, person){
     h += '<div class="det-item' + (neg ? ' neg' : '') + '">'
       + '<div class="det-top"><span class="det-name">' + esc(r.name || '—') + '</span>'
       + '<span class="det-date num">' + esc(r.date || '') + '</span></div>'
-      + '<div class="det-meta"><span class="det-emp">' + esc(r.emp || '—') + '</span></div>'
       + '<div class="det-row num">'
       + '<span class="dv-origin">原价: <b>' + fmtNum(r.origPrice) + '</b></span>'
       + '<span class="dv-disc">折扣: <b>' + fmtNum(r.discPrice) + '</b></span>'
       + '<span class="dv-profit">毛利: <b>' + fmtNum(r.profit) + '</b></span>'
-      + '<span class="dv-gpr">毛利率: <b>' + (r.gpr == null ? '—' : (r.gpr*100).toFixed(1) + '%') + '</b></span>'
       + '<span class="dv-so">SO: <b>' + esc(r.so || '—') + '</b></span>'
       + '<span class="dv-cost">成本: <b>' + fmtNum(r.cost) + '</b></span>'
+      + '<span class="dv-gpr">毛利率: <b>' + (r.gpr == null ? '—' : (r.gpr*100).toFixed(1) + '%') + '</b></span>'
       + '</div></div>';
   });
   h += '</div>';

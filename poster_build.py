@@ -330,6 +330,11 @@ def build_html(d):
     return html
 
 
+# 目标出图分辨率（竖版手机海报）
+OUT_W, OUT_H = 1316, 2832
+PAD_COLOR = "F5F6F9"  # 与页面 body 背景一致，无缝衔接
+
+
 if __name__ == "__main__":
     out = "/Users/mac/WorkBuddy/Claw/poster_today.png"
     for i, a in enumerate(sys.argv):
@@ -339,5 +344,13 @@ if __name__ == "__main__":
     html = build_html(d)
     tmp = os.path.join(BASE, "_poster_tmp.html")
     open(tmp, "w", encoding="utf-8").write(html)
-    subprocess.run([NODE, RENDER_JS, tmp, out], check=True)
+    # 1) 先按 4x 高清截出设计稿（720 设计宽 → 2880 实宽）
+    raw = os.path.join(BASE, "_poster_raw.png")
+    scaled = os.path.join(BASE, "_poster_scaled.png")
+    subprocess.run([NODE, RENDER_JS, tmp, raw], check=True)
+    # 2) 宽度缩放到目标 1316（等比，高度随之变小）
+    subprocess.run(["sips", "--resampleWidth", str(OUT_W), "-o", scaled, raw], check=True)
+    # 3) 纵向补白到目标 2832，背景色与页面一致
+    subprocess.run(["sips", "-p", str(OUT_H), str(OUT_W),
+                    "--padColor", PAD_COLOR, "-o", out, scaled], check=True)
     print(out)
