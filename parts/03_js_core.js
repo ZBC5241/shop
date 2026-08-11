@@ -143,6 +143,8 @@ function catRow(name, k, key, person){
 }
 
 function money(v){ v = (v == null ? 0 : v); return v.toLocaleString('zh-CN', {maximumFractionDigits:2}); }
+/* 明细用：无千分位逗号、无货币符号 */
+function fmtNum(v){ v = (v == null ? 0 : v); return Number(v).toLocaleString('en-US', {maximumFractionDigits:2, useGrouping:false}); }
 
 /* 品类销售明细（点击品类行下钻） */
 function detailRowsHTML(cat, person){
@@ -157,10 +159,14 @@ function detailRowsHTML(cat, person){
       + '<span class="det-date num">' + esc(r.date || '') + '</span></div>'
       + '<div class="det-meta"><span class="det-emp">' + esc(r.emp || '—') + '</span>'
       + (r.sku ? '<span class="det-sku">' + esc(r.sku) + '</span>' : '') + '</div>'
-      + '<div class="det-nums num"><span class="det-qty">×' + (r.qty || 0) + '</span>'
-      + '<span>¥' + money(r.amount) + '</span>'
-      + '<span class="det-profit">毛利 ' + money(r.profit) + '</span></div>'
-      + '</div>';
+      + '<div class="det-grid num">'
+      + '<span>原价: <b>' + fmtNum(r.origPrice) + '</b></span>'
+      + '<span>折扣价: <b>' + fmtNum(r.discPrice) + '</b></span>'
+      + '<span>金额: <b>' + fmtNum(r.amount) + '</b></span>'
+      + '<span>毛利: <b>' + fmtNum(r.profit) + '</b></span>'
+      + '<span>SO: <b>' + esc(r.so || '—') + '</b></span>'
+      + '<span>成本: <b>' + fmtNum(r.cost) + '</b></span>'
+      + '</div></div>';
   });
   h += '</div>';
   return h;
