@@ -157,15 +157,13 @@ function detailRowsHTML(cat, person){
     h += '<div class="det-item' + (neg ? ' neg' : '') + '">'
       + '<div class="det-top"><span class="det-name">' + esc(r.name || '—') + '</span>'
       + '<span class="det-date num">' + esc(r.date || '') + '</span></div>'
-      + '<div class="det-meta"><span class="det-emp">' + esc(r.emp || '—') + '</span>'
-      + (r.sku ? '<span class="det-sku">' + esc(r.sku) + '</span>' : '') + '</div>'
-      + '<div class="det-grid num">'
-      + '<span>原价: <b>' + fmtNum(r.origPrice) + '</b></span>'
-      + '<span>折扣价: <b>' + fmtNum(r.discPrice) + '</b></span>'
-      + '<span>金额: <b>' + fmtNum(r.amount) + '</b></span>'
-      + '<span>毛利: <b>' + fmtNum(r.profit) + '</b></span>'
-      + '<span>SO: <b>' + esc(r.so || '—') + '</b></span>'
-      + '<span>成本: <b>' + fmtNum(r.cost) + '</b></span>'
+      + '<div class="det-meta"><span class="det-emp">' + esc(r.emp || '—') + '</span></div>'
+      + '<div class="det-row num">'
+      + '<span class="dv-origin">原价: <b>' + fmtNum(r.origPrice) + '</b></span>'
+      + '<span class="dv-disc">折扣: <b>' + fmtNum(r.discPrice) + '</b></span>'
+      + '<span class="dv-profit">毛利: <b>' + fmtNum(r.profit) + '</b></span>'
+      + '<span class="dv-so">SO: <b>' + esc(r.so || '—') + '</b></span>'
+      + '<span class="dv-cost">成本: <b>' + fmtNum(r.cost) + '</b></span>'
       + '</div></div>';
   });
   h += '</div>';

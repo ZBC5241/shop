@@ -285,9 +285,14 @@ svg{display:block}
 .det-date{font-size:11px;color:var(--tx3);flex:0 0 auto}
 .det-meta{display:flex;gap:8px;margin-top:3px;font-size:11px;color:var(--tx2)}
 .det-sku{color:var(--tx3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:170px}
-.det-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 16px;margin-top:6px;font-size:12px;color:var(--tx2);align-items:baseline}
-.det-grid b{color:var(--tx);font-weight:700;font-variant-numeric:tabular-nums}
-.det-item.neg .det-grid b{color:var(--red)}
+.det-row{display:flex;flex-wrap:wrap;gap:4px 14px;margin-top:6px;font-size:12px;color:var(--tx2);align-items:baseline}
+.det-row b{font-weight:700;font-variant-numeric:tabular-nums}
+.det-row .dv-origin{color:var(--tx3)}
+.det-row .dv-disc{color:var(--purple)}
+.det-row .dv-profit{color:var(--green)}
+.det-row .dv-so{color:#0ea5e9}
+.det-row .dv-cost{color:#f59e0b}
+.det-item.neg .det-row .dv-profit{color:var(--red)}
 .det-empty{font-size:12px;color:var(--tx3);text-align:center;padding:10px 0}
 .row.warn{background:linear-gradient(90deg,var(--redDim),transparent 60%)}
 
