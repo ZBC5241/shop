@@ -146,8 +146,9 @@ JSEOF
 }
 
 # ---------- 主流程 ----------
-agent-browser close --all 2>/dev/null || true
-echo "→ 打开用友云（session=$SESSION）…"
+# 注意：绝不 close --all —— 它会清掉持久化 session，导致下次必重登录。
+# 用 session-name=yonyou 持久化登录态：打开即复用，失效才重登录。
+echo "→ 打开用友云（session=$SESSION，复用登录态）…"
 agent-browser open "$YY_BASE/#/" >/dev/null
 sleep 3
 
@@ -159,22 +160,18 @@ else
   fetch_yy || { echo "✗ 登录后仍抓取失败"; exit 1; }
 fi
 
-# 登录后进入工作台（左侧菜单才有销售分析等报表入口，否则停在公司首页点不到）
-agent-browser eval "(function(){var els=Array.from(document.querySelectorAll('a,span,div,li'));var t=els.filter(function(e){return e.textContent && e.textContent.trim()==='我的工作台';});if(t[0]){t[0].click();return 'clicked';}return 'none';})()" >/dev/null 2>&1
-sleep 5
-
-# [debug] 登录后打印页面含 分析/报表/工作台 的菜单文本，定位销售分析入口
-echo "  [debug] 登录后可见菜单(分析/报表/工作台/销售/中心):"
-agent-browser eval "(function(){var els=Array.from(document.querySelectorAll('a,button,li,div,span'));var ks=els.map(function(e){return (e.textContent||'').trim();}).filter(function(t){return t && /分析|报表|工作台|销售|门户|中心/.test(t);});return 'MENU:'+JSON.stringify([...new Set(ks)].slice(0,30));})()" 2>/dev/null | tail -1
-
-echo "→ [2/2] 抓销售分析…"
+# 销售分析需要进工作台菜单（仅 API 模式启用时）；无 UUID 时跳过整段，省 5s+
 if [ -n "$SA_REPORT_ID" ]; then
-  echo "  [API 模式] SA_REPORT_ID=$SA_REPORT_ID"
+  # 登录后进入工作台（左侧菜单才有销售分析等报表入口）
+  agent-browser eval "(function(){var els=Array.from(document.querySelectorAll('a,span,div,li'));var t=els.filter(function(e){return e.textContent && e.textContent.trim()==='我的工作台';});if(t[0]){t[0].click();return 'clicked';}return 'none';})()" >/dev/null 2>&1
+  sleep 5
+  echo "→ [2/2] 抓销售分析（API 模式 SA_REPORT_ID=$SA_REPORT_ID）…"
   # TODO 🅱.4: report/exec API 直拿 + update_sales_analysis.py --tsv
-  fetch_sa   # 暂仍走导出链，拿到 ID 后切换
-else
   fetch_sa
+else
+  echo "→ [2/2] 销售分析：无 SA_REPORT_ID，跳过（不阻塞；拿到报表URL后填 SA_REPORT_ID 走 API）"
 fi
 
-agent-browser close --all 2>/dev/null || true
-echo "✓ fetch_all 完成"
+# 不关闭浏览器：保持 session 热登录，刷新服务器模式下每次刷新直接复用，~5s。
+# 仅在 session 失效(401)时由 login() 兜底重登录；浏览器常驻便于下次秒级复用。
+echo "✓ fetch_all 完成（浏览器常驻，保持热登录）"

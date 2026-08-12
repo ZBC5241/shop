@@ -4,10 +4,17 @@
 # 依赖: agent-browser CLI、macOS 钥匙串中已存 service=yonyou 的密码
 set -e
 
-# [auto-fix] macOS 12.7.6 上 agent-browser 自带的 Chrome 151 因 VideoToolbox 符号缺失无法启动，
+# [auto-fix 1] macOS 12.7.6 上 agent-browser 自带的 Chrome 151 因 VideoToolbox 符号缺失无法启动，
 # 改用系统已装的 Chrome 150；同时走直连用友云（已验证直连可达），避免本地代理偶发 ERR_NO_SUPPORTED_PROXIES。
 export AGENT_BROWSER_EXECUTABLE_PATH="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 unset HTTP_PROXY HTTPS_PROXY ALL_PROXY
+
+# [auto-fix 2] agent-browser 会给 Chrome 注入自带拦截代理(--proxy-server=127.0.0.1:53564)，
+# 导致对 c3/euc.yonyoucloud.com 的 fetch 网络层失败("Failed to fetch")。
+# 用 AGENT_BROWSER_PROXY_BYPASS 环境变量让 yonyoucloud 流量全局直连，避免每次命令重复带
+# --proxy-bypass 触发 "daemon already running / ignored" 警告污染输出。
+export AGENT_BROWSER_PROXY_BYPASS="*.yonyoucloud.com"
+
 agent-browser close --all 2>/dev/null || true
 
 OUT="${1:-/Users/mac/WorkBuddy/Claw/yonyou_raw.tsv}"
@@ -29,31 +36,52 @@ agent-browser open "$BASE/#/" >/dev/null
 sleep 4
 
 TITLE="$(agent-browser get title 2>/dev/null | tail -1)"
-if [ "$TITLE" = "数字化工作台" ] || echo "$TITLE" | grep -qi "登录"; then
-  echo "→ 未登录，执行登录…"
+URL_NOW="$(agent-browser get url 2>/dev/null | tail -1)"
+if echo "$TITLE" | grep -qi "登录" || echo "$URL_NOW" | grep -qi "cas/login"; then
+  echo "→ 工作台未登录，执行 yonbip 登录…"
   agent-browser eval "
     var b=Array.from(document.querySelectorAll('button')).find(function(x){return x.textContent.trim()==='接受'});
     if(b) b.click(); 'ok'
   " >/dev/null 2>&1 || true
   sleep 1
-  # 登录表单在 yonbip_login iframe 里，用 snapshot 的 ref 定位
   SNAP="$(agent-browser snapshot 2>/dev/null)"
   REF_ACC="$(echo "$SNAP" | grep '邮箱/账号/用户手机号' | grep -o 'ref=e[0-9]*' | head -1 | cut -d= -f2)"
   REF_PWD="$(echo "$SNAP" | grep 'textbox "密码"' | grep -o 'ref=e[0-9]*' | head -1 | cut -d= -f2)"
   REF_BTN="$(echo "$SNAP" | grep 'button "登录"' | grep -o 'ref=e[0-9]*' | head -1 | cut -d= -f2)"
-  if [ -z "$REF_ACC" ] || [ -z "$REF_PWD" ] || [ -z "$REF_BTN" ]; then
-    echo "✗ 找不到登录表单（账号:$REF_ACC 密码:$REF_PWD 按钮:$REF_BTN）"
-    echo "  可能是页面改版或出现了验证码，需人工介入。"
-    exit 1
+  if [ -n "$REF_ACC" ] && [ -n "$REF_PWD" ] && [ -n "$REF_BTN" ]; then
+    agent-browser fill "@$REF_ACC" "$ACCOUNT" >/dev/null
+    sleep 1
+    agent-browser fill "@$REF_PWD" "$PASS" >/dev/null
+    sleep 1
+    agent-browser click "@$REF_BTN" >/dev/null
+    sleep 10
   fi
-  agent-browser fill "@$REF_ACC" "$ACCOUNT" >/dev/null
-  sleep 1
-  agent-browser fill "@$REF_PWD" "$PASS" >/dev/null
-  sleep 1
-  agent-browser click "@$REF_BTN" >/dev/null
-  sleep 10
-  TITLE="$(agent-browser get title 2>/dev/null | tail -1)"
-  echo "  登录后标题: $TITLE"
+fi
+
+# 关键：进入报表分析应用，触发 data-analytic 服务独立鉴权（该服务 SSO 与会工作台不同，常需单独 CAS 登录）
+echo "→ 打开报表分析页（触发 data-analytic 鉴权）…"
+agent-browser open "$BASE/iuap-data-analytic/index.html#/report/$REPORT_ID?browse=true" >/dev/null
+sleep 8
+
+URL2="$(agent-browser get url 2>/dev/null | tail -1)"
+if echo "$URL2" | grep -qi "euc.yonyoucloud.com/cas\|cas/login"; then
+  echo "→ 报表服务需 CAS 登录，执行…"
+  cat > /tmp/_yy_cas.js <<JSEOF
+(() => {
+  const u = document.querySelector('#username');
+  const p = document.querySelector('#password');
+  const btn = document.querySelector('#submit_btn_login');
+  if(!u||!p||!btn) return 'NO_FORM';
+  function set(el,v){ const d=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set; d.call(el,v); el.dispatchEvent(new Event('input',{bubbles:true})); el.dispatchEvent(new Event('change',{bubbles:true})); }
+  set(u, '$ACCOUNT'); set(p, '$PASS'); btn.click();
+  return 'CLICKED';
+})()
+JSEOF
+  agent-browser eval "$(cat /tmp/_yy_cas.js)" >/dev/null 2>&1
+  rm -f /tmp/_yy_cas.js
+  sleep 12
+  agent-browser open "$BASE/iuap-data-analytic/index.html#/report/$REPORT_ID?browse=true" >/dev/null
+  sleep 8
 fi
 
 echo "→ 调用报表接口…"
@@ -78,6 +106,7 @@ cat > /tmp/_yy_fetch.js <<JSEOF
 })()
 JSEOF
 
+# 注意：daemon 已在启动时带 bypass，这里 eval 不要再带 --proxy-bypass，避免 "ignored" 警告污染输出
 JS_CODE="$(cat /tmp/_yy_fetch.js)"
 agent-browser eval "$JS_CODE" > /tmp/_yy_raw.txt 2>&1
 
