@@ -1835,12 +1835,63 @@ $('#btnAdmin').onclick = () => {
 $('#btnClose').onclick = () => $('#adminMask').classList.remove('on');
 $('#adminMask').onclick = e => { if(e.target.id === 'adminMask') $('#adminMask').classList.remove('on'); };
 
-$('#btnRefresh').onclick = () => {
+const REFRESH_SRV = 'http://localhost:8765';
+$('#btnRefresh').onclick = async () => {
   const svg = $('#btnRefresh svg') || $('#btnRefresh');
   svg.style.transition = 'transform .5s';
   svg.style.transform = 'rotate(360deg)';
   setTimeout(() => { svg.style.transform = ''; svg.style.transition = ''; }, 520);
-  loadRemote(false);
+
+  // 探测本地刷新服务是否在线
+  let alive = false;
+  try {
+    const p = await fetch(REFRESH_SRV + '/status', {cache: 'no-store'});
+    alive = p.ok;
+  } catch (e) { alive = false; }
+
+  if (!alive) {
+    toast('本地刷新服务未启动，仅拉已部署版本');
+    return loadRemote(false);
+  }
+
+  // 触发全流程刷新
+  toast('正在拉取最新数据…');
+  try {
+    await fetch(REFRESH_SRV + '/refresh', {cache: 'no-store'});
+  } catch (e) {
+    toast('触发刷新失败');
+    return;
+  }
+
+  // 轮询进度
+  let lastMsg = '';
+  const iv = setInterval(async () => {
+    let s;
+    try {
+      s = await (await fetch(REFRESH_SRV + '/status', {cache: 'no-store'})).json();
+    } catch (e) { return; }
+
+    if (s.status === 'running') {
+      if (s.msg && s.msg !== lastMsg) { lastMsg = s.msg; toast(s.msg); }
+      $('#liveTag').textContent = s.msg;
+    } else if (s.status === 'done') {
+      clearInterval(iv);
+      try {
+        const d = await (await fetch(REFRESH_SRV + '/data', {cache: 'no-store'})).json();
+        if (d && d.meta && d.store && d.people) {
+          DATA = d; render();
+          $('#liveTag').textContent = '已刷新 · ' + (d.meta.fetchTime || '');
+          toast('已拉取最新数据');
+          return;
+        }
+      } catch (e) {}
+      toast('取数失败，改用已部署版本');
+      loadRemote(false);
+    } else if (s.status === 'error') {
+      clearInterval(iv);
+      toast('刷新出错：' + (s.msg || '').slice(0, 30));
+    }
+  }, 2000);
 };
 
 /* 选文件 */

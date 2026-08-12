@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background:#eef0f3;
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+    display:flex; justify-content:center; padding:28px 0;
+    -webkit-font-smoothing:antialiased;
+  }
+  .phone { width:720px; background:#f5f6f8; border-radius:28px; overflow:hidden;
+           box-shadow:0 24px 60px rgba(20,30,60,.18); }
+
+  /* 头图 */
+  .hero { background:linear-gradient(135deg,#1f2a44 0%,#33476f 55%,#3d5a8a 100%);
+          padding:46px 44px 40px; color:#fff; position:relative; }
+  .hero::after { content:""; position:absolute; right:-60px; top:-60px; width:220px; height:220px;
+                 background:radial-gradient(circle,rgba(255,255,255,.12),transparent 70%); border-radius:50%; }
+  .hero .tag { display:inline-block; font-size:20px; letter-spacing:3px; color:#9fb3d8;
+               border:1px solid rgba(159,179,216,.5); padding:4px 14px; border-radius:20px; margin-bottom:18px; }
+  .hero h1 { font-size:50px; font-weight:800; letter-spacing:1px; }
+  .hero .sub { margin-top:14px; font-size:24px; color:#c4d2ea; }
+
+  /* KPI 卡 */
+  .kpis { display:flex; gap:18px; padding:30px 32px 6px; }
+  .kpi { flex:1; background:#fff; border-radius:20px; padding:24px 22px;
+         box-shadow:0 10px 24px rgba(30,45,80,.07); position:relative; }
+  .kpi .lab { font-size:23px; color:#8893a6; }
+  .kpi .val { font-size:40px; font-weight:800; color:#1c2230; margin-top:10px; letter-spacing:.5px; }
+  .kpi .bar { position:absolute; left:22px; right:22px; bottom:14px; height:5px; border-radius:3px; background:#eef1f6; }
+  .kpi.a .bar::before{content:"";display:block;height:100%;width:62%;border-radius:3px;background:#ff6363;}
+  .kpi.b .bar::before{content:"";display:block;height:100%;width:48%;border-radius:3px;background:#ffa84c;}
+  .kpi.c .bar::before{content:"";display:block;height:100%;width:30%;border-radius:3px;background:#6a8dff;}
+
+  /* 区块标题 */
+  .sec { padding:30px 36px 4px; }
+  .sec-t { font-size:28px; font-weight:800; color:#1c2230; display:flex; align-items:center; gap:12px; }
+  .sec-t .dot { width:10px; height:26px; border-radius:6px; background:linear-gradient(#ff7a7a,#ff6363); }
+
+  /* 进度条行 */
+  .rows { padding:14px 36px 0; }
+  .row { display:flex; align-items:center; padding:16px 0; border-bottom:1px solid #eef0f4; }
+  .row:last-child { border-bottom:none; }
+  .r-name { width:96px; font-size:25px; font-weight:700; color:#2a3242; }
+  .r-mid { flex:1; padding:0 22px; }
+  .r-mid .meta { font-size:20px; color:#9aa3b3; margin-bottom:9px; }
+  .track { height:14px; border-radius:8px; background:#eceff4; overflow:hidden; }
+  .fill { height:100%; border-radius:8px; }
+  .r-rate { width:84px; text-align:right; font-size:27px; font-weight:800; }
+
+  /* 人员 */
+  .people { padding:14px 36px 0; }
+  .p { display:flex; align-items:center; padding:15px 0; border-bottom:1px solid #eef0f4; }
+  .p:last-child{border-bottom:none;}
+  .ava { width:58px; height:58px; border-radius:50%; color:#fff; font-size:27px; font-weight:800;
+         display:flex; align-items:center; justify-content:center; margin-right:20px; flex:none; }
+  .p .nm { font-size:26px; font-weight:700; color:#1c2230; width:130px; }
+  .p .info { flex:1; font-size:21px; color:#9aa3b3; }
+  .p .st { font-size:24px; font-weight:800; }
+  .zero { color:#ff6363; }
+
+  /* 复盘框 */
+  .review { margin:26px 32px 8px; background:#fff5f5; border-radius:20px; padding:26px 28px;
+            position:relative; box-shadow:0 8px 20px rgba(255,99,99,.08); }
+  .review .accent { position:absolute; left:0; top:18px; bottom:18px; width:8px; border-radius:6px; background:#ff6363; }
+  .review h3 { font-size:27px; color:#e05555; font-weight:800; margin-bottom:14px; padding-left:14px; }
+  .review p { font-size:22px; color:#3a3f4c; line-height:1.7; padding-left:14px; }
+  .review p + p { margin-top:6px; }
+
+  .foot { text-align:center; color:#aab2c0; font-size:20px; padding:26px 0 36px; }
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="hero">
+    <span class="tag">DAILY REPORT</span>
+    <h1>李家村门店 · 今日达成日报</h1>
+    <div class="sub">08-10　以已上账为准　·　更新 23:01</div>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi a"><div class="lab">销额</div><div class="val">¥40,788</div><div class="bar"></div></div>
+    <div class="kpi b"><div class="lab">毛利</div><div class="val">¥4,253</div><div class="bar"></div></div>
+    <div class="kpi c"><div class="lab">增值</div><div class="val">¥448</div><div class="bar"></div></div>
+  </div>
+
+  <div class="sec"><div class="sec-t"><span class="dot"></span>各板块达成 · 对比当日任务</div></div>
+  <div class="rows">
+    <div class="row">
+      <div class="r-name">手机</div>
+      <div class="r-mid"><div class="meta">4 台　/　任务 8 台</div><div class="track"><div class="fill" style="width:50%;background:#ffa84c;"></div></div></div>
+      <div class="r-rate" style="color:#ffa84c;">50%</div>
+    </div>
+    <div class="row">
+      <div class="r-name">增值</div>
+      <div class="r-mid"><div class="meta">¥448　/　任务 ¥1,600</div><div class="track"><div class="fill" style="width:28%;background:#ff6363;"></div></div></div>
+      <div class="r-rate" style="color:#ff6363;">28%</div>
+    </div>
+    <div class="row">
+      <div class="r-name">毛利</div>
+      <div class="r-mid"><div class="meta">¥4,253　/　任务 ¥9,762</div><div class="track"><div class="fill" style="width:44%;background:#ffa84c;"></div></div></div>
+      <div class="r-rate" style="color:#ffa84c;">44%</div>
+    </div>
+    <div class="row">
+      <div class="r-name">销额</div>
+      <div class="r-mid"><div class="meta">¥40,788　/　任务 ¥76,190</div><div class="track"><div class="fill" style="width:54%;background:#ffa84c;"></div></div></div>
+      <div class="r-rate" style="color:#ffa84c;">54%</div>
+    </div>
+  </div>
+
+  <div class="sec"><div class="sec-t"><span class="dot"></span>人员战况</div></div>
+  <div class="people">
+    <div class="p"><div class="ava" style="background:#5b8cf5;">杨</div><div class="nm">杨丽华</div><div class="info">销额 ¥21,472　·　6 单</div><div class="st" style="color:#2eb87e;">毛利 ¥2,294</div></div>
+    <div class="p"><div class="ava" style="background:#ff8a65;">陈</div><div class="nm">陈超磊</div><div class="info">销额 ¥19,316　·　10 单</div><div class="st" style="color:#2eb87e;">毛利 ¥1,959</div></div>
+    <div class="p"><div class="ava" style="background:#aa78e6;">邵</div><div class="nm">邵乐乐</div><div class="info">今日未开单</div><div class="st zero">挂零</div></div>
+    <div class="p"><div class="ava" style="background:#ff638c;">李</div><div class="nm">李泽</div><div class="info">今日未开单</div><div class="st zero">挂零</div></div>
+    <div class="p"><div class="ava" style="background:#46b87e;">张</div><div class="nm">张博晨</div><div class="info">今日未开单</div><div class="st zero">挂零</div></div>
+  </div>
+
+  <div class="review">
+    <div class="accent"></div>
+    <h3>核心复盘</h3>
+    <p>手机 4 台达成 50%，缺口 4 台；增值仅 28%，缺口 ¥1,152；电信 0 单；毛利率 10.4% 处低位。</p>
+    <p>杨丽华、陈超磊撑起今日；邵乐乐、李泽、张博晨挂零；增值与电信双低，是拉毛利的关键空间。</p>
+  </div>
+
+  <div class="foot">数据以已上账为准　·　每日 14–22 点自动播报</div>
+</div>
+</body>
+</html>

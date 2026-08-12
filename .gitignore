@@ -12,3 +12,24 @@ __pycache__/
 
 # 本地记忆/配置（禁止入库）
 .workbuddy/
+
+# 表格/图片/杂项（含 PII 或构建产物，禁止入库）
+*.xlsx
+*.xls
+*.png
+*.jpg
+*.jpeg
+.DS_Store
+chat_log_*.txt
+*_2026-08-11.*
+poster_*
+b_card.*
+report_*
+wecom_formats_demo.*
+_shot_*
+_poster_*
+_preview*
+screenshot.js
+*.bak_*
+refresh_server.log
+.refresh_server.pid
