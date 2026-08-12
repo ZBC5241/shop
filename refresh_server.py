@@ -5,8 +5,9 @@
 让前端「刷新键」等价于：点一下就跑完"拉取最新所有数据"的全流程。
 
 流程（每次刷新）：
-  ① fetch_yonyou.sh         -> 自动登录用友云，抓取「门店毛利明细」到 yonyou_raw.tsv
-  ② fetch_sales_analysis.sh -> 自动抓取「销售分析」报表并导入 xlsx
+  ① fetch_all.sh            -> 一次浏览器会话自动登录用友云，抓取「门店毛利明细」+
+                                  「销售分析」并导入 xlsx（含 session 持久化 + 提速；
+                                  设 SA_REPORT_ID 环境变量可让销售分析改走 report/exec API 直拿）
   ③ calc_data.py            -> 复算业绩/品类/洞察 -> data.json（不含渠道挂账）
   ④ build_data.py           -> 从 xlsx 抽取全部指标 + 渠道挂账(qudao) -> /tmp/_full.json
   ⑤ merge                   -> 把 qudao 合并进 data.json（保留复算口径的业绩/洞察）
@@ -64,14 +65,11 @@ def pipeline():
         _running = True
     steps = []
     try:
-        # ① 用友 XS 明细
-        _set("running", "① 抓取用友云「门店毛利明细」…")
-        r = run(["bash", "fetch_yonyou.sh", os.path.join(BASE, "yonyou_raw.tsv")])
-        steps.append(("用友明细抓取", r.returncode == 0, _tail(r)))
-        # ② 销售分析导入
-        _set("running", "② 抓取用友云「销售分析」并导入表格…")
-        r = run(["bash", "fetch_sales_analysis.sh"])
-        steps.append(("销售分析导入", r.returncode == 0, _tail(r)))
+        # ① 一次会话抓取两个报表（合并脚本：session 持久化 + 提速；SA_REPORT_ID
+        #    非空时销售分析走 report/exec API 直拿，砍掉导出下载链）
+        _set("running", "① 抓取用友云「门店毛利明细」+「销售分析」…")
+        r = run(["bash", "fetch_all.sh", os.path.join(BASE, "yonyou_raw.tsv")])
+        steps.append(("用友抓取(两报表)", r.returncode == 0, _tail(r)))
         # ③ 复算业绩
         _set("running", "③ 复算业绩 → data.json…")
         r = run([PY, "calc_data.py", "yonyou_raw.tsv", "-o", "data.json"])
