@@ -57,7 +57,9 @@ MERGE_CODE = (
 )
 
 
-def pipeline():
+def pipeline(push=True):
+    """跑全流程。push=True 时提交并推线上；push='if-changed' 时仅当
+    data.json/index.html 内容变化才提交推送（后台调度用，避免 15 分钟刷一次提交）。"""
     global _running
     with _lock:
         if _running:
@@ -65,11 +67,11 @@ def pipeline():
         _running = True
     steps = []
     try:
-        # ① 一次会话抓取两个报表（合并脚本：session 持久化 + 提速；SA_REPORT_ID
-        #    非空时销售分析走 report/exec API 直拿，砍掉导出下载链）
-        _set("running", "① 抓取用友云「门店毛利明细」+「销售分析」…")
+        # ① 纯 HTTP 抓取「门店毛利明细」(+销售分析，无UUID时跳过)；浏览器仅在登录态
+        #    失效时兜底，平时零浏览器（约 1.9s，接口耗时是用友服务端生成报表的硬下限）
+        _set("running", "① 抓取用友云「门店毛利明细」…")
         r = run(["bash", "fetch_all.sh", os.path.join(BASE, "yonyou_raw.tsv")])
-        steps.append(("用友抓取(两报表)", r.returncode == 0, _tail(r)))
+        steps.append(("用友抓取", r.returncode == 0, _tail(r)))
         # ③ 复算业绩
         _set("running", "③ 复算业绩 → data.json…")
         r = run([PY, "calc_data.py", "yonyou_raw.tsv", "-o", "data.json"])
@@ -85,12 +87,24 @@ def pipeline():
         _set("running", "⑤ 重建看板 index.html…")
         r = run([PY, "build.py"])
         steps.append(("看板重建", r.returncode == 0, _tail(r)))
-        # ⑥ 推线上（先提交本次重建的产物，再推送）
-        _set("running", "⑥ 提交并推送线上副本…")
-        msg = "自动刷新 " + datetime.datetime.now().strftime("%m-%d %H:%M")
-        r = run(["bash", "-c",
-                 "git add -A && git commit -q -m '%s' && git push origin main" % msg])
-        steps.append(("推送线上", r.returncode == 0, _tail(r)))
+        # ⑥ 推线上
+        if push:
+            _set("running", "⑥ 提交并推送线上副本…")
+            if push == "if-changed":
+                # 仅内容变化才提交推送
+                diff = run(["bash", "-c", "git diff --quiet data.json index.html 2>/dev/null || echo CHANGED"])
+                if diff.returncode != 0 and b"CHANGED" in diff.stdout:
+                    msg = "自动刷新(变化) " + datetime.datetime.now().strftime("%m-%d %H:%M")
+                    r = run(["bash", "-c",
+                             "git add data.json index.html && git commit -q -m '%s' && git push origin main" % msg])
+                    steps.append(("推送线上(变化)", r.returncode == 0, _tail(r)))
+                else:
+                    steps.append(("推送线上", True, "无变化，跳过提交"))
+            else:
+                msg = "自动刷新 " + datetime.datetime.now().strftime("%m-%d %H:%M")
+                r = run(["bash", "-c",
+                         "git add -A && git commit -q -m '%s' && git push origin main" % msg])
+                steps.append(("推送线上", r.returncode == 0, _tail(r)))
 
         _state["steps"] = [
             {"name": n, "ok": ok, "log": log[-200:]} for n, ok, log in steps
@@ -104,6 +118,22 @@ def pipeline():
         _set("error", str(e)[:300])
     finally:
         _running = False
+
+
+def scheduler_loop(interval=900):
+    """后台调度：每 interval 秒跑一次轻量刷新（仅变化才推）。
+    与用友云 15 分钟更新频率对齐——点刷新键读到的本地缓存永远不旧于源端。"""
+    time.sleep(20)  # 启动后稍等，先让首次手动刷新/历史数据生效
+    while True:
+        try:
+            if not _running:
+                pipeline(push="if-changed")
+        except Exception:
+            pass
+        time.sleep(interval)
+
+
+
 
 
 def _tail(r):
@@ -167,4 +197,6 @@ class H(BaseHTTPRequestHandler):
 
 if __name__ == "__main__":
     print(f"🐝 看板刷新服务启动： http://localhost:{PORT}/refresh")
+    print(f"   后台每 15 分钟自动轻量刷新（仅数据变化才推线上）")
+    threading.Thread(target=scheduler_loop, args=(900,), daemon=True).start()
     HTTPServer(("127.0.0.1", PORT), H).serve_forever()

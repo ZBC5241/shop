@@ -48,7 +48,16 @@ $('#btnRefresh').onclick = async () => {
     return loadRemote(false);
   }
 
-  // 触发全流程刷新
+  // 先瞬间渲染本地最新缓存（毫秒级），不阻塞用户；后台再拉最新覆盖
+  try {
+    const cached = await (await fetch(REFRESH_SRV + '/data', {cache: 'no-store'})).json();
+    if (cached && cached.meta && cached.store && cached.people) {
+      DATA = cached; render();
+      $('#liveTag').textContent = '本地缓存 · ' + (cached.meta.fetchTime || '');
+    }
+  } catch (e) {}
+
+  // 触发全流程刷新（异步：服务端立即返回，拉取在后台跑）
   toast('正在拉取最新数据…');
   try {
     await fetch(REFRESH_SRV + '/refresh', {cache: 'no-store'});
