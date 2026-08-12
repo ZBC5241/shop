@@ -37,11 +37,12 @@ def _set(status, msg):
 
 
 def run(cmd, timeout=600):
-    """跑一个子命令，返回 CompletedProcess（捕获输出）。"""
+    """跑一个子命令，返回 CompletedProcess（字节捕获，避免子进程输出含 GBK 等
+    非 UTF-8 字节时 subprocess 按 utf-8 解码直接抛 UnicodeDecodeError 打断编排）。"""
     env = dict(os.environ)
     for k in ("HTTP_PROXY", "HTTPS_PROXY", "ALL_PROXY"):
         env.pop(k, None)
-    return subprocess.run(cmd, cwd=BASE, capture_output=True, text=True,
+    return subprocess.run(cmd, cwd=BASE, capture_output=True, text=False,
                           timeout=timeout, env=env)
 
 
@@ -108,7 +109,17 @@ def pipeline():
 
 
 def _tail(r):
-    s = (r.stderr or "") + (r.stdout or "")
+    def dec(b):
+        if b is None:
+            return ""
+        try:
+            return b.decode("utf-8")
+        except Exception:
+            try:
+                return b.decode("gbk")
+            except Exception:
+                return b.decode("utf-8", "replace")
+    s = dec(r.stderr) + "\n" + dec(r.stdout)
     return s.strip()[-300:]
 
 

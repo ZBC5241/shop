@@ -117,8 +117,13 @@ def div(a, b):
 
 # ============================ 读明细 ============================
 def load_tsv(path):
-    with open(path, encoding="utf-8-sig", newline="") as f:
-        rd = list(csv.reader(f, delimiter="\t"))
+    # 兼容用友导出的 GBK/UTF-8 混合文件：先按 utf-8-sig 读，失败再回退 gbk
+    raw = open(path, "rb").read()
+    try:
+        txt = raw.decode("utf-8-sig")
+    except Exception:
+        txt = raw.decode("gbk", "replace")
+    rd = list(csv.reader(txt.splitlines(), delimiter="\t"))
     if not rd:
         sys.exit("❌ 明细文件是空的")
     head = [h.strip() for h in rd[0]]
