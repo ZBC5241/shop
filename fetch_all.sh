@@ -54,12 +54,18 @@ login() {
 fetch_sa() {
   # 销售分析：纯 HTTP 直连 yonbip-mkt-retailweb/report/list（🅱.4 落地，免浏览器）
   # 实测：pageSize=5000 → 全量约 2 页、~26s（服务端生成报表固有下限）。
-  # 落盘原始 JSON/TSV 到 /tmp，供核对 / 后续映射进 42 列模板。
+  # 落盘原始 JSON/TSV 到 /tmp，再按 42 列映射写入桌面「销售分析」sheet（供企微日报/海报用）。
   # 仅为「销售分析」sheet（不在看板刷新关键路径）服务，失败不阻塞主流程。
   echo "→ 纯HTTP直连销售分析(report/list)…"
-  "$PY" "$BASE/fetch_sales_analysis_http.py" /tmp/sa_raw.json /tmp/sa_raw.tsv \
-    && echo "→ 销售分析原始数据已落盘 /tmp/sa_raw.{json,tsv}" \
-    || echo "⚠️ 销售分析纯HTTP抓取失败（不阻塞主流程）"
+  if "$PY" "$BASE/fetch_sales_analysis_http.py" /tmp/sa_raw.json /tmp/sa_raw.tsv; then
+    echo "→ 销售分析原始数据已落盘 /tmp/sa_raw.{json,tsv}"
+    echo "→ 按42列映射写入「销售分析」sheet…"
+    "$PY" "$BASE/update_sales_analysis.py" /tmp/sa_raw.json "$XLSX" \
+      && echo "→ 销售分析已写入: $XLSX（企微日报/海报自动可用）" \
+      || echo "⚠️ 销售分析写入模板失败（不阻塞主流程）"
+  else
+    echo "⚠️ 销售分析纯HTTP抓取失败（不阻塞主流程）"
+  fi
 }
 
 # ---------- 主流程 ----------

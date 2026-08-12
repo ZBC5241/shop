@@ -17,6 +17,7 @@
 import os
 import re
 import sys
+import json
 import zipfile
 import shutil
 import datetime
@@ -80,6 +81,74 @@ def read_src(path):
         row = [d.get(col_letter(i), "") for i in range(NCOLS)]
         rows.append(row)
     z.close()
+    return rows
+
+
+# ---------- 读 JSON（纯HTTP销售分析，42列映射）----------
+def _gv(rec, *keys, default=""):
+    """取 record 中第一个非空字段值。"""
+    for k in keys:
+        v = rec.get(k)
+        if v not in (None, "", []):
+            return v
+    return default
+
+
+# 42 列（A..AP）取值函数；None 表示该列当前 API 无对应（回收/垫付/电信等，留空）。
+# 列序严格对齐 wecom_report.py 读取语义：G(7)=姓名、P(16)=华为获客渠道名称、AM(39)=销售净额。
+SA_COLMAP = [
+    None,                                                                # A 华为Mate50(无对应)
+    None,                                                                # B 销售分析(无对应)
+    None,                                                                # C 回收单号
+    lambda r: _gv(r, "iEmployeeid_code"),                               # D 华为系统登录帐号
+    lambda r: _gv(r, "vouchdate"),                                      # E 单据日期
+    lambda r: _gv(r, "dDate"),                                          # F 业务日期
+    lambda r: _gv(r, "iEmployeeid_name"),                               # G 姓名
+    lambda r: _gv(r, "iWarehouseid_name"),                              # H 仓库
+    lambda r: _gv(r, "iEmployeeid_name"),                               # I 营业员名称
+    lambda r: _gv(r, "iBusinesstypeid_name"),                           # J 业务类型名称
+    lambda r: _gv(r, "iMemberid_name"),                                 # K 会员姓名
+    lambda r: _gv(r, "iMemberid_cphone"),                               # L 会员手机号
+    lambda r: _gv(r, "oid_userDefine_2425253761215627271"),             # M 品牌分类
+    lambda r: _gv(r, "productsku_cCode"),                               # N 商品sku分类
+    lambda r: _gv(r, "productClass_name"),                              # O 上级商品分类
+    lambda r: _gv(r, "retailVouchHeaderDefineCharacter__HWHKQD_name"),  # P 华为获客渠道名称
+    lambda r: _gv(r, "product_cName"),                                  # Q 商品sku名称
+    None,                                                                # R 华为获客渠道名称(空)
+    lambda r: _gv(r, "code"),                                           # S 商场POS单号
+    None,                                                                # T 回收金额
+    None,                                                                # U 回收机型
+    None,                                                                # V 回收平台
+    None,                                                                # W 未先进先出原因
+    lambda r: _gv(r, "oid_userDefine_2470387991963500544"),             # X 垫付事业部
+    None,                                                                # Y 垫付原因
+    None,                                                                # Z 电信系统销售单号
+    None,                                                                # AA 玲珑系统销售单号
+    lambda r: _gv(r, "oid_userDefine_2422070649283411975"),             # AB 序列号
+    lambda r: _gv(r, "oid_userDefine_2419865243700690950"),             # AC 颜色
+    lambda r: _gv(r, "productsku_cCode"),                               # AD 商品SKU编码
+    lambda r: _gv(r, "iDeliveryState"),                                 # AE 交货状态
+    lambda r: _gv(r, "iPayState"),                                      # AF 收款状态
+    None,                                                                # AG 来源单据号
+    lambda r: 1,                                                        # AH 单据数(每行1)
+    lambda r: _gv(r, "fQuantity"),                                      # AI 销售数量
+    lambda r: _gv(r, "fRetailMoney"),                                   # AJ 零售金额
+    lambda r: _gv(r, "fDiscount"),                                      # AK 折扣额
+    lambda r: _gv(r, "fDiscountRate"),                                  # AL 折扣率
+    lambda r: _gv(r, "fNetMoney"),                                      # AM 销售净额
+    None,                                                                # AN 客单价
+    lambda r: _gv(r, "fNetMoney"),                                      # AO 销售净额
+    lambda r: _gv(r, "iNegative"),                                      # AP 预订
+]
+
+
+def read_json(json_path):
+    d = json.load(open(json_path, encoding="utf-8"))
+    recs = d.get("records", [])
+    rows = []
+    for rec in recs:
+        row = [fn(rec) if fn else "" for fn in SA_COLMAP]
+        rows.append(row)
     return rows
 
 
@@ -206,11 +275,16 @@ def main():
     src = sys.argv[1] if len(sys.argv) >= 2 else find_latest_src()
     xlsx = sys.argv[2] if len(sys.argv) > 2 else DEFAULT_XLSX
     if not src or not os.path.exists(src):
-        print("!! 找不到源 Excel（~/Downloads/销售分析_*.xlsx）"); sys.exit(1)
+        print("!! 找不到源（JSON或xlsx）"); sys.exit(1)
     if not os.path.exists(xlsx):
         print("!! 找不到目标表格:", xlsx); sys.exit(1)
 
-    rows = read_src(src)
+    if src.lower().endswith(".json"):
+        print("→ 源为纯HTTP销售分析 JSON，按42列映射转换…")
+        rows = read_json(src)
+    else:
+        print("→ 源为导出 xlsx，按原逻辑读取…")
+        rows = read_src(src)
     if not rows:
         print("!! 源数据为空，已中止（防止清空表格）"); sys.exit(1)
     print("→ 源数据 %d 行" % len(rows))
