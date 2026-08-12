@@ -7,7 +7,8 @@
 #      完全不启动浏览器 → 接口耗时 ~1.3~1.8s（服务端生成报表的固有下限）。
 #   🅱 登录态来自 agent-browser 持久化的 session 文件（yht_access_token / XSRF-TOKEN），
 #      浏览器仅在「纯HTTP返回401=登录态失效」时兜底启动一次重登录。
-#   🅱.4 销售分析：填 SA_REPORT_ID 走 report/exec API；否则走浏览器导出链（当前无 UUID 自动跳过）。
+#   🅱.4 销售分析：纯 HTTP 直连 yonbip-mkt-retailweb/report/list（POST billnum=rm_saleanalysis），
+#       免浏览器；落盘原始 JSON/TSV。不在看板刷新关键路径，失败不阻塞。
 set -e
 
 BASE="/Users/mac/WorkBuddy/Claw"
@@ -51,49 +52,14 @@ login() {
 }
 
 fetch_sa() {
-  # 销售分析：进报表 → 设日期 → 查询 → 导出带条件 → 下载 → 导入（浏览器导出链）
-  TODAY=$(date +%Y-%m-%d); MFIRST=$(date +%Y-%m-01)
-  mv "$DOWN"/销售分析_*.xlsx /tmp/ 2>/dev/null || true
-  agent-browser open "$YY_BASE/#/" >/dev/null
-  sleep 3
-  login
-  agent-browser eval "(function(){var els=Array.from(document.querySelectorAll('a,span,div,li'));var t=els.filter(function(e){return e.textContent && e.textContent.trim()==='我的工作台';});if(t[0]){t[0].click();return 'clicked';}return 'none';})()" >/dev/null 2>&1
-  sleep 5
-  hasq="NO"
-  for a in 1 2 3 4 5 6; do
-    agent-browser click "[data-id='101']" >/dev/null 2>&1 || \
-    agent-browser eval "(function(){var el=document.querySelector('[data-id=\"101\"]');if(el){el.click();return 'clicked';}return 'none';})()" >/dev/null 2>&1
-    sleep 3
-    hasq="$(agent-browser eval "(function(){var bs=Array.from(document.querySelectorAll('button'));return bs.some(function(x){return x.textContent.trim()==='查询';})?'YES':'NO';})()" 2>/dev/null | tail -1)"
-    [ "$hasq" = "YES" ] && break
-  done
-  if [ "$hasq" != "YES" ]; then
-    echo "⚠️ 未进入销售分析报表（查询按钮未出现），跳过本次销售分析"
-    agent-browser close 2>/dev/null || true
-    return 0
-  fi
-  sleep 3
-  agent-browser eval "(function(){var ins=Array.from(document.querySelectorAll('input.el-input__inner'));if(ins.length<2) return 'NO_INPUT';var a=ins[ins.length-2], b=ins[ins.length-1];function setInput(el,val){var proto=Object.getPrototypeOf(el);var desc=Object.getOwnPropertyDescriptor(proto,'value');desc.set.call(el,val);el.dispatchEvent(new Event('input',{bubbles:true}));el.dispatchEvent(new Event('change',{bubbles:true}));}setInput(a,'$MFIRST');setInput(b,'$TODAY');return 'set';})()" >/dev/null 2>&1
-  sleep 1
-  agent-browser eval "(function(){var bs=Array.from(document.querySelectorAll('button'));var b=bs.find(function(x){return x.textContent.trim()==='查询';});if(b){b.click();return 'query';}return 'no-query';})()" >/dev/null 2>&1
-  sleep 4
-  agent-browser eval "(function(){var bs=Array.from(document.querySelectorAll('button'));var b=bs.find(function(x){return x.textContent.trim()==='导出';});if(b){b.click();return 'export';}return 'no-export';})()" >/dev/null 2>&1
-  sleep 2
-  agent-browser eval "(function(){var radios=document.querySelectorAll('input[type=radio]');for(var i=0;i<radios.length;i++){var lab=radios[i].closest('label')||radios[i].parentElement;if(lab && lab.textContent.indexOf('带查询条件导出')>-1){radios[i].click();}}var bs=Array.from(document.querySelectorAll('button'));var ok=bs.find(function(x){return x.textContent.trim()==='确定';});if(ok) ok.click();return 'submit';})()" >/dev/null 2>&1
-  sleep 2
-  F=""
-  for i in $(seq 1 30); do
-    F="$(ls -t "$DOWN"/销售分析_*.xlsx 2>/dev/null | grep -v crdownload | head -1)"
-    [ -n "$F" ] && break
-    sleep 1
-  done
-  if [ -n "$F" ]; then
-    echo "→ 已导出: $(basename "$F")"
-    "$PY" "$BASE/update_sales_analysis.py" "$F" "$XLSX" || echo "⚠️ 销售分析导入失败"
-  else
-    echo "⚠️ 未找到导出的销售分析 xlsx，跳过"
-  fi
-  agent-browser close 2>/dev/null || true
+  # 销售分析：纯 HTTP 直连 yonbip-mkt-retailweb/report/list（🅱.4 落地，免浏览器）
+  # 实测：pageSize=5000 → 全量约 2 页、~26s（服务端生成报表固有下限）。
+  # 落盘原始 JSON/TSV 到 /tmp，供核对 / 后续映射进 42 列模板。
+  # 仅为「销售分析」sheet（不在看板刷新关键路径）服务，失败不阻塞主流程。
+  echo "→ 纯HTTP直连销售分析(report/list)…"
+  "$PY" "$BASE/fetch_sales_analysis_http.py" /tmp/sa_raw.json /tmp/sa_raw.tsv \
+    && echo "→ 销售分析原始数据已落盘 /tmp/sa_raw.{json,tsv}" \
+    || echo "⚠️ 销售分析纯HTTP抓取失败（不阻塞主流程）"
 }
 
 # ---------- 主流程 ----------
@@ -110,11 +76,7 @@ else
   fetch_yy || { echo "✗ 重登录后仍抓取失败"; exit 1; }
 fi
 
-if [ -n "$SA_REPORT_ID" ]; then
-  echo "→ [2/2] 抓销售分析（API 模式 SA_REPORT_ID=$SA_REPORT_ID）…"
-  fetch_sa
-else
-  echo "→ [2/2] 销售分析：无 SA_REPORT_ID，跳过（不阻塞；拿到报表URL后填 SA_REPORT_ID 走 API）"
-fi
+echo "→ [2/2] 抓销售分析（纯HTTP，免浏览器）…"
+fetch_sa
 
 echo "✓ fetch_all 完成"

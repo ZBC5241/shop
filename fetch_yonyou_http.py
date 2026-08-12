@@ -43,11 +43,13 @@ def main():
         sys.stderr.write("  请先用 agent-browser 登录一次用友（fetch_all.sh 会处理），生成该状态文件。\n")
         return 1
     ck = load_cookies(state)
-    need = ("yht_access_token", "yht_usertoken_diwork", "XSRF-TOKEN")
-    missing = [k for k in need if k not in ck]
-    if missing:
-        sys.stderr.write("✗ 登录态缺少关键 cookie: %s\n" % ",".join(missing))
+    # 关键校验只依赖 yht_access_token；XSRF-TOKEN 重登录后可能丢失，但报表接口主要靠 cookie 校验。
+    if "yht_access_token" not in ck:
+        sys.stderr.write("✗ 登录态缺少关键 cookie: yht_access_token\n")
+        sys.stderr.write("  请先用 agent-browser 登录一次用友（fetch_all.sh 会处理），生成该状态文件。\n")
         return 1
+    if "XSRF-TOKEN" not in ck:
+        sys.stderr.write("  [提示] 状态文件无 XSRF-TOKEN，尝试不携带该头直连\n")
     xsrf = ck.get("XSRF-TOKEN", "")
     yht = ck.get("yht_access_token", "")
     cookie_hdr = "; ".join("%s=%s" % (k, v) for k, v in ck.items())
