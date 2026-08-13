@@ -156,6 +156,12 @@ def main():
   .alert {{ background:#FEF2F2; border:1px solid #FECACA; border-radius:8px;
             padding:12px 16px; margin-bottom:16px; color:#991B1B; font-size:13px; }}
   .alert b {{ color:var(--danger); }}
+  .float-btn {{ position:fixed; right:16px; bottom:20px; z-index:999;
+    background:linear-gradient(135deg,var(--primary),var(--accent)); color:#fff;
+    padding:12px 18px; border-radius:24px; font-size:13px; font-weight:600;
+    box-shadow:0 4px 12px rgba(59,130,246,.35); cursor:pointer; text-decoration:none;
+    display:flex; align-items:center; gap:5px; transition:transform .2s; }}
+  .float-btn:active {{ transform:scale(.95); }}
   @media (max-width:480px) {{
     .kpi-grid {{ grid-template-columns:1fr 1fr; }}
     .header h1 {{ font-size:18px; }}
@@ -238,6 +244,11 @@ def main():
 <div style="text-align:center;font-size:11px;color:var(--muted);padding:12px">
   数据来源：用友云 · 自动生成 · {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 </div>
+
+<a href="./" class="float-btn">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+  详细看板
+</a>
 
 </body>
 </html>"""
