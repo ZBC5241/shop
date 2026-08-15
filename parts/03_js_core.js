@@ -161,9 +161,9 @@ function detailRowsHTML(cat, person){
       + '<span class="dv-origin">原价: <b>' + fmtNum(r.origPrice) + '</b></span>'
       + '<span class="dv-disc">折扣: <b>' + fmtNum(r.discPrice) + '</b></span>'
       + '<span class="dv-profit">毛利: <b>' + fmtNum(r.profit) + '</b></span>'
-      + '<span class="dv-so">SO: <b>' + esc(r.so || '—') + '</b></span>'
+      + (r.so ? '<span class="dv-so">SO: <b>' + esc(r.so) + '</b></span>' : '')
+      + '<span class="dv-gpr">毛利率: <b>' + (r.gpr == null ? '—' : (r.gpr * 100).toFixed(1) + '%') + '</b></span>'
       + '<span class="dv-cost">成本: <b>' + fmtNum(r.cost) + '</b></span>'
-      + '<span class="dv-gpr">毛利率: <b>' + (r.gpr == null ? '—' : (r.gpr*100).toFixed(1) + '%') + '</b></span>'
       + '</div></div>';
   });
   h += '</div>';
@@ -172,15 +172,55 @@ function detailRowsHTML(cat, person){
 
 function toggleDetail(cat, person){
   person = person || '';
-  const det = document.querySelector('.cat-det[data-cat="' + cat + '"][data-person="' + person + '"]');
+  /* 门店视图无 person（cat-det 不带 data-person 属性）；个人视图带 data-person */
+  const psel = person ? '[data-person="' + esc(person) + '"]' : ':not([data-person])';
+  const det = document.querySelector('.cat-det[data-cat="' + cat + '"]' + psel);
   if(!det) return;
-  const rc  = document.querySelector('.cat-click[data-cat="' + cat + '"][data-person="' + person + '"]');
+  const rc  = document.querySelector('.cat-click[data-cat="' + cat + '"]' + psel);
   const open = det.classList.contains('open');
   // 逐层展开：关掉其它已展开项，保持界面干净
   document.querySelectorAll('.cat-det.open').forEach(d => { if(d !== det){ d.classList.remove('open'); d.innerHTML = ''; }});
   document.querySelectorAll('.cat-click.on').forEach(d => { if(d !== rc) d.classList.remove('on'); });
   if(open){ det.classList.remove('open'); det.innerHTML = ''; if(rc) rc.classList.remove('on'); return; }
   det.innerHTML = detailRowsHTML(cat, person);
+  det.classList.add('open');
+  if(rc) rc.classList.add('on');
+}
+
+/* 逐人下钻：列出该员工在各获客渠道的销售额（DATA.qudao.empChannel[员工]）
+   口径：剔除垫付/预订。只展示【渠道 + 金额】（用户要求，其它字段暂不显示）。 */
+function personDetailHTML(name){
+  const emp = (DATA.qudao && DATA.qudao.empChannel) || {};
+  const rows = emp[name] || [];
+  if(!rows.length) return '<div class="det-empty">该员工本期无获客渠道销售（垫付/预订已剔除）</div>';
+  let total = 0;
+  rows.forEach(r => { total += (r.amount || 0); });
+  let h = '<div class="det-list">';
+  rows.forEach(r => {
+    h += '<div class="det-item">'
+      + '<div class="det-top"><span class="det-name">' + esc(r.channel || '—') + '</span>'
+      + '<span class="det-date num">' + (r.bills || 0) + ' 笔</span></div>'
+      + '<div class="det-row num"><b style="font-size:15px;color:var(--tx1)">' + moneyShort(r.amount) + '</b>'
+      + ' <span style="font-size:11px;color:var(--tx3)">销售净额</span></div>'
+      + '</div>';
+  });
+  h += '<div class="det-item" style="border-top:1px dashed var(--line2);padding-top:8px;margin-top:2px">'
+    + '<div class="det-top"><span class="det-name" style="font-weight:700">合计</span>'
+    + '<span class="num" style="font-weight:700">' + moneyShort(total) + '</span></div></div>';
+  h += '</div>';
+  return h;
+}
+
+function togglePerson(name){
+  const det = document.querySelector('.pp-det[data-person="' + name + '"]');
+  if(!det) return;
+  const rc  = document.querySelector('.pp-click[data-person="' + name + '"]');
+  const open = det.classList.contains('open');
+  // 逐层展开：关掉其它已展开项，保持界面干净
+  document.querySelectorAll('.pp-det.open').forEach(d => { if(d !== det){ d.classList.remove('open'); d.innerHTML = ''; }});
+  document.querySelectorAll('.pp-click.on').forEach(d => { if(d !== rc) d.classList.remove('on'); });
+  if(open){ det.classList.remove('open'); det.innerHTML = ''; if(rc) rc.classList.remove('on'); return; }
+  det.innerHTML = personDetailHTML(name);
   det.classList.add('open');
   if(rc) rc.classList.add('on');
 }
@@ -474,8 +514,9 @@ function renderQudao(){
      + '</div>';
   h += '</div></div>';
 
-  /* 逐人 */
-  h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>逐人进度</b></div><div class="rows">';
+  /* 逐人（渠道挂账口径：剔除垫付/预订） */
+  h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>逐人进度</b>'
+     + '<span class="tail">不含垫付/预订</span></div><div class="rows">';
   (Q.people || []).forEach(p => {
     const has = isNum(p.task) && p.task !== 0;
     const ps = has ? stat(p.rate) : 'na';
