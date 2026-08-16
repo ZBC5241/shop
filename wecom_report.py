@@ -157,10 +157,8 @@ def read_qudao():
 
 
 def wan(x):
-    """无逗号显示：>=1万 显示「x万」，否则整数。"""
+    """渠道挂账精准值：整数原样显示，不缩写「万」。"""
     x = float(x or 0)
-    if x >= 10000:
-        return "{:.0f}万".format(x / 10000)
     return "{:.0f}".format(x)
 
 

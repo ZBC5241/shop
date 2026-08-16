@@ -663,6 +663,11 @@ function moneyShort(v){
   return Math.round(v).toLocaleString('zh-CN');
 }
 function cnt(v){ return isNum(v) ? String(Math.round(v)) : '—'; }
+/* 精准金额：整数原样（带千分位），不缩写「万」。用于渠道挂账板块。 */
+function moneyFull(v){
+  if(!isNum(v)) return '—';
+  return Math.round(v).toLocaleString('en-US');
+}
 function pct(v, dec){
   if(!isNum(v)) return '—';
   return (v*100).toFixed(dec === undefined ? 1 : dec) + '%';
@@ -827,13 +832,13 @@ function personDetailHTML(name){
     h += '<div class="det-item">'
       + '<div class="det-top"><span class="det-name">' + esc(r.channel || '—') + '</span>'
       + '<span class="det-date num">' + (r.bills || 0) + ' 笔</span></div>'
-      + '<div class="det-row num"><b style="font-size:15px;color:var(--tx1)">' + moneyShort(r.amount) + '</b>'
+      + '<div class="det-row num"><b style="font-size:15px;color:var(--tx1)">' + moneyFull(r.amount) + '</b>'
       + ' <span style="font-size:11px;color:var(--tx3)">销售净额</span></div>'
       + '</div>';
   });
   h += '<div class="det-item" style="border-top:1px dashed var(--line2);padding-top:8px;margin-top:2px">'
     + '<div class="det-top"><span class="det-name" style="font-weight:700">合计</span>'
-    + '<span class="num" style="font-weight:700">' + moneyShort(total) + '</span></div></div>';
+    + '<span class="num" style="font-weight:700">' + moneyFull(total) + '</span></div></div>';
   h += '</div>';
   return h;
 }
@@ -1125,8 +1130,8 @@ function renderQudao(){
      + '<span class="tail">时间进度 ' + pct(tp,1) + '</span></div>';
   h += '<div class="card" style="padding:15px">';
   h += '<div style="display:flex;align-items:baseline;gap:8px">'
-     + '<b class="num" style="font-size:28px;font-weight:800;letter-spacing:-.5px">' + moneyShort(t.done) + '</b>'
-     + '<span style="font-size:12px;color:var(--tx3)">/ ' + moneyShort(t.task) + ' 目标</span>'
+     + '<b class="num" style="font-size:28px;font-weight:800;letter-spacing:-.5px">' + moneyFull(t.done) + '</b>'
+     + '<span style="font-size:12px;color:var(--tx3)">/ ' + moneyFull(t.task) + ' 目标</span>'
      + '<span style="flex:1"></span>'
      + '<span class="r-' + s + '" style="font-size:13px;font-weight:800;padding:3px 9px;border-radius:8px">' + pct(t.rate,1) + '</span>'
      + '</div>';
@@ -1152,13 +1157,13 @@ function renderQudao(){
       + '<div class="row-t">'
         + '<span class="row-n">' + esc(p.name) + '</span>'
         + '<span class="row-p r-' + ps + '">' + (has ? pct(p.rate,0) : '无任务') + '</span>'
-        + '<span class="row-v num"><b>' + moneyShort(p.done) + '</b>' + (has ? ' / ' + moneyShort(p.task) : '') + '</span>'
+        + '<span class="row-v num"><b>' + moneyFull(p.done) + '</b>' + (has ? ' / ' + moneyFull(p.task) : '') + '</span>'
       + '</div>'
       + barHTML(p.rate, ps)
       + (has && isNum(p.gap) && p.gap < 0
-          ? '<div class="row-g"><span>' + STAT_TXT[ps] + '</span><em>还差 ' + moneyShort(Math.abs(p.gap)) + '</em></div>'
+          ? '<div class="row-g"><span>' + STAT_TXT[ps] + '</span><em>还差 ' + moneyFull(Math.abs(p.gap)) + '</em></div>'
           : (has && isNum(p.gap) && p.gap >= 0
-              ? '<div class="row-g"><span>' + STAT_TXT[ps] + '</span><span style="color:var(--green)">超出 ' + moneyShort(p.gap) + '</span></div>'
+              ? '<div class="row-g"><span>' + STAT_TXT[ps] + '</span><span style="color:var(--green)">超出 ' + moneyFull(p.gap) + '</span></div>'
               : (has ? '<div class="row-g"><span>' + STAT_TXT[ps] + '</span></div>' : '')))
       + '</div>';
   });
