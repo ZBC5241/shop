@@ -22,6 +22,84 @@ def main():
 
     meta = data.get("meta", {})
     store_name = meta.get("storeName", "华为李家村万达授权体验店")
+
+    # ===== 无人上账检测（配合每2小时定时更新） =====
+    # 数据里出库日期只有「天」粒度，无法直接判断2小时。改用「两次抓取边界对比」：
+    # 用友每15分钟刷新，只要有人开单，下次抓取(≤2h)最大出库日期就会前进。
+    # 本周期该日期没前进 = 这2小时没人开单 → 提示。营业时段(9-22点)才提示，避开凌晨误报。
+    import os as _os
+    STATE_FILE = _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), ".daily_alert_state.json")
+    biz_date = (meta.get("date") or "").strip()[:10]          # 明细里最大出库日期
+    today_str = datetime.date.today().isoformat()
+    now = datetime.datetime.now()
+    in_biz = 9 <= now.hour < 22
+    # 今日累计销额（取当日 dailyDone["销额"]，能反映当天新开单，不受「日期粒度」限制）
+    _store = data.get("store", {})
+    _dd = _store.get("dailyDone", {}) or {}
+    try:
+        today_amt = float(_dd.get("销额", 0) or 0)
+    except Exception:
+        today_amt = 0.0
+    no_post_html = ""
+    msg = ""
+    try:
+        with open(STATE_FILE, encoding="utf-8") as f:
+            _st = json.load(f)
+    except Exception:
+        _st = {}
+    prev_max = (_st.get("lastMaxDate") or "").strip()[:10]
+    prev_amt = float(_st.get("lastTodayAmt") or 0)
+    if not prev_max:
+        # 首次运行，重置基线
+        new_state = {"lastMaxDate": biz_date, "lastTodayAmt": today_amt,
+                     "lastCheckAt": now.strftime("%Y-%m-%d %H:%M:%S")}
+    elif biz_date > prev_max:
+        # 跨到了新的一天
+        if today_amt > 0:
+            # 新的一天且今日已开单 → 重置基线，不告警
+            new_state = {"lastMaxDate": biz_date, "lastTodayAmt": today_amt,
+                         "lastCheckAt": now.strftime("%Y-%m-%d %H:%M:%S")}
+        else:
+            # 新的一天但今日还没开单 → 提示
+            msg = "今日（{}）暂无上账，请确认门店是否已营业/开单".format(today_str)
+            no_post_html = f'<div class="alert">⏰ <b>{msg}</b></div>'
+            new_state = {"lastMaxDate": biz_date, "lastTodayAmt": today_amt,
+                         "lastCheckAt": now.strftime("%Y-%m-%d %H:%M:%S")}
+    elif not in_biz:
+        # 非营业时段（22点后~次日9点）不告警
+        new_state = {"lastMaxDate": biz_date, "lastTodayAmt": today_amt,
+                     "lastCheckAt": now.strftime("%Y-%m-%d %H:%M:%S")}
+    elif today_amt == 0:
+        # 今天一单都没开（今日累计销额为 0）→ 今日尚未上账
+        msg = "今日（{}）暂无上账，请确认门店是否已营业/开单".format(today_str)
+        no_post_html = f'<div class="alert">⏰ <b>{msg}</b></div>'
+        new_state = {"lastMaxDate": biz_date, "lastTodayAmt": today_amt,
+                     "lastCheckAt": now.strftime("%Y-%m-%d %H:%M:%S")}
+    else:
+        # 今天已开单：对比上一周期今日累计金额是否增长
+        if today_amt > prev_amt:
+            new_state = {"lastMaxDate": biz_date, "lastTodayAmt": today_amt,
+                         "lastCheckAt": now.strftime("%Y-%m-%d %H:%M:%S")}
+        else:
+            msg = "近2小时无新上账，请关注（用友每15分钟刷新一次）"
+            no_post_html = f'<div class="alert">⏰ <b>{msg}</b></div>'
+            new_state = {"lastMaxDate": biz_date, "lastTodayAmt": today_amt,
+                         "lastCheckAt": now.strftime("%Y-%m-%d %H:%M:%S")}
+    try:
+        with open(STATE_FILE, "w", encoding="utf-8") as f:
+            json.dump(new_state, f, ensure_ascii=False, indent=1)
+    except Exception:
+        pass
+    # 企微群推送标记：触发无人上账时写 .daily_alert_msg，daily_report.sh 读它调 notify.sh
+    _alert_file = _os.path.join(_os.path.dirname(STATE_FILE), ".daily_alert_msg")
+    try:
+        if no_post_html and msg:
+            with open(_alert_file, "w", encoding="utf-8") as f:
+                f.write(msg)
+        elif _os.path.exists(_alert_file):
+            _os.remove(_alert_file)
+    except Exception:
+        pass
     date_str = meta.get("date", datetime.date.today().strftime("%Y-%m-%d"))
     fetch_time = meta.get("fetchTime", datetime.datetime.now().strftime("%H:%M"))
     time_progress = meta.get("timeProgress", 0)
@@ -176,6 +254,7 @@ def main():
   <div class="sub">门店日报 · {date_str} · 生成于 {fetch_time}</div>
 </div>
 
+{no_post_html}
 <!-- 核心指标 -->
 <div class="kpi-grid">
   <div class="kpi-card">
@@ -261,6 +340,18 @@ def main():
     print(f"✅ 已生成门店日报: {out_file}")
     print(f"   数据日期: {date_str}")
     print(f"   月累计毛利: ¥{mli_done:,.0f} / 达成率: {mli_rate:.1%}")
+
+    # 企微群每周期摘要：写 .daily_summary_msg，daily_report.sh 读它调 notify.sh 推送
+    _summary_file = _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), ".daily_summary_msg")
+    _summary = (f"【李家村门店日报 {date_str}】\n"
+                f"月毛利 ¥{mli_done:,.0f} / 达成 {mli_rate:.1%}"
+                f"（任务¥{mli_task:,.0f}，时间进度{time_progress:.1%}）\n"
+                f"销额 ¥{sale_done:,.0f} ｜ 增值 ¥{zz.get('done', 0) or 0:,.0f}")
+    try:
+        with open(_summary_file, "w", encoding="utf-8") as f:
+            f.write(_summary)
+    except Exception:
+        pass
 
 
 if __name__ == "__main__":

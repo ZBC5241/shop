@@ -619,15 +619,16 @@ def main():
     if not xs:
         sys.exit("❌ 明细里没有数据行")
 
-    day = a.day or max(day_of(r) for r in xs)
-    rxs = [r for r in xs if day_of(r) == day]
-    base = datetime.date.fromisoformat(day)          # 数据截止日：决定「当日达成」看哪天
-    last_day = calendar.monthrange(base.year, base.month)[1]
-
-    # 冲刺基准日：业务上该按「今天」算还剩几天，而不是数据日期。
-    # 但若系统时间跑到数据月份之外（时钟异常），退回用数据日期，避免算出负数天数。
+    # 当日达成严格锚定「今天」：不把昨天的数据顶上来当今天的日报。
+    # data_max=明细里最新出库日；同月且今天≥数据日时 day=今天，否则回退 data_max（跨月/时钟异常）。
+    data_max = max(day_of(r) for r in xs)
     today = datetime.date.today()
-    ref = today if (today.year, today.month) == (base.year, base.month) and today >= base else base
+    base0 = datetime.date.fromisoformat(data_max)
+    ref = today if (today.year, today.month) == (base0.year, base0.month) and today >= base0 else base0
+    day = a.day or ref.isoformat()
+    rxs = [r for r in xs if day_of(r) == day]
+    base = datetime.date.fromisoformat(day)
+    last_day = calendar.monthrange(base.year, base.month)[1]
     rd = remain_days(ref)
 
     tasks, lehui, taili, perf_score, lab_day, lab_gap = load_manual(a.xlsx)
