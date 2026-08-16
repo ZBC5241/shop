@@ -31,8 +31,6 @@ function money(v, dec){
 }
 function moneyShort(v){
   if(!isNum(v)) return '—';
-  const a = Math.abs(v);
-  if(a >= 10000) return (v/10000).toFixed(1).replace(/\.0$/,'') + '万';
   return Math.round(v).toLocaleString('zh-CN');
 }
 function cnt(v){ return isNum(v) ? String(Math.round(v)) : '—'; }
@@ -84,7 +82,6 @@ function unitOf(key, k){
 function fmtU(v, u){
   if(!isNum(v)) return '—';
   if(u === 'cnt')  return String(Math.round(v));
-  if(u === 'wan')  return (v/10000).toFixed(1).replace(/\.0$/,'') + '万';
   return Math.round(v).toLocaleString('zh-CN');
 }
 
