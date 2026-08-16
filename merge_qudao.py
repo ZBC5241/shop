@@ -195,6 +195,9 @@ def main():
     if emp_ch:
         qd["empChannel"] = emp_ch
         print("[员工×渠道] 已聚合 %d 名员工的渠道明细" % len(emp_ch))
+        # 渠道挂账「完成额 / 任务额 / 达成」严格按用户 xlsx「渠道挂账」sheet 公式提取
+        # （read_qudao 已读到表格公式值，如合计 24539 / 杨丽华 0），不再用用友销售分析覆盖。
+        # empChannel（用友逐人×渠道明细）仅作看板逐人下拉辅助，不影响完成额数字。
 
     with open(DATA, encoding="utf-8") as f:
         d = json.load(f)

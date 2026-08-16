@@ -48,7 +48,8 @@ def load_webhook():
 
 
 def num(s):
-    s = (s or "").replace(",", "").strip()
+    s = "" if s is None else str(s)
+    s = s.replace(",", "").replace("%", "").strip()
     try:
         return float(s)
     except Exception:
@@ -95,20 +96,11 @@ def today_rows(tsv, today):
 
 
 def read_qudao():
-    """读取「渠道挂账」：任务/时间进度取自 xlsx「渠道挂账」sheet；
-    完成额按公式口径从「销售分析」实时汇总（P列=华为获客渠道名称/系列=渠道名, G列=姓名, AM列=销售净额,
-    6渠道: 三大地图/小红书/大众点评/异业/社区/企业上门购）。
-    —— 不依赖 xlsx 公式缓存，Excel 未重算也能出数，口径与表格公式一致。"""
+    """读取「渠道挂账」：任务额/完成额/时间进度均严格按用户 xlsx「渠道挂账」sheet 公式提取
+    （完成额取 C 列公式值，用户要求以表格口径为准，不再用用友销售分析覆盖）。"""
     import openpyxl, datetime, calendar
+
     SRC = TARGET_XLSX
-    CHS = ["三大地图", "小红书", "大众点评", "异业", "社区", "企业上门购"]
-
-    def num(x):
-        try:
-            return float(str(x).replace(",", "").replace("%", "").strip())
-        except Exception:
-            return 0.0
-
     try:
         wb = openpyxl.load_workbook(SRC, data_only=True)
     except Exception:
@@ -131,7 +123,7 @@ def read_qudao():
     if not hrow:
         return None
 
-    names, tasks = [], {}
+    names, tasks, dones = [], {}, {}
     for r in range(hrow + 1, ws.max_row + 1):
         nm = ws.cell(r, 1).value
         if nm is None:
@@ -140,22 +132,14 @@ def read_qudao():
         if not nm or nm == "合计":
             continue
         names.append(nm)
+        # 任务额(B列) / 完成额(C列) 均取自 xlsx「渠道挂账」sheet 公式，按用户表格口径
         tasks[nm] = num(ws.cell(r, 2).value)
+        dones[nm] = num(ws.cell(r, 3).value)
 
-    # 从「销售分析」按 6 渠道口径汇总完成额
-    done_map = {n: 0.0 for n in names}
-    if "销售分析" in wb.sheetnames:
-        sa = wb["销售分析"]
-        for r in range(3, sa.max_row + 1):
-            ch = str(sa.cell(r, 16).value or "").strip()   # P列 华为获客渠道名称/系列=渠道名
-            if ch in CHS:
-                nm = str(sa.cell(r, 7).value or "").strip()  # G列 姓名
-                if nm in done_map:
-                    done_map[nm] += num(sa.cell(r, 39).value)  # AM 销售净额
-
+    # 每人完成额：严格按用户 xlsx「渠道挂账」sheet 公式（C列=完成额）提取，不再用用友销售分析覆盖
     people, tot_task, tot_done = [], 0.0, 0.0
     for n in names:
-        done = done_map.get(n, 0.0)
+        done = dones.get(n, 0.0)
         task = tasks.get(n, 0.0)
         tot_task += task
         tot_done += done
@@ -215,6 +199,16 @@ def build_markdown_v2(d):
     ftime = meta.get("fetchTime", "")
 
     L = []
+    # 无人上账提醒（由 gen_daily_html.py 写入 .daily_alert_msg，营业时段才会写）
+    _alert = ""
+    try:
+        with open(os.path.join(BASE, ".daily_alert_msg"), encoding="utf-8") as f:
+            _alert = f.read().strip()
+    except Exception:
+        _alert = ""
+    if _alert:
+        L.append("⏰ {}".format(_alert))
+        L.append("")
     L.append("# 📊 李家村门店今日达成日报 · {}".format(label))
     L.append('<font color="comment">更新 {} ｜ 以已上账为准</font>'.format(ftime))
     L.append("")
