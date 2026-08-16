@@ -97,48 +97,48 @@ def _gv(rec, *keys, default=""):
 # 42 列（A..AP）取值函数；None 表示该列当前 API 无对应（回收/垫付/电信等，留空）。
 # 列序严格对齐 wecom_report.py 读取语义：G(7)=姓名、P(16)=华为获客渠道名称、AM(39)=销售净额。
 SA_COLMAP = [
-    None,                                                                # A 华为Mate50(无对应)
-    None,                                                                # B 销售分析(无对应)
-    None,                                                                # C 回收单号
-    lambda r: _gv(r, "iEmployeeid_code"),                               # D 华为系统登录帐号
-    lambda r: _gv(r, "vouchdate"),                                      # E 单据日期
-    lambda r: _gv(r, "dDate"),                                          # F 业务日期
-    lambda r: _gv(r, "iEmployeeid_name"),                               # G 姓名
-    lambda r: _gv(r, "iWarehouseid_name"),                              # H 仓库
-    lambda r: _gv(r, "iEmployeeid_name"),                               # I 营业员名称
-    lambda r: _gv(r, "iBusinesstypeid_name"),                           # J 业务类型名称
-    lambda r: _gv(r, "iMemberid_name"),                                 # K 会员姓名
-    lambda r: _gv(r, "iMemberid_cphone"),                               # L 会员手机号
-    lambda r: _gv(r, "oid_userDefine_2425253761215627271"),             # M 品牌分类
-    lambda r: _gv(r, "productsku_cCode"),                               # N 商品sku分类
-    lambda r: _gv(r, "productClass_name"),                              # O 上级商品分类
+    lambda r: _gv(r, "vouchdate"),                                      # A 单据日期
+    lambda r: _gv(r, "dDate"),                                          # B 业务日期
+    lambda r: _gv(r, "code"),                                           # C 单据编号
+    lambda r: _gv(r, "store_code"),                                     # D 门店编码
+    lambda r: _gv(r, "store_name"),                                     # E 门店名称
+    lambda r: _gv(r, "iWarehouseid_name"),                              # F 仓库
+    lambda r: _gv(r, "iEmployeeid_name"),                               # G 营业员名称
+    lambda r: _gv(r, "iBusinesstypeid_name"),                           # H 业务类型名称
+    lambda r: _gv(r, "iMemberid_name"),                                 # I 会员姓名
+    lambda r: _gv(r, "iMemberid_cphone"),                               # J 会员手机号
+    lambda r: _gv(r, "oid_userDefine_2425253761215627271"),             # K 品牌分类
+    None,                                                                # L 上级商品分类(无对应)
+    lambda r: _gv(r, "productClass_name"),                              # M 商品分类名称
+    lambda r: _gv(r, "product_cName"),                                  # N 商品名称
+    lambda r: _gv(r, "productsku_cCode"),                               # O 商品sku名称
     lambda r: _gv(r, "retailVouchHeaderDefineCharacter__HWHKQD_name"),  # P 华为获客渠道名称
-    lambda r: _gv(r, "product_cName"),                                  # Q 商品sku名称
-    None,                                                                # R 华为获客渠道名称(空)
-    lambda r: _gv(r, "code"),                                           # S 商场POS单号
-    None,                                                                # T 回收金额
-    None,                                                                # U 回收机型
-    None,                                                                # V 回收平台
-    None,                                                                # W 未先进先出原因
-    lambda r: _gv(r, "oid_userDefine_2470387991963500544"),             # X 垫付事业部
-    None,                                                                # Y 垫付原因
-    None,                                                                # Z 电信系统销售单号
-    None,                                                                # AA 玲珑系统销售单号
-    lambda r: _gv(r, "oid_userDefine_2422070649283411975"),             # AB 序列号
-    lambda r: _gv(r, "oid_userDefine_2419865243700690950"),             # AC 颜色
-    lambda r: _gv(r, "productsku_cCode"),                               # AD 商品SKU编码
-    lambda r: _gv(r, "iDeliveryState"),                                 # AE 交货状态
-    lambda r: _gv(r, "iPayState"),                                      # AF 收款状态
-    None,                                                                # AG 来源单据号
-    lambda r: 1,                                                        # AH 单据数(每行1)
-    lambda r: _gv(r, "fQuantity"),                                      # AI 销售数量
-    lambda r: _gv(r, "fRetailMoney"),                                   # AJ 零售金额
-    lambda r: _gv(r, "fDiscount"),                                      # AK 折扣额
-    lambda r: _gv(r, "fDiscountRate"),                                  # AL 折扣率
-    lambda r: _gv(r, "fNetMoney"),                                      # AM 销售净额
-    None,                                                                # AN 客单价
-    lambda r: _gv(r, "fNetMoney"),                                      # AO 销售净额
-    lambda r: _gv(r, "iNegative"),                                      # AP 预订
+    None,                                                                # Q 商场POS单号(与单据编号同,留空)
+    None,                                                                # R 回收金额
+    None,                                                                # S 回收机型
+    None,                                                                # T 回收平台
+    None,                                                                # U 未先进先出原因名称
+    lambda r: _gv(r, "oid_userDefine_2470387991963500544"),             # V 垫付事业部
+    None,                                                                # W 垫付原因名称
+    None,                                                                # X 电信系统销售单号
+    None,                                                                # Y 玲珑系统销售单号
+    None,                                                                # Z 序列号
+    None,                                                                # AA 华为手机SKU颜色
+    lambda r: _gv(r, "iDeliveryState"),                                  # AB 交货状态
+    lambda r: _gv(r, "iPayState"),                                       # AC 收款状态
+    None,                                                                # AD 入库属性
+    None,                                                                # AE 来源单据号
+    lambda r: 1,                                                         # AF 单据数(每行1)
+    lambda r: _gv(r, "fQuantity"),                                       # AG 销售数量
+    lambda r: _gv(r, "fRetailMoney"),                                    # AH 零售金额
+    lambda r: _gv(r, "fDiscount"),                                       # AI 折扣额
+    lambda r: _gv(r, "fDiscountRate"),                                   # AJ 折扣率
+    None,                                                                # AK 客单量
+    None,                                                                # AL 客单价
+    lambda r: _gv(r, "fNetMoney"),                                       # AM 销售净额
+    None,                                                                # AN 预订
+    None,                                                                # AO 垫付
+    lambda r: _gv(r, "iNegative"),                                       # AP 普通
 ]
 
 
