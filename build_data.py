@@ -127,6 +127,42 @@ def read_labels(ws, label_row, start=1, end=15):
     return out
 
 
+# 渠道挂账「完成额」严格对齐《李家村8月任务进度.xlsx》「渠道挂账」sheet 的 C 列数组公式：
+#   =SUM(SUMIFS(销售分析!$AM:$AM, 销售分析!$G:$G, A{r}, 销售分析!$P:$P,
+#              {"三大地图","小红书","大众点评","异业","社区","企业上门购"}))
+# 即从「销售分析」sheet 按 营业员(G列)+6获客渠道(P列) 实时聚合 销售净额(AM列)。
+# 不剔除任何业务类型（与表格公式一致）。返回 {营业员名: 金额}。
+QUDAO_CHANNELS = ["三大地图", "小红书", "大众点评", "异业", "社区", "企业上门购"]
+
+
+def _agg_qudao_done(wb):
+    """实时复算「渠道挂账」C 列公式（SUMIFS 聚合销售分析），拿到最新完成额。"""
+    if "销售分析" not in wb.sheetnames:
+        return {}
+    ws = wb["销售分析"]
+    hdr = 2  # 表头在第2行
+    G, P, AM = 7, 16, 39
+    cols = [ws.cell(hdr, c).value for c in range(1, ws.max_column + 1)]
+    def _find(*keys):
+        for i, v in enumerate(cols, 1):
+            if v and all(k in str(v) for k in keys):
+                return i
+        return None
+    g = _find("营业员名称") or G
+    p = _find("华为获客渠道名称") or P
+    am = _find("销售净额") or AM
+    agg = {}
+    for r in range(hdr + 1, ws.max_row + 1):
+        e = ws.cell(r, g).value
+        if not e:
+            continue
+        e = str(e).strip()
+        ch = str(ws.cell(r, p).value or "").strip()
+        if ch in QUDAO_CHANNELS:
+            agg[e] = agg.get(e, 0.0) + float(ws.cell(r, am).value or 0)
+    return agg
+
+
 def read_qudao(wb, wb_f=None):
     """读取「渠道挂账」sheet：时间进度 + 合计行 + 逐人。只提取不计算。
     wb_f 为 data_only=False 的工作簿，用于识别 B1/E1 是否为公式(=TODAY())，
@@ -162,8 +198,10 @@ def read_qudao(wb, wb_f=None):
     if not hrow:
         return None
 
-    # 完成额(done) / 任务额(task) 一律按表格「渠道挂账」sheet 的公式值提取
-    # （B=任务，C=完成），与用户在表里维护的数字完全一致。
+    # 完成额(done)：严格对齐表格「渠道挂账」sheet 的 C 列数组公式
+    # （=SUM(SUMIFS(销售分析...))），从销售分析实时聚合最新值，不读 WPS 缓存旧值。
+    # 任务额(task)：仍取本 sheet B 列手填值。
+    agg = _agg_qudao_done(wb)
     people, t_task = [], 0.0
     for r in range(hrow + 1, ws.max_row + 1):
         nm = ws.cell(r, 1).value
@@ -173,7 +211,7 @@ def read_qudao(wb, wb_f=None):
         if nm == "" or nm == "合计":
             continue
         task = num(ws.cell(r, 2).value)        # 任务额：本 sheet B 列
-        done = num(ws.cell(r, 3).value)        # 完成额：本 sheet C 列（表格里的渠道挂账）
+        done = round(agg.get(nm, 0.0), 2)      # 完成额：实时复算 C 列 SUMIFS 公式
         if task:
             gap = round(task - done, 2)
             rate = round(done / task, 6)
