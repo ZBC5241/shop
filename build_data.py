@@ -28,55 +28,6 @@ SHEET = "李家村销售"
 ROW_TIME = 1                       # 时间进度行：B1=日期, I1=进度
 PEOPLE_ORDER = ["邵乐乐", "杨丽华", "李泽", "陈超磊", "张博晨"]
 
-# 渠道挂账“完成额”聚合口径：仅统计以下获客渠道的销售净额，剔除垫付/预订
-QUDAO_CHANNELS = ["三大地图", "小红书", "大众点评", "异业", "社区", "企业上门购"]
-QUDAO_EXCLUDE_BTYPE = {"垫付", "预订"}
-
-
-def _agg_qudao_done(wb):
-    """渠道挂账“完成额”= 从「销售分析」sheet 实时聚合各营业员的华为获客渠道净销售额
-    （剔除业务类型∈{垫付,预订}，仅 QUDAO_CHANNELS 白名单）。直接算原始明细，
-    不读「渠道挂账」sheet 的 C 列（手填/缓存旧值，不会随销售分析自动刷新），
-    故每次取到的都是销售分析表里的最新数据。返回 {营业员名: 金额}。"""
-    if "销售分析" not in wb.sheetnames:
-        return {}
-    ws = wb["销售分析"]
-    hdr = None
-    for r in range(1, min(ws.max_row, 12) + 1):
-        row = [ws.cell(r, c).value for c in range(1, ws.max_column + 1)]
-        s = " ".join(str(x) for x in row if x)
-        if all(k in s for k in ("营业员名称", "华为获客渠道名称", "销售净额")):
-            hdr = r
-            break
-    if hdr is None:
-        return {}
-    cols = [ws.cell(hdr, c).value for c in range(1, ws.max_column + 1)]
-    def _col(name):
-        for i, v in enumerate(cols, 1):
-            if v and name in str(v):
-                return i
-        return None
-    emp = _col("营业员名称")
-    bt = _col("业务类型名称")
-    ch = _col("华为获客渠道名称")
-    net = _col("销售净额")
-    if not (emp and net):
-        return {}
-    res = {}
-    for r in range(hdr + 1, ws.max_row + 1):
-        e = ws.cell(r, emp).value
-        if not e:
-            continue
-        e = str(e).strip()
-        bts = str(ws.cell(r, bt).value or "").strip() if bt else ""
-        if bts in QUDAO_EXCLUDE_BTYPE:
-            continue
-        c = str(ws.cell(r, ch).value or "").strip() if ch else ""
-        if c not in QUDAO_CHANNELS:
-            continue
-        res[e] = res.get(e, 0.0) + float(ws.cell(r, net).value or 0)
-    return res
-
 # 区块1：业绩考核
 P1_ROWS = {"邵乐乐": 4, "杨丽华": 5, "李泽": 6, "陈超磊": 7, "张博晨": 8}
 P1_TOTAL_ROW = 9
@@ -211,9 +162,8 @@ def read_qudao(wb, wb_f=None):
     if not hrow:
         return None
 
-    # 完成额(done) 一律从「销售分析」sheet 实时聚合（见 _agg_qudao_done），
-    # 不再读本 sheet 的 C 列（手填/陈旧缓存值，不会随销售分析自动刷新）。
-    agg = _agg_qudao_done(wb)
+    # 完成额(done) / 任务额(task) 一律按表格「渠道挂账」sheet 的公式值提取
+    # （B=任务，C=完成），与用户在表里维护的数字完全一致。
     people, t_task = [], 0.0
     for r in range(hrow + 1, ws.max_row + 1):
         nm = ws.cell(r, 1).value
@@ -222,8 +172,8 @@ def read_qudao(wb, wb_f=None):
         nm = str(nm).strip()
         if nm == "" or nm == "合计":
             continue
-        task = num(ws.cell(r, 2).value)        # 任务额：仍取本 sheet 手填值
-        done = round(agg.get(nm, 0.0), 2)      # 完成额：销售分析聚合（最新）
+        task = num(ws.cell(r, 2).value)        # 任务额：本 sheet B 列
+        done = num(ws.cell(r, 3).value)        # 完成额：本 sheet C 列（表格里的渠道挂账）
         if task:
             gap = round(task - done, 2)
             rate = round(done / task, 6)

@@ -654,17 +654,17 @@ const isNum = v => typeof v === 'number' && isFinite(v);
 function money(v, dec){
   if(!isNum(v)) return '—';
   const d = dec === undefined ? (Math.abs(v) >= 10000 ? 0 : 0) : dec;
-  return '¥' + v.toLocaleString('zh-CN', {minimumFractionDigits:d, maximumFractionDigits:d});
+  return '¥' + Number(v).toFixed(d);
 }
 function moneyShort(v){
   if(!isNum(v)) return '—';
-  return Math.round(v).toLocaleString('zh-CN');
+  return String(Math.round(v));
 }
 function cnt(v){ return isNum(v) ? String(Math.round(v)) : '—'; }
 /* 精准金额：整数原样（带千分位），不缩写「万」。用于渠道挂账板块。 */
 function moneyFull(v){
   if(!isNum(v)) return '—';
-  return Math.round(v).toLocaleString('en-US');
+  return String(Math.round(v));
 }
 function pct(v, dec){
   if(!isNum(v)) return '—';
@@ -709,7 +709,7 @@ function unitOf(key, k){
 function fmtU(v, u){
   if(!isNum(v)) return '—';
   if(u === 'cnt')  return String(Math.round(v));
-  return Math.round(v).toLocaleString('zh-CN');
+  return String(Math.round(v));
 }
 
 /* ---------------- 渲染：进度条组件 ---------------- */
@@ -771,7 +771,7 @@ function catRow(name, k, key, person){
     + '<div class="cat-det" data-cat="' + esc(name) + '"' + pc + '></div>';
 }
 
-function money(v){ v = (v == null ? 0 : v); return v.toLocaleString('zh-CN', {maximumFractionDigits:2}); }
+function money(v){ v = (v == null ? 0 : v); return String(Math.round(v)); }
 /* 明细用：无千分位逗号、无货币符号 */
 function fmtNum(v){ v = (v == null ? 0 : v); return Number(v).toLocaleString('en-US', {maximumFractionDigits:2, useGrouping:false}); }
 
