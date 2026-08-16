@@ -30,8 +30,15 @@ TODAY=$(date '+%Y-%m-%d')
 MONTH_START=$(date '+%Y-%m')"-01"
 TSV="$SHOP_DIR/yonyou_raw.tsv"
 DATA_JSON="$SHOP_DIR/data.json"
+LOG="$SHOP_DIR/daily_report.log"
+# 日志轮转：超过 300KB 归档为 .1，避免无限增长
+if [ -f "$LOG" ] && [ "$(stat -f%z "$LOG" 2>/dev/null || echo 0)" -gt 307200 ]; then
+  mv -f "$LOG" "$LOG.1"
+fi
 
 log(){ echo -e "\n\033[1;36m[$(date '+%H:%M:%S')] $*\033[0m"; }
+# 全程日志落盘（同时保留终端输出），今日达成/渠道数字对不上时可追溯
+exec > >(tee -a "$LOG") 2>&1
 
 # ========== Step 1: 抓取用友云数据 ==========
 log "▶ [1/3] 抓取用友云门店毛利明细 ($MONTH_START ~ $TODAY) ..."
