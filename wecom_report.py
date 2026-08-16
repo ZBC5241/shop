@@ -96,8 +96,11 @@ def today_rows(tsv, today):
 
 
 def read_qudao():
-    """读取「渠道挂账」：任务额/完成额/时间进度均严格按用户 xlsx「渠道挂账」sheet 公式提取
-    （完成额取 C 列公式值，用户要求以表格口径为准，不再用用友销售分析覆盖）。"""
+    """读取「渠道挂账」：
+    - 任务额/时间进度取自 xlsx「渠道挂账」sheet（手填/公式）
+    - 完成额改为从「销售分析」sheet 实时聚合（build_data._agg_qudao_done：
+      仅6大获客渠道、剔除垫付/预订），等价于“刷新公式后的最新值”，不再读 C 列陈旧缓存。"""
+    import build_data as bd
     import openpyxl, datetime, calendar
 
     SRC = TARGET_XLSX
@@ -113,6 +116,9 @@ def read_qudao():
     today = datetime.date.today()
     time_date = today.strftime("%Y-%m-%d")
     time_rate = "{:.1f}%".format(today.day / calendar.monthrange(today.year, today.month)[1] * 100)
+
+    # 完成额：从销售分析 sheet 实时聚合（最新数据）
+    agg = bd._agg_qudao_done(wb)
 
     # 定位表头行（B=任务 且 C=完成）
     hrow = None
@@ -132,11 +138,9 @@ def read_qudao():
         if not nm or nm == "合计":
             continue
         names.append(nm)
-        # 任务额(B列) / 完成额(C列) 均取自 xlsx「渠道挂账」sheet 公式，按用户表格口径
-        tasks[nm] = num(ws.cell(r, 2).value)
-        dones[nm] = num(ws.cell(r, 3).value)
+        tasks[nm] = num(ws.cell(r, 2).value)          # 任务额：本 sheet 手填
+        dones[nm] = round(agg.get(nm, 0.0), 2)        # 完成额：销售分析聚合（最新）
 
-    # 每人完成额：严格按用户 xlsx「渠道挂账」sheet 公式（C列=完成额）提取，不再用用友销售分析覆盖
     people, tot_task, tot_done = [], 0.0, 0.0
     for n in names:
         done = dones.get(n, 0.0)
