@@ -353,11 +353,5 @@ if __name__ == "__main__":
         print("（--dry 模式，未生成海报、未推送）")
         sys.exit(0)
 
-    png = build_image(dry=False)
     print("推送 Markdown ...")
     print(send_markdown(wh, content))
-    if png:
-        print("推送海报图 ...")
-        print(send_image(wh, png))
-    else:
-        print("⚠️ 海报图缺失，仅推送了 Markdown。")
