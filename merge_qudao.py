@@ -180,24 +180,9 @@ def main():
         print("[渠道] 未找到「渠道挂账」数据，跳过")
         return 0
 
-    # 渠道明细（按【华为获客渠道名称】聚合 8 月李家村销售分析）
-    channels = read_channels()
-    if channels:
-        qd["channels"] = channels
-        top_amt = channels[0]["amount"]
-        print("[渠道明细] 已聚合 %d 个获客渠道（按销额降序），Top: %s=%.0f"
-              % (len(channels), channels[0]["name"], top_amt))
-    else:
-        print("[渠道明细] 未取到销售分析渠道数据（销售分析表为空？）")
-
-    # 员工 × 渠道 聚合（供逐人下拉展示“走了哪些渠道、各多少金额”）
-    emp_ch = read_emp_channel()
-    if emp_ch:
-        qd["empChannel"] = emp_ch
-        print("[员工×渠道] 已聚合 %d 名员工的渠道明细" % len(emp_ch))
-        # 渠道挂账「完成额 / 任务额 / 达成」严格按用户 xlsx「渠道挂账」sheet 公式提取
-        # （read_qudao 已读到表格公式值，如合计 24539 / 杨丽华 0），不再用用友销售分析覆盖。
-        # empChannel（用友逐人×渠道明细）仅作看板逐人下拉辅助，不影响完成额数字。
+    # 渠道挂账完成额/任务额/达成/逐人：全部按用户 xlsx「渠道挂账」sheet 公式提取
+    # （read_qudao 已读到表格公式值，如合计 24539 / 杨丽华 0）。
+    # 不再注入用友销售分析的 channels / empChannel，避免表格与用友两套口径混用。
 
     with open(DATA, encoding="utf-8") as f:
         d = json.load(f)
