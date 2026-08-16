@@ -3,6 +3,11 @@
 # daily_report.sh —— 李家村门店日报一键流水线
 # 一条命令完成：用友云抓取 → 复算 data.json → 生成日报 HTML → 保存到工作区
 #
+# ⏱ 更新频率：每 2 小时跑一次（用友后台 15 分钟刷新一次数据）。
+#    已挂 launchd（见 com.claw.daily.plist），或 crontab：  0 */2 * * *
+#    企微群推送（见 gen_daily_html.py + notify.sh）：营业时段(9-22点)每周期推日报摘要；
+#    若触发「近 2 小时无人上账」则把提醒合并到摘要前一起推。
+#
 # 用法：
 #   ./daily_report.sh              # 默认输出到工作区
 #   ./daily_report.sh /path/out    # 指定输出目录
@@ -121,16 +126,92 @@ print(f'  明细行数: {len(lines)-1}')
 print(f'  日期范围: {dates[0]} ~ {dates[-1]}')
 "
 
+# ========== Step 1.5: 抓取销售分析（刷新渠道口径数据源 sa_aug_cache.json） ==========
+log "▶ [1.5] 抓取销售分析（刷新渠道挂账口径，剔除垫付/预订）…"
+cat > /tmp/_yy_sa.js <<JSEOF
+(async () => {
+  const url = 'https://c3.yonyoucloud.com/yonbip-mkt-retailweb/report/list';
+  const begin = '$MONTH_START', end = '$TODAY';
+  let all = [], page = 1;
+  while (true) {
+    const r = await fetch(url, {method:'POST', credentials:'include',
+      headers:{'Content-Type':'application/json','X-Requested-With':'XMLHttpRequest'},
+      body: JSON.stringify({billnum:'rm_saleanalysis', page:{pageIndex:page,pageSize:5000},
+        queryParams:[{name:'beginDate',value:begin},{name:'endDate',value:end}]})});
+    if (r.status !== 200) return 'HTTP_'+r.status;
+    const j = await r.json();
+    if (!j.data || !j.data.recordList) return 'NO_LIST';
+    const recs = j.data.recordList;
+    all = all.concat(recs);
+    if (!recs.length || recs.length < 5000) break;
+    if (page > 60) break;
+    page++;
+  }
+  const ym = begin.slice(0,7);
+  const filtered = all.filter(x => x.dDate && String(x.dDate).startsWith(ym));
+  return JSON.stringify({filtered_at: Date.now(), begin: begin, end: end, raw_total: all.length, records: filtered});
+})()
+JSEOF
+JS_SA="$(cat /tmp/_yy_sa.js)"
+agent-browser eval "$JS_SA" > /tmp/_yy_sa.txt 2>&1 || true
+python3 -c "
+import sys, json
+s=open('/tmp/_yy_sa.txt').read().strip()
+try:
+    txt=json.loads(s)
+except Exception:
+    txt=s
+if isinstance(txt,str) and (txt.startswith('HTTP_') or txt.startswith('NO_')):
+    print('  [警告] 销售分析抓取失败:', txt[:120], '→ 沿用旧 sa_aug_cache.json')
+else:
+    if isinstance(txt,str):
+        try: txt=json.loads(txt)
+        except Exception: txt=None
+    if isinstance(txt,dict) and 'records' in txt:
+        json.dump(txt, open('$SHOP_DIR/sa_aug_cache.json','w'), ensure_ascii=False)
+        print('  [渠道] 已刷新 sa_aug_cache.json，本月 %d 行' % len(txt['records']))
+    else:
+        print('  [警告] 销售分析返回结构异常 → 沿用旧 sa_aug_cache.json')
+"
+
 # ========== Step 2: 复算 data.json ==========
 log "▶ [2/3] 复算 data.json ..."
-python3 "$SHOP_DIR/calc_data.py" "$TSV" --xlsx "$SHOP_DIR/../李家村8月任务进度.xlsx" --day "$TODAY" -o "$DATA_JSON" 2>&1 || {
+python3 "$SHOP_DIR/calc_data.py" "$TSV" --xlsx "/Users/mac/Desktop/李家村销售/李家村8月任务进度.xlsx" -o "$DATA_JSON" 2>&1 || {
   # 如果没有 xlsx 任务进度表，用纯明细复算（不依赖 xlsx）
   log "  无任务进度表，用纯明细模式复算…"
   python3 "$SHOP_DIR/calc_data.py" "$TSV" -o "$DATA_JSON" 2>&1
 }
 
+# ========== Step 2.4: 刷新《李家村销售》"今日达成"区块并取值注入 data.json ==========
+# 做法：把当日明细写入 RXS 明细表(公式数据源) → 真实引擎(soffice/Excel)重算整本
+#       → 读「今日达成」区块刷新出来的缓存值 → 覆盖 data.json 的 dailyDone。
+# 这样日报"当日达成"严格等于表格公式结果，不再由 Python 近似复算。
+log "▶ [2.4] 刷新今日达成区块(写RXS→重算→读刷新值) …"
+python3 "$SHOP_DIR/refresh_today_block.py" \
+  --tsv "$TSV" \
+  --xlsx "/Users/mac/Desktop/李家村销售/李家村8月任务进度.xlsx" \
+  --data "$DATA_JSON" 2>&1 \
+  || echo "  [警告] 今日达成区块刷新失败，沿用 calc_data 复算值"
+
+# ========== Step 2.5: 合并渠道口径（剔除垫付/预订）注入 data.json ==========
+log "▶ [2.5] 合并渠道口径（剔除垫付/预订）注入 data.json …"
+python3 "$SHOP_DIR/merge_qudao.py" "$DATA_JSON" "/Users/mac/Desktop/李家村销售/李家村8月任务进度.xlsx" 2>&1 \
+  || echo "  [警告] 渠道合并失败，渠道挂账可能用旧数据"
+
 # ========== Step 3: 生成日报 HTML ==========
 log "▶ [3/3] 生成日报 HTML ..."
 python3 "$SHOP_DIR/gen_daily_html.py" "$DATA_JSON" "$OUT_DIR"
+
+# ========== Step 4: 企微群推送（详细日报 wecom_report，含无人上账提醒） ==========
+# 营业时段(9-22点)才推，避免凌晨刷屏。wecom_report 自己读 .daily_alert_msg 合并⏰提醒。
+HOUR=$(date +%H)
+if [ "$HOUR" -ge 9 ] && [ "$HOUR" -lt 22 ]; then
+  log "▶ [4/4] 企微群推送详细日报（wecom_report）…"
+  python3 "$SHOP_DIR/wecom_report.py" || true
+else
+  echo "非营业时段，跳过企微推送"
+fi
+# 清理可能残留的纯摘要标记（旧逻辑遗留，已不再推送）
+rm -f "$SHOP_DIR/.daily_summary_msg"
 
 log "🎉 日报流水线完成！"
