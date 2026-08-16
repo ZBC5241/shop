@@ -5939,6 +5939,168 @@
     "gap": 0.0,
     "rate": null
    }
-  ]
+  ],
+  "empChannel": {
+   "张博晨": [
+    {
+     "channel": "三大地图",
+     "amount": 0.0,
+     "bills": 0
+    },
+    {
+     "channel": "小红书",
+     "amount": 0.0,
+     "bills": 0
+    },
+    {
+     "channel": "大众点评",
+     "amount": 0.0,
+     "bills": 0
+    },
+    {
+     "channel": "异业",
+     "amount": 0.0,
+     "bills": 0
+    },
+    {
+     "channel": "社区",
+     "amount": 0.0,
+     "bills": 0
+    },
+    {
+     "channel": "企业上门购",
+     "amount": 0.0,
+     "bills": 0
+    }
+   ],
+   "邵乐乐": [
+    {
+     "channel": "三大地图",
+     "amount": 0.0,
+     "bills": 0
+    },
+    {
+     "channel": "小红书",
+     "amount": 0.0,
+     "bills": 0
+    },
+    {
+     "channel": "大众点评",
+     "amount": 0.0,
+     "bills": 0
+    },
+    {
+     "channel": "异业",
+     "amount": 0.0,
+     "bills": 0
+    },
+    {
+     "channel": "社区",
+     "amount": 0.0,
+     "bills": 0
+    },
+    {
+     "channel": "企业上门购",
+     "amount": 11836.0,
+     "bills": 27
+    }
+   ],
+   "杨丽华": [
+    {
+     "channel": "三大地图",
+     "amount": 24998.0,
+     "bills": 6
+    },
+    {
+     "channel": "小红书",
+     "amount": 0.0,
+     "bills": 0
+    },
+    {
+     "channel": "大众点评",
+     "amount": 0.0,
+     "bills": 0
+    },
+    {
+     "channel": "异业",
+     "amount": 0.0,
+     "bills": 0
+    },
+    {
+     "channel": "社区",
+     "amount": 0.0,
+     "bills": 0
+    },
+    {
+     "channel": "企业上门购",
+     "amount": 0.0,
+     "bills": 0
+    }
+   ],
+   "李泽": [
+    {
+     "channel": "三大地图",
+     "amount": 0.0,
+     "bills": 0
+    },
+    {
+     "channel": "小红书",
+     "amount": 0.0,
+     "bills": 0
+    },
+    {
+     "channel": "大众点评",
+     "amount": 0.0,
+     "bills": 0
+    },
+    {
+     "channel": "异业",
+     "amount": 0.0,
+     "bills": 0
+    },
+    {
+     "channel": "社区",
+     "amount": 0.0,
+     "bills": 0
+    },
+    {
+     "channel": "企业上门购",
+     "amount": 2690.0,
+     "bills": 10
+    }
+   ],
+   "陈超磊": [
+    {
+     "channel": "三大地图",
+     "amount": 46991.0,
+     "bills": 10
+    },
+    {
+     "channel": "小红书",
+     "amount": 0.0,
+     "bills": 0
+    },
+    {
+     "channel": "大众点评",
+     "amount": 0.0,
+     "bills": 0
+    },
+    {
+     "channel": "异业",
+     "amount": 0.0,
+     "bills": 0
+    },
+    {
+     "channel": "社区",
+     "amount": 0.0,
+     "bills": 0
+    },
+    {
+     "channel": "企业上门购",
+     "amount": 0.0,
+     "bills": 0
+    }
+   ]
+  }
  }
 }

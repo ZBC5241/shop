@@ -123,35 +123,59 @@ def read_channels():
 
 
 def read_emp_channel():
-    """按【员工 × 华为获客渠道】聚合 8 月李家村销售分析，供「渠道挂账·逐人」下拉展示。
+    """按【员工 × 华为获客渠道】聚合桌面 xlsx「销售分析」sheet（8 月李家村）。
 
-    口径：剔除业务类型 ∈ {垫付, 预订}（与用户 Excel「不含垫付预订」表一致）。
-    来源：sa_aug_cache.json（纯HTTP 抓取的 8 月切片）。
-    返回：{ 员工名: [ {channel, amount, bills}, ... 按金额降序 ] }
-    这样点击某员工即可看到「他走了哪些渠道、各渠道多少金额」，回答“显示哪个渠道的”。
+    口径：剔除业务类型 ∈ {垫付, 预订}（与用户 Excel「不含垫付预订」表一致）；
+          仅白名单获客渠道；按业务日期过滤 8 月切片。
+    来源：直接读桌面《李家村8月任务进度.xlsx》的「销售分析」sheet（用户导出，全程按表格走）。
+    返回：{ 员工名: [ {channel, amount, bills}, ... 按白名单顺序 ] }
     """
     emp = {}
-    if not os.path.exists(AUG_CACHE):
+    if not os.path.exists(XLSX):
+        print("  [员工×渠道] 找不到 xlsx: %s" % XLSX)
         return emp
     try:
-        recs = json.load(open(AUG_CACHE, encoding="utf-8")).get("records", [])
+        wb = openpyxl.load_workbook(XLSX, data_only=True)
+        if "销售分析" not in wb.sheetnames:
+            print("  [员工×渠道] 未找到「销售分析」sheet")
+            return emp
+        ws = wb["销售分析"]
+        # 表头在第 2 行，动态定位关键列
+        hdr = {}
+        for c in range(1, ws.max_column + 1):
+            v = ws.cell(2, c).value
+            if v:
+                hdr[str(v).strip()] = c
+        COL_P  = hdr.get("华为获客渠道名称")   # 渠道
+        COL_G  = hdr.get("营业员名称")         # 员工
+        COL_H  = hdr.get("业务类型名称")        # 业务类型（剔除垫付/预订）
+        COL_N  = hdr.get("销售净额")           # 净额
+        COL_BD = hdr.get("业务日期")           # 过滤 8 月
+        if not (COL_G and COL_P and COL_H and COL_N):
+            print("  [员工×渠道] 销售分析缺少关键列（员工/渠道/业务类型/净额）")
+            return emp
+        import datetime as _dt
+        for r in range(3, ws.max_row + 1):
+            bt = str(ws.cell(r, COL_H).value or "").strip()
+            if bt in EXCLUDE_BTYPE:
+                continue
+            bd = ws.cell(r, COL_BD).value if COL_BD else None
+            if isinstance(bd, (_dt.datetime, _dt.date)):
+                if not (bd.year == 2026 and bd.month == 8):
+                    continue
+            p = str(ws.cell(r, COL_G).value or "").strip()
+            c = str(ws.cell(r, COL_P).value or "").strip()
+            if not p or not c:
+                continue
+            d = emp.setdefault(p, {}).setdefault(c, {"amount": 0.0, "bills": 0})
+            d["amount"] += _num(ws.cell(r, COL_N).value)
+            d["bills"]  += 1
     except Exception as e:
-        print("  [员工×渠道] sa_aug_cache 读取失败: %s" % e)
+        print("  [员工×渠道] 销售分析读取失败: %s" % e)
         return emp
-    for r in recs:
-        bt = str(r.get("iBusinesstypeid_name") or "").strip()
-        if bt in EXCLUDE_BTYPE:
-            continue
-        p = str(r.get("iEmployeeid_name") or "").strip()
-        c = str(r.get("retailVouchHeaderDefineCharacter__HWHKQD_name") or "").strip()
-        if not p or not c:
-            continue
-        d = emp.setdefault(p, {}).setdefault(c, {"amount": 0.0, "bills": 0})
-        d["amount"] += _num(r.get("fNetMoney"))
-        d["bills"]  += 1
-    out = {}
-    # 渠道展示白名单：仅展示用户指定的获客渠道（与其余渠道明细保持一致口径）
+    # 渠道展示白名单：仅展示用户指定的获客渠道
     CHANNEL_WHITELIST = ["三大地图", "小红书", "大众点评", "异业", "社区", "企业上门购"]
+    out = {}
     for p, chans in emp.items():
         rows = []
         for ch in CHANNEL_WHITELIST:
@@ -182,7 +206,12 @@ def main():
 
     # 渠道挂账完成额/任务额/达成/逐人：全部按用户 xlsx「渠道挂账」sheet 公式提取
     # （read_qudao 已读到表格公式值，如合计 24539 / 杨丽华 0）。
-    # 不再注入用友销售分析的 channels / empChannel，避免表格与用友两套口径混用。
+    # 逐人下钻的【各渠道明细】则从桌面 xlsx「销售分析」sheet 聚合（同样剔除垫付/预订），
+    # 全程数据源都是用户桌面文件，不再经过用友抓取缓存。
+    emp_ch = read_emp_channel()
+    if emp_ch:
+        qd["empChannel"] = emp_ch
+        print("[员工×渠道] 已聚合 %d 名员工的渠道明细（来自桌面销售分析 sheet）" % len(emp_ch))
 
     with open(DATA, encoding="utf-8") as f:
         d = json.load(f)

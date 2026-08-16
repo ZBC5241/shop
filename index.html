@@ -814,24 +814,26 @@ function toggleDetail(cat, person){
   if(rc) rc.classList.add('on');
 }
 
-/* 逐人下钻：展示该员工在「渠道挂账」表格里的任务/完成/缺口/完成率（严格按表格公式） */
+/* 逐人下钻：列出该员工在各获客渠道的销售额（DATA.qudao.empChannel[员工]，来自桌面销售分析 sheet）
+   口径：剔除垫付/预订。只展示【渠道 + 金额 + 笔数】。 */
 function personDetailHTML(name){
-  const list = (DATA.qudao && DATA.qudao.people) || [];
-  const p = list.find(x => x.name === name);
-  if(!p) return '<div class="det-empty">该员工暂无渠道挂账数据</div>';
-  const has = isNum(p.task) && p.task !== 0;
-  const rows = [
-    ['任务目标', has ? moneyShort(p.task) : '—'],
-    ['本期完成', moneyShort(p.done)],
-    ['完成率',   has ? pct(p.rate,1) : '无任务'],
-    ['缺口',     has ? (isNum(p.gap) && p.gap < 0 ? '还差 ' + moneyShort(Math.abs(p.gap)) : '超出 ' + moneyShort(p.gap||0)) : '—'],
-  ];
+  const emp = (DATA.qudao && DATA.qudao.empChannel) || {};
+  const rows = emp[name] || [];
+  if(!rows.length) return '<div class="det-empty">该员工本期无获客渠道销售（垫付/预订已剔除）</div>';
+  let total = 0;
+  rows.forEach(r => { total += (r.amount || 0); });
   let h = '<div class="det-list">';
-  rows.forEach(rw => {
+  rows.forEach(r => {
     h += '<div class="det-item">'
-      + '<div class="det-top"><span class="det-name">' + esc(rw[0]) + '</span>'
-      + '<span class="det-date num">' + rw[1] + '</span></div></div>';
+      + '<div class="det-top"><span class="det-name">' + esc(r.channel || '—') + '</span>'
+      + '<span class="det-date num">' + (r.bills || 0) + ' 笔</span></div>'
+      + '<div class="det-row num"><b style="font-size:15px;color:var(--tx1)">' + moneyShort(r.amount) + '</b>'
+      + ' <span style="font-size:11px;color:var(--tx3)">销售净额</span></div>'
+      + '</div>';
   });
+  h += '<div class="det-item" style="border-top:1px dashed var(--line2);padding-top:8px;margin-top:2px">'
+    + '<div class="det-top"><span class="det-name" style="font-weight:700">合计</span>'
+    + '<span class="num" style="font-weight:700">' + moneyShort(total) + '</span></div></div>';
   h += '</div>';
   return h;
 }
