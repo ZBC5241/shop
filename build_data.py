@@ -198,10 +198,12 @@ def read_qudao(wb, wb_f=None):
     if not hrow:
         return None
 
-    # 完成额(done)：严格对齐表格「渠道挂账」sheet 的 C 列数组公式
-    # （=SUM(SUMIFS(销售分析...))），从销售分析实时聚合最新值，不读 WPS 缓存旧值。
-    # 任务额(task)：仍取本 sheet B 列手填值。
-    agg = _agg_qudao_done(wb)
+    # 完成额(done)：直接取「渠道挂账」sheet C 列「完成」已拉取/填入的值
+    # （即「最先拉取的数据」），不再实时复算销售分析。
+    # 仅当整列 C 均无值时，回退复算一次，避免空表报错。
+    c_vals = [ws.cell(r, 3).value for r in range(hrow + 1, ws.max_row + 1)]
+    use_sheet = any(v is not None for v in c_vals)
+    agg = _agg_qudao_done(wb) if not use_sheet else {}
     people, t_task = [], 0.0
     for r in range(hrow + 1, ws.max_row + 1):
         nm = ws.cell(r, 1).value
@@ -211,7 +213,11 @@ def read_qudao(wb, wb_f=None):
         if nm == "" or nm == "合计":
             continue
         task = num(ws.cell(r, 2).value)        # 任务额：本 sheet B 列
-        done = round(agg.get(nm, 0.0), 2)      # 完成额：实时复算 C 列 SUMIFS 公式
+        if use_sheet:
+            done = num(ws.cell(r, 3).value) or 0.0   # 完成额：取 sheet C 列「最先拉取」的值
+        else:
+            done = round(agg.get(nm, 0.0), 2)  # 回退：实时复算 C 列
+        done = round(done, 2)
         if task:
             gap = round(task - done, 2)
             rate = round(done / task, 6)

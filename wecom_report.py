@@ -97,9 +97,9 @@ def today_rows(tsv, today):
 
 def read_qudao():
     """读取「渠道挂账」：
-    - 任务额(B列)、时间进度(B1=TODAY()) 取自 xlsx「渠道挂账」sheet
-    - 完成额(C列) 是数组公式 =SUM(SUMIFS(销售分析!...))，从销售分析实时聚合最新值；
-      为拿到实时结果（而非 WPS 缓存旧值），直接复现该公式逻辑（build_data._agg_qudao_done）。"""
+    - 任务额(B列)、完成额(C列)、时间进度(B1=TODAY()) 均直接取自 xlsx「渠道挂账」sheet
+      （C 列「完成」即「最先拉取的数据」，不再实时复算销售分析）。
+    - 仅当 C 列全为空时才回退复算一次，避免空表报错。"""
     import openpyxl, datetime, calendar
     import build_data as bd
 
@@ -117,9 +117,6 @@ def read_qudao():
     time_date = today.strftime("%Y-%m-%d")
     time_rate = "{:.1f}%".format(today.day / calendar.monthrange(today.year, today.month)[1] * 100)
 
-    # 完成额：实时复算「渠道挂账」C 列 SUMIFS 数组公式（对齐表格）
-    agg = bd._agg_qudao_done(wb)
-
     # 定位表头行（B=任务 且 C=完成）
     hrow = None
     for r in range(1, min(ws.max_row, 40) + 1):
@@ -129,7 +126,8 @@ def read_qudao():
     if not hrow:
         return None
 
-    names, tasks = [], {}
+    # 完成额：直接取 sheet C 列「最先拉取」的值；整列空才回退复算
+    names, tasks, done_map = [], {}, {}
     for r in range(hrow + 1, ws.max_row + 1):
         nm = ws.cell(r, 1).value
         if nm is None:
@@ -139,10 +137,17 @@ def read_qudao():
             continue
         names.append(nm)
         tasks[nm] = num(ws.cell(r, 2).value)          # 任务额：本 sheet B 列
+        done_map[nm] = num(ws.cell(r, 3).value)       # 完成额：本 sheet C 列
+
+    use_sheet = any(v for v in done_map.values())
+    agg = bd._agg_qudao_done(wb) if not use_sheet else {}
 
     people, tot_task, tot_done = [], 0.0, 0.0
     for n in names:
-        done = round(agg.get(n, 0.0), 2)              # 完成额：实时复算 C 列公式
+        if use_sheet:
+            done = done_map.get(n, 0.0)               # 完成额：取 sheet C 列「最先拉取」的值
+        else:
+            done = round(agg.get(n, 0.0), 2)          # 回退：复算 C 列公式
         task = tasks.get(n, 0.0)
         tot_task += task
         tot_done += done
