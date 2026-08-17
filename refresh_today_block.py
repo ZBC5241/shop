@@ -48,20 +48,27 @@ def num(v):
 def data_day_of(tsv):
     """取『当日正销额>0』的最大出库日期，作为日报数据日。
 
-    避开纯退货/冲账日（如 8-17 只有 2 行负金额退货，不应作为营业日报日）。
-    金额列 M(索引12) 求和 > 0 的日期才入选。
+    避开纯退货/冲账日（如 8-17 是李泽把 8-16 两笔 Watch GT7 退货冲账+重开，
+    净额仅 762，并非真实营业）。判定：当日净销额 > 0，且净销额 ≥ 当日正向
+    销额的 30%（即大部分被退货冲掉的日子视为冲账日，排除，回退到前一天）。
+    金额列 M(索引12)。
     """
     import collections
     rows = list(csv.reader(open(tsv, encoding="utf-8"), delimiter="\t"))
-    sales = collections.defaultdict(float)
+    net = collections.defaultdict(float)   # 当日净销额
+    pos = collections.defaultdict(float)   # 当日正向销额（仅正金额行）
     for r in rows[1:]:
         if len(r) > 2 and r[2]:
             try:
                 m = float(str(r[12]).replace(",", ""))
             except Exception:
                 m = 0.0
-            sales[r[2][:10]] += m
-    cand = [d for d, m in sales.items() if m > 0]
+            d = r[2][:10]
+            net[d] += m
+            if m > 0:
+                pos[d] += m
+    cand = [d for d, m in net.items()
+            if m > 0 and (pos[d] <= 0 or m >= pos[d] * 0.3)]
     return max(cand) if cand else None
 
 
