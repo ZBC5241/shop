@@ -200,8 +200,10 @@ python3 "$SHOP_DIR/refresh_today_block.py" \
   --data "$DATA_JSON" 2>&1 \
   || echo "  [警告] 今日达成区块刷新失败，沿用 calc_data 复算值"
 
-# ========== Step 2.5: 合并渠道口径（剔除垫付/预订）注入 data.json ==========
-log "▶ [2.5] 合并渠道口径（剔除垫付/预订）注入 data.json …"
+# ========== Step 2.5: 最新拉取渠道口径 → 写渠道挂账C列 → 注入 data.json ==========
+# merge_qudao 内部先复算最新完成额写入「渠道挂账」sheet C 列(落表)，再读 C 列，
+# 实现「取渠道挂账 sheet 表、最新拉取的数据」——定时任务每次跑都会刷新该值。
+log "▶ [2.5] 最新拉取渠道口径(复算→写C列→读回)注入 data.json …"
 python3 "$SHOP_DIR/merge_qudao.py" "$DATA_JSON" "/Users/mac/Desktop/李家村销售/李家村8月任务进度.xlsx" 2>&1 \
   || echo "  [警告] 渠道合并失败，渠道挂账可能用旧数据"
 

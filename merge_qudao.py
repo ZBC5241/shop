@@ -189,6 +189,53 @@ def read_emp_channel():
     return out
 
 
+def refresh_qudao_done(xlsx):
+    """【最新拉取】从销售分析 sheet 实时复算完成额，写入「渠道挂账」sheet C 列(落表)。
+
+    这样每日定时任务跑时 C 列永远是最新拉取到的值，日报 read_qudao 读 C 列即「最新拉取的数据」，
+    而非冻结的首拉快照。仅当整列 C 为空才回退（已在 read_qudao 内兜底）。
+    返回写入的 {姓名: 完成额}，失败返回 None。
+    """
+    try:
+        wb = openpyxl.load_workbook(xlsx, data_only=True)
+        agg = bd._agg_qudao_done(wb)
+    except Exception as e:
+        print("  [渠道刷新] 复算失败: %s" % e)
+        return None
+    if not agg:
+        print("  [渠道刷新] 无聚合结果，跳过写入 C 列")
+        return None
+    try:
+        wb_f = openpyxl.load_workbook(xlsx, data_only=False)
+        ws = wb_f["渠道挂账"]
+        hrow = None
+        for r in range(1, min(ws.max_row, 40) + 1):
+            if (str(ws.cell(r, 2).value or "").strip() == "任务"
+                    and str(ws.cell(r, 3).value or "").strip() == "完成"):
+                hrow = r
+                break
+        if not hrow:
+            print("  [渠道刷新] 未找到表头行，跳过写入")
+            return None
+        written = {}
+        for r in range(hrow + 1, ws.max_row + 1):
+            nm = ws.cell(r, 1).value
+            if not nm:
+                continue
+            nm = str(nm).strip()
+            if nm in ("", "合计"):
+                continue
+            v = round(agg.get(nm, 0.0), 2)
+            ws.cell(r, 3).value = v
+            written[nm] = v
+        wb_f.save(xlsx)
+        print("  [渠道刷新] 已写入 C 列(最新拉取): %s" % written)
+        return written
+    except Exception as e:
+        print("  [渠道刷新] 写入失败: %s" % e)
+        return None
+
+
 def main():
     if not os.path.exists(DATA):
         print("✗ 找不到 data.json，请先运行 calc_data.py")
@@ -197,6 +244,10 @@ def main():
         print("✗ 找不到表格: %s" % XLSX)
         return 1
 
+    # Step A：最新拉取——先复算最新完成额写入渠道挂账 sheet C 列（落表）
+    refresh_qudao_done(XLSX)
+
+    # Step B：重新读取（含最新写入的 C 列）做合并
     wb = openpyxl.load_workbook(XLSX, data_only=True)
     wb_f = openpyxl.load_workbook(XLSX, data_only=False)
     qd = bd.read_qudao(wb, wb_f)
