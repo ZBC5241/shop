@@ -46,9 +46,23 @@ def num(v):
 
 
 def data_day_of(tsv):
+    """取『当日正销额>0』的最大出库日期，作为日报数据日。
+
+    避开纯退货/冲账日（如 8-17 只有 2 行负金额退货，不应作为营业日报日）。
+    金额列 M(索引12) 求和 > 0 的日期才入选。
+    """
+    import collections
     rows = list(csv.reader(open(tsv, encoding="utf-8"), delimiter="\t"))
-    dates = [r[2][:10] for r in rows[1:] if len(r) > 2 and r[2]]
-    return max(dates) if dates else None
+    sales = collections.defaultdict(float)
+    for r in rows[1:]:
+        if len(r) > 2 and r[2]:
+            try:
+                m = float(str(r[12]).replace(",", ""))
+            except Exception:
+                m = 0.0
+            sales[r[2][:10]] += m
+    cand = [d for d, m in sales.items() if m > 0]
+    return max(cand) if cand else None
 
 
 def write_rxs(xlsx, tsv, day):
@@ -75,20 +89,12 @@ def write_rxs(xlsx, tsv, day):
 
 
 def recalc_xlsx(xlsx):
-    """用真实引擎重算整本。优先 soffice，否则 Excel。返回 True/False。"""
-    # 1) LibreOffice headless（若有）
-    for bin_ in ("soffice", "libreoffice"):
-        p = shutil.which(bin_)
-        if p:
-            try:
-                subprocess.run([p, "--headless", "--calc", "--convert-to", "xlsx",
-                                "--outdir", os.path.dirname(xlsx), xlsx],
-                               check=True, timeout=120,
-                               stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-                return True
-            except Exception:
-                pass
-    # 2) Microsoft Excel via AppleScript（macOS）
+    """尽力用 Excel 触发表格重算（让用户打开文件时区块值正确），但【不作为 data.json 数据来源】。
+
+    注意：曾用 soffice --convert-to 同名覆盖原文件，在 macOS 上会把 RXS 写乱（回到旧数据），
+    已弃用。data.json 当日达成一律由 py_calc_block() 的 Python 口径计算，与表格公式等价。
+    此处仅可选触发 Excel 重算表格显示，失败不影响日报数据。
+    """
     scpt = '''
     set f to POSIX file "%s"
     tell application "Microsoft Excel"
@@ -104,12 +110,12 @@ def recalc_xlsx(xlsx):
                        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         return True
     except Exception as e:
-        sys.stderr.write("  [警告] Excel 重算失败: %s\n" % e)
+        sys.stderr.write("  [提示] Excel 触发重算不可用（无 GUI），不影响日报：%s\n" % e)
         return False
 
 
 def read_block(xlsx):
-    """读「今日达成」区块刷新值（data_only）。返回 (labels, per_person, total, sales_by, sales_total)。"""
+    """（保留备用）读「今日达成」区块缓存值（data_only）。"""
     import openpyxl
     wb = openpyxl.load_workbook(xlsx, data_only=True)
     ws = wb[BLOCK_SHEET]
@@ -126,7 +132,6 @@ def read_block(xlsx):
     for c in BLOCK_COLS:
         v = ws.cell(TOTAL_ROW, c).value
         total[labels[c - 2]] = 0.0 if v is None else float(v)
-    # 销额（区块无此行）：RXS 金额列(M,13) 按业务员合计
     rx = wb["RXS"]
     sales_total = 0.0
     sales_by = {}
@@ -137,6 +142,31 @@ def read_block(xlsx):
             sales_total += m
             sales_by[p] = sales_by.get(p, 0.0) + m
     return labels, per_person, total, sales_by, sales_total
+
+
+# 13 品类标签（与《李家村销售》B26:N26 一致）
+CAT_LABELS = ["手机", "毛利", "增值", "智慧办公", "音频穿戴", "HD", "会员",
+              "回收", "贴膜", "电信积分", "滞销", "摄影课", "优享/会员"]
+
+
+def py_calc_block(tsv, day):
+    """Python 复刻「今日达成」区块公式口径，返回 (labels, per_person, total, sales_by, sales_total)。
+
+    复用 calc_data.calc_daily（SUMIFS 口径，已验证与表格公式一致），并补齐 calc_daily 漏掉的『摄影课』。
+    数据源是 TSV 当日行，与表格 RXS 同源，结果等价。
+    """
+    import calc_data as bd
+    rows = bd.load_tsv(tsv)
+    tr = [r for r in rows if r[2][:10] == day]
+    block = {}
+    for p in PEOPLE:
+        v = bd.calc_daily(tr, p, CAT_LABELS)   # 含销额(=M列)
+        v["摄影课"] = bd.sumifs(tr, "I", ("P", p), ("G", "*大师课*"), ("N", ">0"))
+        block[p] = v
+    total = {k: sum(block[p].get(k, 0.0) for p in PEOPLE) for k in CAT_LABELS}
+    sales_total = sum(block[p].get("销额", 0.0) for p in PEOPLE)
+    sales_by = {p: block[p].get("销额", 0.0) for p in PEOPLE}
+    return CAT_LABELS, block, total, sales_by, sales_total
 
 
 def main():
@@ -160,15 +190,12 @@ def main():
     n = write_rxs(a.xlsx, a.tsv, day)
     print("  ✓ 已写 RXS 当日明细 %d 行（备份 %s）" % (n, os.path.basename(bak)))
 
-    ok = True
+    # 真实引擎（Excel）仅尽力触发表格显示重算，不作为数据来源
     if not a.no_excel:
-        ok = recalc_xlsx(a.xlsx)
-        if ok:
-            print("  ✓ Excel/soffice 已重算整本")
-        else:
-            print("  [警告] 真实引擎重算不可用，区块值可能非最新")
+        recalc_xlsx(a.xlsx)
 
-    labels, per_person, total, sales_by, sales_total = read_block(a.xlsx)
+    # 当日达成一律用 Python 口径（与表格公式等价，稳定可复现）
+    labels, per_person, total, sales_by, sales_total = py_calc_block(a.tsv, day)
     store_daily = dict(total)
     store_daily["销额"] = sales_total
 

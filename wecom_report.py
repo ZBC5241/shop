@@ -191,12 +191,10 @@ def build_markdown_v2(d):
         return t / wd if wd else 0
 
     def rate(done, task):
-        return (done / task * 100) if task else 0
+        return (done / task) if task else 0
 
-    label = meta.get("todayLabel", today)
-    # 今天未上账时（isToday=False），标题跟随实际数据日期，避免"标题今天、数据昨天"错位
-    if not meta.get("isToday", False) and today:
-        label = today[5:] if len(today) == 10 else today
+    # 标题日期永远跟随真实数据日（meta.date），避免与内容错位
+    label = today[5:] if len(today) == 10 else (meta.get("todayLabel") or today)
     ftime = meta.get("fetchTime", "")
 
     L = []
@@ -214,41 +212,41 @@ def build_markdown_v2(d):
     L.append('<font color="comment">更新 {} ｜ 以已上账为准</font>'.format(ftime))
     L.append("")
 
-    L.append("🌟 今日总览")
-    L.append("销额　{:.0f}".format(amt))
-    L.append("毛利　{:.0f}".format(gp))
-    L.append("增值　{:.0f}".format(va))
-    L.append("手机　{:.0f}台".format(phone))
+    L.append("**一、今日核心**")
+    L.append("销额 {} ｜ 毛利 {} ｜ 增值 {} ｜ 手机 {}台".format(
+        "{:.0f}".format(amt), "{:.0f}".format(gp), "{:.0f}".format(va), "{:.0f}".format(phone)))
     L.append("")
 
-    L.append("📈 板块达成（当日任务）")
+    L.append("**二、板块任务达成**")
     blocks = [
-        ("手机", phone, dtask("手机"), "台"),
-        ("增值", va, dtask("增值"), ""),
-        ("毛利", gp, dtask("毛利"), ""),
-        ("销额", amt, dtask("销额"), ""),
+        ("销额", amt, dtask("销额")),
+        ("毛利", gp, dtask("毛利")),
+        ("手机", phone, dtask("手机")),
+        ("增值", va, dtask("增值")),
     ]
-    for name, done, task, unit in blocks:
+    for name, done, task in blocks:
         r = rate(done, task)
         if name == "手机":
-            L.append("{}　今日 {:.0f}台 ／ 任务 {:.0f}台 ／ 达成 {:.0f}%".format(name, done, task, r))
+            L.append("· {}　{:.0f}台 / {:.0f}台 → {}".format(name, done, task, pct(r)))
         else:
-            L.append("{}　今日 {:.0f} ／ 任务 {:.0f} ／ 达成 {:.0f}%".format(name, done, task, r))
+            L.append("· {}　{:.0f} / {:.0f} → {}".format(name, done, task, pct(r)))
     L.append("")
 
-    # 当日品类达成（按《李家村销售》今日达成区块 13 品类字段）
-    L.append("🏷️ 当日品类达成 · 按《李家村销售》公式")
+    # 三、当日品类达成（按《李家村销售》今日达成区块 13 品类字段，全量展示）
+    L.append("**三、当日品类达成 · 按《李家村销售》公式**")
     _cat_order = ["手机", "毛利", "增值", "智慧办公", "音频穿戴", "HD", "会员",
                   "回收", "贴膜", "电信积分", "滞销", "摄影课", "优享/会员"]
-    _cat_lines = []
+    _cat_parts = []
     for k in _cat_order:
         v = dd.get(k, 0) or 0
-        if v != 0:
-            _cat_lines.append("{} {:.0f}".format(k, v))
-    L.append("　".join(_cat_lines) if _cat_lines else "（暂无）")
+        if k == "手机":
+            _cat_parts.append("{} {}台".format(k, "{:.0f}".format(v)))
+        else:
+            _cat_parts.append("{} {}".format(k, "{:.0f}".format(v)))
+    L.append("　".join(_cat_parts))
     L.append("")
 
-    L.append("👤 人员战况")
+    L.append("**四、人员战况**")
     # 开单在前
     for e in sorted(emp, key=lambda x: -(d.get("people", {}).get(x, {}).get("dailyDone", {}).get("销额", 0) or 0)):
         pd = d.get("people", {}).get(e, {}).get("dailyDone", {})
@@ -258,10 +256,10 @@ def build_markdown_v2(d):
         if e_amt == 0:
             L.append("{}　⚠️ 挂零".format(e))
         else:
-            L.append("{}　✅ 销额 {:.0f} ／ 毛利 {:.0f} ／ {}单".format(e, e_amt, e_gp, n))
+            L.append("{}　✅ 销额 {} ／ 毛利 {} ／ {}单".format(e, "{:.0f}".format(e_amt), "{:.0f}".format(e_gp), n))
     L.append("")
 
-    # 渠道挂账（来自任务进度表独立 sheet）
+    # 五、渠道挂账（来自任务进度表独立 sheet）
     qd = read_qudao()
     if qd:
 
@@ -274,11 +272,9 @@ def build_markdown_v2(d):
             except Exception:
                 return str(s)
 
-        L.append("🏦 渠道挂账")
-        L.append("完成 {} ／ 任务 {} ／ 达成 {:.1f}%".format(
-            wan(qd["total_done"]), wan(qd["total_task"]), qd["total_rate"]))
+        L.append("**五、渠道挂账**")
+        lag = ""
         if qd["time_rate"]:
-            lag = ""
             try:
                 tr = float(str(qd["time_rate"]).replace("%", ""))
                 if 0 < tr < 1:
@@ -287,22 +283,27 @@ def build_markdown_v2(d):
                     lag = " ⚠️ 落后"
             except Exception:
                 pass
-            L.append("时间进度 {} ／ 已过 {} {}".format(
-                qd["time_date"], rate_str(qd["time_rate"]), lag))
+            L.append("完成 {} ／ 任务 {} ／ 达成 {:.1f}%　（时间进度 {}）{}".format(
+                wan(qd["total_done"]), wan(qd["total_task"]), qd["total_rate"],
+                rate_str(qd["time_rate"]), lag))
+        else:
+            L.append("完成 {} ／ 任务 {} ／ 达成 {:.1f}%".format(
+                wan(qd["total_done"]), wan(qd["total_task"]), qd["total_rate"]))
+        _peo = []
         for p in qd["people"]:
             if p["task"] == 0 and p["done"] == 0:
-                L.append("{}　⚠️ 无任务".format(p["name"]))
+                _peo.append("{} 无任务".format(p["name"]))
             elif p["done"] == 0:
-                L.append("{}　⚠️ 挂零".format(p["name"]))
+                _peo.append("{} 挂零".format(p["name"]))
             elif p["task"] == 0:
-                L.append("{}　✅ {}（无任务）".format(p["name"], wan(p["done"])))
+                _peo.append("{} {}（无任务）".format(p["name"], wan(p["done"])))
             else:
-                L.append("{}　✅ {}（{}）".format(p["name"], wan(p["done"]), rate_str(p["rate"])))
+                _peo.append("{} {}（{}）".format(p["name"], wan(p["done"]), rate_str(p["rate"])))
+        L.append("　".join(_peo))
         L.append("")
 
-    L.append("💡 复盘")
-    L.append("增值电信双低")
-    L.append("毛利率 {} 处低位".format(pct1(gm)))
+    L.append("**六、复盘**")
+    L.append("增值电信双低；毛利率 {} 处低位".format(pct1(gm)))
 
     return "\n".join(L)
 
