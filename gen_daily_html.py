@@ -187,11 +187,14 @@ def main():
           <td style="text-align:right;color:{rate_color(r)}">{r:.1%}</td>
         </tr>"""
 
-    # 每日达成摘要
+    # 每日达成摘要（按《李家村销售》今日达成区块 13 品类字段，如实展示；销额已在顶部 KPI 展示）
+    _CAT_ORDER = ["手机", "毛利", "增值", "智慧办公", "音频穿戴", "HD", "会员",
+                  "回收", "贴膜", "电信积分", "滞销", "摄影课", "优享/会员"]
+    cats_shown = [k for k in _CAT_ORDER if k in daily_done]
     daily_items = ""
-    for k, v in daily_done.items():
-        if isinstance(v, (int, float)) and v != 0:
-            daily_items += f'<span class="daily-tag">{k}: <b>¥{v:,.0f}</b></span>'
+    for k in cats_shown:
+        v = daily_done.get(k) or 0
+        daily_items += f'<span class="daily-tag">{k}: <b>{v:,.0f}</b></span>'
 
     html = f"""<!DOCTYPE html>
 <html lang="zh-CN">
@@ -283,7 +286,7 @@ def main():
 {f'''<div class="alert">⚠️ <b>毛利落后约 ¥{max(0,mli_task*time_progress - mli_done):,.0f}</b>，时间进度 {time_progress:.1%}，达成率仅 {mli_rate:.1%}，日均需 ¥{daily_need:,.0f} 才能追回</div>''' if mli_rate < time_progress else ''}
 
 <!-- 当日达成 -->
-{f'''<div class="section"><h2>当日达成</h2><div>{daily_items}</div></div>''' if daily_items else ''}
+{f'''<div class="section"><h2>当日达成 · 按《李家村销售》公式</h2><div class="daily-tags">{daily_items}</div></div>''' if daily_items else ''}
 
 <!-- 品类达成 -->
 <div class="section">

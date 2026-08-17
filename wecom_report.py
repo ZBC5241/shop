@@ -236,6 +236,18 @@ def build_markdown_v2(d):
             L.append("{}　今日 {:.0f} ／ 任务 {:.0f} ／ 达成 {:.0f}%".format(name, done, task, r))
     L.append("")
 
+    # 当日品类达成（按《李家村销售》今日达成区块 13 品类字段）
+    L.append("🏷️ 当日品类达成 · 按《李家村销售》公式")
+    _cat_order = ["手机", "毛利", "增值", "智慧办公", "音频穿戴", "HD", "会员",
+                  "回收", "贴膜", "电信积分", "滞销", "摄影课", "优享/会员"]
+    _cat_lines = []
+    for k in _cat_order:
+        v = dd.get(k, 0) or 0
+        if v != 0:
+            _cat_lines.append("{} {:.0f}".format(k, v))
+    L.append("　".join(_cat_lines) if _cat_lines else "（暂无）")
+    L.append("")
+
     L.append("👤 人员战况")
     # 开单在前
     for e in sorted(emp, key=lambda x: -(d.get("people", {}).get(x, {}).get("dailyDone", {}).get("销额", 0) or 0)):
