@@ -126,6 +126,13 @@ svg{display:block}
 .empty{padding:26px 0;text-align:center;color:var(--tx3);font-size:12px}
 
 /* ============ 店长洞察 ============ */
+/* 店长标识条（有数据才显示，空状态已提前隐藏） */
+.mgr-bar{display:flex;align-items:center;gap:6px;padding:9px 13px;margin-bottom:12px;
+  background:linear-gradient(135deg,var(--purpleDim),var(--soft));
+  border:1px solid var(--line);border-radius:var(--r);font-size:13px;color:var(--tx2);
+  box-shadow:var(--shadow-s)}
+.mgr-bar b{font-weight:800;color:var(--tx)}
+.mgr-bar .num{font-variant-numeric:tabular-nums;letter-spacing:.3px}
 /* 今日战况 */
 .bt{display:flex;gap:9px;margin-bottom:9px}
 .bt-c{flex:1;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);
@@ -1859,12 +1866,22 @@ function foot(){
 const LV_COLOR = { danger:'--red', warn:'--amber', good:'--green', mid:'--blue', none:'--gray' };
 const LV_TAG   = { danger:'急', warn:'追', good:'稳', mid:'跟得上', none:'无任务' };
 
+/* 店长标识：店长姓名固定，工号由配置常量决定（填数字即可，例如 '8821'）。
+   本标识只在"有数据"路径渲染——renderInsight 在无 insights 时已提前 return 空状态，故天然隐藏。 */
+const MANAGER_NAME = '张博晨';
+const MANAGER_ID   = '20230528';
+
 function renderInsight(){
   const I = DATA.insights;
   if(!I) return '<div class="wrap"><div class="empty">暂无洞察数据，请重新生成看板</div></div>';
   const m = DATA.meta || {};
   const tp = I.timeProgress || 0;
   let h = '<div class="wrap">';
+
+  /* 店长标识（有数据才显示） */
+  h += '<div class="mgr-bar">店长 <b>' + esc(MANAGER_NAME) + '</b>'
+     + (MANAGER_ID ? ' · 工号 <b class="num">' + esc(MANAGER_ID) + '</b>' : '')
+     + '</div>';
 
   /* ---- 1. 今日战况 ---- */
   const T = I.today || {sold:[],idle:[]};

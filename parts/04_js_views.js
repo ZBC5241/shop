@@ -341,12 +341,22 @@ function foot(){
 const LV_COLOR = { danger:'--red', warn:'--amber', good:'--green', mid:'--blue', none:'--gray' };
 const LV_TAG   = { danger:'急', warn:'追', good:'稳', mid:'跟得上', none:'无任务' };
 
+/* 店长标识：店长姓名固定，工号由配置常量决定（填数字即可，例如 '8821'）。
+   本标识只在"有数据"路径渲染——renderInsight 在无 insights 时已提前 return 空状态，故天然隐藏。 */
+const MANAGER_NAME = '张博晨';
+const MANAGER_ID   = '20230528';
+
 function renderInsight(){
   const I = DATA.insights;
   if(!I) return '<div class="wrap"><div class="empty">暂无洞察数据，请重新生成看板</div></div>';
   const m = DATA.meta || {};
   const tp = I.timeProgress || 0;
   let h = '<div class="wrap">';
+
+  /* 店长标识（有数据才显示） */
+  h += '<div class="mgr-bar">店长 <b>' + esc(MANAGER_NAME) + '</b>'
+     + (MANAGER_ID ? ' · 工号 <b class="num">' + esc(MANAGER_ID) + '</b>' : '')
+     + '</div>';
 
   /* ---- 1. 今日战况 ---- */
   const T = I.today || {sold:[],idle:[]};
