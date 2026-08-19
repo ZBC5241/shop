@@ -835,8 +835,6 @@ function personDetailHTML(name){
   const emp = (DATA.qudao && DATA.qudao.empChannel) || {};
   const rows = emp[name] || [];
   if(!rows.length) return '<div class="det-empty">该员工本期无获客渠道销售</div>';
-  let total = 0;
-  rows.forEach(r => { total += (r.amount || 0); });
   let h = '<div class="det-list">';
   rows.forEach(r => {
     if(!(r.amount > 0)) return;
@@ -849,9 +847,6 @@ function personDetailHTML(name){
       + '</div>'
       + '<div class="cd-det" data-p="' + esc(name) + '" data-c="' + esc(r.channel) + '"></div>';
   });
-  h += '<div class="det-item" style="border-top:1px dashed var(--line2);padding-top:8px;margin-top:2px">'
-    + '<div class="det-top"><span class="det-name" style="font-weight:700">合计</span>'
-    + '<span class="num" style="font-weight:700">' + moneyFull(total) + '</span></div></div>';
   h += '</div>';
   return h;
 }
