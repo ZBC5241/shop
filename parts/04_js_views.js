@@ -341,37 +341,6 @@ function foot(){
 const LV_COLOR = { danger:'--red', warn:'--amber', good:'--green', mid:'--blue', none:'--gray' };
 const LV_TAG   = { danger:'急', warn:'追', good:'稳', mid:'跟得上', none:'无任务' };
 
-/* 店长标识：店长姓名固定，工号由配置常量决定（填数字即可，例如 '8821'）。
-   本标识只在"有数据"路径渲染——renderInsight 在无 insights 时已提前 return 空状态，故天然隐藏。 */
-const MANAGER_NAME = '张博晨';
-const MANAGER_ID   = '20230528';
-
-/* 店长（张博晨）是否在数据中有记录——有则全局页头显示其标识，无则不显示 */
-function managerHasData(){
-  const D = (typeof DATA !== 'undefined' && DATA) || null;
-  if(!D) return false;
-  /* 店长个人数据存在且非空 */
-  if(D.people && D.people[MANAGER_NAME] && Object.keys(D.people[MANAGER_NAME]).length) return true;
-  /* 员工名单含店长，且整体数据有来源（非测试空壳） */
-  const emp = (D.meta && D.meta.employees) || [];
-  if(emp.indexOf(MANAGER_NAME) >= 0 && (D.meta.sourceFile || D.store)) return true;
-  /* 当日明细中存在店长记录 */
-  if((D.dayDetails || []).some(r => r.emp === MANAGER_NAME)) return true;
-  return false;
-}
-/* 同步全局页头店长芯片的显隐（render 每次切换 Tab 都会调用） */
-function updateManagerChip(){
-  const el = document.getElementById('mgrChip');
-  if(!el) return;
-  if(managerHasData()){
-    el.innerHTML = '店长 <b>' + esc(MANAGER_NAME) + '</b>'
-      + (MANAGER_ID ? ' · 工号 <b class="num">' + esc(MANAGER_ID) + '</b>' : '');
-    el.style.display = 'flex';
-  } else {
-    el.style.display = 'none';
-  }
-}
-
 function renderInsight(){
   const I = DATA.insights;
   if(!I) return '<div class="wrap"><div class="empty">暂无洞察数据，请重新生成看板</div></div>';
@@ -488,7 +457,6 @@ function renderInsight(){
 function render(){
   const m = DATA.meta || {};
   $('#storeName').textContent = m.storeName || '门店看板';
-  updateManagerChip();
   $('#dataDate').textContent  = (m.date || '')
     + (m.fetchTime ? ' · ' + m.fetchTime + ' 更新' : (m.dayTitle ? ' · ' + m.dayTitle : ''));
   const tp = m.timeProgress;
