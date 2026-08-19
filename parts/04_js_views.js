@@ -200,25 +200,49 @@ function renderDay(){
   h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>全店今日达成</b>'
      + '<span class="tail">' + esc(DATA.meta.dayTitle || DATA.meta.date) + '</span></div>';
 
-  /* 今日品类：行式展示全部品类（9个一个不少），点行下钻当天产品明细 */
-  h += '<div class="strip-lab">今日品类 · 点开看当天明细</div><div class="rows">';
-  CAT_ORDER.forEach(c => {
+  /* 今日品类：15个品类横向柱图（9品类按金额 + 6附加按件数），点柱下钻当天明细 */
+  const dayDone = DATA.store.dailyDone || {};
+  const CATS_9 = ['手机','PC','平板','穿戴','音频','HD','智慧办公','音频穿戴','增值'];
+  const SPECIALS = [['会员','单'],['回收','单'],['贴膜','单'],['电信积分','分'],['滞销','台'],['优享/会员','单']];
+  const g9 = CATS_9.map(c => {
     const items = groups[c] || [];
-    const qty = items.reduce((s,r) => s + (r.qty || 0), 0);
-    const amt = items.reduce((s,r) => s + (r.amount || 0), 0);
-    const pf  = items.reduce((s,r) => s + (r.profit || 0), 0);
-    const has = items.length > 0;
-    const neg = pf < 0;
-    h += '<div class="row pp-click' + (neg ? ' warn' : '') + (has ? '' : ' zero-row') + '" onclick="toggleDayCat(\'' + esc(c) + '\')">'
+    return { name:c, val: items.reduce((s,r) => s + (r.amount || 0), 0),
+             qty: items.reduce((s,r) => s + (r.qty || 0), 0),
+             pf:  items.reduce((s,r) => s + (r.profit || 0), 0) };
+  });
+  const gS = SPECIALS.map(([c,u]) => ({ name:c, val: isNum(dayDone[c]) ? dayDone[c] : 0, unit:u }));
+  const m9 = Math.max.apply(null, g9.map(v => v.val).concat([1]));
+  const mS = Math.max.apply(null, gS.map(v => v.val).concat([1]));
+
+  h += '<div class="strip-lab">今日品类 · 共15个 · 点柱看当天明细</div><div class="rows">';
+  g9.forEach(cv => {
+    const pct = cv.val ? Math.max(cv.val / m9 * 100, 2) : 0;
+    const neg = cv.pf < 0;
+    h += '<div class="row pp-click' + (neg ? ' warn' : '') + (cv.val ? '' : ' zero-row') + '" onclick="toggleDayCat(\'' + esc(cv.name) + '\')">'
       + '<div class="row-t">'
-        + '<span class="row-n">' + esc(c) + '</span>'
-        + '<span class="row-p r-' + (has ? (neg ? 'low' : 'good') : 'na') + '">' + qty + ' 件</span>'
-        + '<span class="row-v num"><b>' + (has ? moneyFull(amt) : '—') + '</b></span>'
+        + '<span class="row-n">' + esc(cv.name) + '</span>'
+        + '<span class="row-p r-' + (cv.val ? (neg ? 'low' : 'good') : 'na') + '">' + cv.qty + ' 件</span>'
+        + '<span class="row-v num"><b>' + (cv.val ? moneyShort(cv.val) : '—') + '</b></span>'
         + '<span class="chev">' + ic('chev') + '</span>'
       + '</div>'
-      + '<div class="row-g"><span class="' + (neg ? 'stat-low' : '') + '">毛利 ' + (has ? moneyFull(pf) : '—') + '</span>'
-      + '<em style="font-style:normal">毛利率 ' + (has && amt ? (pf / amt * 100).toFixed(1) + '%' : '—') + '</em></div>'
-      + '<div class="dcdet-det" data-cat="' + esc(c) + '"></div>'
+      + '<div class="cat-chart"><i style="width:' + pct.toFixed(1) + '%"></i></div>'
+      + '<div class="row-g"><span class="' + (neg ? 'stat-low' : '') + '">毛利 ' + (cv.val ? moneyShort(cv.pf) : '—') + '</span>'
+      + '<em style="font-style:normal">毛利率 ' + (cv.val ? (cv.pf / cv.val * 100).toFixed(1) + '%' : '—') + '</em></div>'
+      + '<div class="dcdet-det" data-cat="' + esc(cv.name) + '"></div>'
+      + '</div>';
+  });
+  h += '<div class="strip-lab" style="margin:8px 2px 6px">附加品类</div>';
+  gS.forEach(cv => {
+    const pct = cv.val ? Math.max(cv.val / mS * 100, 2) : 0;
+    h += '<div class="row pp-click' + (cv.val ? '' : ' zero-row') + '" onclick="toggleDayCat(\'' + esc(cv.name) + '\')">'
+      + '<div class="row-t">'
+        + '<span class="row-n">' + esc(cv.name) + '</span>'
+        + '<span class="row-p r-' + (cv.val ? 'good' : 'na') + '">' + cnt(cv.val) + cv.unit + '</span>'
+        + '<span class="row-v num"><b>' + (cv.val ? cnt(cv.val) : '—') + '</b></span>'
+        + '<span class="chev">' + ic('chev') + '</span>'
+      + '</div>'
+      + '<div class="cat-chart"><i style="width:' + pct.toFixed(1) + '%"></i></div>'
+      + '<div class="dcdet-det" data-cat="' + esc(cv.name) + '"></div>'
       + '</div>';
   });
   h += '</div>';

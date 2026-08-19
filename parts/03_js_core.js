@@ -320,8 +320,8 @@ function toggleDayCat(cat){
   const open = det.classList.contains('open');
   document.querySelectorAll('.dcdet-det.open').forEach(x => { if(x !== det){ x.classList.remove('open'); x.innerHTML = ''; }});
   if(open){ det.classList.remove('open'); det.innerHTML = ''; return; }
-  const items = (DATA.dayDetails || []).filter(r => (r.cat || '其他') === cat);
-  det.innerHTML = items.length ? dayCatHTML(cat, items) : '<div class="det-empty">该品类今日暂无明细</div>';
+  const items = dayMetricItems(cat);
+  det.innerHTML = (items && items.length) ? dayCatHTML(cat, items) : '<div class="det-empty">该品类今日暂无明细</div>';
   det.classList.add('open');
 }
 
@@ -695,7 +695,13 @@ function dayMetricItems(k){
                  'HD':['HD'],'智慧办公':['PC','平板'],'音频穿戴':['穿戴','音频'],'增值':['增值'] };
   if(CATS[k]) return dd.filter(r => CATS[k].indexOf(r.cat) !== -1);
   if(k === '毛利' || k === '销额') return dd.slice();
-  const rx = { '贴膜':/膜|套包/, '回收':/回收/, '会员':/Care|会员|星联优享/, '电信积分':/入网/ }[k];
+  if(k === '滞销'){
+    const khj = ["01.001.010.00","01.001.011.002","01.001.012.00","01.001.013.0","01.001.031.002",
+                 "01.001.032.002","01.001.043.002","01.001.044.002","01.001.001.0","01.001.002.0","01.001.003"];
+    return dd.filter(r => khj.some(p => r.sku.indexOf(p) === 0));
+  }
+  const rx = { '贴膜':/膜|套包/, '回收':/回收/, '会员':/Care|会员|星联优享/,
+               '电信积分':/入网/, '优享/会员':/星联优享|优享/ }[k];
   if(rx) return dd.filter(r => (k === '贴膜' ? (r.amount > 0 && rx.test(r.product)) : rx.test(r.product)));
   return null;
 }

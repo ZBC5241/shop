@@ -379,6 +379,9 @@ svg{display:block}
 .cat-p{font-size:9.5px;color:var(--green);margin-top:1px;font-weight:600}
 /* 今日品类行式：无销售品类置灰 */
 .row.zero-row{opacity:.45}
+/* 今日品类横向柱 */
+.cat-chart{height:6px;border-radius:3px;background:var(--soft);overflow:hidden;margin-top:7px}
+.cat-chart i{display:block;height:100%;border-radius:3px;background:var(--grad);transform-origin:left;animation:barGrow .9s cubic-bezier(.22,1,.36,1) both}
 .day{
   background:var(--panel);border:1px solid var(--line);border-radius:12px;
   padding:10px 8px;text-align:center;box-shadow:var(--shadow-s);
@@ -1025,8 +1028,8 @@ function toggleDayCat(cat){
   const open = det.classList.contains('open');
   document.querySelectorAll('.dcdet-det.open').forEach(x => { if(x !== det){ x.classList.remove('open'); x.innerHTML = ''; }});
   if(open){ det.classList.remove('open'); det.innerHTML = ''; return; }
-  const items = (DATA.dayDetails || []).filter(r => (r.cat || '其他') === cat);
-  det.innerHTML = items.length ? dayCatHTML(cat, items) : '<div class="det-empty">该品类今日暂无明细</div>';
+  const items = dayMetricItems(cat);
+  det.innerHTML = (items && items.length) ? dayCatHTML(cat, items) : '<div class="det-empty">该品类今日暂无明细</div>';
   det.classList.add('open');
 }
 
@@ -1400,7 +1403,13 @@ function dayMetricItems(k){
                  'HD':['HD'],'智慧办公':['PC','平板'],'音频穿戴':['穿戴','音频'],'增值':['增值'] };
   if(CATS[k]) return dd.filter(r => CATS[k].indexOf(r.cat) !== -1);
   if(k === '毛利' || k === '销额') return dd.slice();
-  const rx = { '贴膜':/膜|套包/, '回收':/回收/, '会员':/Care|会员|星联优享/, '电信积分':/入网/ }[k];
+  if(k === '滞销'){
+    const khj = ["01.001.010.00","01.001.011.002","01.001.012.00","01.001.013.0","01.001.031.002",
+                 "01.001.032.002","01.001.043.002","01.001.044.002","01.001.001.0","01.001.002.0","01.001.003"];
+    return dd.filter(r => khj.some(p => r.sku.indexOf(p) === 0));
+  }
+  const rx = { '贴膜':/膜|套包/, '回收':/回收/, '会员':/Care|会员|星联优享/,
+               '电信积分':/入网/, '优享/会员':/星联优享|优享/ }[k];
   if(rx) return dd.filter(r => (k === '贴膜' ? (r.amount > 0 && rx.test(r.product)) : rx.test(r.product)));
   return null;
 }
@@ -1639,25 +1648,49 @@ function renderDay(){
   h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>全店今日达成</b>'
      + '<span class="tail">' + esc(DATA.meta.dayTitle || DATA.meta.date) + '</span></div>';
 
-  /* 今日品类：行式展示全部品类（9个一个不少），点行下钻当天产品明细 */
-  h += '<div class="strip-lab">今日品类 · 点开看当天明细</div><div class="rows">';
-  CAT_ORDER.forEach(c => {
+  /* 今日品类：15个品类横向柱图（9品类按金额 + 6附加按件数），点柱下钻当天明细 */
+  const dayDone = DATA.store.dailyDone || {};
+  const CATS_9 = ['手机','PC','平板','穿戴','音频','HD','智慧办公','音频穿戴','增值'];
+  const SPECIALS = [['会员','单'],['回收','单'],['贴膜','单'],['电信积分','分'],['滞销','台'],['优享/会员','单']];
+  const g9 = CATS_9.map(c => {
     const items = groups[c] || [];
-    const qty = items.reduce((s,r) => s + (r.qty || 0), 0);
-    const amt = items.reduce((s,r) => s + (r.amount || 0), 0);
-    const pf  = items.reduce((s,r) => s + (r.profit || 0), 0);
-    const has = items.length > 0;
-    const neg = pf < 0;
-    h += '<div class="row pp-click' + (neg ? ' warn' : '') + (has ? '' : ' zero-row') + '" onclick="toggleDayCat(\'' + esc(c) + '\')">'
+    return { name:c, val: items.reduce((s,r) => s + (r.amount || 0), 0),
+             qty: items.reduce((s,r) => s + (r.qty || 0), 0),
+             pf:  items.reduce((s,r) => s + (r.profit || 0), 0) };
+  });
+  const gS = SPECIALS.map(([c,u]) => ({ name:c, val: isNum(dayDone[c]) ? dayDone[c] : 0, unit:u }));
+  const m9 = Math.max.apply(null, g9.map(v => v.val).concat([1]));
+  const mS = Math.max.apply(null, gS.map(v => v.val).concat([1]));
+
+  h += '<div class="strip-lab">今日品类 · 共15个 · 点柱看当天明细</div><div class="rows">';
+  g9.forEach(cv => {
+    const pct = cv.val ? Math.max(cv.val / m9 * 100, 2) : 0;
+    const neg = cv.pf < 0;
+    h += '<div class="row pp-click' + (neg ? ' warn' : '') + (cv.val ? '' : ' zero-row') + '" onclick="toggleDayCat(\'' + esc(cv.name) + '\')">'
       + '<div class="row-t">'
-        + '<span class="row-n">' + esc(c) + '</span>'
-        + '<span class="row-p r-' + (has ? (neg ? 'low' : 'good') : 'na') + '">' + qty + ' 件</span>'
-        + '<span class="row-v num"><b>' + (has ? moneyFull(amt) : '—') + '</b></span>'
+        + '<span class="row-n">' + esc(cv.name) + '</span>'
+        + '<span class="row-p r-' + (cv.val ? (neg ? 'low' : 'good') : 'na') + '">' + cv.qty + ' 件</span>'
+        + '<span class="row-v num"><b>' + (cv.val ? moneyShort(cv.val) : '—') + '</b></span>'
         + '<span class="chev">' + ic('chev') + '</span>'
       + '</div>'
-      + '<div class="row-g"><span class="' + (neg ? 'stat-low' : '') + '">毛利 ' + (has ? moneyFull(pf) : '—') + '</span>'
-      + '<em style="font-style:normal">毛利率 ' + (has && amt ? (pf / amt * 100).toFixed(1) + '%' : '—') + '</em></div>'
-      + '<div class="dcdet-det" data-cat="' + esc(c) + '"></div>'
+      + '<div class="cat-chart"><i style="width:' + pct.toFixed(1) + '%"></i></div>'
+      + '<div class="row-g"><span class="' + (neg ? 'stat-low' : '') + '">毛利 ' + (cv.val ? moneyShort(cv.pf) : '—') + '</span>'
+      + '<em style="font-style:normal">毛利率 ' + (cv.val ? (cv.pf / cv.val * 100).toFixed(1) + '%' : '—') + '</em></div>'
+      + '<div class="dcdet-det" data-cat="' + esc(cv.name) + '"></div>'
+      + '</div>';
+  });
+  h += '<div class="strip-lab" style="margin:8px 2px 6px">附加品类</div>';
+  gS.forEach(cv => {
+    const pct = cv.val ? Math.max(cv.val / mS * 100, 2) : 0;
+    h += '<div class="row pp-click' + (cv.val ? '' : ' zero-row') + '" onclick="toggleDayCat(\'' + esc(cv.name) + '\')">'
+      + '<div class="row-t">'
+        + '<span class="row-n">' + esc(cv.name) + '</span>'
+        + '<span class="row-p r-' + (cv.val ? 'good' : 'na') + '">' + cnt(cv.val) + cv.unit + '</span>'
+        + '<span class="row-v num"><b>' + (cv.val ? cnt(cv.val) : '—') + '</b></span>'
+        + '<span class="chev">' + ic('chev') + '</span>'
+      + '</div>'
+      + '<div class="cat-chart"><i style="width:' + pct.toFixed(1) + '%"></i></div>'
+      + '<div class="dcdet-det" data-cat="' + esc(cv.name) + '"></div>'
       + '</div>';
   });
   h += '</div>';
