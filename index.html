@@ -1466,7 +1466,7 @@ function renderQudao(){
   });
 })();
 
-/* 全店今日达成大模块：点击展开该指标/品类的当天逐单明细 */
+/* 今日明细：点击展开某指标/品类的当天逐单明细（供今日品类行下钻调用） */
 function dayMetricItems(k){
   const dd = DATA.dayDetails || [];
   const CATS = { '手机':['手机'],'PC':['PC'],'平板':['平板'],'穿戴':['穿戴'],'音频':['音频'],
@@ -1750,14 +1750,11 @@ function renderDay(){
   let h = '<div class="wrap">';
   h += postingBanner();
 
-  /* 第1层：全店今日达成 = 品类横排（全品类）+ 每日任务网格，合二为一 */
+  /* 今日图表 → 今日品类 → 每日任务：三段平铺，去掉冗余的"全店今日达成"大标题 */
   const dd = DATA.dayDetails || [];
-  const CAT_ORDER = ['手机','PC','平板','穿戴','音频','HD','智慧办公','音频穿戴','增值','其他'];
-  const groups = {};
-  dd.forEach(r => { const c = r.cat || '其他'; (groups[c] = groups[c] || []).push(r); });
 
-  h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>全店今日达成</b>'
-     + '<span class="tail">' + esc(DATA.meta.dayTitle || DATA.meta.date) + '</span></div>';
+  /* 今日图表：品类毛利占比(Donut) + 全员增值排行(Bar)，独立成节 */
+  h += dayChartsHTML(dd, DATA.meta);
 
   /* 今日品类：统一排序（毛利/手机/增值置顶，其余按毛利降序），大数字=毛利合计 */
   const dayDone = DATA.store.dailyDone || {};
@@ -1788,9 +1785,8 @@ function renderDay(){
   });
   const maxV = Math.max.apply(null, items15.map(v => v.pf).concat([1]));
 
-  /* 今日图表：品类毛利占比(Donut) + 全员增值排行(Bar) */
-  h += dayChartsHTML(dd, DATA.meta);
-
+  /* 今日品类 + 每日任务合为一节，用 strip-lab 自然分两段 */
+  h += '<div class="sec">';
   h += '<div class="strip-lab">今日品类 · 共' + items15.length + '个 · 毛利合计 ' + moneyShort(isNum(dayDone['毛利']) ? dayDone['毛利'] : 0) + ' · 点柱看当天明细</div><div class="rows">';
   items15.forEach(cv => {
     const pct = cv.pf ? Math.max(cv.pf / maxV * 100, 2) : 0;

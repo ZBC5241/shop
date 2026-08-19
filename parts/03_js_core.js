@@ -735,7 +735,7 @@ function renderQudao(){
   });
 })();
 
-/* 全店今日达成大模块：点击展开该指标/品类的当天逐单明细 */
+/* 今日明细：点击展开某指标/品类的当天逐单明细（供今日品类行下钻调用） */
 function dayMetricItems(k){
   const dd = DATA.dayDetails || [];
   const CATS = { '手机':['手机'],'PC':['PC'],'平板':['平板'],'穿戴':['穿戴'],'音频':['音频'],
