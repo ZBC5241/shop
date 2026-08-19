@@ -391,6 +391,32 @@ svg{display:block}
 .day:active{transform:scale(.95)}
 .day-det{display:none;padding:2px 2px 10px}
 .day-det.open{display:block;animation:detIn .22s ease}
+
+/* 今日图表区（叠加图表风格：Gauge / Donut / 横向 Bar） */
+.day-charts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.dc-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:12px;box-shadow:var(--shadow-s)}
+.dc-card.dc-gauge{grid-column:span 2}
+.dc-card svg{max-width:100%;height:auto}
+.dc-h{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--tx3);margin-bottom:8px}
+.dc-h svg{width:15px;height:15px;color:var(--brand,#6366f1)}
+.gauge-wrap{position:relative;width:96px;height:96px;margin:0 auto}
+.gauge-c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
+.gauge-c b{font-size:22px;font-weight:800;color:var(--tx);line-height:1}
+.gauge-c span{font-size:10px;color:var(--tx3);margin-top:2px}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}
+.kpi{text-align:center;background:var(--soft);border-radius:8px;padding:6px 2px}
+.kpi span{display:block;font-size:10px;color:var(--tx3);margin-bottom:2px}
+.kpi b{font-size:14px;font-weight:800;color:var(--tx)}
+.legend{display:flex;flex-wrap:wrap;gap:5px 10px;margin-top:8px;justify-content:center}
+.lg{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;color:var(--tx3)}
+.lg i{width:9px;height:9px;border-radius:3px;display:inline-block}
+.hbar{display:flex;flex-direction:column;gap:7px;margin-top:4px}
+.hb-row{display:grid;grid-template-columns:54px 1fr auto;align-items:center;gap:8px;font-size:11.5px}
+.hb-n{color:var(--tx);font-weight:600}
+.hb-track{flex:1;height:14px;background:var(--soft);border-radius:7px;overflow:hidden}
+.hb-track i{display:block;height:100%;border-radius:7px;transition:width .9s cubic-bezier(.22,1,.36,1)}
+.hb-v{font-weight:800;color:var(--tx);font-variant-numeric:tabular-nums}
+@media(max-width:440px){.day-charts{grid-template-columns:1fr}.dc-card.dc-gauge{grid-column:span 1}}
 .day-l{font-size:10.5px;color:var(--tx3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .day-v{font-size:clamp(16px,1.1rem + .3vw,21px);font-weight:800;margin-top:3px;letter-spacing:-.3px}
 .day-g{font-size:10px;margin-top:2px;font-weight:700}
