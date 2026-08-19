@@ -146,10 +146,10 @@ td:first-child,th:first-child{text-align:left}
       <div class="bar"><i style="width:39.1%;background:#fac858"></i></div></div><div class="kpi"><div class="kpi-t">手机(台)</div>
       <div class="kpi-v">72</div>
       <div class="kpi-s">目标 170 · 达成 <b style="color:#fac858">42.4%</b></div>
-      <div class="bar"><i style="width:42.4%;background:#fac858"></i></div></div><div class="kpi"><div class="kpi-t">增值(元)</div>
-      <div class="kpi-v">22,206</div>
-      <div class="kpi-s">目标 57,000 · 达成 <b style="color:#fac858">39.0%</b></div>
-      <div class="bar"><i style="width:39.0%;background:#fac858"></i></div></div><div class="kpi"><div class="kpi-t">音频穿戴(台)</div>
+      <div class="bar"><i style="width:42.4%;background:#fac858"></i></div></div><div class="kpi"><div class="kpi-t">增值毛利(元)</div>
+      <div class="kpi-v">19,415</div>
+      <div class="kpi-s">目标 57,000 · 达成 <b style="color:#fac858">34.1%</b></div>
+      <div class="bar"><i style="width:34.1%;background:#fac858"></i></div></div><div class="kpi"><div class="kpi-t">音频穿戴(台)</div>
       <div class="kpi-v">93</div>
       <div class="kpi-s">目标 137 · 达成 <b style="color:#91cc75">67.9%</b></div>
       <div class="bar"><i style="width:67.9%;background:#91cc75"></i></div></div></div>
@@ -157,15 +157,15 @@ td:first-child,th:first-child{text-align:left}
   <div class="section"><h2>销售团队绩效</h2>
     <table><tr><th>姓名</th><th>销额(元)</th><th>目标</th><th>达成率</th><th>手机(台)</th><th>增值(元)</th></tr><tr><td>邵乐乐</td><td>74,057</td><td>400,000</td>
       <td class="bad">18.5%</td><td>12</td>
-      <td>2,506</td></tr><tr><td>杨丽华</td><td>208,903</td><td>400,000</td>
+      <td>2,158</td></tr><tr><td>杨丽华</td><td>208,903</td><td>400,000</td>
       <td class="good">52.2%</td><td>25</td>
-      <td>6,672</td></tr><tr><td>李泽</td><td>162,669</td><td>400,000</td>
+      <td>6,111</td></tr><tr><td>李泽</td><td>162,669</td><td>400,000</td>
       <td class="mid">40.7%</td><td>19</td>
-      <td>6,785</td></tr><tr><td>陈超磊</td><td>151,476</td><td>400,000</td>
+      <td>6,057</td></tr><tr><td>陈超磊</td><td>151,476</td><td>400,000</td>
       <td class="mid">37.9%</td><td>16</td>
-      <td>5,145</td></tr><tr><td>张博晨</td><td>1,098</td><td>0</td>
+      <td>4,055</td></tr><tr><td>张博晨</td><td>1,098</td><td>0</td>
       <td class="bad">0.0%</td><td>0</td>
-      <td>1,098</td></tr></table></div>
+      <td>1,033</td></tr></table></div>
   <div class="section"><h2>风险预警（达成率偏低品类）</h2><div class="warn"><b>HD 智慧屏</b> 达成 0.0% · 缺口 2台
       · 日均需 1台</div><div class="warn"><b>平板</b> 达成 17.6% · 缺口 28台
       · 日均需 3台 · 已冷却6天</div><div class="warn"><b>音频</b> 达成 27.0% · 缺口 27件
@@ -173,7 +173,7 @@ td:first-child,th:first-child{text-align:left}
   <div class="section"><h2>改进建议</h2><div class="advice">截至 8/18，时间已过 58.1%，但销额只跑出 37.4%、毛利 39.1%，
 进度明显慢于时间轴——不是差一点，是差一截。平板只到 23.5%、HD 还是 0、音频 43.2%，
 这几个品类基本是靠杨丽华、李泽、陈超磊三个人在扛。后面 13 天要补齐缺口，光指望自然客流不现实，得主动推。
-增值服务率 39.0% 也偏低，客户买单后顺手搭个 Care+、贴膜、配件，是最容易捡的增量，别放过。
+增值服务率 34.1% 也偏低，客户买单后顺手搭个 Care+、贴膜、配件，是最容易捡的增量，别放过。
 具体动作：平板/HD/音频按人排目标，谁冷了几天就谁先动；渠道挂账盯紧个人完成率，掉队的当天拉一把；
 会员结单按口径（客户买单后店员在玲珑接单并扫会员码）做实，别让分白白丢。</div></div>
   <div class="foot">数据来源：李家村8月任务进度_已更新.xlsx · 交互图表由 Smart Charts 生成</div>
@@ -780,7 +780,7 @@ c_cat_gross.setOption({
   ]
 });
 window.addEventListener('resize',function(){c_cat_gross.resize();});var c_health=echarts.init(document.getElementById('c_health'));
-c_health.setOption({"series": [{"type": "gauge", "radius": "80%", "center": ["50%", "58%"], "startAngle": 210, "endAngle": -30, "axisLine": {"lineStyle": {"width": 16, "color": [[0.4, "#ee6666"], [0.7, "#fac858"], [1, "#91cc75"]]}}, "pointer": {"width": 5}, "detail": {"fontSize": 16, "formatter": "{value}%", "offsetCenter": [0, "70%"]}, "data": [{"value": 13.4, "name": "毛利率"}, {"value": 39.0, "name": "增值率"}], "title": {"offsetCenter": [0, "95%"], "fontSize": 12}, "max": 50}]});
+c_health.setOption({"series": [{"type": "gauge", "radius": "80%", "center": ["50%", "58%"], "startAngle": 210, "endAngle": -30, "axisLine": {"lineStyle": {"width": 16, "color": [[0.4, "#ee6666"], [0.7, "#fac858"], [1, "#91cc75"]]}}, "pointer": {"width": 5}, "detail": {"fontSize": 16, "formatter": "{value}%", "offsetCenter": [0, "70%"]}, "data": [{"value": 13.4, "name": "毛利率"}, {"value": 34.1, "name": "增值率"}], "title": {"offsetCenter": [0, "95%"], "fontSize": 12}, "max": 50}]});
 window.addEventListener('resize',function(){c_health.resize();});
 
 var floatCharts={};
