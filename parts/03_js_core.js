@@ -217,19 +217,25 @@ function personDetailHTML(name){
   return h;
 }
 
-/* 二级下钻：渠道 → 单品明细（DATA.qudao.channelItems[员工][渠道]） */
+/* 二级下钻：渠道 → 单品明细（DATA.qudao.channelItems[员工][渠道]，含毛利/成本/原价/毛利率）
+   渲染样式与「品类达成明细」一致：商品名+日期 顶行，原价/折扣/毛利/毛利率/成本 数值行。 */
 function channelDetailHTML(person, channel){
   const map = (DATA.qudao && DATA.qudao.channelItems) || {};
   const items = (map[person] || {})[channel] || [];
   if(!items.length) return '<div class="det-empty">该渠道本期无单品明细</div>';
-  let h = '<div class="cd-list">';
-  items.forEach(it => {
-    const name = it.product || it.sku || '—';
-    h += '<div class="cd-item">'
-      + '<div class="cd-top"><span class="cd-name">' + esc(name) + '</span>'
-      + '<span class="cd-date num">' + (it.qty || 0) + ' 件 · <b>' + moneyFull(it.amount) + '</b></span></div>'
-      + '<div class="cd-sub">' + (it.code ? esc(it.code) : '') + (it.date ? ' · ' + esc(String(it.date).slice(0,10)) : '') + '</div>'
-      + '</div>';
+  let h = '<div class="det-list">';
+  items.forEach(r => {
+    const neg = (r.amount || 0) < 0;
+    h += '<div class="det-item' + (neg ? ' neg' : '') + '">'
+      + '<div class="det-top"><span class="det-name">' + esc(r.product || r.sku || '—') + '</span>'
+      + '<span class="det-date num">' + esc(r.date || '') + '</span></div>'
+      + '<div class="det-row num">'
+      + '<span class="dv-origin">原价: <b>' + (r.origPrice == null ? '—' : fmtNum(r.origPrice)) + '</b></span>'
+      + (r.discPrice && parseFloat(r.discPrice) ? '<span class="dv-disc">折扣: <b>' + fmtNum(r.discPrice) + '</b></span>' : '')
+      + '<span class="dv-profit">毛利: <b>' + (r.profit == null ? '—' : fmtNum(r.profit)) + '</b></span>'
+      + '<span class="dv-gpr">毛利率: <b>' + (r.gpr == null ? '—' : (r.gpr * 100).toFixed(1) + '%') + '</b></span>'
+      + '<span class="dv-cost">成本: <b>' + (r.cost == null ? '—' : fmtNum(r.cost)) + '</b></span>'
+      + '</div></div>';
   });
   h += '</div>';
   return h;

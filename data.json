@@ -7057,7 +7057,12 @@
       "product": "Cooyee华为Nova16Pro一体镜头膜",
       "sku": "15.001.003.053",
       "qty": 1.0,
-      "amount": 99.0
+      "amount": 99.0,
+      "origPrice": 99.0,
+      "discPrice": 0.0,
+      "profit": 75.0,
+      "gpr": 0.7576,
+      "cost": 24.0
      }
     ]
    },
@@ -7069,7 +7074,12 @@
       "product": "华为 Mate X6 ICL-AL10",
       "sku": "01.001.008.002.008",
       "qty": 1.0,
-      "amount": 9799.0
+      "amount": 9799.0,
+      "origPrice": 9999.0,
+      "discPrice": 200.0,
+      "profit": 769.0,
+      "gpr": 0.0785,
+      "cost": 10030.0
      }
     ],
     "企业上门购": [
@@ -7079,7 +7089,12 @@
       "product": "华为 FreeClip2 耳机 T0027",
       "sku": "07.001.013.005.001",
       "qty": 1.0,
-      "amount": 1149.0
+      "amount": 1149.0,
+      "origPrice": 1299.0,
+      "discPrice": 150.0,
+      "profit": 130.58,
+      "gpr": 0.1136,
+      "cost": 1068.42
      },
      {
       "date": "2026-08-18",
@@ -7087,7 +7102,12 @@
       "product": "华为 FreeClip2 耳机 T0027",
       "sku": "07.001.013.005.002",
       "qty": 1.0,
-      "amount": 1149.0
+      "amount": 1149.0,
+      "origPrice": 1299.0,
+      "discPrice": 150.0,
+      "profit": 159.0,
+      "gpr": 0.1384,
+      "cost": 1040.0
      },
      {
       "date": "2026-08-18",
@@ -7095,7 +7115,12 @@
       "product": "华为 FreeClip2 耳机 T0027",
       "sku": "07.001.013.005.002",
       "qty": 1.0,
-      "amount": 1149.0
+      "amount": 1149.0,
+      "origPrice": 1299.0,
+      "discPrice": 150.0,
+      "profit": 159.0,
+      "gpr": 0.1384,
+      "cost": 1040.0
      },
      {
       "date": "2026-08-18",
@@ -7103,7 +7128,12 @@
       "product": "华为 FreeClip2 耳机 T0027",
       "sku": "07.001.013.005.002",
       "qty": 1.0,
-      "amount": 1149.0
+      "amount": 1149.0,
+      "origPrice": 1299.0,
+      "discPrice": 150.0,
+      "profit": 159.0,
+      "gpr": 0.1384,
+      "cost": 1040.0
      },
      {
       "date": "2026-08-18",
@@ -7111,7 +7141,12 @@
       "product": "华为 FreeClip2 耳机 T0027",
       "sku": "07.001.013.005.002",
       "qty": 1.0,
-      "amount": 1149.0
+      "amount": 1149.0,
+      "origPrice": 1299.0,
+      "discPrice": 150.0,
+      "profit": 159.0,
+      "gpr": 0.1384,
+      "cost": 1040.0
      },
      {
       "date": "2026-08-18",
@@ -7119,7 +7154,12 @@
       "product": "华为 FreeClip2 耳机 T0027",
       "sku": "07.001.013.005.003",
       "qty": 1.0,
-      "amount": 1149.0
+      "amount": 1149.0,
+      "origPrice": 1299.0,
+      "discPrice": 150.0,
+      "profit": 130.58,
+      "gpr": 0.1136,
+      "cost": 1068.42
      },
      {
       "date": "2026-08-05",
@@ -7127,7 +7167,12 @@
       "product": "华为手环11 CDY-B39 NFC版",
       "sku": "08.001.032.001.002",
       "qty": 1.0,
-      "amount": 269.0
+      "amount": 269.0,
+      "origPrice": 289.0,
+      "discPrice": 20.0,
+      "profit": 5.99,
+      "gpr": 0.0223,
+      "cost": 263.01
      },
      {
       "date": "2026-08-05",
@@ -7135,7 +7180,12 @@
       "product": "华为手环11 CDY-B39 NFC版",
       "sku": "08.001.032.001.002",
       "qty": 1.0,
-      "amount": 269.0
+      "amount": 269.0,
+      "origPrice": 289.0,
+      "discPrice": 20.0,
+      "profit": 5.99,
+      "gpr": 0.0223,
+      "cost": 263.01
      },
      {
       "date": "2026-08-05",
@@ -7143,7 +7193,12 @@
       "product": "华为手环11 CDY-B39 NFC版",
       "sku": "08.001.032.001.002",
       "qty": 1.0,
-      "amount": 269.0
+      "amount": 269.0,
+      "origPrice": 289.0,
+      "discPrice": 20.0,
+      "profit": 5.99,
+      "gpr": 0.0223,
+      "cost": 263.01
      },
      {
       "date": "2026-08-05",
@@ -7151,7 +7206,12 @@
       "product": "华为手环11 CDY-B39 NFC版",
       "sku": "08.001.032.001.002",
       "qty": 1.0,
-      "amount": 269.0
+      "amount": 269.0,
+      "origPrice": 289.0,
+      "discPrice": 20.0,
+      "profit": 5.99,
+      "gpr": 0.0223,
+      "cost": 263.01
      },
      {
       "date": "2026-08-05",
@@ -7159,7 +7219,12 @@
       "product": "华为手环11 CDY-B39 NFC版",
       "sku": "08.001.032.001.002",
       "qty": 1.0,
-      "amount": 269.0
+      "amount": 269.0,
+      "origPrice": 289.0,
+      "discPrice": 20.0,
+      "profit": 5.99,
+      "gpr": 0.0223,
+      "cost": 263.01
      },
      {
       "date": "2026-08-05",
@@ -7167,7 +7232,12 @@
       "product": "华为手环11 CDY-B39 NFC版",
       "sku": "08.001.032.001.002",
       "qty": 1.0,
-      "amount": 269.0
+      "amount": 269.0,
+      "origPrice": 289.0,
+      "discPrice": 20.0,
+      "profit": 5.99,
+      "gpr": 0.0223,
+      "cost": 263.01
      },
      {
       "date": "2026-08-05",
@@ -7175,7 +7245,12 @@
       "product": "华为手环11 CDY-B39 NFC版",
       "sku": "08.001.032.001.002",
       "qty": 1.0,
-      "amount": 269.0
+      "amount": 269.0,
+      "origPrice": 289.0,
+      "discPrice": 20.0,
+      "profit": 5.99,
+      "gpr": 0.0223,
+      "cost": 263.01
      },
      {
       "date": "2026-08-05",
@@ -7183,7 +7258,12 @@
       "product": "华为手环11 CDY-B39 NFC版",
       "sku": "08.001.032.001.002",
       "qty": 1.0,
-      "amount": 269.0
+      "amount": 269.0,
+      "origPrice": 289.0,
+      "discPrice": 20.0,
+      "profit": 5.99,
+      "gpr": 0.0223,
+      "cost": 263.01
      },
      {
       "date": "2026-08-05",
@@ -7191,7 +7271,12 @@
       "product": "华为手环11 CDY-B39 NFC版",
       "sku": "08.001.032.001.002",
       "qty": 1.0,
-      "amount": 269.0
+      "amount": 269.0,
+      "origPrice": 289.0,
+      "discPrice": 20.0,
+      "profit": 5.99,
+      "gpr": 0.0223,
+      "cost": 263.01
      },
      {
       "date": "2026-08-05",
@@ -7199,7 +7284,12 @@
       "product": "华为手环11 CDY-B39 NFC版",
       "sku": "08.001.032.001.002",
       "qty": 1.0,
-      "amount": 269.0
+      "amount": 269.0,
+      "origPrice": 289.0,
+      "discPrice": 20.0,
+      "profit": 5.99,
+      "gpr": 0.0223,
+      "cost": 263.01
      },
      {
       "date": "2026-08-05",
@@ -7207,7 +7297,12 @@
       "product": "华为手环11 CDY-B39 NFC版",
       "sku": "08.001.032.001.002",
       "qty": 1.0,
-      "amount": 269.0
+      "amount": 269.0,
+      "origPrice": 289.0,
+      "discPrice": 20.0,
+      "profit": 5.99,
+      "gpr": 0.0223,
+      "cost": 263.01
      },
      {
       "date": "2026-08-05",
@@ -7215,7 +7310,12 @@
       "product": "华为手环11 CDY-B39 NFC版",
       "sku": "08.001.032.001.002",
       "qty": 1.0,
-      "amount": 269.0
+      "amount": 269.0,
+      "origPrice": 289.0,
+      "discPrice": 20.0,
+      "profit": 5.99,
+      "gpr": 0.0223,
+      "cost": 263.01
      },
      {
       "date": "2026-08-05",
@@ -7223,7 +7323,12 @@
       "product": "华为手环11 CDY-B39 NFC版",
       "sku": "08.001.032.001.002",
       "qty": 1.0,
-      "amount": 269.0
+      "amount": 269.0,
+      "origPrice": 289.0,
+      "discPrice": 20.0,
+      "profit": 5.99,
+      "gpr": 0.0223,
+      "cost": 263.01
      }
     ]
    },
@@ -7235,7 +7340,12 @@
       "product": "华为 Pura X Max 典藏版 HOP-AL10",
       "sku": "01.001.074.002.001",
       "qty": 1.0,
-      "amount": 12499.0
+      "amount": 12499.0,
+      "origPrice": 12999.0,
+      "discPrice": 500.0,
+      "profit": 669.0,
+      "gpr": 0.0535,
+      "cost": 11830.0
      },
      {
       "date": "2026-08-16",
@@ -7243,7 +7353,12 @@
       "product": "华为 nova16 EMA-AL00U",
       "sku": "01.001.078.001.001",
       "qty": 1.0,
-      "amount": 3399.0
+      "amount": 3399.0,
+      "origPrice": 3499.0,
+      "discPrice": 100.0,
+      "profit": 494.0,
+      "gpr": 0.1453,
+      "cost": 2905.0
      },
      {
       "date": "2026-08-07",
@@ -7251,7 +7366,12 @@
       "product": "华为 nova16 EMA-AL00U",
       "sku": "01.001.078.001.005",
       "qty": 1.0,
-      "amount": 2799.0
+      "amount": 2799.0,
+      "origPrice": 2999.0,
+      "discPrice": 200.0,
+      "profit": 309.0,
+      "gpr": 0.1104,
+      "cost": 2490.0
      },
      {
       "date": "2026-08-08",
@@ -7259,7 +7379,12 @@
       "product": "华为 nova16 EMA-AL00U",
       "sku": "01.001.078.001.005",
       "qty": -1.0,
-      "amount": -2799.0
+      "amount": -2799.0,
+      "origPrice": -2999.0,
+      "discPrice": -200.0,
+      "profit": -309.0,
+      "gpr": 0.1104,
+      "cost": -2490.0
      },
      {
       "date": "2026-08-15",
@@ -7267,7 +7392,12 @@
       "product": "华为 Watch GT7 TUM-B39",
       "sku": "08.001.040.001.003",
       "qty": 1.0,
-      "amount": 1638.0
+      "amount": 1638.0,
+      "origPrice": 1688.0,
+      "discPrice": 50.0,
+      "profit": 338.0,
+      "gpr": 0.2063,
+      "cost": 1300.0
      },
      {
       "date": "2026-08-17",
@@ -7295,7 +7425,12 @@
       "product": "华为 MateBook Pro S MOR-M1",
       "sku": "05.001.022.001.003",
       "qty": 1.0,
-      "amount": 10499.0
+      "amount": 10499.0,
+      "origPrice": 10499.0,
+      "discPrice": 0.0,
+      "profit": 1149.64,
+      "gpr": 0.1095,
+      "cost": 9349.36
      }
     ],
     "企业上门购": [
@@ -7305,7 +7440,12 @@
       "product": "华为手环11 CDY-B39 NFC版",
       "sku": "08.001.032.001.002",
       "qty": 1.0,
-      "amount": 269.0
+      "amount": 269.0,
+      "origPrice": 289.0,
+      "discPrice": 20.0,
+      "profit": 5.99,
+      "gpr": 0.0223,
+      "cost": 263.01
      },
      {
       "date": "2026-08-05",
@@ -7313,7 +7453,12 @@
       "product": "华为手环11 CDY-B39 NFC版",
       "sku": "08.001.032.001.002",
       "qty": 1.0,
-      "amount": 269.0
+      "amount": 269.0,
+      "origPrice": 289.0,
+      "discPrice": 20.0,
+      "profit": 5.99,
+      "gpr": 0.0223,
+      "cost": 263.01
      },
      {
       "date": "2026-08-05",
@@ -7321,7 +7466,12 @@
       "product": "华为手环11 CDY-B39 NFC版",
       "sku": "08.001.032.001.002",
       "qty": 1.0,
-      "amount": 269.0
+      "amount": 269.0,
+      "origPrice": 289.0,
+      "discPrice": 20.0,
+      "profit": 5.99,
+      "gpr": 0.0223,
+      "cost": 263.01
      },
      {
       "date": "2026-08-05",
@@ -7329,7 +7479,12 @@
       "product": "华为手环11 CDY-B39 NFC版",
       "sku": "08.001.032.001.002",
       "qty": 1.0,
-      "amount": 269.0
+      "amount": 269.0,
+      "origPrice": 289.0,
+      "discPrice": 20.0,
+      "profit": 5.99,
+      "gpr": 0.0223,
+      "cost": 263.01
      },
      {
       "date": "2026-08-05",
@@ -7337,7 +7492,12 @@
       "product": "华为手环11 CDY-B39 NFC版",
       "sku": "08.001.032.001.002",
       "qty": 1.0,
-      "amount": 269.0
+      "amount": 269.0,
+      "origPrice": 289.0,
+      "discPrice": 20.0,
+      "profit": 5.99,
+      "gpr": 0.0223,
+      "cost": 263.01
      }
     ]
    },
@@ -7349,7 +7509,12 @@
       "product": "华为 Mate80 VYG-AL00",
       "sku": "01.001.062.002.004",
       "qty": 1.0,
-      "amount": 4999.0
+      "amount": 4999.0,
+      "origPrice": 5199.0,
+      "discPrice": 200.0,
+      "profit": 579.0,
+      "gpr": 0.1158,
+      "cost": 4420.0
      },
      {
       "date": "2026-08-04",
@@ -7357,7 +7522,12 @@
       "product": "华为 Mate80 VYG-AL30",
       "sku": "01.001.062.003.001",
       "qty": 1.0,
-      "amount": 5299.0
+      "amount": 5299.0,
+      "origPrice": 5499.0,
+      "discPrice": 200.0,
+      "profit": 624.0,
+      "gpr": 0.1178,
+      "cost": 4675.0
      },
      {
       "date": "2026-08-02",
@@ -7365,7 +7535,12 @@
       "product": "华为 Pura90 Pro MLN-AL00",
       "sku": "01.001.076.001.005",
       "qty": 1.0,
-      "amount": 5799.0
+      "amount": 5799.0,
+      "origPrice": 5999.0,
+      "discPrice": 200.0,
+      "profit": 699.0,
+      "gpr": 0.1205,
+      "cost": 5100.0
      },
      {
       "date": "2026-08-05",
@@ -7373,7 +7548,12 @@
       "product": "华为 MateBook 14 MNTXM-24A",
       "sku": "05.001.004.017.002",
       "qty": 1.0,
-      "amount": 8049.0
+      "amount": 8049.0,
+      "origPrice": 8399.0,
+      "discPrice": 350.0,
+      "profit": 521.0,
+      "gpr": 0.0647,
+      "cost": 7728.0
      },
      {
       "date": "2026-08-09",
@@ -7381,7 +7561,12 @@
       "product": "华为 MatePad 11.5 TXZ-W20 柔光版",
       "sku": "06.001.002.006.030",
       "qty": 1.0,
-      "amount": 3099.0
+      "amount": 3099.0,
+      "origPrice": 3099.0,
+      "discPrice": 0.0,
+      "profit": 442.0,
+      "gpr": 0.1426,
+      "cost": 2657.0
      },
      {
       "date": "2026-08-05",
@@ -7389,7 +7574,12 @@
       "product": "星联优享-499",
       "sku": "15.005.011",
       "qty": 1.0,
-      "amount": 550.0
+      "amount": 550.0,
+      "origPrice": 550.0,
+      "discPrice": 0.0,
+      "profit": 550.0,
+      "gpr": 1.0,
+      "cost": 0.0
      }
     ]
    }

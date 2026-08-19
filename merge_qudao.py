@@ -279,6 +279,30 @@ def main():
 
     with open(DATA, encoding="utf-8") as f:
         d = json.load(f)
+    # 单品明细补充 毛利/成本/原价/毛利率：关联 calc_data 已算的 details（按 日期+SKU+净额 精确匹配，回退 日期+SKU）
+    det_idx = {}
+    det_idx_amt = {}
+    for _cat, rows in (d.get("details") or {}).items():
+        for r in rows:
+            k = (r.get("date"), r.get("sku", ""))
+            det_idx.setdefault(k, r)
+            det_idx_amt.setdefault((k[0], k[1], r.get("amount")), r)
+    _enriched = 0
+    for _p, _chans in (qd.get("channelItems") or {}).items():
+        for _ch, _items in _chans.items():
+            for it in _items:
+                dr = (det_idx_amt.get((it.get("date"), it.get("sku", ""), it.get("amount")))
+                      or det_idx.get((it.get("date"), it.get("sku", ""))))
+                if not dr:
+                    continue
+                it["origPrice"] = dr.get("origPrice")
+                it["discPrice"] = dr.get("discPrice")
+                it["profit"] = dr.get("profit")
+                it["gpr"] = dr.get("gpr")
+                it["cost"] = dr.get("cost")
+                _enriched += 1
+    if _enriched:
+        print("  [渠道单品] 已补毛利/成本字段 %d 条" % _enriched)
     d["qudao"] = qd
     with open(DATA, "w", encoding="utf-8") as f:
         json.dump(d, f, ensure_ascii=False, indent=1)
