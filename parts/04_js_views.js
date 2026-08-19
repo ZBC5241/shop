@@ -203,9 +203,9 @@ function renderDay(){
   /* 今日品类：15个品类横向柱图（9品类按金额 + 6附加按件数），点柱下钻当天明细 */
   const dayDone = DATA.store.dailyDone || {};
   const CATS_9 = ['手机','PC','平板','穿戴','音频','HD','智慧办公','音频穿戴','增值'];
-  const SPECIALS = [['会员','单'],['回收','单'],['贴膜','单'],['电信积分','分'],['滞销','台'],['优享/会员','单']];
+  const SPECIALS = [['会员','单'],['回收','单'],['贴膜','单'],['电信积分','分'],['滞销','台'],['摄影课','课']];
   const g9 = CATS_9.map(c => {
-    const items = groups[c] || [];
+    const items = dayMetricItems(c) || [];
     return { name:c, val: items.reduce((s,r) => s + (r.amount || 0), 0),
              qty: items.reduce((s,r) => s + (r.qty || 0), 0),
              pf:  items.reduce((s,r) => s + (r.profit || 0), 0) };

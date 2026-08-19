@@ -701,8 +701,8 @@ function dayMetricItems(k){
     return dd.filter(r => khj.some(p => r.sku.indexOf(p) === 0));
   }
   const rx = { '贴膜':/膜|套包/, '回收':/回收/, '会员':/Care|会员|星联优享/,
-               '电信积分':/入网/, '优享/会员':/星联优享|优享/ }[k];
-  if(rx) return dd.filter(r => (k === '贴膜' ? (r.amount > 0 && rx.test(r.product)) : rx.test(r.product)));
+               '电信积分':/入网/, '摄影课':/大师课/ }[k];
+  if(rx) return dd.filter(r => ((k === '贴膜' || k === '摄影课') ? (r.amount > 0 && rx.test(r.product)) : rx.test(r.product)));
   return null;
 }
 
