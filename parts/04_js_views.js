@@ -202,9 +202,9 @@ function renderDay(){
 
   /* 今日品类：统一排序（毛利/手机/增值/合约置顶，其余按达成量降序），点柱下钻当天明细 */
   const dayDone = DATA.store.dailyDone || {};
-  const MONEY_CATS = ['毛利','手机','PC','平板','穿戴','音频','HD','智慧办公','音频穿戴','增值','合约'];
+  const MONEY_CATS = ['毛利','手机','PC','平板','穿戴','音频','HD','智慧办公','音频穿戴','增值'];
   const SPECIALS = [['回收','单'],['贴膜','单'],['电信积分','分'],['滞销','台'],['摄影课','课']];
-  const PRIORITY = ['毛利','手机','增值','合约'];
+  const PRIORITY = ['毛利','手机','增值'];
   const mkCat = (c) => {
     if(c === '毛利'){
       const mv = isNum(dayDone['毛利']) ? dayDone['毛利'] : 0;
@@ -225,7 +225,7 @@ function renderDay(){
   });
   const maxV = Math.max.apply(null, items15.map(v => v.val).concat([1]));
 
-  h += '<div class="strip-lab">今日品类 · 共' + items15.length + '个 · 点柱看当天明细</div><div class="rows">';
+  h += '<div class="strip-lab">今日品类 · 共' + items15.length + '个 · 毛利合计 ' + moneyShort(isNum(dayDone['毛利']) ? dayDone['毛利'] : 0) + ' · 点柱看当天明细</div><div class="rows">';
   items15.forEach(cv => {
     const pct = cv.val ? Math.max(cv.val / maxV * 100, 2) : 0;
     const neg = cv.pf < 0;

@@ -700,7 +700,6 @@ function dayMetricItems(k){
                  "01.001.032.002","01.001.043.002","01.001.044.002","01.001.001.0","01.001.002.0","01.001.003"];
     return dd.filter(r => khj.some(p => r.sku.indexOf(p) === 0));
   }
-  if(k === '合约') return dd.filter(r => /合约|入网/.test(r.type) || /合约/.test(r.product));
   const rx = { '贴膜':/膜|套包/, '回收':/回收/, '会员':/Care|会员|星联优享/,
                '电信积分':/入网/, '摄影课':/大师课/ }[k];
   if(rx) return dd.filter(r => ((k === '贴膜' || k === '摄影课') ? (r.amount > 0 && rx.test(r.product)) : rx.test(r.product)));
