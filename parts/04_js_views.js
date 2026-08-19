@@ -194,7 +194,7 @@ function renderDay(){
      + '<span class="tail">' + esc(DATA.meta.dayTitle || DATA.meta.date) + '</span></div>';
   h += dayHTML(DATA.store.dailyDone, DATA.store.dailyGap);
   h += '<div style="font-size:10.5px;color:var(--tx3);padding:9px 2px 0;line-height:1.7">'
-     + '大数字＝今天已完成；下方＝距每日任务的差额（负数表示还差）</div>';
+     + '大数字＝今天已完成；下方＝距每日任务的差额（负数表示缺口）</div>';
   h += '</div>';
 
   /* 每人今日 */
