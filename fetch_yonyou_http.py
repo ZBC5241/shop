@@ -3,7 +3,11 @@
 # 登录态来源：agent-browser 持久化的 session 状态文件（含 yht_access_token / XSRF-TOKEN 等 cookie）
 # 用法: python3 fetch_yonyou_http.py [输出TSV路径]
 # 退出码: 0 成功 / 1 失败(含401需重登录)
-import json, sys, time, os, urllib.request, urllib.error, ssl
+import json, sys, time, os, re, urllib.request, urllib.error, ssl
+
+def clean(v):
+    """去掉 cookie 值里的非 ASCII 可打印字符，避免 urllib 拼 header 时 latin-1 编码炸。"""
+    return re.sub(r'[^\x20-\x7e]', '', str(v))
 
 YY_BASE = "https://c3.yonyoucloud.com"
 YY_REPORT_ID = "a76e21a0-fe9b-4366-9b8e-2c9327c15ab9"
@@ -14,7 +18,9 @@ def load_cookies(state_path):
     d = json.load(open(state_path))
     out = {}
     for c in d.get("cookies", []):
-        if "yonyoucloud" in c.get("domain", "") and c.get("name") and c.get("value") is not None:
+        dom = c.get("domain", "")
+        # 用友域分布在 .yonyoucloud.com / success.yonyou.com / euc.yonyoucloud.com 等，放宽过滤
+        if ("yonyou" in dom or "yonbip" in dom) and c.get("name") and c.get("value") is not None:
             out[c["name"]] = c["value"]
     return out
 
@@ -51,8 +57,8 @@ def main():
     if "XSRF-TOKEN" not in ck:
         sys.stderr.write("  [提示] 状态文件无 XSRF-TOKEN，尝试不携带该头直连\n")
     xsrf = ck.get("XSRF-TOKEN", "")
-    yht = ck.get("yht_access_token", "")
-    cookie_hdr = "; ".join("%s=%s" % (k, v) for k, v in ck.items())
+    yht = clean(ck.get("yht_access_token", ""))
+    cookie_hdr = "; ".join("%s=%s" % (k, clean(v)) for k, v in ck.items())
     url = ("%s/iuap-data-analytic/report/exec/%s"
            "?isAjax=1&hb=close&systenant=U8C3&havePublishPermission=true&browse=true"
            "&newExec=true&sdkCode=%s&locale=zh_CN&serviceCode=%s") % (YY_BASE, YY_REPORT_ID, YY_REPORT_ID, YY_REPORT_ID)

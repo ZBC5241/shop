@@ -232,7 +232,7 @@ def build_html(d):
   * {{ margin:0; padding:0; box-sizing:border-box; }}
   body {{ background:#f5f6f9; font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
           display:flex; justify-content:center; -webkit-font-smoothing:antialiased; }}
-  .phone {{ width:720px; background:#f5f6f9; display:flex; flex-direction:column; overflow:hidden; }}
+  .phone {{ width:720px; height:1549px; background:#f5f6f9; display:flex; flex-direction:column; overflow:hidden; }}
   .hero {{ background:linear-gradient(135deg,#131c33 0%,#1f2f52 55%,#274072 100%);
            padding:30px 34px 26px; color:#fff; position:relative; }}
   .hero::after {{ content:""; position:absolute; right:-30px; top:-30px; width:150px; height:150px;
@@ -247,7 +247,7 @@ def build_html(d):
                display:flex; flex-direction:column; align-items:center; justify-content:center; }}
   .ring .in b {{ font-size:23px; font-weight:800; color:#fff; line-height:1; }}
   .ring .in span {{ font-size:9px; color:#f5a623; margin-top:3px; font-weight:600; }}
-  .body {{ padding:18px; display:flex; flex-direction:column; gap:14px; }}
+  .body {{ padding:18px; display:flex; flex-direction:column; gap:14px; flex:1; justify-content:space-between; }}
   .kpis {{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }}
   .kpi {{ background:#fff; border-radius:16px; padding:16px 20px; position:relative; box-shadow:0 6px 16px rgba(30,45,80,.06); }}
   .kpi::before {{ content:""; position:absolute; left:20px; top:0; width:30px; height:4px; border-radius:0 0 3px 3px; background:#2f6bff; }}
@@ -330,9 +330,10 @@ def build_html(d):
     return html
 
 
-# 目标出图分辨率（竖版手机海报）
+# 目标出图尺寸（晨哥 2026-08-15 指定）：宽 1316 × 高 2832
+# 设计稿 .phone 为 720×1549（同比例 1:2.152），先 4x 截图（2880×6196）再下采样到目标尺寸，
+# 内容 flex 撑满，整张铺满画布、无灰边。
 OUT_W, OUT_H = 1316, 2832
-PAD_COLOR = "F5F6F9"  # 与页面 body 背景一致，无缝衔接
 
 
 if __name__ == "__main__":
@@ -344,13 +345,7 @@ if __name__ == "__main__":
     html = build_html(d)
     tmp = os.path.join(BASE, "_poster_tmp.html")
     open(tmp, "w", encoding="utf-8").write(html)
-    # 1) 先按 4x 高清截出设计稿（720 设计宽 → 2880 实宽）
-    raw = os.path.join(BASE, "_poster_raw.png")
-    scaled = os.path.join(BASE, "_poster_scaled.png")
-    subprocess.run([NODE, RENDER_JS, tmp, raw], check=True)
-    # 2) 宽度缩放到目标 1316（等比，高度随之变小）
-    subprocess.run(["sips", "--resampleWidth", str(OUT_W), "-o", scaled, raw], check=True)
-    # 3) 纵向补白到目标 2832，背景色与页面一致
-    subprocess.run(["sips", "-p", str(OUT_H), str(OUT_W),
-                    "--padColor", PAD_COLOR, "-o", out, scaled], check=True)
+    # 截 .phone 元素 → 4x 大图，再精确下采样到 1316×2832（铺满、无灰边）
+    subprocess.run([NODE, RENDER_JS, tmp, out], check=True)
+    subprocess.run(["sips", "-z", str(OUT_H), str(OUT_W), "-o", out, out], check=True)
     print(out)

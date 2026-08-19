@@ -7,7 +7,7 @@ const outPath = args[1] || '/Users/mac/WorkBuddy/Claw/poster_today.png';
     executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
     headless: true, args: ['--no-sandbox']
   });
-  const page = await browser.newPage({ viewport: { width: 760, height: 1500 }, deviceScaleFactor: 4 });
+  const page = await browser.newPage({ viewport: { width: 760, height: 1600 }, deviceScaleFactor: 4 });
   await page.goto('file://' + htmlPath, { waitUntil: 'networkidle0' });
   const el = await page.$('.phone');
   await el.screenshot({ path: outPath });

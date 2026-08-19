@@ -71,11 +71,24 @@ def parse_tsv(path):
 def get_sheet_path(z, sheet_name):
     wbxml = z.read("xl/workbook.xml").decode("utf-8")
     rels = z.read("xl/_rels/workbook.xml.rels").decode("utf-8")
-    rmap = dict(re.findall(r'Id="([^"]+)"[^>]*Target="([^"]+)"', rels))
+    # 逐个解析 Relationship，不依赖 Id/Target 的书写顺序（WPS 重存可能翻转顺序）
+    rmap = {}
+    for m in re.finditer(r'<Relationship\b([^>]*)/?>', rels):
+        attrs = m.group(1)
+        idm = re.search(r'Id="([^"]+)"', attrs)
+        tgm = re.search(r'Target="([^"]+)"', attrs)
+        if idm and tgm:
+            rmap[idm.group(1)] = tgm.group(1)
     for m in re.finditer(r'<sheet[^>]*name="([^"]+)"[^>]*r:id="([^"]+)"', wbxml):
         if m.group(1) == sheet_name:
             t = rmap[m.group(2)]
-            return "xl/" + t.lstrip("/")
+            # 归一化为 zip 内相对路径：兼容绝对(/xl/..)与相对(worksheets/..)两种 Target
+            t = t.replace("\\", "/")
+            if t.startswith("/"):
+                t = t.lstrip("/")
+            elif not t.startswith("xl/"):
+                t = "xl/" + t.lstrip("./")
+            return t
     sys.exit("!! 找不到工作表: " + sheet_name)
 
 

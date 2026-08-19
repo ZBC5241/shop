@@ -68,7 +68,7 @@ git add data.json index.html 2>/dev/null || true
 git -c user.email="18@local" -c user.name="18号" \
     commit -m "看板刷新 $(date '+%Y-%m-%d %H:%M')：毛利明细+销售分析双表同步" \
     2>/dev/null || echo "（无变更可提交，跳过）"
-if GIT_TERMINAL_PROMPT=0 timeout 90 git push origin main > /tmp/run_pipeline_push.log 2>&1; then
+if GIT_TERMINAL_PROMPT=0 git -c http.lowSpeedLimit=1000 -c http.lowSpeedTime=75 push origin main > /tmp/run_pipeline_push.log 2>&1; then
   echo "✅ 已推送线上（GitHub Pages 即将更新）"
 else
   echo "⚠️ 推送失败：当前网络无法连接 github.com。本地 data.json/index.html 已是最新，网络恢复后重跑即可上线。"

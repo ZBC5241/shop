@@ -331,25 +331,27 @@ def calc_qcs(xs, name, task, perf, lehui, taili):
 # ============================ 复算：当日达成 ============================
 def calc_daily(rxs, name, labels):
     P = ("P", name)
+    # 严格对齐《李家村销售》sheet「今日达成」区块(行28-33)的 SUMIFS 公式：
+    #   增值=毛利列且(分类∈{*增值*,*运营商*})；会员=Care+会员+星联优享*；
+    #   贴膜=*膜*&毛利>0+贴膜套包+会员；摄影课=*大师课*&毛利>0；滞销=KHJX_SKU数组
     v = {
         "手机":     sumifs(rxs, "I", P, ("F", "01.001*")),
         "毛利":     sumifs(rxs, "N", P),
-        "销额":     sumifs(rxs, "M", P),
-        "增值":     sumifs(rxs, "N", P, ("D", "*增值*")),
+        "增值":     sumifs(rxs, "N", P, ("D", "*增值*")) + sumifs(rxs, "N", P, ("D", "*运营商*")),
         "智慧办公": sumifs(rxs, "I", P, ("F", "05.001*")) + sumifs(rxs, "I", P, ("F", "06.001*")),
         "音频穿戴": sumifs(rxs, "I", P, ("F", "08.001*")) + sumifs(rxs, "I", P, ("F", "07.001*")),
         "HD":       sumifs(rxs, "I", P, ("F", "12*")),
-        "会员":     sumifs(rxs, "I", P, ("G", "*Care*")) + sumifs(rxs, "I", P, ("G", "*会员*")),
+        "会员":     sumifs(rxs, "I", P, ("G", "*Care*")) + sumifs(rxs, "I", P, ("G", "*会员*")) + sumifs(rxs, "I", P, ("G", "星联优享*")),
         "回收":     sumifs(rxs, "I", P, ("G", "*回收*")),
-        "贴膜":     sumifs(rxs, "I", P, ("G", "*膜*"), ("N", ">0")) +
-                    sumifs(rxs, "I", P, ("G", "*贴膜套包")),
+        "贴膜":     sumifs(rxs, "I", P, ("G", "*膜*"), ("N", ">0")) + sumifs(rxs, "I", P, ("G", "*贴膜套包")) + sumifs(rxs, "I", P, ("G", "*会员*")),
         "电信积分": sumifs(rxs, "M", P, ("E", "*入网*")),
         "滞销":     sumifs_any(rxs, "I", [P], "F", KHJX_SKU),
+        "摄影课":   sumifs(rxs, "I", P, ("G", "*大师课*"), ("N", ">0")),
         "优享/会员": sumifs(rxs, "I", P, ("G", "*新自由*")) + sumifs(rxs, "I", P, ("G", "星联优享*")),
-        "尊享/储值": sumifs(rxs, "I", P, ("G", "新自由*")) + sumifs(rxs, "I", P, ("G", "星联尊享*")),
     }
-    out = {k: v.get(k, 0.0) for k in labels if k and k != "摄影课"}
-    out["销额"] = v["销额"]          # 当日销额（金额列 M），不依赖表格日达成标签，强制计入
+    # 严格按表格「今日达成」品类标签(B26:N26)输出（含原被误排除的「摄影课」）
+    out = {k: v.get(k, 0.0) for k in labels if k}
+    out["销额"] = sumifs(rxs, "M", P)   # 表格「今日达成」无销额行，但日报总览/板块依赖，保留
     return out
 
 

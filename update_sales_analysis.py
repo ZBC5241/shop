@@ -192,10 +192,21 @@ def num_val(s):
 def get_sheet_path(z, sheet_name):
     wbxml = z.read("xl/workbook.xml").decode("utf-8")
     rels = z.read("xl/_rels/workbook.xml.rels").decode("utf-8")
-    rmap = dict(re.findall(r'Id="([^"]+)"[^>]*Target="([^"]+)"', rels))
+    rmap = {}
+    for m in re.finditer(r"<Relationship\b([^>]*)/>", rels):
+        attrs = m.group(1)
+        idm = re.search(r'Id="([^"]+)"', attrs)
+        tgm = re.search(r'Target="([^"]+)"', attrs)
+        if idm and tgm:
+            rmap[idm.group(1)] = tgm.group(1)
     for m in re.finditer(r'<sheet[^>]*name="([^"]+)"[^>]*r:id="([^"]+)"', wbxml):
         if m.group(1) == sheet_name:
-            return "xl/" + rmap[m.group(2)].lstrip("/")
+            # WPS 生成的 rels Target 可能是绝对路径 "/xl/worksheets/sheetN.xml"，
+            # 也可能是相对 "worksheets/sheetN.xml"；统一归一成包内相对路径。
+            tgt = rmap[m.group(2)].lstrip("/")
+            if not tgt.startswith("xl/"):
+                tgt = "xl/" + tgt
+            return tgt
     raise RuntimeError("找不到工作表: " + sheet_name)
 
 
