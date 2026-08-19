@@ -100,6 +100,32 @@ def atomic_write_text(path, text):
     os.replace(tmp, path)
 
 
+# 用友 report/list 对 rm_saleanalysis 返回的行存在两类冗余（2026-08-19 实测，与
+# 晨哥手机手工导出的《销售分析_0819.xlsx》417 行逐项核对）：
+#   1) 同一单号下部分商品行被重复返回（如 18 行变 36 行，内容全同）；
+#   2) 预订单以「单号_YD」额外返回一份（与主单同金额，属订金，不应重复计入）。
+# 去重规则 = 剔除 _YD 单号 + 按 (单号, SKU编码, 序列号) 去重。
+# 验证：去重后 8008→约对应晨哥文件 417 行；六渠道净额 83753 完全一致。
+SN_FIELD = "oid_userDefine_2419863036093267976"  # 序列号（SN）
+
+
+def dedup_records(records):
+    seen = set()
+    out = []
+    for r in records:
+        code = str(r.get("code") or "")
+        if code.endswith("_YD"):          # 订金/预订单变体，剔除
+            continue
+        k = (code,
+             str(r.get("productsku_cCode") or ""),
+             str(r.get(SN_FIELD) or ""))
+        if k in seen:
+            continue
+        seen.add(k)
+        out.append(r)
+    return out
+
+
 def main():
     state = os.environ.get("YONYOU_STATE", DEFAULT_STATE)
     if not os.path.exists(state):
@@ -180,7 +206,10 @@ def main():
             page += 1
             if page > 200:
                 break
-        # 写仓（全量，未过滤）—— 供 --use-cache 毫秒级复用
+        # 去重（剔除 _YD 预订单 + 按 单号/SKU/序列号 去重）→ 与晨哥手工导出口径一致
+        all_rows = dedup_records(all_rows)
+        print("  [去重] 剔除 _YD 预订单 + (单号,SKU,序列号) 去重后 %d 行" % len(all_rows))
+        # 写仓（全量，已去重）—— 供 --use-cache 毫秒级复用
         try:
             atomic_write_json(WAREHOUSE, {"fetched_at": time.time(), "records": all_rows})
             print("  [仓] 已写入仓库（%d 行）" % len(all_rows))

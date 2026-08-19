@@ -189,22 +189,18 @@ def read_emp_channel():
     return out
 
 
-def refresh_qudao_done(xlsx):
-    """【最新拉取】从销售分析 sheet 实时复算完成额，写入「渠道挂账」sheet C 列(落表)。
+QUDAO_FORMULA = ('=SUM(SUMIFS(销售分析!$AM:$AM,销售分析!$G:$G,A{row},'
+                 '销售分析!$P:$P,{{"三大地图","小红书","大众点评","异业","社区","企业上门购"}}))')
 
-    这样每日定时任务跑时 C 列永远是最新拉取到的值，日报 read_qudao 读 C 列即「最新拉取的数据」，
-    而非冻结的首拉快照。仅当整列 C 为空才回退（已在 read_qudao 内兜底）。
-    返回写入的 {姓名: 完成额}，失败返回 None。
+
+def restore_qudao_formulas(xlsx):
+    """恢复「渠道挂账」sheet 完成(C)列 SUMIFS 公式，不写死数值。
+
+    用户口径（2026-08-19 晨哥拍板）：挂账完成 = 渠道挂账 sheet「完成」列公式
+    （SUMIFS 从销售分析表提取白名单渠道净额）的值，与预订/垫付无关。
+    完成列必须保持为活公式，Excel/WPS 打开即自动重算；看板读数走 read_qudao
+    的 _agg_qudao_done 兜底（同口径 Python 复算，数值与公式一致）。
     """
-    try:
-        wb = openpyxl.load_workbook(xlsx, data_only=True)
-        agg = bd._agg_qudao_done(wb)
-    except Exception as e:
-        print("  [渠道刷新] 复算失败: %s" % e)
-        return None
-    if not agg:
-        print("  [渠道刷新] 无聚合结果，跳过写入 C 列")
-        return None
     try:
         wb_f = openpyxl.load_workbook(xlsx, data_only=False)
         ws = wb_f["渠道挂账"]
@@ -215,9 +211,9 @@ def refresh_qudao_done(xlsx):
                 hrow = r
                 break
         if not hrow:
-            print("  [渠道刷新] 未找到表头行，跳过写入")
-            return None
-        written = {}
+            print("  [渠道公式] 未找到表头行，跳过恢复")
+            return False
+        restored = 0
         for r in range(hrow + 1, ws.max_row + 1):
             nm = ws.cell(r, 1).value
             if not nm:
@@ -225,15 +221,14 @@ def refresh_qudao_done(xlsx):
             nm = str(nm).strip()
             if nm in ("", "合计"):
                 continue
-            v = round(agg.get(nm, 0.0), 2)
-            ws.cell(r, 3).value = v
-            written[nm] = v
+            ws.cell(r, 3).value = QUDAO_FORMULA.format(row=r)
+            restored += 1
         wb_f.save(xlsx)
-        print("  [渠道刷新] 已写入 C 列(最新拉取): %s" % written)
-        return written
+        print("  [渠道公式] 已恢复 C 列 SUMIFS 公式 %d 格（完成=销售分析白名单渠道净额）" % restored)
+        return True
     except Exception as e:
-        print("  [渠道刷新] 写入失败: %s" % e)
-        return None
+        print("  [渠道公式] 恢复失败: %s" % e)
+        return False
 
 
 def main():
@@ -244,8 +239,8 @@ def main():
         print("✗ 找不到表格: %s" % XLSX)
         return 1
 
-    # Step A：最新拉取——先复算最新完成额写入渠道挂账 sheet C 列（落表）
-    refresh_qudao_done(XLSX)
+    # Step A：恢复 C 列公式（保持「完成」为活公式，Excel 打开自动重算）
+    restore_qudao_formulas(XLSX)
 
     # Step B：重新读取（含最新写入的 C 列）做合并
     wb = openpyxl.load_workbook(XLSX, data_only=True)
