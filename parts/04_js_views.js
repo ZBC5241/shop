@@ -206,8 +206,7 @@ function renderDay(){
     const groups = {};
     dd.forEach(r => { const c = r.cat || '其他'; (groups[c] = groups[c] || []).push(r); });
     h += '<div style="margin-top:12px;border-top:1px dashed var(--line2);padding-top:10px">'
-       + '<div class="sec-h"><span class="bar"></span><b>今日品类</b>'
-       + '<span class="tail">点品类行下钻当天明细</span></div><div class="rows">';
+       + '<div style="font-size:11px;color:var(--tx3);font-weight:700;margin-bottom:8px">今日品类 · 点行下钻当天明细</div><div class="rows">';
     CAT_ORDER.forEach(c => {
       const items = groups[c];
       if(!items || !items.length) return;
