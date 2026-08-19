@@ -300,6 +300,9 @@ def main():
                 it["profit"] = dr.get("profit")
                 it["gpr"] = dr.get("gpr")
                 it["cost"] = dr.get("cost")
+                # 商品名补全：毛利明细的 name 含 颜色/内存（如 HOP-AL10 16GB+512GB 活力橙）
+                if dr.get("name"):
+                    it["product"] = dr["name"]
                 _enriched += 1
     if _enriched:
         print("  [渠道单品] 已补毛利/成本字段 %d 条" % _enriched)
