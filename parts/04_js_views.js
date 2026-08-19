@@ -226,23 +226,31 @@ function renderDay(){
   });
   h += '</div>';
 
-  /* 今日明细：当天每单（点行展开出库单号） */
+  /* 今日明细：按品类分组，点品类行展开该品类当天明细 */
   const dd = DATA.dayDetails || [];
   if(dd.length){
+    const CAT_ORDER = ['手机','PC','平板','穿戴','音频','HD','智慧办公','音频穿戴','增值','其他'];
+    const groups = {};
+    dd.forEach(r => { const c = r.cat || '其他'; (groups[c] = groups[c] || []).push(r); });
     h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>今日明细</b>'
-       + '<span class="tail">' + dd.length + ' 单 · 点行展开单号</span></div><div class="det-list">';
-    dd.forEach((r, i) => {
-      const neg = (r.amount || 0) < 0;
-      h += '<div class="det-item cd-click' + (neg ? ' neg' : '') + '" onclick="toggleDayCode(' + i + ')">'
-        + '<div class="det-top"><span class="det-name">' + esc(r.product || '—') + '</span>'
-        + '<span class="det-date num">' + esc(r.emp || '—') + ' · ' + (r.qty || 0) + '件</span></div>'
-        + '<div class="det-row num">'
-        + '<span class="dv-profit">金额: <b>' + fmtNum(r.amount) + '</b></span>'
-        + '<span class="dv-profit">毛利: <b>' + fmtNum(r.profit) + '</b></span>'
-        + '<span class="dv-gpr">毛利率: <b>' + (r.gpr == null ? '—' : (r.gpr * 100).toFixed(1) + '%') + '</b></span>'
-        + '<span class="dv-cost">成本: <b>' + fmtNum(r.cost) + '</b></span>'
+       + '<span class="tail">' + dd.length + ' 单 · 按品类展开</span></div><div class="rows">';
+    CAT_ORDER.forEach(c => {
+      const items = groups[c];
+      if(!items || !items.length) return;
+      const qty = items.reduce((s,r) => s + (r.qty || 0), 0);
+      const amt = items.reduce((s,r) => s + (r.amount || 0), 0);
+      const pf  = items.reduce((s,r) => s + (r.profit || 0), 0);
+      const neg = pf < 0;
+      h += '<div class="row pp-click' + (neg ? ' warn' : '') + '" data-cat="' + esc(c) + '" onclick="toggleDayCat(\'' + esc(c) + '\')">'
+        + '<div class="row-t">'
+          + '<span class="row-n">' + esc(c) + '</span>'
+          + '<span class="row-p r-' + (neg ? 'low' : 'good') + '">' + qty + ' 件</span>'
+          + '<span class="row-v num"><b>' + moneyFull(amt) + '</b></span>'
+          + '<span class="chev">' + ic('chev') + '</span>'
         + '</div>'
-        + '<div class="ddet-det" data-i="' + i + '"></div>'
+        + '<div class="row-g"><span class="' + (neg ? 'stat-low' : '') + '">毛利 ' + moneyFull(pf) + '</span>'
+        + '<em style="font-style:normal">毛利率 ' + (amt ? (pf / amt * 100).toFixed(1) + '%' : '—') + '</em></div>'
+        + '<div class="dcdet-det" data-cat="' + esc(c) + '"></div>'
         + '</div>';
     });
     h += '</div></div>';

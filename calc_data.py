@@ -608,8 +608,22 @@ def build_insights(xs, rxs, people, store, ref, tp, rd):
             "timeProgress": tp, "remainDays": rd}
 
 
+def day_cat(r):
+    """当日明细的单行品类（叶子归类，不重叠）：手机/PC/平板/穿戴/音频/HD/增值/其他。"""
+    d = str(r[C["D"]] or "")
+    f = str(r[C["F"]] or "")
+    if d == "01手机":   return "手机"
+    if d == "05电脑":   return "PC"
+    if d == "06平板电脑": return "平板"
+    if d == "08穿戴":   return "穿戴"
+    if d == "07音频":   return "音频"
+    if f.startswith("12"): return "HD"
+    if "增值" in d:     return "增值"
+    return "其他"
+
+
 def build_day_details(rxs):
-    """当日达成明细：RXS 逐行（商品/业务员/金额/毛利/毛利率/成本）。"""
+    """当日达成明细：RXS 逐行（商品/业务员/金额/毛利/毛利率/成本 + 品类）。"""
     out = []
     for r in rxs:
         amt = num(r[C["M"]])
@@ -626,6 +640,7 @@ def build_day_details(rxs):
             "profit": gross,
             "cost": num(r[C["S"]]),
             "gpr": (gross / amt) if amt else None,
+            "cat": day_cat(r),
         })
     out.sort(key=lambda x: (x["emp"], x["code"]))
     return out

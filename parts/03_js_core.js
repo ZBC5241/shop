@@ -293,9 +293,42 @@ function toggleDetCode(cat, i, person){
   toggleCodeBox('.cdet-det[data-cat="' + esc(cat) + '"][data-i="' + i + '"]' + psel, rows[i]);
 }
 
-/* 今日明细：点行展开出库单号 */
-function toggleDayCode(i){
-  toggleCodeBox('.ddet-det[data-i="' + i + '"]', (DATA.dayDetails || [])[i]);
+/* 今日明细：点品类行展开该品类当天明细（每项点日期看单号） */
+function dayCatHTML(cat, items){
+  let h = '<div class="det-list" style="margin-left:10px">';
+  items.forEach((it, i) => {
+    const neg = (it.amount || 0) < 0;
+    h += '<div class="det-item cd-click' + (neg ? ' neg' : '') + '" onclick="toggleDayCode(\'' + esc(cat) + '\',' + i + ')">'
+      + '<div class="det-top"><span class="det-name">' + esc(it.product || '—') + '</span>'
+      + '<span class="det-date num">' + esc(it.emp || '—') + ' · ' + (it.qty || 0) + '件</span></div>'
+      + '<div class="det-row num">'
+      + '<span class="dv-profit">金额: <b>' + fmtNum(it.amount) + '</b></span>'
+      + '<span class="dv-profit">毛利: <b>' + fmtNum(it.profit) + '</b></span>'
+      + '<span class="dv-gpr">毛利率: <b>' + (it.gpr == null ? '—' : (it.gpr * 100).toFixed(1) + '%') + '</b></span>'
+      + '<span class="dv-cost">成本: <b>' + fmtNum(it.cost) + '</b></span>'
+      + '</div>'
+      + '<div class="ddet-det" data-cat="' + esc(cat) + '" data-i="' + i + '"></div>'
+      + '</div>';
+  });
+  h += '</div>';
+  return h;
+}
+
+function toggleDayCat(cat){
+  const det = document.querySelector('.dcdet-det[data-cat="' + esc(cat) + '"]');
+  if(!det) return;
+  const open = det.classList.contains('open');
+  document.querySelectorAll('.dcdet-det.open').forEach(x => { if(x !== det){ x.classList.remove('open'); x.innerHTML = ''; }});
+  if(open){ det.classList.remove('open'); det.innerHTML = ''; return; }
+  const items = (DATA.dayDetails || []).filter(r => (r.cat || '其他') === cat);
+  det.innerHTML = dayCatHTML(cat, items);
+  det.classList.add('open');
+}
+
+/* 今日明细：点单项展开出库单号（cat=品类内索引） */
+function toggleDayCode(cat, i){
+  const items = (DATA.dayDetails || []).filter(r => (r.cat || '其他') === cat);
+  toggleCodeBox('.ddet-det[data-cat="' + esc(cat) + '"][data-i="' + i + '"]', items[i]);
 }
 
 function toggleChannel(person, channel){
