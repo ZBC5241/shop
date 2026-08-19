@@ -133,9 +133,10 @@ def read_emp_channel():
     """
     emp = {}
     items = {}
+    sa_lookup = {}
     if not os.path.exists(XLSX):
         print("  [员工×渠道] 找不到 xlsx: %s" % XLSX)
-        return emp, items
+        return emp, items, sa_lookup
     try:
         wb = openpyxl.load_workbook(XLSX, data_only=True)
         if "销售分析" not in wb.sheetnames:
@@ -185,9 +186,17 @@ def read_emp_channel():
                 "member": str(ws.cell(r, COL_MEM).value or "").strip() if COL_MEM else "",
                 "phone": str(ws.cell(r, COL_PH).value or "").strip() if COL_PH else "",
             })
+            # 全量索引（含非白名单渠道）：供品类明细补 单号/会员/电话
+            sa_lookup.setdefault((p, (str(bd)[:10] if bd else ""),
+                                  str(ws.cell(r, COL_SKU).value or "").strip() if COL_SKU else "",
+                                  _num(ws.cell(r, COL_N).value)), []).append({
+                "code": str(ws.cell(r, COL_C).value or "").strip() if COL_C else "",
+                "member": str(ws.cell(r, COL_MEM).value or "").strip() if COL_MEM else "",
+                "phone": str(ws.cell(r, COL_PH).value or "").strip() if COL_PH else "",
+            })
     except Exception as e:
         print("  [员工×渠道] 销售分析读取失败: %s" % e)
-        return emp, items
+        return emp, items, sa_lookup
     # 渠道展示白名单：仅展示用户指定的获客渠道
     CHANNEL_WHITELIST = ["三大地图", "小红书", "大众点评", "异业", "社区", "企业上门购"]
     out = {}
@@ -205,7 +214,7 @@ def read_emp_channel():
     items_out = {}
     for p, chans in items.items():
         items_out[p] = {ch: rows for ch, rows in chans.items() if ch in CHANNEL_WHITELIST}
-    return out, items_out
+    return out, items_out, sa_lookup
 
 
 QUDAO_FORMULA = ('=SUM(SUMIFS(销售分析!$AM:$AM,销售分析!$G:$G,A{row},'
@@ -273,7 +282,7 @@ def main():
     # （read_qudao 已读到表格公式值，如合计 24539 / 杨丽华 0）。
     # 逐人下钻的【各渠道明细】则从桌面 xlsx「销售分析」sheet 聚合（口径与挂账完成一致：含全部业务类型），
     # 全程数据源都是用户桌面文件，不再经过用友抓取缓存。
-    emp_ch, ch_items = read_emp_channel()
+    emp_ch, ch_items, sa_lookup = read_emp_channel()
     if emp_ch:
         qd["empChannel"] = emp_ch
         print("[员工×渠道] 已聚合 %d 名员工的渠道明细（来自桌面销售分析 sheet）" % len(emp_ch))
@@ -310,6 +319,23 @@ def main():
                 _enriched += 1
     if _enriched:
         print("  [渠道单品] 已补毛利/成本字段 %d 条" % _enriched)
+
+    # 品类达成明细补 单号/会员/电话：按 (员工,日期,SKU,净额) 关联销售分析
+    if sa_lookup:
+        _hit = 0
+        for _cat, rows in (d.get("details") or {}).items():
+            for r in rows:
+                info = sa_lookup.get((r.get("emp"), r.get("date"), r.get("sku", ""),
+                                      _num(r.get("amount"))))
+                if not info:
+                    continue
+                it0 = info[0]
+                r["code"] = it0.get("code", "")
+                r["member"] = it0.get("member", "")
+                r["phone"] = it0.get("phone", "")
+                _hit += 1
+        if _hit:
+            print("  [品类明细] 已补单号/会员/电话 %d 条" % _hit)
     d["qudao"] = qd
     with open(DATA, "w", encoding="utf-8") as f:
         json.dump(d, f, ensure_ascii=False, indent=1)

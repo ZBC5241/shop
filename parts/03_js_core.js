@@ -169,11 +169,11 @@ function detailRowsHTML(cat, person){
   if(person) rows = rows.filter(r => r.emp === person);
   if(!rows.length) return '<div class="det-empty">该品类暂无销售明细</div>';
   let h = '<div class="det-list">';
-  rows.forEach(r => {
+  rows.forEach((r, i) => {
     const neg = (r.amount || 0) < 0;
     h += '<div class="det-item' + (neg ? ' neg' : '') + '">'
       + '<div class="det-top"><span class="det-name">' + esc(r.name || '—') + '</span>'
-      + '<span class="det-date num">' + esc(r.date || '') + '</span></div>'
+      + '<span class="det-date num cd-date-click" onclick="toggleDetCode(\'' + esc(cat) + '\',' + i + (person ? ',\'' + esc(person) + '\'' : '') + ')">' + esc(r.date || '—') + '</span></div>'
       + '<div class="det-row num">'
       + '<span class="dv-origin">原价: <b>' + fmtNum(r.origPrice) + '</b></span>'
       + (r.discPrice && parseFloat(r.discPrice) ? '<span class="dv-disc">折扣: <b>' + fmtNum(r.discPrice) + '</b></span>' : '')
@@ -181,7 +181,9 @@ function detailRowsHTML(cat, person){
       + (r.so ? '<span class="dv-so">SO: <b>' + Math.round(r.so) + '</b></span>' : '')
       + '<span class="dv-gpr">毛利率: <b>' + (r.gpr == null ? '—' : (r.gpr * 100).toFixed(1) + '%') + '</b></span>'
       + '<span class="dv-cost">成本: <b>' + fmtNum(r.cost) + '</b></span>'
-      + '</div></div>';
+      + '</div>'
+      + '<div class="cdet-det" data-cat="' + esc(cat) + '" data-i="' + i + '"' + (person ? ' data-person="' + esc(person) + '"' : '') + '></div>'
+      + '</div>';
   });
   h += '</div>';
   return h;
@@ -254,24 +256,41 @@ function channelDetailHTML(person, channel){
   return h;
 }
 
-/* 点日期展开：显示该单的 单号/会员姓名/电话（同渠道只展开一条，不占地方） */
-function toggleCode(person, channel, i){
-  const det = document.querySelector('.code-det[data-p="' + person + '"][data-c="' + channel + '"][data-i="' + i + '"]');
-  if(!det) return;
-  const open = det.classList.contains('open');
-  document.querySelectorAll('.code-det.open').forEach(d => { if(d !== det){ d.classList.remove('open'); d.innerHTML = ''; }});
-  if(open){ det.classList.remove('open'); det.innerHTML = ''; return; }
-  const map = (DATA.qudao && DATA.qudao.channelItems) || {};
-  const items = (map[person] || {})[channel] || [];
-  const it = items[i];
-  if(!it){ det.innerHTML = '<div class="code-line">—</div>'; det.classList.add('open'); return; }
-  let h = '<div class="code-line">单号 ' + esc(it.code || '—') + '</div>';
-  if(it.member || it.phone){
+/* 展开内容：单号 / 会员姓名 / 电话（点日期展示，不占地方） */
+function codeInfoHTML(it){
+  let h = '<div class="code-line">单号 ' + esc((it && it.code) || '—') + '</div>';
+  if(it && (it.member || it.phone)){
     h += '<div class="code-line">会员 ' + esc(it.member || '—')
        + (it.phone ? ' · ' + esc(it.phone) : '') + '</div>';
   }
-  det.innerHTML = h;
+  return h;
+}
+
+function toggleCodeBox(sel, it){
+  const det = document.querySelector(sel);
+  if(!det) return;
+  const open = det.classList.contains('open');
+  document.querySelectorAll('.code-det.open,.cdet-det.open').forEach(x => {
+    if(x !== det){ x.classList.remove('open'); x.innerHTML = ''; }
+  });
+  if(open){ det.classList.remove('open'); det.innerHTML = ''; return; }
+  det.innerHTML = codeInfoHTML(it);
   det.classList.add('open');
+}
+
+/* 点日期展开：渠道单品明细（同渠道只展开一条） */
+function toggleCode(person, channel, i){
+  const map = (DATA.qudao && DATA.qudao.channelItems) || {};
+  const items = (map[person] || {})[channel] || [];
+  toggleCodeBox('.code-det[data-p="' + esc(person) + '"][data-c="' + esc(channel) + '"][data-i="' + i + '"]', items[i]);
+}
+
+/* 点日期展开：品类达成明细（同品类只展开一条） */
+function toggleDetCode(cat, i, person){
+  let rows = (DATA.details && DATA.details[cat]) || [];
+  if(person) rows = rows.filter(r => r.emp === person);
+  const psel = person ? '[data-person="' + esc(person) + '"]' : ':not([data-person])';
+  toggleCodeBox('.cdet-det[data-cat="' + esc(cat) + '"][data-i="' + i + '"]' + psel, rows[i]);
 }
 
 function toggleChannel(person, channel){
