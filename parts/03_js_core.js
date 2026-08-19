@@ -190,7 +190,8 @@ function toggleDetail(cat, person){
 }
 
 /* 逐人下钻：列出该员工在各获客渠道的销售额（DATA.qudao.empChannel[员工]，来自桌面销售分析 sheet）
-   口径：与渠道挂账完成一致（含全部业务类型，垫付/预订也算）。只展示【渠道 + 金额 + 笔数】。 */
+   口径：与渠道挂账完成一致（含全部业务类型，垫付/预订也算）。只展示【渠道 + 金额 + 笔数】。
+   点渠道可再下钻到单品明细（DATA.qudao.channelItems[员工][渠道]）。 */
 function personDetailHTML(name){
   const emp = (DATA.qudao && DATA.qudao.empChannel) || {};
   const rows = emp[name] || [];
@@ -199,18 +200,49 @@ function personDetailHTML(name){
   rows.forEach(r => { total += (r.amount || 0); });
   let h = '<div class="det-list">';
   rows.forEach(r => {
-    h += '<div class="det-item">'
-      + '<div class="det-top"><span class="det-name">' + esc(r.channel || '—') + '</span>'
+    if(!(r.amount > 0)) return;
+    h += '<div class="det-item cd-click" data-p="' + esc(name) + '" data-c="' + esc(r.channel) + '" onclick="toggleChannel(\'' + esc(name) + '\',\'' + esc(r.channel) + '\')">'
+      + '<div class="det-top"><span class="det-name">' + esc(r.channel)
+      + ' <span class="chev" style="display:inline-flex;vertical-align:-1px">' + ic('chev') + '</span></span>'
       + '<span class="det-date num">' + (r.bills || 0) + ' 笔</span></div>'
       + '<div class="det-row num"><b style="font-size:15px;color:var(--tx1)">' + moneyFull(r.amount) + '</b>'
       + ' <span style="font-size:11px;color:var(--tx3)">销售净额</span></div>'
-      + '</div>';
+      + '</div>'
+      + '<div class="cd-det" data-p="' + esc(name) + '" data-c="' + esc(r.channel) + '"></div>';
   });
   h += '<div class="det-item" style="border-top:1px dashed var(--line2);padding-top:8px;margin-top:2px">'
     + '<div class="det-top"><span class="det-name" style="font-weight:700">合计</span>'
     + '<span class="num" style="font-weight:700">' + moneyFull(total) + '</span></div></div>';
   h += '</div>';
   return h;
+}
+
+/* 二级下钻：渠道 → 单品明细（DATA.qudao.channelItems[员工][渠道]） */
+function channelDetailHTML(person, channel){
+  const map = (DATA.qudao && DATA.qudao.channelItems) || {};
+  const items = (map[person] || {})[channel] || [];
+  if(!items.length) return '<div class="det-empty">该渠道本期无单品明细</div>';
+  let h = '<div class="cd-list">';
+  items.forEach(it => {
+    const name = it.product || it.sku || '—';
+    h += '<div class="cd-item">'
+      + '<div class="cd-top"><span class="cd-name">' + esc(name) + '</span>'
+      + '<span class="cd-date num">' + (it.qty || 0) + ' 件 · <b>' + moneyFull(it.amount) + '</b></span></div>'
+      + '<div class="cd-sub">' + (it.code ? esc(it.code) : '') + (it.date ? ' · ' + esc(String(it.date).slice(0,10)) : '') + '</div>'
+      + '</div>';
+  });
+  h += '</div>';
+  return h;
+}
+
+function toggleChannel(person, channel){
+  const det = document.querySelector('.cd-det[data-p="' + person + '"][data-c="' + channel + '"]');
+  if(!det) return;
+  const open = det.classList.contains('open');
+  document.querySelectorAll('.cd-det.open').forEach(d => { if(d !== det){ d.classList.remove('open'); d.innerHTML = ''; }});
+  if(open){ det.classList.remove('open'); det.innerHTML = ''; return; }
+  det.innerHTML = channelDetailHTML(person, channel);
+  det.classList.add('open');
 }
 
 function togglePerson(name){

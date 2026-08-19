@@ -128,17 +128,19 @@ def read_emp_channel():
     口径：与「渠道挂账」完成列公式一致（含全部业务类型，垫付/预订也算，晨哥 2026-08-19 拍板），
           保证逐人渠道明细合计 == 渠道挂账完成额；仅白名单获客渠道；按业务日期过滤 8 月切片。
     来源：直接读桌面《李家村8月任务进度.xlsx》的「销售分析」sheet（用户导出，全程按表格走）。
-    返回：{ 员工名: [ {channel, amount, bills}, ... 按白名单顺序 ] }
+    返回：( { 员工名: [ {channel, amount, bills}, ... 按白名单顺序 ] },
+           { 员工名: { 渠道: [ {date, code, product, sku, qty, amount}, ... ] } } )
     """
     emp = {}
+    items = {}
     if not os.path.exists(XLSX):
         print("  [员工×渠道] 找不到 xlsx: %s" % XLSX)
-        return emp
+        return emp, items
     try:
         wb = openpyxl.load_workbook(XLSX, data_only=True)
         if "销售分析" not in wb.sheetnames:
             print("  [员工×渠道] 未找到「销售分析」sheet")
-            return emp
+            return emp, items
         ws = wb["销售分析"]
         # 表头在第 2 行，动态定位关键列
         hdr = {}
@@ -146,14 +148,17 @@ def read_emp_channel():
             v = ws.cell(2, c).value
             if v:
                 hdr[str(v).strip()] = c
-        COL_P  = hdr.get("华为获客渠道名称")   # 渠道
-        COL_G  = hdr.get("营业员名称")         # 员工
-        COL_H  = hdr.get("业务类型名称")        # 业务类型（挂账口径：不剔除）
-        COL_N  = hdr.get("销售净额")           # 净额
-        COL_BD = hdr.get("业务日期")           # 过滤 8 月
+        COL_P   = hdr.get("华为获客渠道名称")   # 渠道
+        COL_G   = hdr.get("营业员名称")         # 员工
+        COL_N   = hdr.get("销售净额")           # 净额
+        COL_BD  = hdr.get("业务日期")           # 过滤 8 月
+        COL_C   = hdr.get("单据编号")           # 单号
+        COL_PRO = hdr.get("商品名称")           # 商品名称
+        COL_SKU = hdr.get("商品sku名称")        # SKU
+        COL_QTY = hdr.get("销售数量")           # 数量
         if not (COL_G and COL_P and COL_N):
             print("  [员工×渠道] 销售分析缺少关键列（员工/渠道/净额）")
-            return emp
+            return emp, items
         import datetime as _dt
         for r in range(3, ws.max_row + 1):
             bd = ws.cell(r, COL_BD).value if COL_BD else None
@@ -167,9 +172,18 @@ def read_emp_channel():
             d = emp.setdefault(p, {}).setdefault(c, {"amount": 0.0, "bills": 0})
             d["amount"] += _num(ws.cell(r, COL_N).value)
             d["bills"]  += 1
+            # 单品明细（供下钻到订单/商品级）
+            items.setdefault(p, {}).setdefault(c, []).append({
+                "date": str(bd)[:10] if bd else "",
+                "code": str(ws.cell(r, COL_C).value or "").strip() if COL_C else "",
+                "product": str(ws.cell(r, COL_PRO).value or "").strip() if COL_PRO else "",
+                "sku": str(ws.cell(r, COL_SKU).value or "").strip() if COL_SKU else "",
+                "qty": _num(ws.cell(r, COL_QTY).value) if COL_QTY else 0,
+                "amount": _num(ws.cell(r, COL_N).value),
+            })
     except Exception as e:
         print("  [员工×渠道] 销售分析读取失败: %s" % e)
-        return emp
+        return emp, items
     # 渠道展示白名单：仅展示用户指定的获客渠道
     CHANNEL_WHITELIST = ["三大地图", "小红书", "大众点评", "异业", "社区", "企业上门购"]
     out = {}
@@ -183,7 +197,11 @@ def read_emp_channel():
                 "bills": d["bills"] if d else 0,
             })
         out[p] = rows
-    return out
+    # 仅保留白名单渠道的单品明细（去掉空渠道）
+    items_out = {}
+    for p, chans in items.items():
+        items_out[p] = {ch: rows for ch, rows in chans.items() if ch in CHANNEL_WHITELIST}
+    return out, items_out
 
 
 QUDAO_FORMULA = ('=SUM(SUMIFS(销售分析!$AM:$AM,销售分析!$G:$G,A{row},'
@@ -249,12 +267,15 @@ def main():
 
     # 渠道挂账完成额/任务额/达成/逐人：全部按用户 xlsx「渠道挂账」sheet 公式提取
     # （read_qudao 已读到表格公式值，如合计 24539 / 杨丽华 0）。
-    # 逐人下钻的【各渠道明细】则从桌面 xlsx「销售分析」sheet 聚合（同样剔除垫付/预订），
+    # 逐人下钻的【各渠道明细】则从桌面 xlsx「销售分析」sheet 聚合（口径与挂账完成一致：含全部业务类型），
     # 全程数据源都是用户桌面文件，不再经过用友抓取缓存。
-    emp_ch = read_emp_channel()
+    emp_ch, ch_items = read_emp_channel()
     if emp_ch:
         qd["empChannel"] = emp_ch
         print("[员工×渠道] 已聚合 %d 名员工的渠道明细（来自桌面销售分析 sheet）" % len(emp_ch))
+    if ch_items:
+        qd["channelItems"] = ch_items
+        print("[渠道单品] 已聚合各员工×渠道单品明细（%d 人）" % len(ch_items))
 
     with open(DATA, encoding="utf-8") as f:
         d = json.load(f)
