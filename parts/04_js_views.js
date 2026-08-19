@@ -200,11 +200,12 @@ function renderDay(){
   h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>全店今日达成</b>'
      + '<span class="tail">' + esc(DATA.meta.dayTitle || DATA.meta.date) + '</span></div>';
 
-  /* 今日品类：15个品类横向柱图（10品类按金额 + 5附加按件数），点柱下钻当天明细 */
+  /* 今日品类：统一排序（毛利/手机/增值/合约置顶，其余按达成量降序），点柱下钻当天明细 */
   const dayDone = DATA.store.dailyDone || {};
-  const CATS_9 = ['手机','PC','平板','穿戴','音频','HD','智慧办公','音频穿戴','增值','毛利'];
+  const MONEY_CATS = ['毛利','手机','PC','平板','穿戴','音频','HD','智慧办公','音频穿戴','增值','合约'];
   const SPECIALS = [['回收','单'],['贴膜','单'],['电信积分','分'],['滞销','台'],['摄影课','课']];
-  const g9 = CATS_9.map(c => {
+  const PRIORITY = ['毛利','手机','增值','合约'];
+  const mkCat = (c) => {
     if(c === '毛利'){
       const mv = isNum(dayDone['毛利']) ? dayDone['毛利'] : 0;
       return { name:'毛利', val: mv, qty: (dayMetricItems('毛利') || []).length, pf: mv, unit:'单' };
@@ -214,38 +215,32 @@ function renderDay(){
              qty: items.reduce((s,r) => s + (r.qty || 0), 0),
              pf:  items.reduce((s,r) => s + (r.profit || 0), 0),
              unit:'件' };
+  };
+  let items15 = MONEY_CATS.map(mkCat);
+  SPECIALS.forEach(([c,u]) => items15.push({ name:c, val: isNum(dayDone[c]) ? dayDone[c] : 0, qty:0, pf:0, unit:u }));
+  items15.sort((a,b) => {
+    const ia = PRIORITY.indexOf(a.name), ib = PRIORITY.indexOf(b.name);
+    if(ia >= 0 || ib >= 0) return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
+    return b.val - a.val;
   });
-  const gS = SPECIALS.map(([c,u]) => ({ name:c, val: isNum(dayDone[c]) ? dayDone[c] : 0, unit:u }));
-  const m9 = Math.max.apply(null, g9.map(v => v.val).concat([1]));
-  const mS = Math.max.apply(null, gS.map(v => v.val).concat([1]));
+  const maxV = Math.max.apply(null, items15.map(v => v.val).concat([1]));
 
-  h += '<div class="strip-lab">今日品类 · 共15个 · 点柱看当天明细</div><div class="rows">';
-  g9.forEach(cv => {
-    const pct = cv.val ? Math.max(cv.val / m9 * 100, 2) : 0;
+  h += '<div class="strip-lab">今日品类 · 共' + items15.length + '个 · 点柱看当天明细</div><div class="rows">';
+  items15.forEach(cv => {
+    const pct = cv.val ? Math.max(cv.val / maxV * 100, 2) : 0;
     const neg = cv.pf < 0;
     h += '<div class="row pp-click' + (neg ? ' warn' : '') + (cv.val ? '' : ' zero-row') + '" onclick="toggleDayCat(\'' + esc(cv.name) + '\')">'
       + '<div class="row-t">'
         + '<span class="row-n">' + esc(cv.name) + '</span>'
-        + '<span class="row-p r-' + (cv.val ? (neg ? 'low' : 'good') : 'na') + '">' + cv.qty + (cv.unit || '件') + '</span>'
+        + '<span class="row-p r-' + (cv.val ? (neg ? 'low' : 'good') : 'na') + '">' + (cv.qty ? cv.qty + (cv.unit || '件') : cnt(cv.val) + (cv.unit || '件')) + '</span>'
         + '<span class="row-v num"><b>' + (cv.val ? moneyShort(cv.val) : '—') + '</b></span>'
         + '<span class="chev">' + ic('chev') + '</span>'
       + '</div>'
       + '<div class="cat-chart"><i style="width:' + pct.toFixed(1) + '%"></i></div>'
-      + '<div class="row-g"><span class="' + (neg ? 'stat-low' : '') + '">毛利 ' + (cv.val ? moneyShort(cv.pf) : '—') + '</span>'
-      + '<em style="font-style:normal">毛利率 ' + (cv.val ? (cv.pf / cv.val * 100).toFixed(1) + '%' : '—') + '</em></div>'
-      + '<div class="dcdet-det" data-cat="' + esc(cv.name) + '"></div>'
-      + '</div>';
-  });
-  gS.forEach(cv => {
-    const pct = cv.val ? Math.max(cv.val / mS * 100, 2) : 0;
-    h += '<div class="row pp-click' + (cv.val ? '' : ' zero-row') + '" onclick="toggleDayCat(\'' + esc(cv.name) + '\')">'
-      + '<div class="row-t">'
-        + '<span class="row-n">' + esc(cv.name) + '</span>'
-        + '<span class="row-p r-' + (cv.val ? 'good' : 'na') + '">' + cnt(cv.val) + cv.unit + '</span>'
-        + '<span class="row-v num"><b>' + (cv.val ? cnt(cv.val) : '—') + '</b></span>'
-        + '<span class="chev">' + ic('chev') + '</span>'
-      + '</div>'
-      + '<div class="cat-chart"><i style="width:' + pct.toFixed(1) + '%"></i></div>'
+      + (cv.name === '毛利'
+          ? '<div class="row-g"><span>当日毛利</span><em style="font-style:normal">' + (cv.val ? moneyShort(cv.pf) : '—') + '</em></div>'
+          : '<div class="row-g"><span class="' + (neg ? 'stat-low' : '') + '">毛利 ' + (cv.val ? moneyShort(cv.pf) : '—') + '</span>'
+          + '<em style="font-style:normal">毛利率 ' + (cv.val ? (cv.pf / cv.val * 100).toFixed(1) + '%' : '—') + '</em></div>')
       + '<div class="dcdet-det" data-cat="' + esc(cv.name) + '"></div>'
       + '</div>';
   });
