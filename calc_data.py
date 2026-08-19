@@ -630,6 +630,7 @@ def build_day_details(rxs):
         gross = num(r[C["N"]])
         out.append({
             "code": str(r[C["A"]]).strip(),
+            "type": str(r[C["E"]]).strip(),
             "emp": str(r[C["P"]]).strip(),
             "product": str(r[C["G"]]).strip(),
             "sku": str(r[C["F"]]).strip(),

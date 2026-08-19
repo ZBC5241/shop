@@ -158,7 +158,7 @@ function dayHTML(done, gap){
     let cls = 'day';
     if(hit) cls += ' hit ok'; else if(isNum(gv)) cls += ' miss';
     if(zero) cls += ' zero';
-    h += '<div class="' + cls + '">'
+    h += '<div class="' + cls + '" data-metric="' + esc(k) + '" onclick="clickDayMetric(\'' + esc(k) + '\')">'
       + '<div class="day-l">' + esc(k) + '</div>'
       + '<div class="day-v num">' + (isM ? moneyShort(dv) : cnt(dv)) + '</div>'
       + '<div class="day-g num">' + (isNum(gv)
@@ -195,8 +195,9 @@ function renderDay(){
   h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>全店今日达成</b>'
      + '<span class="tail">' + esc(DATA.meta.dayTitle || DATA.meta.date) + '</span></div>';
   h += dayHTML(DATA.store.dailyDone, DATA.store.dailyGap);
+  h += '<div class="day-det"></div>';
   h += '<div style="font-size:10.5px;color:var(--tx3);padding:9px 2px 0;line-height:1.7">'
-     + '大数字＝今天已完成；下方＝距每日任务的差额（负数表示缺口）</div>';
+     + '大数字＝今天已完成；下方＝距每日任务的差额（负数表示缺口）<br>点上面的模块看当天逐单明细</div>';
 
   /* 今日品类：点品类行展开该品类当天产品明细（并入第1层） */
   const dd = DATA.dayDetails || [];

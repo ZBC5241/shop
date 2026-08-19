@@ -367,7 +367,12 @@ svg{display:block}
 .day{
   background:var(--panel);border:1px solid var(--line);border-radius:12px;
   padding:10px 8px;text-align:center;box-shadow:var(--shadow-s);
+  cursor:pointer;-webkit-tap-highlight-color:transparent;position:relative;
+  transition:transform .15s ease,box-shadow .15s ease;
 }
+.day:active{transform:scale(.95)}
+.day-det{display:none;padding:2px 2px 10px}
+.day-det.open{display:block;animation:detIn .22s ease}
 .day-l{font-size:10.5px;color:var(--tx3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .day-v{font-size:clamp(16px,1.1rem + .3vw,21px);font-weight:800;margin-top:3px;letter-spacing:-.3px}
 .day-g{font-size:10px;margin-top:2px;font-weight:700}

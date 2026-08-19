@@ -687,3 +687,47 @@ function renderQudao(){
     setTimeout(function(){ if(r.parentNode) r.parentNode.removeChild(r); }, 600);
   });
 })();
+
+/* 全店今日达成大模块：点击展开该指标/品类的当天逐单明细 */
+function dayMetricItems(k){
+  const dd = DATA.dayDetails || [];
+  const CATS = { '手机':['手机'], '音频穿戴':['穿戴','音频'], '智慧办公':['PC','平板'],
+                 'HD':['HD'], '增值':['增值'] };
+  if(CATS[k]) return dd.filter(r => CATS[k].indexOf(r.cat) !== -1);
+  if(k === '毛利' || k === '销额') return dd.slice();
+  const rx = { '贴膜':/膜|套包/, '回收':/回收/, '会员':/Care|会员|星联优享/, '电信积分':/入网/ }[k];
+  if(rx) return dd.filter(r => (k === '贴膜' ? (r.amount > 0 && rx.test(r.product)) : rx.test(r.product)));
+  return null;
+}
+
+function dayMetricHTML(k, items){
+  let h = '<div class="det-list">';
+  items.forEach((it, i) => {
+    const neg = (it.amount || 0) < 0;
+    h += '<div class="det-item' + (neg ? ' neg' : '') + '">'
+      + '<div class="det-top"><span class="det-name">' + esc(it.product || '—') + '</span>'
+      + '<span class="det-date num">' + esc(it.emp || '—') + ' · ' + (it.qty || 0) + '件</span></div>'
+      + '<div class="det-row num">'
+      + '<span class="dv-profit">金额: <b>' + fmtNum(it.amount) + '</b></span>'
+      + '<span class="dv-profit">毛利: <b>' + fmtNum(it.profit) + '</b></span>'
+      + '<span class="dv-gpr">毛利率: <b>' + (it.gpr == null ? '—' : (it.gpr * 100).toFixed(1) + '%') + '</b></span>'
+      + '<span class="dv-cost">成本: <b>' + fmtNum(it.cost) + '</b></span>'
+      + '</div></div>';
+  });
+  h += '</div>';
+  return '<div class="sec-h" style="margin-top:10px"><span class="bar"></span><b>' + esc(k) + ' · 当天明细</b>'
+       + '<span class="tail">' + items.length + ' 行</span></div>' + h;
+}
+
+function clickDayMetric(k){
+  const det = document.querySelector('.day-det');
+  if(!det) return;
+  const items = dayMetricItems(k);
+  if(!items || !items.length){
+    toast('今日「' + k + '」暂无逐单明细');
+    return;
+  }
+  det.innerHTML = dayMetricHTML(k, items);
+  det.scrollIntoView({behavior:'smooth', block:'nearest'});
+  det.classList.add('open');
+}
