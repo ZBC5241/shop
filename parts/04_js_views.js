@@ -190,26 +190,55 @@ function postingBanner(){
 function renderDay(){
   let h = '<div class="wrap">';
   h += postingBanner();
+
+  /* 第1层：全店今日达成 + 今日品类（点品类行下钻当天产品明细） */
   h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>全店今日达成</b>'
      + '<span class="tail">' + esc(DATA.meta.dayTitle || DATA.meta.date) + '</span></div>';
   h += dayHTML(DATA.store.dailyDone, DATA.store.dailyGap);
   h += '<div style="font-size:10.5px;color:var(--tx3);padding:9px 2px 0;line-height:1.7">'
      + '大数字＝今天已完成；下方＝距每日任务的差额（负数表示缺口）</div>';
+
+  /* 今日品类：点品类行展开该品类当天产品明细（并入第1层） */
+  const dd = DATA.dayDetails || [];
+  if(dd.length){
+    const CAT_ORDER = ['手机','PC','平板','穿戴','音频','HD','智慧办公','音频穿戴','增值','其他'];
+    const groups = {};
+    dd.forEach(r => { const c = r.cat || '其他'; (groups[c] = groups[c] || []).push(r); });
+    h += '<div style="margin-top:12px;border-top:1px dashed var(--line2);padding-top:10px">'
+       + '<div class="sec-h"><span class="bar"></span><b>今日品类</b>'
+       + '<span class="tail">点品类行下钻当天明细</span></div><div class="rows">';
+    CAT_ORDER.forEach(c => {
+      const items = groups[c];
+      if(!items || !items.length) return;
+      const qty = items.reduce((s,r) => s + (r.qty || 0), 0);
+      const amt = items.reduce((s,r) => s + (r.amount || 0), 0);
+      const pf  = items.reduce((s,r) => s + (r.profit || 0), 0);
+      const neg = pf < 0;
+      h += '<div class="row pp-click' + (neg ? ' warn' : '') + '" onclick="toggleDayCat(\'' + esc(c) + '\')">'
+        + '<div class="row-t">'
+          + '<span class="row-n">' + esc(c) + '</span>'
+          + '<span class="row-p r-' + (neg ? 'low' : 'good') + '">' + qty + ' 件</span>'
+          + '<span class="row-v num"><b>' + moneyFull(amt) + '</b></span>'
+          + '<span class="chev">' + ic('chev') + '</span>'
+        + '</div>'
+        + '<div class="row-g"><span class="' + (neg ? 'stat-low' : '') + '">毛利 ' + moneyFull(pf) + '</span>'
+        + '<em style="font-style:normal">毛利率 ' + (amt ? (pf / amt * 100).toFixed(1) + '%' : '—') + '</em></div>'
+        + '<div class="dcdet-det" data-cat="' + esc(c) + '"></div>'
+        + '</div>';
+    });
+    h += '</div></div>';
+  }
   h += '</div>';
 
-  /* 每人今日 */
-  h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>每人今日</b></div>';
+  /* 第2层：每人今日（展示所有销售品类） */
+  h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>每人今日</b>'
+     + '<span class="tail">全部销售品类</span></div>';
+  const DAY_SHOW = ['销额','毛利','手机','PC','平板','穿戴','音频','音频穿戴','智慧办公','HD','增值','会员','回收','贴膜','电信积分','滞销','优享/会员','摄影课','尊享/储值'];
   DATA.meta.employees.forEach(n => {
     const p = DATA.people[n]; if(!p) return;
     const d = p.dailyDone || {};
-    const items = [
-      ['销额', moneyShort(d['销额'])],
-      ['毛利', moneyShort(d['毛利'])],
-      ['增值', moneyShort(d['增值'])],
-      ['手机', cnt(d['手机'])],
-      ['音频穿戴', cnt(d['音频穿戴'])],
-    ];
-    const allZero = ['销额','毛利','增值','手机','音频穿戴'].every(k => !isNum(d[k]) || d[k] === 0);
+    const items = DAY_SHOW.filter(k => k in d).map(k => [k, MONEY_KEYS.has(k) ? moneyShort(d[k]) : cnt(d[k])]);
+    const allZero = items.every(([k]) => !isNum(d[k]) || d[k] === 0);
     h += '<div class="card" style="padding:11px 12px;margin-bottom:8px'
        + (allZero ? ';border-color:rgba(232,68,58,.22)' : '') + '">'
       + '<div style="display:flex;align-items:center;gap:7px;margin-bottom:7px">'
@@ -225,36 +254,6 @@ function renderDay(){
     h += '</div></div>';
   });
   h += '</div>';
-
-  /* 今日明细：按品类分组，点品类行展开该品类当天明细 */
-  const dd = DATA.dayDetails || [];
-  if(dd.length){
-    const CAT_ORDER = ['手机','PC','平板','穿戴','音频','HD','智慧办公','音频穿戴','增值','其他'];
-    const groups = {};
-    dd.forEach(r => { const c = r.cat || '其他'; (groups[c] = groups[c] || []).push(r); });
-    h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>今日明细</b>'
-       + '<span class="tail">' + dd.length + ' 单 · 按品类展开</span></div><div class="rows">';
-    CAT_ORDER.forEach(c => {
-      const items = groups[c];
-      if(!items || !items.length) return;
-      const qty = items.reduce((s,r) => s + (r.qty || 0), 0);
-      const amt = items.reduce((s,r) => s + (r.amount || 0), 0);
-      const pf  = items.reduce((s,r) => s + (r.profit || 0), 0);
-      const neg = pf < 0;
-      h += '<div class="row pp-click' + (neg ? ' warn' : '') + '" data-cat="' + esc(c) + '" onclick="toggleDayCat(\'' + esc(c) + '\')">'
-        + '<div class="row-t">'
-          + '<span class="row-n">' + esc(c) + '</span>'
-          + '<span class="row-p r-' + (neg ? 'low' : 'good') + '">' + qty + ' 件</span>'
-          + '<span class="row-v num"><b>' + moneyFull(amt) + '</b></span>'
-          + '<span class="chev">' + ic('chev') + '</span>'
-        + '</div>'
-        + '<div class="row-g"><span class="' + (neg ? 'stat-low' : '') + '">毛利 ' + moneyFull(pf) + '</span>'
-        + '<em style="font-style:normal">毛利率 ' + (amt ? (pf / amt * 100).toFixed(1) + '%' : '—') + '</em></div>'
-        + '<div class="dcdet-det" data-cat="' + esc(c) + '"></div>'
-        + '</div>';
-    });
-    h += '</div></div>';
-  }
 
   h += foot();
   h += '</div>';
