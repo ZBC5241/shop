@@ -385,6 +385,24 @@ function bindDynamic(){
   });
   /* 品类达成：点击品类行下钻明细 */
   $$('.cat-click').forEach(c => c.onclick = () => { toggleDetail(c.dataset.cat, c.dataset.person || null); });
+  /* KPI 卡片：点击跳转到该指标排行 */
+  $$('.kpi[data-kpi]').forEach(c => c.onclick = () => {
+    const k = c.dataset.kpi;
+    if(!RANK_DIMS.some(d => d.k === k)) return;
+    RANK_BY = k; VIEW = 'rank';
+    $$('.tab').forEach(t => t.classList.toggle('on', t.dataset.v === 'rank'));
+    render();
+  });
+  /* 品类速览柱：点击展开对应品类达成明细 + 高亮对应行 */
+  $$('.mc-b[data-cat]').forEach(c => c.onclick = () => {
+    toggleDetail(c.dataset.cat, null);
+    const row = $('.cat-click[data-cat="' + c.dataset.cat + '"]:not([data-person])');
+    if(row){
+      row.scrollIntoView({behavior:'smooth', block:'center'});
+      row.classList.add('flash');
+      setTimeout(() => row.classList.remove('flash'), 1000);
+    }
+  });
   /* 点击总览进度环：达成即撒彩带庆祝 */
   const ring = $('.ring');
   if(ring) ring.onclick = () => {

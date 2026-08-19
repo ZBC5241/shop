@@ -552,6 +552,40 @@ svg{display:block}
   :root{--sideW:248px}
   .kpi-grid{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
 }
+/* ============ 动效（晨哥 2026-08-19：增加反馈与质感，先本地试行） ============ */
+/* 入场：整屏淡入 + 卡片逐张浮现 */
+.wrap{animation:viewIn .38s cubic-bezier(.22,1,.36,1) both}
+@keyframes viewIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.kpi,.rk,.day,.bt-c,.q,.ct,.pf,.adv,.mc,.card{animation:cardIn .4s cubic-bezier(.22,1,.36,1) both}
+.kpi:nth-child(2){animation-delay:.04s}
+.kpi:nth-child(3){animation-delay:.08s}
+.kpi:nth-child(4){animation-delay:.12s}
+.sec:nth-child(2){animation-delay:.05s}
+.sec:nth-child(3){animation-delay:.1s}
+@keyframes cardIn{from{opacity:0;transform:translateY(8px) scale(.985)}to{opacity:1;transform:none}}
+.row{animation:rowIn .32s cubic-bezier(.22,1,.36,1) both}
+@keyframes rowIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+/* 进度条/图表：生长动画（scale 动画不依赖内联宽度，重渲染也会播） */
+.kpi-bar i,.row-bar i{transform-origin:left;animation:barGrow .9s cubic-bezier(.22,1,.36,1) both}
+@keyframes barGrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.mc-f{transform-origin:bottom;animation:barUp .8s cubic-bezier(.22,1,.36,1) both}
+@keyframes barUp{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+
+/* 可点元素：按压缩放 + 去点击高亮 */
+.kpi,.rk,.day,.bt-c,.q,.ct,.pf,.adv,.mc,.tab,.chip,.row.cat-click,.pp-click,.cd-click,.icon-btn,.mc-b[data-cat],.cat-dot{cursor:pointer;-webkit-tap-highlight-color:transparent}
+.kpi:active,.rk:active,.day:active,.tab:active,.chip:active,.row.cat-click:active,.pp-click:active,.cd-click:active,.icon-btn:active,.mc-b[data-cat]:active{transform:scale(.965)}
+
+/* 水波纹 */
+.rp-ring{position:absolute;border-radius:50%;background:radial-gradient(circle,rgba(124,58,237,.28),rgba(124,58,237,0) 70%);transform:scale(0);animation:rp .55s ease-out forwards;pointer-events:none;z-index:5}
+@keyframes rp{0%{transform:scale(0);opacity:.9}100%{transform:scale(1);opacity:0}}
+/* 让水波纹容器裁剪：对可点卡片类加 overflow 裁剪（不破坏布局） */
+.kpi,.rk,.day,.bt-c,.q,.ct,.pf,.adv,.mc,.tab,.chip,.row.cat-click,.pp-click,.cd-click,.icon-btn,.mc-b[data-cat]{position:relative;overflow:hidden}
+
+/* 品类速览柱→达成行 联动高亮 */
+.row.flash{background:var(--purpleDim);box-shadow:inset 0 0 0 1.5px var(--purple)}
+.row.flash{animation:flashPulse .6s ease 2}
+@keyframes flashPulse{0%,100%{background:var(--purpleDim)}50%{background:var(--soft)}}
 </style>
 </head>
 <body>

@@ -127,7 +127,7 @@ function kpiCard(label, k, key){
   const s = hasTask(k) ? stat(k.rate) : 'na';
   const rateTxt = hasTask(k) ? pct(k.rate,1) : '无任务';
   const u = unitOf(key, k);
-  return '<div class="kpi s-' + s + '">'
+  return '<div class="kpi s-' + s + '" data-kpi="' + esc(key) + '">'
     + '<div class="kpi-r r-' + s + '">' + rateTxt + '</div>'
     + '<div class="kpi-l">' + esc(label) + '</div>'
     + '<div class="kpi-v num">' + fmtU(k.done, u) + '</div>'
@@ -405,7 +405,7 @@ function catChartHTML(P){
     const rate = (k && isNum(k.rate)) ? Math.min(k.rate, 1) : 0;
     const s = k && hasTask(k) ? stat(k.rate) : 'na';
     const col = {done:'var(--green)', over:'var(--purple)', on:'var(--amber)', low:'var(--red)', na:'var(--gray)'}[s];
-    bars += '<div class="mc-b"><div class="mc-track">'
+    bars += '<div class="mc-b" data-cat="' + esc(c) + '"><div class="mc-track">'
           + '<div class="mc-f" style="height:' + (rate*100).toFixed(0) + '%;background:' + col + '"></div>'
           + (tpPct > 0 ? '<div class="mc-mk" style="bottom:' + tpPct.toFixed(0) + '%"></div>' : '')
           + '</div><span class="mc-l">' + esc(c) + '</span></div>';
@@ -631,3 +631,21 @@ function renderQudao(){
   h += '</div>';
   return h;
 }
+
+/* ---------------- 动效：点击水波纹（一次性委托，避免每次 render 重绑） ---------------- */
+(function(){
+  var RP_SEL = '.kpi,.rk,.day,.tab,.chip,.row.cat-click,.pp-click,.cd-click,.icon-btn,.mc-b[data-cat]';
+  document.addEventListener('click', function(e){
+    var t = e.target && e.target.closest ? e.target.closest(RP_SEL) : null;
+    if(!t) return;
+    var rect = t.getBoundingClientRect();
+    var size = Math.max(rect.width, rect.height, 40);
+    var r = document.createElement('span');
+    r.className = 'rp-ring';
+    r.style.width = r.style.height = size + 'px';
+    r.style.left = (e.clientX - rect.left - size / 2) + 'px';
+    r.style.top  = (e.clientY - rect.top  - size / 2) + 'px';
+    t.appendChild(r);
+    setTimeout(function(){ if(r.parentNode) r.parentNode.removeChild(r); }, 600);
+  });
+})();
