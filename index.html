@@ -869,6 +869,8 @@ function channelDetailHTML(person, channel){
       + '<span class="dv-profit">毛利: <b>' + (r.profit == null ? '—' : fmtNum(r.profit)) + '</b></span>'
       + '<span class="dv-gpr">毛利率: <b>' + (r.gpr == null ? '—' : (r.gpr * 100).toFixed(1) + '%') + '</b></span>'
       + '<span class="dv-cost">成本: <b>' + (r.cost == null ? '—' : fmtNum(r.cost)) + '</b></span>'
+      + '</div>'
+      + (r.code ? '<div class="cd-sub">单号 ' + esc(r.code) + '</div>' : '')
       + '</div></div>';
   });
   h += '</div>';
