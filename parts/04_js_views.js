@@ -191,43 +191,36 @@ function renderDay(){
   let h = '<div class="wrap">';
   h += postingBanner();
 
-  /* 第1层：全店今日达成 + 今日品类（点品类行下钻当天产品明细） */
+  /* 第1层：全店今日达成 = 品类横排（全品类）+ 每日任务网格，合二为一 */
+  const dd = DATA.dayDetails || [];
+  const CAT_ORDER = ['手机','PC','平板','穿戴','音频','HD','智慧办公','音频穿戴','增值','其他'];
+  const groups = {};
+  dd.forEach(r => { const c = r.cat || '其他'; (groups[c] = groups[c] || []).push(r); });
+
   h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>全店今日达成</b>'
      + '<span class="tail">' + esc(DATA.meta.dayTitle || DATA.meta.date) + '</span></div>';
+
+  /* 今日品类：横排展示全部品类，点开下钻当天产品明细 */
+  h += '<div class="strip-lab">今日品类 · 点开看当天明细</div><div class="cat-strip">';
+  CAT_ORDER.forEach(c => {
+    const items = groups[c] || [];
+    const qty = items.reduce((s,r) => s + (r.qty || 0), 0);
+    const amt = items.reduce((s,r) => s + (r.amount || 0), 0);
+    const has = items.length > 0;
+    const pf  = items.reduce((s,r) => s + (r.profit || 0), 0);
+    h += '<div class="cat-blk' + (has ? '' : ' zero') + '" data-metric="' + esc(c) + '" onclick="clickDayMetric(\'' + esc(c) + '\')">'
+      + '<div class="cat-n">' + esc(c) + '</div>'
+      + '<div class="cat-q num">' + qty + '件</div>'
+      + '<div class="cat-a num">' + (has ? moneyShort(amt) : '—') + '</div>'
+      + (has ? '<div class="cat-p num">毛 ' + moneyShort(pf) + '</div>' : '')
+      + '</div>';
+  });
+  h += '</div>';
+
+  /* 每日任务：横排网格，点开看当天逐单明细 */
+  h += '<div class="strip-lab" style="margin-top:12px">每日任务 · 点开看当天逐单</div>';
   h += dayHTML(DATA.store.dailyDone, DATA.store.dailyGap);
   h += '<div class="day-det"></div>';
-  h += '<div style="font-size:10.5px;color:var(--tx3);padding:9px 2px 0;line-height:1.7">'
-     + '大数字＝今天已完成；下方＝距每日任务的差额（负数表示缺口）<br>点上面的模块看当天逐单明细</div>';
-
-  /* 今日品类：点品类行展开该品类当天产品明细（并入第1层） */
-  const dd = DATA.dayDetails || [];
-  if(dd.length){
-    const CAT_ORDER = ['手机','PC','平板','穿戴','音频','HD','智慧办公','音频穿戴','增值','其他'];
-    const groups = {};
-    dd.forEach(r => { const c = r.cat || '其他'; (groups[c] = groups[c] || []).push(r); });
-    h += '<div style="margin-top:12px;border-top:1px dashed var(--line2);padding-top:10px">'
-       + '<div style="font-size:11px;color:var(--tx3);font-weight:700;margin-bottom:8px">今日品类 · 点行下钻当天明细</div><div class="rows">';
-    CAT_ORDER.forEach(c => {
-      const items = groups[c];
-      if(!items || !items.length) return;
-      const qty = items.reduce((s,r) => s + (r.qty || 0), 0);
-      const amt = items.reduce((s,r) => s + (r.amount || 0), 0);
-      const pf  = items.reduce((s,r) => s + (r.profit || 0), 0);
-      const neg = pf < 0;
-      h += '<div class="row pp-click' + (neg ? ' warn' : '') + '" onclick="toggleDayCat(\'' + esc(c) + '\')">'
-        + '<div class="row-t">'
-          + '<span class="row-n">' + esc(c) + '</span>'
-          + '<span class="row-p r-' + (neg ? 'low' : 'good') + '">' + qty + ' 件</span>'
-          + '<span class="row-v num"><b>' + moneyFull(amt) + '</b></span>'
-          + '<span class="chev">' + ic('chev') + '</span>'
-        + '</div>'
-        + '<div class="row-g"><span class="' + (neg ? 'stat-low' : '') + '">毛利 ' + moneyFull(pf) + '</span>'
-        + '<em style="font-style:normal">毛利率 ' + (amt ? (pf / amt * 100).toFixed(1) + '%' : '—') + '</em></div>'
-        + '<div class="dcdet-det" data-cat="' + esc(c) + '"></div>'
-        + '</div>';
-    });
-    h += '</div></div>';
-  }
   h += '</div>';
 
   /* 第2层：每人今日（展示所有销售品类） */

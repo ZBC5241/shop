@@ -691,8 +691,8 @@ function renderQudao(){
 /* 全店今日达成大模块：点击展开该指标/品类的当天逐单明细 */
 function dayMetricItems(k){
   const dd = DATA.dayDetails || [];
-  const CATS = { '手机':['手机'], '音频穿戴':['穿戴','音频'], '智慧办公':['PC','平板'],
-                 'HD':['HD'], '增值':['增值'] };
+  const CATS = { '手机':['手机'],'PC':['PC'],'平板':['平板'],'穿戴':['穿戴'],'音频':['音频'],
+                 'HD':['HD'],'智慧办公':['PC','平板'],'音频穿戴':['穿戴','音频'],'增值':['增值'] };
   if(CATS[k]) return dd.filter(r => CATS[k].indexOf(r.cat) !== -1);
   if(k === '毛利' || k === '销额') return dd.slice();
   const rx = { '贴膜':/膜|套包/, '回收':/回收/, '会员':/Care|会员|星联优享/, '电信积分':/入网/ }[k];
