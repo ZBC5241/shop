@@ -369,47 +369,6 @@ function ringSVG(rate, s, size){
     + '</svg>';
 }
 
-/* ============ 图表风格组件（叠加：Gauge / Donut / 横向 Bar）============ */
-const CHART_PALETTE = ['#6366f1','#22c55e','#06b6d4','#eab308','#ef4444','#8b5cf6','#ec4899','#14b8a6','#f97316','#64748b'];
-/* 仪表盘：270° 弧 + 红→黄→绿着色 + 目标刻度线（charts.csv #8 Performance vs Target） */
-function gaugeSVG(rate, level, size){
-  const r=(size-18)/2, c=2*Math.PI*r, arc=c*0.75;
-  const w=isNum(rate)?Math.max(0,Math.min(rate,1)):0;
-  const col={over:'#7c3aed',done:'#22c55e',on:'#f59e0b',low:'#ef4444',good:'#22c55e',na:'#9aa0bd'}[level]||'#9aa0bd';
-  const cx=size/2, cy=size/2, rot=-135;
-  return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 '+size+' '+size+'">'
-    +'<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="rgba(30,28,60,.08)" stroke-width="11" stroke-linecap="round"'
-    +' stroke-dasharray="'+arc.toFixed(1)+' '+(c-arc).toFixed(1)+'" transform="rotate('+rot+' '+cx+' '+cy+')"/>'
-    +'<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="'+col+'" stroke-width="11" stroke-linecap="round"'
-    +' stroke-dasharray="'+(arc*w).toFixed(1)+' '+(c-arc*w).toFixed(1)+'" transform="rotate('+rot+' '+cx+' '+cy+')" style="transition:stroke-dasharray 1s cubic-bezier(.22,1,.36,1)"/>'
-    +'<line x1="'+cx+'" y1="'+(cy-r-7).toFixed(1)+'" x2="'+cx+'" y2="'+(cy-r+2).toFixed(1)+'" stroke="'+col+'" stroke-width="2.5" opacity=".5" transform="rotate('+(rot+270)+' '+cx+' '+cy+')"/>'
-    +'</svg>';
-}
-/* 环形图：品类占比，对比色板 + 中心总量（charts.csv #3 Part-to-Whole） */
-function donutSVG(segs, size){
-  const cx=size/2, cy=size/2, r=size/2-14, ir=r*0.6;
-  const total=segs.reduce((s,v)=>s+Math.max(v.value,0),0)||1, c=2*Math.PI*r;
-  let acc=0, p='<svg width="'+size+'" height="'+size+'" viewBox="0 0 '+size+' '+size+'">';
-  p+='<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="rgba(30,28,60,.05)" stroke-width="'+(r-ir).toFixed(1)+'"/>';
-  segs.forEach(s=>{ const frac=Math.max(s.value,0)/total, dash=(c*frac).toFixed(1);
-    p+='<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="'+(s.color||'#9aa0bd')+'" stroke-width="'+(r-ir).toFixed(1)+'"'
-      +' stroke-dasharray="'+dash+' '+(c-dash)+'" stroke-dashoffset="'+(-c*acc).toFixed(1)+'" transform="rotate(-90 '+cx+' '+cy+')" style="transition:stroke-dashoffset .9s ease"/>';
-    acc+=frac; });
-  p+='<text x="'+cx+'" y="'+(cy-3)+'" text-anchor="middle" font-size="15" font-weight="800" fill="#1e1c3c">'+moneyShort(total)+'</text>';
-  p+='<text x="'+cx+'" y="'+(cy+13)+'" text-anchor="middle" font-size="10" fill="#9aa0bd">总销额</text></svg>';
-  return p;
-}
-/* 横向条形图：全员销额排行，降序、每柱异色、带数值（charts.csv #2 Compare Categories） */
-function hbarSVG(items){
-  const max=Math.max.apply(null, items.map(v=>v.value).concat([1]));
-  return '<div class="hbar">'+items.map((v,i)=>{
-    const w=max?Math.max(v.value/max*100, v.value>0?3:0):0, col=CHART_PALETTE[i%CHART_PALETTE.length];
-    return '<div class="hb-row"><span class="hb-n">'+esc(v.label)+'</span>'
-      +'<span class="hb-track"><i style="width:'+w.toFixed(1)+'%;background:'+col+'"></i></span>'
-      +'<span class="hb-v num">'+(v.value?moneyShort(v.value):'0')+'</span></div>';
-  }).join('')+'</div>';
-}
-
 /* 内联 SVG 图标库（无 emoji、无外部资源） */
 const ICONS = {
   store:'<path d="M3 9l9-6 9 6v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 21V12h6v9"/>',

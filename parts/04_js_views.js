@@ -187,30 +187,6 @@ function postingBanner(){
     + '</div>';
 }
 
-function dayChartsHTML(g9, DATA){
-  const segs = g9.filter(v=>v.val>0).sort((a,b)=>b.val-a.val).map((v,i)=>({label:v.name, value:v.val, color: CHART_PALETTE[i % CHART_PALETTE.length]}));
-  const totalAmt = segs.reduce((s,v)=>s+v.value,0);
-  const empBar = DATA.meta.employees.map(n=>{ const p=DATA.people[n]||{}; return {label:n, value:(p.dailyDone||{}).销额||0}; }).sort((a,b)=>b.value-a.value);
-  const dn=DATA.store.dailyDone||{}, dg=DATA.store.dailyGap||{};
-  const md=dn.毛利||0, mg=dg.毛利||0, rate=(md+mg)?md/(md+mg):0, lvl=rate>=1?'over':rate>=0.6?'on':'low';
-  const bills=(DATA.dayDetails||[]).length, qty=g9.reduce((s,v)=>s+v.qty,0), perEmp=empBar.length?totalAmt/empBar.length:0;
-  let h='<div class="day-charts">';
-  h+='<div class="dc-card dc-gauge"><div class="dc-h">'+ic('insight')+'<span>全店今日达成</span></div>'
-    +'<div class="gauge-wrap">'+gaugeSVG(rate,lvl,96)+'<div class="gauge-c"><b class="num">'+pct(rate,0)+'</b><span>毛利达成</span></div></div>'
-    +'<div class="kpi-row">'
-      +'<div class="kpi"><span>毛利</span><b class="num">'+moneyShort(md)+'</b></div>'
-      +'<div class="kpi"><span>笔数</span><b class="num">'+bills+'</b></div>'
-      +'<div class="kpi"><span>件数</span><b class="num">'+qty+'</b></div>'
-      +'<div class="kpi"><span>人均</span><b class="num">'+moneyShort(perEmp)+'</b></div>'
-    +'</div></div>';
-  h+='<div class="dc-card"><div class="dc-h">'+ic('rank')+'<span>品类销额占比</span></div>'
-    +donutSVG(segs,150)
-    +'<div class="legend">'+segs.map(s=>'<span class="lg"><i style="background:'+s.color+'"></i>'+esc(s.label)+' '+pct(s.value/totalAmt,0)+'</span>').join('')+'</div></div>';
-  h+='<div class="dc-card"><div class="dc-h">'+ic('person')+'<span>全员销额排行</span></div>'+hbarSVG(empBar)+'</div>';
-  h+='</div>';
-  return h;
-}
-
 function renderDay(){
   let h = '<div class="wrap">';
   h += postingBanner();
@@ -252,9 +228,6 @@ function renderDay(){
     return b.pf - a.pf;
   });
   const maxV = Math.max.apply(null, items15.map(v => v.pf).concat([1]));
-
-  const g9main = items15.filter(v => MONEY_CATS.slice(1).includes(v.name));
-  h += dayChartsHTML(g9main, DATA);
 
   h += '<div class="strip-lab">今日品类 · 共' + items15.length + '个 · 毛利合计 ' + moneyShort(isNum(dayDone['毛利']) ? dayDone['毛利'] : 0) + ' · 点柱看当天明细</div><div class="rows">';
   items15.forEach(cv => {
