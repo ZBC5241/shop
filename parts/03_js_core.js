@@ -239,7 +239,7 @@ function channelDetailHTML(person, channel){
   return h;
 }
 
-/* 点日期展开：显示该单的 LS 单号（同渠道只展开一条） */
+/* 点日期展开：显示该单的 单号/会员姓名/电话（同渠道只展开一条，不占地方） */
 function toggleCode(person, channel, i){
   const det = document.querySelector('.code-det[data-p="' + person + '"][data-c="' + channel + '"][data-i="' + i + '"]');
   if(!det) return;
@@ -249,8 +249,13 @@ function toggleCode(person, channel, i){
   const map = (DATA.qudao && DATA.qudao.channelItems) || {};
   const items = (map[person] || {})[channel] || [];
   const it = items[i];
-  if(!it || !it.code){ det.innerHTML = '<div class="code-line">单号 —</div>'; det.classList.add('open'); return; }
-  det.innerHTML = '<div class="code-line">单号 ' + esc(it.code) + '</div>';
+  if(!it){ det.innerHTML = '<div class="code-line">—</div>'; det.classList.add('open'); return; }
+  let h = '<div class="code-line">单号 ' + esc(it.code || '—') + '</div>';
+  if(it.member || it.phone){
+    h += '<div class="code-line">会员 ' + esc(it.member || '—')
+       + (it.phone ? ' · ' + esc(it.phone) : '') + '</div>';
+  }
+  det.innerHTML = h;
   det.classList.add('open');
 }
 

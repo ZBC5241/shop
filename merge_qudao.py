@@ -156,6 +156,8 @@ def read_emp_channel():
         COL_PRO = hdr.get("商品名称")           # 商品名称
         COL_SKU = hdr.get("商品sku名称")        # SKU
         COL_QTY = hdr.get("销售数量")           # 数量
+        COL_MEM = hdr.get("会员姓名")           # 会员姓名
+        COL_PH  = hdr.get("会员手机号")          # 会员手机号
         if not (COL_G and COL_P and COL_N):
             print("  [员工×渠道] 销售分析缺少关键列（员工/渠道/净额）")
             return emp, items
@@ -180,6 +182,8 @@ def read_emp_channel():
                 "sku": str(ws.cell(r, COL_SKU).value or "").strip() if COL_SKU else "",
                 "qty": _num(ws.cell(r, COL_QTY).value) if COL_QTY else 0,
                 "amount": _num(ws.cell(r, COL_N).value),
+                "member": str(ws.cell(r, COL_MEM).value or "").strip() if COL_MEM else "",
+                "phone": str(ws.cell(r, COL_PH).value or "").strip() if COL_PH else "",
             })
     except Exception as e:
         print("  [员工×渠道] 销售分析读取失败: %s" % e)
