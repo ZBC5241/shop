@@ -190,11 +190,11 @@ function toggleDetail(cat, person){
 }
 
 /* 逐人下钻：列出该员工在各获客渠道的销售额（DATA.qudao.empChannel[员工]，来自桌面销售分析 sheet）
-   口径：剔除垫付/预订。只展示【渠道 + 金额 + 笔数】。 */
+   口径：与渠道挂账完成一致（含全部业务类型，垫付/预订也算）。只展示【渠道 + 金额 + 笔数】。 */
 function personDetailHTML(name){
   const emp = (DATA.qudao && DATA.qudao.empChannel) || {};
   const rows = emp[name] || [];
-  if(!rows.length) return '<div class="det-empty">该员工本期无获客渠道销售（垫付/预订已剔除）</div>';
+  if(!rows.length) return '<div class="det-empty">该员工本期无获客渠道销售</div>';
   let total = 0;
   rows.forEach(r => { total += (r.amount || 0); });
   let h = '<div class="det-list">';
@@ -516,18 +516,19 @@ function renderQudao(){
      + '</div>';
   h += '</div></div>';
 
-  /* 逐人（渠道挂账口径：剔除垫付/预订） */
+  /* 逐人（渠道挂账口径：含全部业务类型；点击行下钻渠道明细） */
   h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>逐人进度</b>'
-     + '<span class="tail">不含垫付/预订</span></div><div class="rows">';
+     + '<span class="tail">点击行下钻渠道明细</span></div><div class="rows">';
   (Q.people || []).forEach(p => {
     const has = isNum(p.task) && p.task !== 0;
     const ps = has ? stat(p.rate) : 'na';
     const crit = has && isCritical(p.rate);
-    h += '<div class="row' + (crit ? ' warn' : '') + '">'
+    h += '<div class="row pp-click' + (crit ? ' warn' : '') + '" data-person="' + esc(p.name) + '" onclick="togglePerson(\'' + esc(p.name) + '\')">'
       + '<div class="row-t">'
         + '<span class="row-n">' + esc(p.name) + '</span>'
         + '<span class="row-p r-' + ps + '">' + (has ? pct(p.rate,0) : '无任务') + '</span>'
         + '<span class="row-v num"><b>' + moneyFull(p.done) + '</b>' + (has ? ' / ' + moneyFull(p.task) : '') + '</span>'
+        + '<span class="chev">' + ic('chev') + '</span>'
       + '</div>'
       + barHTML(p.rate, ps)
       + (has && isNum(p.gap) && p.gap < 0
@@ -535,7 +536,8 @@ function renderQudao(){
           : (has && isNum(p.gap) && p.gap >= 0
               ? '<div class="row-g"><span>' + STAT_TXT[ps] + '</span><span style="color:var(--green)">超出 ' + moneyFull(p.gap) + '</span></div>'
               : (has ? '<div class="row-g"><span>' + STAT_TXT[ps] + '</span></div>' : '')))
-      + '</div>';
+      + '</div>'
+      + '<div class="pp-det" data-person="' + esc(p.name) + '"></div>';
   });
   h += '</div></div>';
 

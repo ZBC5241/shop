@@ -9,7 +9,7 @@
   "isToday": true,
   "lagDays": 0,
   "todayLabel": "08-19",
-  "fetchTime": "15:12",
+  "fetchTime": "15:13",
   "employees": [
    "邵乐乐",
    "杨丽华",
@@ -20,7 +20,7 @@
   "sourceFile": "yonyou_raw.tsv",
   "sourceRows": 323,
   "dayRows": 5,
-  "generatedAt": "2026-08-19 15:12:36"
+  "generatedAt": "2026-08-19 15:13:30"
  },
  "store": {
   "performance": {
@@ -6883,8 +6883,8 @@
    "张博晨": [
     {
      "channel": "三大地图",
-     "amount": 0.0,
-     "bills": 0
+     "amount": 99.0,
+     "bills": 1
     },
     {
      "channel": "小红书",
@@ -6940,15 +6940,15 @@
     },
     {
      "channel": "企业上门购",
-     "amount": 6894.0,
-     "bills": 6
+     "amount": 10391.0,
+     "bills": 19
     }
    ],
    "杨丽华": [
     {
      "channel": "三大地图",
-     "amount": 17626.0,
-     "bills": 6
+     "amount": 23825.0,
+     "bills": 7
     },
     {
      "channel": "小红书",
@@ -7004,8 +7004,8 @@
     },
     {
      "channel": "企业上门购",
-     "amount": 0.0,
-     "bills": 0
+     "amount": 1345.0,
+     "bills": 5
     }
    ],
    "陈超磊": [

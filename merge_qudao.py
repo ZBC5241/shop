@@ -125,8 +125,8 @@ def read_channels():
 def read_emp_channel():
     """按【员工 × 华为获客渠道】聚合桌面 xlsx「销售分析」sheet（8 月李家村）。
 
-    口径：剔除业务类型 ∈ {垫付, 预订}（与用户 Excel「不含垫付预订」表一致）；
-          仅白名单获客渠道；按业务日期过滤 8 月切片。
+    口径：与「渠道挂账」完成列公式一致（含全部业务类型，垫付/预订也算，晨哥 2026-08-19 拍板），
+          保证逐人渠道明细合计 == 渠道挂账完成额；仅白名单获客渠道；按业务日期过滤 8 月切片。
     来源：直接读桌面《李家村8月任务进度.xlsx》的「销售分析」sheet（用户导出，全程按表格走）。
     返回：{ 员工名: [ {channel, amount, bills}, ... 按白名单顺序 ] }
     """
@@ -148,17 +148,14 @@ def read_emp_channel():
                 hdr[str(v).strip()] = c
         COL_P  = hdr.get("华为获客渠道名称")   # 渠道
         COL_G  = hdr.get("营业员名称")         # 员工
-        COL_H  = hdr.get("业务类型名称")        # 业务类型（剔除垫付/预订）
+        COL_H  = hdr.get("业务类型名称")        # 业务类型（挂账口径：不剔除）
         COL_N  = hdr.get("销售净额")           # 净额
         COL_BD = hdr.get("业务日期")           # 过滤 8 月
-        if not (COL_G and COL_P and COL_H and COL_N):
-            print("  [员工×渠道] 销售分析缺少关键列（员工/渠道/业务类型/净额）")
+        if not (COL_G and COL_P and COL_N):
+            print("  [员工×渠道] 销售分析缺少关键列（员工/渠道/净额）")
             return emp
         import datetime as _dt
         for r in range(3, ws.max_row + 1):
-            bt = str(ws.cell(r, COL_H).value or "").strip()
-            if bt in EXCLUDE_BTYPE:
-                continue
             bd = ws.cell(r, COL_BD).value if COL_BD else None
             if isinstance(bd, (_dt.datetime, _dt.date)):
                 if not (bd.year == 2026 and bd.month == 8):
