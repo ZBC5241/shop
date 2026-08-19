@@ -200,19 +200,25 @@ function renderDay(){
   h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>全店今日达成</b>'
      + '<span class="tail">' + esc(DATA.meta.dayTitle || DATA.meta.date) + '</span></div>';
 
-  /* 今日品类：横排展示全部品类，点开下钻当天产品明细 */
-  h += '<div class="strip-lab">今日品类 · 点开看当天明细</div><div class="cat-strip">';
+  /* 今日品类：行式展示全部品类（9个一个不少），点行下钻当天产品明细 */
+  h += '<div class="strip-lab">今日品类 · 点开看当天明细</div><div class="rows">';
   CAT_ORDER.forEach(c => {
     const items = groups[c] || [];
     const qty = items.reduce((s,r) => s + (r.qty || 0), 0);
     const amt = items.reduce((s,r) => s + (r.amount || 0), 0);
-    const has = items.length > 0;
     const pf  = items.reduce((s,r) => s + (r.profit || 0), 0);
-    h += '<div class="cat-blk' + (has ? '' : ' zero') + '" data-metric="' + esc(c) + '" onclick="clickDayMetric(\'' + esc(c) + '\')">'
-      + '<div class="cat-n">' + esc(c) + '</div>'
-      + '<div class="cat-q num">' + qty + '件</div>'
-      + '<div class="cat-a num">' + (has ? moneyShort(amt) : '—') + '</div>'
-      + (has ? '<div class="cat-p num">毛 ' + moneyShort(pf) + '</div>' : '')
+    const has = items.length > 0;
+    const neg = pf < 0;
+    h += '<div class="row pp-click' + (neg ? ' warn' : '') + (has ? '' : ' zero-row') + '" onclick="toggleDayCat(\'' + esc(c) + '\')">'
+      + '<div class="row-t">'
+        + '<span class="row-n">' + esc(c) + '</span>'
+        + '<span class="row-p r-' + (has ? (neg ? 'low' : 'good') : 'na') + '">' + qty + ' 件</span>'
+        + '<span class="row-v num"><b>' + (has ? moneyFull(amt) : '—') + '</b></span>'
+        + '<span class="chev">' + ic('chev') + '</span>'
+      + '</div>'
+      + '<div class="row-g"><span class="' + (neg ? 'stat-low' : '') + '">毛利 ' + (has ? moneyFull(pf) : '—') + '</span>'
+      + '<em style="font-style:normal">毛利率 ' + (has && amt ? (pf / amt * 100).toFixed(1) + '%' : '—') + '</em></div>'
+      + '<div class="dcdet-det" data-cat="' + esc(c) + '"></div>'
       + '</div>';
   });
   h += '</div>';

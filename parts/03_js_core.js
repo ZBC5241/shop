@@ -321,7 +321,7 @@ function toggleDayCat(cat){
   document.querySelectorAll('.dcdet-det.open').forEach(x => { if(x !== det){ x.classList.remove('open'); x.innerHTML = ''; }});
   if(open){ det.classList.remove('open'); det.innerHTML = ''; return; }
   const items = (DATA.dayDetails || []).filter(r => (r.cat || '其他') === cat);
-  det.innerHTML = dayCatHTML(cat, items);
+  det.innerHTML = items.length ? dayCatHTML(cat, items) : '<div class="det-empty">该品类今日暂无明细</div>';
   det.classList.add('open');
 }
 
