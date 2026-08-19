@@ -369,6 +369,53 @@ function ringSVG(rate, s, size){
     + '</svg>';
 }
 
+/* ============ 今日图表：Donut(毛利占比) + Bar(增值排行) ============ */
+const CHART_PALETTE = ['#6366f1','#22c55e','#06b6d4','#eab308','#f43f5e','#a855f7','#14b8a6','#fb923c'];
+
+/* Donut 环形图：items=[{label,value,color}], size=直径。返回 SVG 字符串。
+   中心数字与标签由调用方在外层 HTML 叠加（更灵活）。 */
+function donutSVG(items, size){
+  const total = items.reduce((s,it) => s + (isNum(it.value) ? it.value : 0), 0);
+  if(!total) return '<div style="width:' + size + 'px;height:' + size + 'px;display:flex;align-items:center;justify-content:center;color:var(--tx3);font-size:12px">暂无数据</div>';
+  const cx = size / 2, cy = size / 2;
+  const r = (size / 2) - 14;
+  const c = 2 * Math.PI * r;
+  let acc = 0, parts = '';
+  items.forEach((it) => {
+    const v = isNum(it.value) ? it.value : 0;
+    if(!v) return;
+    const frac = v / total;
+    const dash = (frac * c).toFixed(2);
+    const gap  = (c - parseFloat(dash)).toFixed(2);
+    const off  = (-acc * c).toFixed(2);
+    parts += '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="none" stroke="' + it.color + '" stroke-width="18"'
+          + ' stroke-dasharray="' + dash + ' ' + gap + '" stroke-dashoffset="' + off + '"'
+          + ' transform="rotate(-90 ' + cx + ' ' + cy + ')" style="transition:stroke-dasharray .8s cubic-bezier(.22,1,.36,1)"/>';
+    acc += frac;
+  });
+  return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">'
+    + parts + '</svg>';
+}
+
+/* 横向条形排行：items=[{label,value}] 已降序。maxV 不传时自动取 items 中最大值。返回 HTML 字符串。 */
+function hbarSVG(items, maxV){
+  if(!maxV) maxV = items.reduce((m,it) => Math.max(m, isNum(it.value) ? it.value : 0), 1);
+  const mv = Math.max(maxV, 1);
+  let h = '';
+  items.forEach((it, i) => {
+    const v = isNum(it.value) ? it.value : 0;
+    const w = v > 0 ? Math.max(v / mv * 100, 4) : 0;
+    const col = CHART_PALETTE[i % CHART_PALETTE.length];
+    const valTxt = v > 0 ? moneyShort(v) : '0';
+    h += '<div class="hb-row">'
+       +   '<span class="hb-name">' + esc(it.label) + '</span>'
+       +   '<span class="hb-track"><span class="hb-fill" style="width:' + w.toFixed(1) + '%;background:' + col + '"></span></span>'
+       +   '<span class="hb-v num">' + valTxt + '</span>'
+       + '</div>';
+  });
+  return h;
+}
+
 /* 内联 SVG 图标库（无 emoji、无外部资源） */
 const ICONS = {
   store:'<path d="M3 9l9-6 9 6v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 21V12h6v9"/>',

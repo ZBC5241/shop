@@ -187,6 +187,47 @@ function postingBanner(){
     + '</div>';
 }
 
+/* ============ 今日图表：Donut(按毛利) + Bar(按增值排行) ============ */
+function dayChartsHTML(dd, meta){
+  /* Donut 数据：按 cat 聚合 profit（毛利），降序，取前 5 + 其他 */
+  const pfByCat = {};
+  dd.forEach(r => { const c = r.cat || '其他'; pfByCat[c] = (pfByCat[c]||0) + (isNum(r.profit) ? r.profit : 0); });
+  const cats = Object.keys(pfByCat).filter(c => pfByCat[c] > 0).sort((a,b) => pfByCat[b] - pfByCat[a]);
+  const top = cats.slice(0, 5);
+  const restSum = cats.slice(5).reduce((s,c) => s + pfByCat[c], 0);
+  const donutItems = top.map((c,i) => ({ label:c, value:pfByCat[c], color:CHART_PALETTE[i % CHART_PALETTE.length] }));
+  if(restSum > 0) donutItems.push({ label:'其他', value:restSum, color:CHART_PALETTE[5 % CHART_PALETTE.length] });
+  const totalPf = donutItems.reduce((s,it) => s + it.value, 0);
+
+  /* Bar 数据：按 emp 聚合 cat=='增值' 的 amount，降序，全员都列（含 0） */
+  const incByEmp = {};
+  (meta.employees || []).forEach(n => incByEmp[n] = 0);
+  dd.forEach(r => { if(r.cat === '增值') incByEmp[r.emp] = (incByEmp[r.emp]||0) + (isNum(r.amount) ? r.amount : 0); });
+  const barItems = Object.keys(incByEmp).map(n => ({ label:n, value:incByEmp[n] })).sort((a,b) => b.value - a.value);
+
+  let h = '<div class="sec"><div class="sec-h"><span class="bar"></span><b>今日图表</b><span class="tail">构成 · 排行</span></div>'
+        + '<div class="chart-grid">'
+        +   '<div class="cg-card"><div class="cg-h">品类毛利占比</div>'
+        +     '<div class="donut-wrap">' + donutSVG(donutItems, 150)
+        +       '<div class="donut-center"><b class="num">' + moneyShort(totalPf) + '</b><span>总毛利</span></div>'
+        +     '</div>'
+        +     '<div class="donut-legend">';
+  donutItems.forEach(it => {
+    const pct = totalPf ? (it.value / totalPf * 100) : 0;
+    h += '<div class="dl-i"><span class="dl-swatch" style="background:' + it.color + '"></span>'
+       +   '<span class="dl-t">' + esc(it.label) + '</span>'
+       +   '<span class="dl-v num">' + moneyShort(it.value) + '</span>'
+       +   '<span class="dl-p num">' + pct.toFixed(0) + '%</span>'
+       + '</div>';
+  });
+  h +=   '</div></div>'
+      +   '<div class="cg-card"><div class="cg-h">全员增值排行</div>'
+      +     '<div class="hb-list">' + hbarSVG(barItems) + '</div>'
+      +   '</div>'
+      + '</div></div>';
+  return h;
+}
+
 function renderDay(){
   let h = '<div class="wrap">';
   h += postingBanner();
@@ -228,6 +269,9 @@ function renderDay(){
     return b.pf - a.pf;
   });
   const maxV = Math.max.apply(null, items15.map(v => v.pf).concat([1]));
+
+  /* 今日图表：品类毛利占比(Donut) + 全员增值排行(Bar) */
+  h += dayChartsHTML(dd, DATA.meta);
 
   h += '<div class="strip-lab">今日品类 · 共' + items15.length + '个 · 毛利合计 ' + moneyShort(isNum(dayDone['毛利']) ? dayDone['毛利'] : 0) + ' · 点柱看当天明细</div><div class="rows">';
   items15.forEach(cv => {
