@@ -133,6 +133,13 @@ svg{display:block}
   box-shadow:var(--shadow-s)}
 .mgr-bar b{font-weight:800;color:var(--tx)}
 .mgr-bar .num{font-variant-numeric:tabular-nums;letter-spacing:.3px}
+/* 全局页头店长芯片：默认隐藏，由 JS 按"张博晨是否有数据"显隐 */
+.mgr-chip{display:none;align-items:center;gap:6px;margin-top:11px;padding:7px 12px;
+  background:linear-gradient(135deg,var(--purpleDim),var(--soft));
+  border:1px solid var(--line);border-radius:var(--r);font-size:12px;color:var(--tx2);
+  box-shadow:var(--shadow-s)}
+.mgr-chip b{font-weight:800;color:var(--tx)}
+.mgr-chip .num{font-variant-numeric:tabular-nums;letter-spacing:.3px}
 /* 今日战况 */
 .bt{display:flex;gap:9px;margin-bottom:9px}
 .bt-c{flex:1;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);
@@ -672,6 +679,8 @@ svg{display:block}
       </div>
       <div class="tp-bar"><div class="tp-fill" id="tpFill" style="width:0"></div></div>
     </div>
+
+    <div class="mgr-chip" id="mgrChip"></div>
   </header>
 
   <nav class="tabs">
@@ -1871,17 +1880,38 @@ const LV_TAG   = { danger:'急', warn:'追', good:'稳', mid:'跟得上', none:'
 const MANAGER_NAME = '张博晨';
 const MANAGER_ID   = '20230528';
 
+/* 店长（张博晨）是否在数据中有记录——有则全局页头显示其标识，无则不显示 */
+function managerHasData(){
+  const D = (typeof DATA !== 'undefined' && DATA) || null;
+  if(!D) return false;
+  /* 店长个人数据存在且非空 */
+  if(D.people && D.people[MANAGER_NAME] && Object.keys(D.people[MANAGER_NAME]).length) return true;
+  /* 员工名单含店长，且整体数据有来源（非测试空壳） */
+  const emp = (D.meta && D.meta.employees) || [];
+  if(emp.indexOf(MANAGER_NAME) >= 0 && (D.meta.sourceFile || D.store)) return true;
+  /* 当日明细中存在店长记录 */
+  if((D.dayDetails || []).some(r => r.emp === MANAGER_NAME)) return true;
+  return false;
+}
+/* 同步全局页头店长芯片的显隐（render 每次切换 Tab 都会调用） */
+function updateManagerChip(){
+  const el = document.getElementById('mgrChip');
+  if(!el) return;
+  if(managerHasData()){
+    el.innerHTML = '店长 <b>' + esc(MANAGER_NAME) + '</b>'
+      + (MANAGER_ID ? ' · 工号 <b class="num">' + esc(MANAGER_ID) + '</b>' : '');
+    el.style.display = 'flex';
+  } else {
+    el.style.display = 'none';
+  }
+}
+
 function renderInsight(){
   const I = DATA.insights;
   if(!I) return '<div class="wrap"><div class="empty">暂无洞察数据，请重新生成看板</div></div>';
   const m = DATA.meta || {};
   const tp = I.timeProgress || 0;
   let h = '<div class="wrap">';
-
-  /* 店长标识（有数据才显示） */
-  h += '<div class="mgr-bar">店长 <b>' + esc(MANAGER_NAME) + '</b>'
-     + (MANAGER_ID ? ' · 工号 <b class="num">' + esc(MANAGER_ID) + '</b>' : '')
-     + '</div>';
 
   /* ---- 1. 今日战况 ---- */
   const T = I.today || {sold:[],idle:[]};
@@ -1992,6 +2022,7 @@ function renderInsight(){
 function render(){
   const m = DATA.meta || {};
   $('#storeName').textContent = m.storeName || '门店看板';
+  updateManagerChip();
   $('#dataDate').textContent  = (m.date || '')
     + (m.fetchTime ? ' · ' + m.fetchTime + ' 更新' : (m.dayTitle ? ' · ' + m.dayTitle : ''));
   const tp = m.timeProgress;
