@@ -65,18 +65,20 @@ function isCritical(rate){
 }
 const STAT_TXT = { done:'已达成', over:'超进度', on:'跟得上', low:'落后', na:'无任务' };
 
-/* 进度提示行（gap = 任务-完成）：
-   - gap>0 未完成：状态词 + 「还差 X」
-   - gap<=0 已完成：只给形容词（超额完成/任务已达成），不写「超出 X元」——
-     月份未结束，写金额容易给人已结清/超额完成的错觉（晨哥 2026-08-19 拍板） */
-function gapHintHTML(s, gap, fmt){
-  if(!isNum(gap)) return '';
+/* 进度提示行（short = 缺口量，>0=还差多少，<0=超额完成）：
+   - short>0 未完成：状态词 + 「缺口 X[单位]」
+   - short<=0 已完成：只给形容词（超额完成/任务已达成），不写金额——
+     月份未结束，写金额容易给人已结清/超额完成的错觉（晨哥 2026-08-19 拍板）。
+   注意：品类行 gap 是 done-task（负=缺），挂账行 gap 是 task-done（正=缺），
+   调用方需先把 gap 归一到「缺口」语义再传入。 */
+function gapHintHTML(s, short, fmt, unit){
+  if(!isNum(short)) return '';
   let inner;
-  if(gap > 0){
+  if(short > 0){
     const w = {low:'进度落后', on:'进度正常', over:'进度领先', done:'进度达标'}[s] || STAT_TXT[s] || '进度';
-    inner = '<span>' + w + '</span><em>还差 ' + fmt(gap) + '</em>';
+    inner = '<span>' + w + '</span><em>缺口 ' + fmt(short) + (unit || '') + '</em>';
   }else{
-    const w = (gap < 0) ? '超额完成' : '任务已达成';
+    const w = (short < 0) ? '超额完成' : '任务已达成';
     inner = '<span style="color:var(--green);font-weight:700">' + w + '</span>';
   }
   return '<div class="row-g">' + inner + '</div>';
@@ -152,7 +154,7 @@ function catRow(name, k, key, person){
       + '<span class="chev">' + ic('chev') + '</span>'
     + '</div>'
     + barHTML(k.rate, s)
-    + (has ? gapHintHTML(s, k.gap, v => fmtU(v, u)) : '')
+    + (has ? gapHintHTML(s, -k.gap, v => fmtU(v, u), u === 'cnt' ? '台' : '') : '')
     + '</div>'
     + '<div class="cat-det" data-cat="' + esc(name) + '"' + pc + '></div>';
 }
