@@ -226,6 +226,28 @@ function renderDay(){
   });
   h += '</div>';
 
+  /* 今日明细：当天每单（点行展开出库单号） */
+  const dd = DATA.dayDetails || [];
+  if(dd.length){
+    h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>今日明细</b>'
+       + '<span class="tail">' + dd.length + ' 单 · 点行展开单号</span></div><div class="det-list">';
+    dd.forEach((r, i) => {
+      const neg = (r.amount || 0) < 0;
+      h += '<div class="det-item cd-click' + (neg ? ' neg' : '') + '" onclick="toggleDayCode(' + i + ')">'
+        + '<div class="det-top"><span class="det-name">' + esc(r.product || '—') + '</span>'
+        + '<span class="det-date num">' + esc(r.emp || '—') + ' · ' + (r.qty || 0) + '件</span></div>'
+        + '<div class="det-row num">'
+        + '<span class="dv-profit">金额: <b>' + fmtNum(r.amount) + '</b></span>'
+        + '<span class="dv-profit">毛利: <b>' + fmtNum(r.profit) + '</b></span>'
+        + '<span class="dv-gpr">毛利率: <b>' + (r.gpr == null ? '—' : (r.gpr * 100).toFixed(1) + '%') + '</b></span>'
+        + '<span class="dv-cost">成本: <b>' + fmtNum(r.cost) + '</b></span>'
+        + '</div>'
+        + '<div class="ddet-det" data-i="' + i + '"></div>'
+        + '</div>';
+    });
+    h += '</div></div>';
+  }
+
   h += foot();
   h += '</div>';
   return h;

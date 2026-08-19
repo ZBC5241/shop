@@ -270,7 +270,7 @@ function toggleCodeBox(sel, it){
   const det = document.querySelector(sel);
   if(!det) return;
   const open = det.classList.contains('open');
-  document.querySelectorAll('.code-det.open,.cdet-det.open').forEach(x => {
+  document.querySelectorAll('.code-det.open,.cdet-det.open,.ddet-det.open').forEach(x => {
     if(x !== det){ x.classList.remove('open'); x.innerHTML = ''; }
   });
   if(open){ det.classList.remove('open'); det.innerHTML = ''; return; }
@@ -291,6 +291,11 @@ function toggleDetCode(cat, i, person){
   if(person) rows = rows.filter(r => r.emp === person);
   const psel = person ? '[data-person="' + esc(person) + '"]' : ':not([data-person])';
   toggleCodeBox('.cdet-det[data-cat="' + esc(cat) + '"][data-i="' + i + '"]' + psel, rows[i]);
+}
+
+/* 今日明细：点行展开出库单号 */
+function toggleDayCode(i){
+  toggleCodeBox('.ddet-det[data-i="' + i + '"]', (DATA.dayDetails || [])[i]);
 }
 
 function toggleChannel(person, channel){

@@ -608,6 +608,29 @@ def build_insights(xs, rxs, people, store, ref, tp, rd):
             "timeProgress": tp, "remainDays": rd}
 
 
+def build_day_details(rxs):
+    """当日达成明细：RXS 逐行（商品/业务员/金额/毛利/毛利率/成本）。"""
+    out = []
+    for r in rxs:
+        amt = num(r[C["M"]])
+        gross = num(r[C["N"]])
+        out.append({
+            "code": str(r[C["A"]]).strip(),
+            "emp": str(r[C["P"]]).strip(),
+            "product": str(r[C["G"]]).strip(),
+            "sku": str(r[C["F"]]).strip(),
+            "qty": num(r[C["I"]]),
+            "origPrice": num(r[C["K"]]),
+            "discPrice": num(r[C["L"]]),
+            "amount": amt,
+            "profit": gross,
+            "cost": num(r[C["S"]]),
+            "gpr": (gross / amt) if amt else None,
+        })
+    out.sort(key=lambda x: (x["emp"], x["code"]))
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("tsv")
@@ -683,6 +706,7 @@ def main():
         "people": people,
         "insights": build_insights(xs, rxs, people, store, ref, ref.day / last_day, rd),
         "details": build_details(xs),
+        "dayDetails": build_day_details(rxs),
     }
 
     with open(a.out, "w", encoding="utf-8") as f:
