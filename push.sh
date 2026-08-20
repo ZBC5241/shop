@@ -28,6 +28,10 @@ if git diff --cached --quiet; then
 fi
 git commit -m "$MSG" || true
 
+GITEETOK="${GITEETOK:-}"
+GITEE_USER="${GITEE_USER:-time5241}"
+GITEE_REPO="https://gitee.com/${GITEE_USER}/shop.git"
+
 # 无令牌则退出（不污染 remote）
 if [ -z "$TOKEN" ]; then
   echo "❌ 缺少令牌：TOKEN=gho_xxx bash push.sh"
@@ -65,7 +69,19 @@ for m in "${MIRRORS[@]}"; do
 done
 
 if [ "$push_ok" = "1" ]; then
-  echo "✅ 推送成功，remote 已还原（token 即用即清）"
+  echo "✅ GitHub 推送成功，remote 已还原（token 即用即清）"
+  # —— Gitee 自动备份（可选：提供 GITEETOK 则顺手同步，不参与日常操作）——
+  if [ -n "$GITEETOK" ]; then
+    echo "→ 自动备份到 Gitee（${GITEE_USER}/shop）..."
+    git remote add gitee "$GITEE_REPO" 2>/dev/null || true
+    git remote set-url gitee "https://${GITEE_USER}:${GITEETOK}@gitee.com/${GITEE_USER}/shop.git"
+    if git push gitee main 2>&1 | tail -2; then
+      echo "✅ Gitee 备份完成"
+    else
+      echo "  ⚠️ Gitee 备份失败（不影响上线，可稍后手动补）"
+    fi
+    git remote set-url gitee "$GITEE_REPO"   # 还原，清除令牌
+  fi
 else
   echo "❌ 三个镜像全部失败，请检查网络或令牌"
   exit 1
