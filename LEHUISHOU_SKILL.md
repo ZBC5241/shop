@@ -98,21 +98,52 @@
 
 ---
 
-## 6. 看板展示约定（已固化）
+## 6. 看板展示约定（图2 布局，已固化）
 
-- 看板从 `data.json → store.qcs.乐回收` 和 `people[n].qcs.乐回收` 读，不再有独立"乐回收（手动录入）"板块
-- 卡片标签："乐回收（公司净利）"，与"太力回收（自动）"并列
-- 无"手动录入"标记、无"沿用上次"徽标（持久化由表本身承载，不需要展示状态）
+**单一「回收业务」卡片**（`class="q wide"`），标题「回收业务」，内部两行紧凑文字（`.rec-list`）：
+
+```
+回收业务
+  乐回收 27 单 · 公司净利 2,853
+  太力回收 2 单 · 983 · 增值 138
+```
+
+- 乐回收从 `《李家村销售》` T14:U18 直读（xlsx 即持久化），与太力回收**合并在同一张卡**；
+- **不再有独立「乐回收（公司净利）」5 人明细板块**，无「手动录入」标记，无「沿用上次」徽标；
+- 乐回收「增值」=0，按图2 样式不显示该列（太力回收增值≠0 时显示「· 增值 N」）。
+- 渲染代码：`parts/03_js_core.js`「回收业务」块；样式：`parts/01_head.html` `.rec-list`。
+- ⚠️ 任何修改后必须 `grep -c "乐回收（公司净利）" index.html` 确认 = 0（历史曾漏删导致线上仍是图1，正确状态 commit `c0e7ddd`）。
 
 ---
 
-## 7. 出错检查清单
+## 7. 推送上线（持久化长记忆）
+
+GitHub PAT 已写入 `~/.git-credentials`（host 绑定 `ghproxy.net`，`credential.helper=store`）→ **`git push` 自动认证，不用再问 token**。
+
+```
+cd /root/.codebuddy/artifact/shop
+git add -A
+git commit -m "乐回收更新：<单量/金额简述>"
+git push origin main
+# 线上 https://ZBC5241.github.io/shop/ 1–3 分钟自动刷新
+```
+
+- 仓库：`https://ghproxy.net/https://github.com/ZBC5241/shop.git`（main 分支）
+- 若 push 报 `could not read Username`：`~/.git-credentials` 被清，需重新写入 PAT。
+
+---
+
+## 8. 出错检查清单
 
 | 现象 | 检查项 |
 |---|---|
 | 写入失败 "找不到表" | 确认 xlsx 路径，且文件存在 |
 | 写入失败 "没有 [李家村销售] sheet" | 表被改名，恢复 |
-| 写入失败 "公式被改坏了" | T19/U19 被人手工改动，从备份恢复后重写 |
+| 写入失败 "公式被改坏了" | T19/U19 被人手工改动，从 `/workspace/_备份/` 恢复后重写 |
 | 看板看不到乐回收 | data.json 的 store.qcs.乐回收 应有 orders/amount/增值 三字段 |
 | 数据没生效 | 检查 xlsx 里 T14:T18 单元格实际值 |
 | 复算后数值对不上 | calc_data.py 读的是 data_only=True 的缓存，需要 WPS/Excel 打开一次刷新，或用 LibreOffice headless 计算 |
+| push 报 `could not read Username` | `~/.git-credentials` 被清，重新写入 PAT（host 绑定 ghproxy.net） |
+| 线上 404 | 仓库 `Settings → Pages` 发布源需设为 **main 分支 / (root)** |
+
+> 本 skill 的正式可调用版本位于 `/root/.codebuddy/skills/lehuishou-update/SKILL.md`（含 frontmatter）。本文件为仓库内可读镜像。
