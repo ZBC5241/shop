@@ -637,12 +637,10 @@ svg{display:block}
 .row.flash{animation:flashPulse .6s ease 2}
 @keyframes flashPulse{0%,100%{background:var(--purpleDim)}50%{background:var(--soft)}}
 
-/* —— 乐回收明细（与太力回收并列，无独立板块样式）—— */
-.lh-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px;margin-top:8px}
-.lh-r{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--tx3);background:var(--soft);border-radius:7px;padding:5px 8px}
-.lh-n{font-weight:700;color:var(--tx1);min-width:52px}
-.lh-d{margin-left:auto}
-.lh-d .num{margin-left:3px}
+/* —— 回收业务合并两行（乐回收 + 太力回收）—— */
+.rec-list{margin-top:6px;display:flex;flex-direction:column;gap:3px}
+.rec-list .q-s{font-size:13px;color:var(--tx2);padding:1px 0}
+.rec-list .num{color:var(--tx1);margin:0 2px;font-weight:700}
 </style>
 </head>
 <body>
