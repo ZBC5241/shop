@@ -988,11 +988,27 @@ function channelDetailHTML(person, channel){
 
 /* 展开内容：单号 / 会员姓名 / 电话（点日期展示，不占地方） */
 function codeInfoHTML(it){
-  let h = '<div class="code-line">单号 ' + esc((it && it.code) || '—') + '</div>';
+  let h = '';
+  if(it && it.code){ h += '<div class="code-line">单号 ' + esc(it.code) + '</div>'; }
   if(it && (it.member || it.phone)){
     h += '<div class="code-line">会员 ' + esc(it.member || '—')
        + (it.phone ? ' · ' + esc(it.phone) : '') + '</div>';
+  } else if(it && it.date && (DATA.dayMembers || {})[it.date]){
+    /* 回退：XSCK 毛利单不含会员字段，按日期从用友云「销售分析」聚合的 dayMembers 取该日所有会员单 */
+    const arr = DATA.dayMembers[it.date];
+    h += '<div class="code-line" style="color:var(--tx3);font-weight:600">该日 ' + arr.length + ' 单会员：</div>';
+    arr.forEach(m => {
+      h += '<div class="code-line">'
+         + '<b style="color:var(--purple)">' + esc(m.code) + '</b>'
+         + ' · 会员 <b>' + esc(m.member) + '</b>' + (m.phone ? ' · ' + esc(m.phone) : '')
+         + (m.emp ? ' <span style="color:var(--tx3)">· ' + esc(m.emp) + '</span>' : '')
+         + (m.product ? ' <span style="color:var(--tx3)">· ' + esc(m.product) + '</span>' : '')
+         + '</div>';
+    });
+  } else if(it && it.date){
+    h += '<div class="code-line" style="color:var(--tx3)">该日销售分析未同步，无会员单</div>';
   }
+  if(!h) h = '<div class="code-line" style="color:var(--tx3)">暂无明细</div>';
   return h;
 }
 
