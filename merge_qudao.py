@@ -123,80 +123,122 @@ def read_channels():
 
 
 def read_emp_channel():
-    """按【员工 × 华为获客渠道】聚合桌面 xlsx「销售分析」sheet（8 月李家村）。
+    """按【员工 × 华为获客渠道】聚合 8 月李家村销售分析（员工渠道挂账完成额）。
 
-    口径：与「渠道挂账」完成列公式一致（含全部业务类型，垫付/预订也算，晨哥 2026-08-19 拍板），
-          保证逐人渠道明细合计 == 渠道挂账完成额；仅白名单获客渠道；按业务日期过滤 8 月切片。
-    来源：直接读桌面《李家村8月任务进度.xlsx》的「销售分析」sheet（用户导出，全程按表格走）。
+    口径：与「渠道挂账」完成列公式一致（SUMIFS 从销售分析表提取白名单渠道净额，
+          垫付/预订也算——晨哥 2026-08-19 拍板），保证逐人渠道明细合计 == 渠道挂账完成额；
+          仅白名单获客渠道；按单据日期过滤 8 月切片。
+    来源优先级：
+      1) sa_aug_cache.json（纯HTTP 抓取的 8 月全量切片，最新最全）
+      2) xlsx「销售分析」sheet（用户导出，兜底）
     返回：( { 员工名: [ {channel, amount, bills}, ... 按白名单顺序 ] },
-           { 员工名: { 渠道: [ {date, code, product, sku, qty, amount}, ... ] } } )
+           { 员工名: { 渠道: [ {date, code, product, sku, qty, amount, member, phone}, ... ] } } )
     """
     emp = {}
     items = {}
     sa_lookup = {}
-    if not os.path.exists(XLSX):
-        print("  [员工×渠道] 找不到 xlsx: %s" % XLSX)
-        return emp, items, sa_lookup
-    try:
-        wb = openpyxl.load_workbook(XLSX, data_only=True)
-        if "销售分析" not in wb.sheetnames:
-            print("  [员工×渠道] 未找到「销售分析」sheet")
-            return emp, items
-        ws = wb["销售分析"]
-        # 表头在第 2 行，动态定位关键列
-        hdr = {}
-        for c in range(1, ws.max_column + 1):
-            v = ws.cell(2, c).value
-            if v:
-                hdr[str(v).strip()] = c
-        COL_P   = hdr.get("华为获客渠道名称")   # 渠道
-        COL_G   = hdr.get("营业员名称")         # 员工
-        COL_N   = hdr.get("销售净额")           # 净额
-        COL_BD  = hdr.get("业务日期")           # 过滤 8 月
-        COL_C   = hdr.get("单据编号")           # 单号
-        COL_PRO = hdr.get("商品名称")           # 商品名称
-        COL_SKU = hdr.get("商品sku名称")        # SKU
-        COL_QTY = hdr.get("销售数量")           # 数量
-        COL_MEM = hdr.get("会员姓名")           # 会员姓名
-        COL_PH  = hdr.get("会员手机号")          # 会员手机号
-        if not (COL_G and COL_P and COL_N):
-            print("  [员工×渠道] 销售分析缺少关键列（员工/渠道/净额）")
-            return emp, items
-        import datetime as _dt
-        for r in range(3, ws.max_row + 1):
-            bd = ws.cell(r, COL_BD).value if COL_BD else None
-            if isinstance(bd, (_dt.datetime, _dt.date)):
-                if not (bd.year == 2026 and bd.month == 8):
+
+    # —— 来源 1：sa_aug_cache.json（用友云 8 月切片，最全）——
+    if os.path.exists(AUG_CACHE):
+        try:
+            recs = json.load(open(AUG_CACHE, encoding="utf-8")).get("records", [])
+            n_emp = 0
+            for r in recs:
+                p = str(r.get("iEmployeeid_name") or "").strip()
+                c = str(r.get("retailVouchHeaderDefineCharacter__HWHKQD_name") or "").strip()
+                if not p or not c:
                     continue
-            p = str(ws.cell(r, COL_G).value or "").strip()
-            c = str(ws.cell(r, COL_P).value or "").strip()
-            if not p or not c:
-                continue
-            d = emp.setdefault(p, {}).setdefault(c, {"amount": 0.0, "bills": 0})
-            d["amount"] += _num(ws.cell(r, COL_N).value)
-            d["bills"]  += 1
-            # 单品明细（供下钻到订单/商品级）
-            items.setdefault(p, {}).setdefault(c, []).append({
-                "date": str(bd)[:10] if bd else "",
-                "code": str(ws.cell(r, COL_C).value or "").strip() if COL_C else "",
-                "product": str(ws.cell(r, COL_PRO).value or "").strip() if COL_PRO else "",
-                "sku": str(ws.cell(r, COL_SKU).value or "").strip() if COL_SKU else "",
-                "qty": _num(ws.cell(r, COL_QTY).value) if COL_QTY else 0,
-                "amount": _num(ws.cell(r, COL_N).value),
-                "member": str(ws.cell(r, COL_MEM).value or "").strip() if COL_MEM else "",
-                "phone": str(ws.cell(r, COL_PH).value or "").strip() if COL_PH else "",
-            })
-            # 全量索引（含非白名单渠道）：供品类明细补 单号/会员/电话
-            sa_lookup.setdefault((p, (str(bd)[:10] if bd else ""),
-                                  str(ws.cell(r, COL_SKU).value or "").strip() if COL_SKU else "",
-                                  _num(ws.cell(r, COL_N).value)), []).append({
-                "code": str(ws.cell(r, COL_C).value or "").strip() if COL_C else "",
-                "member": str(ws.cell(r, COL_MEM).value or "").strip() if COL_MEM else "",
-                "phone": str(ws.cell(r, COL_PH).value or "").strip() if COL_PH else "",
-            })
-    except Exception as e:
-        print("  [员工×渠道] 销售分析读取失败: %s" % e)
-        return emp, items, sa_lookup
+                amt = _num(r.get("fNetMoney"))
+                d = emp.setdefault(p, {}).setdefault(c, {"amount": 0.0, "bills": 0})
+                d["amount"] += amt
+                d["bills"]  += 1
+                bd = str(r.get("dDate") or r.get("vouchdate") or "")[:10]
+                items.setdefault(p, {}).setdefault(c, []).append({
+                    "date": bd,
+                    "code": str(r.get("code") or r.get("id") or "").strip(),
+                    "product": str(r.get("product_cName") or r.get("oid_userDefine_2394043221715451912") or "").strip(),
+                    "sku": str(r.get("productsku_cCode") or r.get("product_cCode") or "").strip(),
+                    "qty": _num(r.get("fQuantity")),
+                    "amount": amt,
+                    "member": str(r.get("iMemberid_name") or "").strip(),
+                    "phone": str(r.get("iMemberid_cphone") or "").strip(),
+                })
+                # 全量索引（含非白名单渠道）：供品类明细补 单号/会员/电话
+                sa_lookup.setdefault((p, bd, str(r.get("productsku_cCode") or "").strip(), amt), []).append({
+                    "code": str(r.get("code") or r.get("id") or "").strip(),
+                    "member": str(r.get("iMemberid_name") or "").strip(),
+                    "phone": str(r.get("iMemberid_cphone") or "").strip(),
+                })
+                n_emp += 1
+            if emp:
+                print("  [员工×渠道] 用友云切片聚合完成（%d 行，员工 %d 人）" % (n_emp, len(emp)))
+            else:
+                print("  [员工×渠道] sa_aug_cache 为空，转 xlsx 兜底")
+        except Exception as e:
+            print("  [员工×渠道] sa_aug_cache 读取失败，转 xlsx: %s" % e)
+
+    # —— 来源 2：xlsx「销售分析」sheet 兜底（仅当切片无数据）——
+    if not emp and os.path.exists(XLSX):
+        try:
+            wb = openpyxl.load_workbook(XLSX, data_only=True)
+            if "销售分析" not in wb.sheetnames:
+                print("  [员工×渠道] 未找到「销售分析」sheet")
+                return emp, items
+            ws = wb["销售分析"]
+            # 表头在第 2 行，动态定位关键列
+            hdr = {}
+            for c in range(1, ws.max_column + 1):
+                v = ws.cell(2, c).value
+                if v:
+                    hdr[str(v).strip()] = c
+            COL_P   = hdr.get("华为获客渠道名称")   # 渠道
+            COL_G   = hdr.get("营业员名称")         # 员工
+            COL_N   = hdr.get("销售净额")           # 净额
+            COL_BD  = hdr.get("业务日期")           # 过滤 8 月
+            COL_C   = hdr.get("单据编号")           # 单号
+            COL_PRO = hdr.get("商品名称")           # 商品名称
+            COL_SKU = hdr.get("商品sku名称")        # SKU
+            COL_QTY = hdr.get("销售数量")           # 数量
+            COL_MEM = hdr.get("会员姓名")           # 会员姓名
+            COL_PH  = hdr.get("会员手机号")          # 会员手机号
+            if not (COL_G and COL_P and COL_N):
+                print("  [员工×渠道] 销售分析缺少关键列（员工/渠道/净额）")
+                return emp, items
+            import datetime as _dt
+            for r in range(3, ws.max_row + 1):
+                bd = ws.cell(r, COL_BD).value if COL_BD else None
+                if isinstance(bd, (_dt.datetime, _dt.date)):
+                    if not (bd.year == 2026 and bd.month == 8):
+                        continue
+                p = str(ws.cell(r, COL_G).value or "").strip()
+                c = str(ws.cell(r, COL_P).value or "").strip()
+                if not p or not c:
+                    continue
+                d = emp.setdefault(p, {}).setdefault(c, {"amount": 0.0, "bills": 0})
+                d["amount"] += _num(ws.cell(r, COL_N).value)
+                d["bills"]  += 1
+                # 单品明细（供下钻到订单/商品级）
+                items.setdefault(p, {}).setdefault(c, []).append({
+                    "date": str(bd)[:10] if bd else "",
+                    "code": str(ws.cell(r, COL_C).value or "").strip() if COL_C else "",
+                    "product": str(ws.cell(r, COL_PRO).value or "").strip() if COL_PRO else "",
+                    "sku": str(ws.cell(r, COL_SKU).value or "").strip() if COL_SKU else "",
+                    "qty": _num(ws.cell(r, COL_QTY).value) if COL_QTY else 0,
+                    "amount": _num(ws.cell(r, COL_N).value),
+                    "member": str(ws.cell(r, COL_MEM).value or "").strip() if COL_MEM else "",
+                    "phone": str(ws.cell(r, COL_PH).value or "").strip() if COL_PH else "",
+                })
+                # 全量索引（含非白名单渠道）：供品类明细补 单号/会员/电话
+                sa_lookup.setdefault((p, (str(bd)[:10] if bd else ""),
+                                      str(ws.cell(r, COL_SKU).value or "").strip() if COL_SKU else "",
+                                      _num(ws.cell(r, COL_N).value)), []).append({
+                    "code": str(ws.cell(r, COL_C).value or "").strip() if COL_C else "",
+                    "member": str(ws.cell(r, COL_MEM).value or "").strip() if COL_MEM else "",
+                    "phone": str(ws.cell(r, COL_PH).value or "").strip() if COL_PH else "",
+                })
+        except Exception as e:
+            print("  [员工×渠道] 销售分析读取失败: %s" % e)
+            return emp, items, sa_lookup
     # 渠道展示白名单：仅展示用户指定的获客渠道
     CHANNEL_WHITELIST = ["三大地图", "小红书", "大众点评", "异业", "社区", "企业上门购"]
     out = {}
@@ -230,30 +272,30 @@ def restore_qudao_formulas(xlsx):
     的 _agg_qudao_done 兜底（同口径 Python 复算，数值与公式一致）。
     """
     try:
-        wb_f = openpyxl.load_workbook(xlsx, data_only=False)
-        ws = wb_f["渠道挂账"]
-        hrow = None
-        for r in range(1, min(ws.max_row, 40) + 1):
-            if (str(ws.cell(r, 2).value or "").strip() == "任务"
-                    and str(ws.cell(r, 3).value or "").strip() == "完成"):
-                hrow = r
-                break
-        if not hrow:
-            print("  [渠道公式] 未找到表头行，跳过恢复")
-            return False
-        restored = 0
-        for r in range(hrow + 1, ws.max_row + 1):
-            nm = ws.cell(r, 1).value
-            if not nm:
-                continue
-            nm = str(nm).strip()
-            if nm in ("", "合计"):
-                continue
-            ws.cell(r, 3).value = QUDAO_FORMULA.format(row=r)
-            restored += 1
-        wb_f.save(xlsx)
-        print("  [渠道公式] 已恢复 C 列 SUMIFS 公式 %d 格（完成=销售分析白名单渠道净额）" % restored)
-        return True
+            wb_f = openpyxl.load_workbook(xlsx, data_only=False)
+            ws = wb_f["渠道挂账"]
+            hrow = None
+            for r in range(1, min(ws.max_row, 40) + 1):
+                if (str(ws.cell(r, 2).value or "").strip() == "任务"
+                        and str(ws.cell(r, 3).value or "").strip() == "完成"):
+                    hrow = r
+                    break
+            if not hrow:
+                print("  [渠道公式] 未找到表头行，跳过恢复")
+                return False
+            restored = 0
+            for r in range(hrow + 1, ws.max_row + 1):
+                nm = ws.cell(r, 1).value
+                if not nm:
+                    continue
+                nm = str(nm).strip()
+                if nm in ("", "合计"):
+                    continue
+                ws.cell(r, 3).value = QUDAO_FORMULA.format(row=r)
+                restored += 1
+            wb_f.save(xlsx)
+            print("  [渠道公式] 已恢复 C 列 SUMIFS 公式 %d 格（完成=销售分析白名单渠道净额）" % restored)
+            return True
     except Exception as e:
         print("  [渠道公式] 恢复失败: %s" % e)
         return False

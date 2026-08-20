@@ -28,6 +28,7 @@ BILLNUM = "rm_saleanalysis"
 DEFAULT_STATE = os.path.expanduser("~/.agent-browser/sessions/yonyou-default.json")
 # 参数：位置参数 [输出JSON] [输出TSV]，可选 --use-cache（放在任意位置）
 _ARGS = [a for a in sys.argv[1:] if a != "--use-cache"]
+NO_DEDUP = "--no-dedup" in sys.argv
 OUT_JSON = _ARGS[0] if len(_ARGS) > 0 else os.path.join(os.path.dirname(os.path.abspath(__file__)), "sa_raw.json")
 OUT_TSV = _ARGS[1] if len(_ARGS) > 1 else os.path.join(os.path.dirname(os.path.abspath(__file__)), "sa_raw.tsv")
 WAREHOUSE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "sa_warehouse.json")
@@ -207,8 +208,11 @@ def main():
             if page > 200:
                 break
         # 去重（剔除 _YD 预订单 + 按 单号/SKU/序列号 去重）→ 与晨哥手工导出口径一致
-        all_rows = dedup_records(all_rows)
-        print("  [去重] 剔除 _YD 预订单 + (单号,SKU,序列号) 去重后 %d 行" % len(all_rows))
+        if not NO_DEDUP:
+            all_rows = dedup_records(all_rows)
+            print("  [去重] 剔除 _YD 预订单 + (单号,SKU,序列号) 去重后 %d 行" % len(all_rows))
+        else:
+            print("  [no-dedup] 跳过 (单号,SKU) 去重（保留全量明细）")
         # 写仓（全量，已去重）—— 供 --use-cache 毫秒级复用
         try:
             atomic_write_json(WAREHOUSE, {"fetched_at": time.time(), "records": all_rows})
