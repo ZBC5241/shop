@@ -631,15 +631,36 @@ function qcsHTML(Q){
       + '</div></div>';
   }
 
-  const lh = Q['乐回收'], th = Q['太力回收'];
-  if(lh || th){
-    h += '<div class="q wide"><div class="q-l">回收业务</div><div class="q-s" style="margin-top:2px;font-size:12px">';
-    if(lh) h += '乐回收 <b class="num">' + cnt(lh.orders) + '</b> 单'
-              + (isNum(lh.amount) ? ' · ' + money(lh.amount) : '') + '<br>';
-    if(th) h += '太力回收 <b class="num">' + cnt(th.orders) + '</b> 单'
-              + (isNum(th.amount) ? ' · ' + money(th.amount) : '')
-              + (isNum(th['增值']) ? ' · 增值 ' + money(th['增值']) : '');
-    h += '</div></div>';
+  /* 乐回收：数据从《李家村销售》sheet 的 T14:U18 固定单元格直读（xlsx 即持久化），
+     与太力回收并列展示，不另开独立板块 */
+  const lh = Q['乐回收'];
+  if(lh){
+    const _pl = DATA.people;
+    let _rows = '';
+    if(_pl){
+      const _ord = (DATA.meta && DATA.meta.employees) || [];
+      _ord.forEach(function(n){
+        const p = _pl[n] && _pl[n].qcs && _pl[n].qcs['乐回收'];
+        if(!p) return;
+        if(!(p.orders || p.amount || p['增值'])) return;
+        _rows += '<div class="lh-r"><span class="lh-n">' + esc(n) + '</span>'
+              + '<span class="lh-d">单量 <b class="num">' + cnt(p.orders) + '</b></span>'
+              + '<span class="lh-d">增值 <b class="num">' + money(p.amount) + '</b></span></div>';
+      });
+    }
+    h += '<div class="q wide">'
+      + '<div class="q-l">乐回收（公司净利）</div>'
+      + '<div class="lh-grid">' + _rows + '</div>'
+      + '<div class="q-s" style="margin-top:6px">合计 <b class="num">' + cnt(lh.orders)
+      + '</b> 单 · 公司净利 ' + money(lh.amount) + '</div></div>';
+  }
+
+  const th = Q['太力回收'];
+  if(th){
+    h += '<div class="q"><div class="q-l">太力回收 <span class="lh-tag auto">自动</span></div>'
+      + '<div class="q-v num">' + cnt(th.orders) + '<small>单</small></div>'
+      + '<div class="q-s">金额 ' + money(th.amount)
+      + (isNum(th['增值']) ? ' · 增值 ' + money(th['增值']) : '') + '</div></div>';
   }
 
   const xl = Q['星联会员'];

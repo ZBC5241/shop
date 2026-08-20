@@ -150,14 +150,16 @@ def load_manual(xlsx):
         tasks[name] = {k: num(tk.cell(row, col).value) for k, col in TASK_COL.items()}
     tasks["张博晨"] = {k: 0.0 for k in TASK_COL}          # 张博晨不背任务
 
-    # --- 乐回收：李家村销售 T/V 列常量 ---
+    # --- 乐回收：李家村销售 T/U 列固定单元格常量（数据持久化由 xlsx 文件承担）
+    #     行号固定：邵乐乐=14 / 杨丽华=15 / 李泽=16 / 陈超磊=17 / 张博晨=18
+    #     T13=单量, U13=增值；T19/U19 是 SUM 公式（不必动），自动求和
     ws = wbf["李家村销售"]
     P2_ROWS = {"邵乐乐": 14, "杨丽华": 15, "李泽": 16, "陈超磊": 17, "张博晨": 18}
     lehui = {}
     for name, row in P2_ROWS.items():
-        lehui[name] = {"orders": num(ws.cell(row, 20).value),
-                       "amount": num(ws.cell(row, 21).value),
-                       "增值":   num(ws.cell(row, 22).value)}
+        lehui[name] = {"orders": num(ws.cell(row, 20).value),    # T 单量
+                       "amount": num(ws.cell(row, 21).value),    # U 增值（公司净利）
+                       "增值":   num(ws.cell(row, 22).value)}    # V 增值率（备用，可空）
 
     # --- 太力回收：独立表，按业务员汇总（不依赖明细，实时算） ---
     tl = wb["太力回收"]
@@ -673,6 +675,7 @@ def main():
     rd = remain_days(ref)
 
     tasks, lehui, taili, perf_score, lab_day, lab_gap = load_manual(a.xlsx)
+    # 乐回收：直接读《李家村销售》T14:U18（持久化由 xlsx 文件承载；用户每次写入就是最新值）
 
     people = {}
     for n in PEOPLE_ORDER:
