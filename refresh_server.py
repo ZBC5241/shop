@@ -20,11 +20,16 @@
 """
 import os, sys, json, subprocess, threading, datetime, time
 from http.server import BaseHTTPRequestHandler, HTTPServer
+from urllib.parse import urlparse, parse_qs
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 XLSX = "/Users/mac/Desktop/李家村销售/李家村8月任务进度.xlsx"
 PORT = 8765
 PY = sys.executable
+
+# 公网鉴权令牌：仅在「穿透到公网」时设置（环境变量 REFRESH_TOKEN）。
+# 不设 = 不鉴权（依赖 127.0.0.1 回环安全模型）；设了 = 受保护路径必须带正确 token。
+REQ_TOKEN = os.environ.get("REFRESH_TOKEN", "").strip()
 
 _lock = threading.Lock()
 _running = False
@@ -152,6 +157,13 @@ def _tail(r):
 
 
 class H(BaseHTTPRequestHandler):
+    def _auth_ok(self):
+        if not REQ_TOKEN:
+            return True  # 未设令牌则不鉴权（本机回环安全模型）
+        q = parse_qs(urlparse(self.path).query)
+        tok = q.get("token", [""])[0] or self.headers.get("X-Token", "")
+        return tok == REQ_TOKEN
+
     def _cors(self):
         self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header("Access-Control-Allow-Methods", "GET, OPTIONS")
@@ -173,6 +185,9 @@ class H(BaseHTTPRequestHandler):
 
     def do_GET(self):
         path = self.path.split("?")[0]
+        # 公网鉴权：设了 REFRESH_TOKEN 时，受保护路径必须带正确 token
+        if path in ("/", "/refresh", "/data") and not self._auth_ok():
+            return self._json({"error": "unauthorized"}, 401)
         if path in ("/", "/refresh"):
             with _lock:
                 if _running:
@@ -197,6 +212,10 @@ class H(BaseHTTPRequestHandler):
 
 if __name__ == "__main__":
     print(f"🐝 看板刷新服务启动： http://localhost:{PORT}/refresh")
+    if REQ_TOKEN:
+        print(f"   ✅ 已启用令牌鉴权（REFRESH_TOKEN 已设置），公网访问需带 ?token=")
+    else:
+        print(f"   ⚠️  未设置 REFRESH_TOKEN，请勿在公网暴露此端口（仅限本机回环）")
     print(f"   后台每 15 分钟自动轻量刷新（仅数据变化才推线上）")
     threading.Thread(target=scheduler_loop, args=(900,), daemon=True).start()
-    HTTPServer(("127.0.0.1", PORT), H).serve_forever()
+    HTTPServer(("0.0.0.0", PORT), H).serve_forever()
