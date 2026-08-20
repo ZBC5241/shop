@@ -18,15 +18,20 @@ REPO_PATH="https://github.com/ZBC5241/shop.git"
 ORIG_URL="https://ghproxy.net/${REPO_PATH}"
 MIRRORS=("ghproxy.net" "gh-proxy.com" "ghfast.top")
 
-# 提交
+# 提交（无新改动但存在未推送提交时，也继续走推送）
 echo "→ 检查待提交改动..."
 git status --short
 git add -A
 if git diff --cached --quiet; then
-  echo "⚠️  没有改动可提交"
-  exit 0
+  if [ "$(git rev-parse main 2>/dev/null)" = "$(git rev-parse origin/main 2>/dev/null)" ]; then
+    echo "⚠️  没有改动可提交，且本地与远端一致，无需推送"
+    exit 0
+  else
+    echo "⚠️  没有新改动，但存在未推送提交，继续推送..."
+  fi
+else
+  git commit -m "$MSG" || true
 fi
-git commit -m "$MSG" || true
 
 # 无令牌则退出（不污染 remote）
 if [ -z "$TOKEN" ]; then
