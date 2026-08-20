@@ -1840,46 +1840,6 @@ function renderDay(){
   });
   h += '</div>';
 
-  /* 乐回收战报（数据来源：店长手动提供） */
-  if(DATA.lehuishou){
-    const LH = DATA.lehuishou;
-    const LH_STAFF = (LH.staff || []).slice().sort((a,b) => (b.profit||0) - (a.profit||0));
-    h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>'
-       + esc(LH.title || '乐回收·今日战报') + '</b>'
-       + '<span class="tail">' + esc(LH.date || DATA.meta.date || '') + ' · 净利合计 <b style="color:var(--green)">¥' + moneyShort(LH.total.profit) + '</b></span></div>';
-    /* 头部 3 块 KPI */
-    h += '<div class="bt" style="margin-bottom:10px">'
-       +   '<div class="bt-c" style="background:linear-gradient(135deg,var(--greenDim),transparent);border-color:rgba(34,197,94,.25)">'
-       +     '<div class="bt-v num" style="color:var(--green)">¥' + moneyShort(LH.total.profit) + '</div>'
-       +     '<div class="bt-l">公司净利</div></div>'
-       +   '<div class="bt-c">'
-       +     '<div class="bt-v num">' + (LH.total.qty || 0) + '</div>'
-       +     '<div class="bt-l">成交量（单）</div></div>'
-       +   '<div class="bt-c">'
-       +     '<div class="bt-v num">¥' + (LH.total.avgUnit || 0) + '</div>'
-       +     '<div class="bt-l">单均净利</div></div>'
-       + '</div>';
-    /* 人员明细（按净利降序） */
-    h += '<div class="card" style="padding:4px 0"><div class="rows">';
-    LH_STAFF.forEach((s, i) => {
-      const medal = i === 0 ? '🥇' : (i === 1 ? '🥈' : (i === 2 ? '🥉' : ''));
-      const maxPf = LH_STAFF[0].profit || 1;
-      const width = Math.max((s.profit || 0) / maxPf * 100, 4);
-      h += '<div class="row">'
-         + '<div class="row-t">'
-           + '<span class="row-n">' + medal + ' ' + esc(s.name) + '</span>'
-           + '<span class="row-p">' + (s.qty || 0) + '单</span>'
-           + '<span class="row-v num"><b style="color:' + (i===0?'var(--green)':'var(--tx)') + '">¥' + moneyShort(s.profit) + '</b></span>'
-         + '</div>'
-         + '<div class="cat-chart"><i style="width:' + width.toFixed(1) + '%;background:linear-gradient(90deg,var(--green),rgba(34,197,94,.4))"></i></div>'
-         + '<div class="row-g"><span>单均 ¥' + (s.unit || 0) + '</span><em style="font-style:normal">占总净利 ' + ((s.profit/LH.total.profit)*100).toFixed(0) + '%</em></div>'
-         + '</div>';
-    });
-    h += '</div></div>';
-    if(LH.note){ h += '<div style="font-size:10.5px;color:var(--tx3);text-align:center;padding:6px 0 2px">' + esc(LH.note) + '</div>'; }
-    h += '</div>';
-  }
-
   h += foot();
   h += '</div>';
   return h;
