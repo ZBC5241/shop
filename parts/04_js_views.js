@@ -462,7 +462,8 @@ function render(){
   $('#dataDate').textContent  = (m.date || '')
     + (m.fetchTime ? ' · ' + m.fetchTime + ' 更新' : (m.dayTitle ? ' · ' + m.dayTitle : ''));
   const tp = m.timeProgress;
-  $('#tpVal').textContent = isNum(tp) ? pct(tp,1) : '—';
+  const ring = document.getElementById('tpRing');
+  if(ring) ring.innerHTML = tpRingHTML(tp, 60);
   requestAnimationFrame(() => {
     $('#tpFill').style.width = (isNum(tp) ? Math.min(tp,1)*100 : 0).toFixed(1) + '%';
   });
@@ -514,6 +515,30 @@ function bindDynamic(){
     const sales = P['销额'] || {};
     if(hasTask(sales) && isNum(sales.rate) && sales.rate >= 1){ confetti(); toast('销售额已达成，撒花庆祝'); }
   };
+}
+
+/* 时间进度圆环：根据 tp 自动配色做提示警示
+   tp<0.5（月初，时间充裕）紫色；0.5~0.75（月半将尽）橙色；>=0.75（接近月末）红色警示 */
+function tpLevel(tp){
+  if(!isNum(tp)) return {col:'#9aa0bd', level:0};
+  if(tp < 0.5)  return {col:'#7c3aed', level:1};   /* 紫：正常 */
+  if(tp < 0.75) return {col:'#f59e0b', level:2};   /* 橙：注意 */
+  return {col:'#ef4444', level:3};                  /* 红：警示 */
+}
+function tpRingHTML(tp, size){
+  size = size || 60;
+  const r = (size - 12) / 2, c = 2 * Math.PI * r;
+  const w = isNum(tp) ? Math.min(tp, 1) : 0, off = c * (1 - w);
+  const lv = tpLevel(tp);
+  const svg = '<svg width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">'
+    + '<circle cx="' + (size/2) + '" cy="' + (size/2) + '" r="' + r + '" fill="none" stroke="rgba(30,28,60,.08)" stroke-width="8"/>'
+    + '<circle cx="' + (size/2) + '" cy="' + (size/2) + '" r="' + r + '" fill="none" stroke="' + lv.col + '" stroke-width="8" stroke-linecap="round"'
+    +   ' stroke-dasharray="' + c.toFixed(1) + '" stroke-dashoffset="' + off.toFixed(1) + '"'
+    +   ' transform="rotate(-90 ' + (size/2) + ' ' + (size/2) + ')"'
+    +   ' style="transition:stroke-dashoffset 1s cubic-bezier(.22,1,.36,1),stroke 1s"/>'
+    + '</svg>';
+  const txt = isNum(tp) ? pct(tp, 1) : '—';
+  return svg + '<b class="tp-ring-c" style="color:' + lv.col + '">' + txt + '</b>';
 }
 
 /* ---------------- 板块制：销售看板 / 运营看板 ---------------- */
