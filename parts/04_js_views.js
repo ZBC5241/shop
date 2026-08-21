@@ -462,8 +462,9 @@ function render(){
   $('#dataDate').textContent  = (m.date || '')
     + (m.fetchTime ? ' · ' + m.fetchTime + ' 更新' : (m.dayTitle ? ' · ' + m.dayTitle : ''));
   const tp = m.timeProgress;
+  $('#tpVal').textContent = isNum(tp) ? pct(tp,1) : '—';
   const ring = document.getElementById('tpRing');
-  if(ring) ring.innerHTML = tpRingHTML(tp, 60);
+  if(ring) ring.innerHTML = tpRingHTML(tp, 48);
   requestAnimationFrame(() => {
     $('#tpFill').style.width = (isNum(tp) ? Math.min(tp,1)*100 : 0).toFixed(1) + '%';
   });
