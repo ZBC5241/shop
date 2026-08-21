@@ -57,31 +57,31 @@ svg{display:block}
 }
 .top-row{display:flex;align-items:center;gap:11px}
 .logo{
-  width:34px;height:34px;border-radius:10px;flex:0 0 auto;
-  background:var(--grad);
-  display:grid;place-items:center;color:#fff;
-  box-shadow:0 4px 14px rgba(124,58,237,.38);
+  width:36px;height:36px;border-radius:10px;flex:0 0 auto;
+  background:var(--grad);cursor:pointer;
+  display:grid;place-items:center;
+  color:#fff;font-size:12px;font-weight:800;letter-spacing:.5px;line-height:1;
+  box-shadow:0 4px 14px rgba(124,58,237,.38);transition:.18s;
 }
-.logo svg{width:20px;height:20px;stroke:#fff}
+.logo:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(124,58,237,.45)}
+.logo:active{transform:scale(.93)}
+.logo.on{background:linear-gradient(135deg,#f59e0b,#f97316);box-shadow:0 4px 16px rgba(245,158,11,.55)}
 .top-t{flex:1;min-width:0}
 .top-t h1{font-size:clamp(14px,1.02rem + .35vw,17px);font-weight:700;letter-spacing:.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .top-t p{font-size:11px;color:var(--tx3);margin-top:2px}
-.icon-btn{
-  width:34px;height:34px;border-radius:10px;border:1px solid var(--line);
-  background:var(--soft);color:var(--tx2);
-  display:grid;place-items:center;cursor:pointer;flex:0 0 auto;
-  transition:.16s;
-}
-.icon-btn svg{width:18px;height:18px;stroke:currentColor}
-.icon-btn:hover{color:var(--purple);border-color:var(--line2)}
-.icon-btn:active{background:var(--purpleDim);transform:scale(.94)}
 
-/* 时间进度条 */
-.tp{margin-top:11px}
-.tp-h{display:flex;justify-content:space-between;font-size:11px;color:var(--tx3);margin-bottom:5px}
-.tp-h b{color:var(--tx);font-weight:700}
-.tp-bar{height:7px;border-radius:5px;background:var(--soft);overflow:hidden;position:relative}
-.tp-fill{height:100%;border-radius:5px;background:var(--grad);box-shadow:0 0 10px rgba(124,58,237,.35);transition:width 1s cubic-bezier(.22,1,.36,1)}
+/* 时间进度：圆形进度环 + 剩余天数 */
+.tp{margin-top:12px;background:var(--panel);border:1px solid var(--line);border-radius:16px;
+    padding:14px 12px 10px;display:flex;flex-direction:column;align-items:center;gap:2px;
+    box-shadow:0 2px 10px rgba(70,60,130,.04)}
+.tp-ring{position:relative;width:88px;height:88px;display:grid;place-items:center}
+.tp-ring svg{position:absolute;inset:0;width:100%;height:100%}
+.tp-ring-c{position:relative;text-align:center;line-height:1}
+.tp-ring-c b{display:block;font-size:23px;font-weight:800;color:var(--purple);
+  letter-spacing:-.5px;font-variant-numeric:tabular-nums}
+.tp-ring-c i{font-style:normal;font-size:9.5px;color:var(--tx3);display:block;margin-top:3px;letter-spacing:.3px}
+.tp-days{font-size:11px;color:var(--tx3);margin-top:4px;letter-spacing:.2px}
+.tp-days b{color:#f59e0b;font-weight:800;font-variant-numeric:tabular-nums}
 
 /* ============ 标签栏 ============ */
 .tabs{
@@ -559,15 +559,11 @@ svg{display:block}
   }
   .top{position:static;padding:0 8px 16px;max-width:none;margin:0;background:transparent;border:none;box-shadow:none}
   .top-row{flex-wrap:wrap;gap:12px}
-  .logo{width:38px;height:38px}
-  .logo svg{width:22px;height:22px}
-  .icon-btn{width:38px;height:38px}
-  .icon-btn svg{width:19px;height:19px}
+  .logo{width:38px;height:38px;border-radius:11px;font-size:12.5px}
   .top-t{flex:1 0 100%;order:3;margin-top:12px}
   .top-t h1{white-space:normal;line-height:1.45;letter-spacing:.3px}
   .top-t p{font-size:12px;margin-top:3px}
   .tp{margin-top:16px}
-  .tp-bar{height:8px}
   .tabs{
     position:static;flex-direction:column;background:transparent;border-top:none;
     box-shadow:none;padding:8px 0 0;margin:0;gap:6px;border-bottom:none;
@@ -623,14 +619,14 @@ svg{display:block}
 @keyframes barUp{from{transform:scaleY(0)}to{transform:scaleY(1)}}
 
 /* 可点元素：按压缩放 + 去点击高亮 */
-.kpi,.rk,.day,.bt-c,.q,.ct,.pf,.adv,.mc,.tab,.chip,.row.cat-click,.pp-click,.cd-click,.icon-btn,.mc-b[data-cat],.cat-dot{cursor:pointer;-webkit-tap-highlight-color:transparent}
-.kpi:active,.rk:active,.day:active,.tab:active,.chip:active,.row.cat-click:active,.pp-click:active,.cd-click:active,.icon-btn:active,.mc-b[data-cat]:active{transform:scale(.965)}
+.kpi,.rk,.day,.bt-c,.q,.ct,.pf,.adv,.mc,.tab,.chip,.row.cat-click,.pp-click,.cd-click,.mc-b[data-cat],.cat-dot{cursor:pointer;-webkit-tap-highlight-color:transparent}
+.kpi:active,.rk:active,.day:active,.tab:active,.chip:active,.row.cat-click:active,.pp-click:active,.cd-click:active:active,.mc-b[data-cat]:active{transform:scale(.965)}
 
 /* 水波纹 */
 .rp-ring{position:absolute;border-radius:50%;background:radial-gradient(circle,rgba(124,58,237,.28),rgba(124,58,237,0) 70%);transform:scale(0);animation:rp .55s ease-out forwards;pointer-events:none;z-index:5}
 @keyframes rp{0%{transform:scale(0);opacity:.9}100%{transform:scale(1);opacity:0}}
 /* 让水波纹容器裁剪：对可点卡片类加 overflow 裁剪（不破坏布局） */
-.kpi,.rk,.day,.bt-c,.q,.ct,.pf,.adv,.mc,.tab,.chip,.row.cat-click,.pp-click,.cd-click,.icon-btn,.mc-b[data-cat]{position:relative;overflow:hidden}
+.kpi,.rk,.day,.bt-c,.q,.ct,.pf,.adv,.mc,.tab,.chip,.row.cat-click,.pp-click,.cd-click,.mc-b[data-cat]{position:relative;overflow:hidden}
 
 /* 品类速览柱→达成行 联动高亮 */
 .row.flash{background:var(--purpleDim);box-shadow:inset 0 0 0 1.5px var(--purple)}

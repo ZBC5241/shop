@@ -16,8 +16,23 @@ const CFG = {
 
 let DATA = EMBEDDED_DATA;
 let VIEW = 'store';
+let BOARD = (location.hash === '#ops') ? 'ops' : 'sales';   /* 板块：sales 销售看板 / ops 运营看板 */
 let RANK_BY = '毛利';
 let PERSON = null;
+
+/* 板块配置：每个板块有自己的底部 Tab 集合（运营板块后续可加更多 tab） */
+const BOARDS = {
+  sales: { name: '销售看板', tabs: ['store', 'rank', 'person', 'day', 'insight'] },
+  ops:   { name: '运营看板', tabs: ['qudao'] }
+};
+const TAB_META = {
+  store:   { name: '门店', svg: '<path d="M3 9l9-6 9 6v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 21V12h6v9"/>' },
+  rank:    { name: '排行', svg: '<path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0z"/><path d="M7 4H4v2a3 3 0 0 0 3 3M17 4h3v2a3 3 0 0 1-3 3"/>' },
+  person:  { name: '个人', svg: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>' },
+  day:     { name: '今日', svg: '<rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/>' },
+  insight: { name: '洞察', svg: '<circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/>' },
+  qudao:   { name: '渠道', svg: '<path d="M3 10l9-6 9 6M4 10v9h16v-9M9 19v-5h6v5"/>' }
+};
 
 /* ---------------- 工具 ---------------- */
 const $  = s => document.querySelector(s);
@@ -500,12 +515,17 @@ function catChartHTML(P){
        + '<div class="mc-leg"><span class="mc-dot"></span>紫线 = 时间进度 ' + pct(tp, 0) + '</div></div>';
 }
 
-function renderStore(){
+/* ---------------- 板块视图：销售 / 运营 ---------------- */
+/* 销售看板「门店」视图：沿用上一版主板口径（增值达成 hero + 核心指标 + 品类 + 考核机型 + 全科生 + 绩效） */
+/* 运营看板「渠道」视图：仅渠道挂账（含逐人进度），见 renderQudao() */
+
+/* 销售看板：沿用上一版主板口径 */
+function renderSales(){
   const P = DATA.store.performance || {};
   const Q = DATA.store.qcs || {};
   let h = '<div class="wrap">';
 
-  /* 总览 hero */
+  /* 总览 hero（增值达成，沿用上一版口径） */
   h += storeHero(P, Q);
 
   /* 核心 KPI */
@@ -522,8 +542,6 @@ function renderStore(){
   h += '<div class="cols">';
   h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>品类速览</b>'
      + '<span class="tail">柱高 = 达成率</span></div>' + catChartHTML(P) + '</div>';
-
-  /* 品类达成 */
   h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>品类达成</b>'
      + '<span class="tail">点品类行展开明细</span></div><div class="rows">';
   CATS.forEach(c => { h += catRow(c, P[c], c); });
@@ -531,7 +549,7 @@ function renderStore(){
   h += '</div></div>';
   h += '</div>'; /* /cols */
 
-  /* 考核机型 + 全科生 → 桌面并排 */
+  /* 考核机型 + 全科生（运营服务） → 桌面并排 */
   h += '<div class="cols">';
   h += assessHTML(Q['考核机型'], DATA.meta.employees);
   h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>全科生</b></div>';
@@ -547,9 +565,16 @@ function renderStore(){
        + P['绩效'].toFixed(2) + '</div></div></div>';
   }
 
-  h += foot();
   h += '</div>';
   return h;
+}
+
+/* 运营看板「渠道」视图：仅渠道挂账（含逐人进度） */
+/* 由 renderQudao() 提供（见下），运营板块后续可追加其他运营 tab */
+
+/* 销售看板「门店」视图（含页脚） */
+function renderStore(){
+  return renderSales() + foot();
 }
 
 /* 考核机型 —— 独立板块
@@ -670,14 +695,14 @@ function qcsHTML(Q){
   return h;
 }
 
-/* ---------------- 视图：渠道挂账 ---------------- */
-function renderQudao(){
+/* ---------------- 渠道挂账（运营板内复用） ---------------- */
+function qudaoSections(){
   const Q = DATA.qudao;
-  if(!Q) return '<div class="wrap"><div class="empty">暂无渠道挂账数据</div></div>';
+  if(!Q) return '<div class="sec"><div class="card" style="padding:20px;text-align:center;color:var(--tx3)">暂无渠道挂账数据</div></div>';
   const t = Q.total || {};
   const tp = Q.timeRate;
   const s = isNum(t.rate) ? stat(t.rate) : 'na';
-  let h = '<div class="wrap">';
+  let h = '';
 
   /* 汇总卡 */
   h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>渠道挂账</b>'
@@ -720,15 +745,16 @@ function renderQudao(){
       + '<div class="pp-det" data-person="' + esc(p.name) + '"></div>';
   });
   h += '</div></div>';
-
-  h += foot();
-  h += '</div>';
   return h;
+}
+function renderQudao(){
+  if(!DATA.qudao) return '<div class="wrap"><div class="empty">暂无渠道挂账数据</div></div>';
+  return '<div class="wrap">' + qudaoSections() + foot() + '</div>';
 }
 
 /* ---------------- 动效：点击水波纹（一次性委托，避免每次 render 重绑） ---------------- */
 (function(){
-  var RP_SEL = '.kpi,.rk,.day,.tab,.chip,.row.cat-click,.pp-click,.cd-click,.icon-btn,.mc-b[data-cat]';
+  var RP_SEL = '.kpi,.rk,.day,.tab,.chip,.row.cat-click,.pp-click,.cd-click,.mc-b[data-cat]';
   document.addEventListener('click', function(e){
     var t = e.target && e.target.closest ? e.target.closest(RP_SEL) : null;
     if(!t) return;

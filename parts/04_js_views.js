@@ -455,15 +455,21 @@ function renderInsight(){
 
 /* ---------------- 主渲染 ---------------- */
 function render(){
+  /* 视图必须属于当前板块的 tab 集合（#ops 直达等场景下自动归位） */
+  if(!BOARDS[BOARD].tabs.includes(VIEW)) VIEW = BOARDS[BOARD].tabs[0];
   const m = DATA.meta || {};
   $('#storeName').textContent = m.storeName || '门店看板';
   $('#dataDate').textContent  = (m.date || '')
     + (m.fetchTime ? ' · ' + m.fetchTime + ' 更新' : (m.dayTitle ? ' · ' + m.dayTitle : ''));
   const tp = m.timeProgress;
   $('#tpVal').textContent = isNum(tp) ? pct(tp,1) : '—';
-  requestAnimationFrame(() => {
-    $('#tpFill').style.width = (isNum(tp) ? Math.min(tp,1)*100 : 0).toFixed(1) + '%';
-  });
+  const ring = document.getElementById('tpRing');
+  if(ring) ring.innerHTML = isNum(tp) ? ringSVG(tp, stat(tp), 88) : '';
+  const days = document.getElementById('tpDays');
+  if(days) days.innerHTML = isNum(m.remainDays)
+    ? ('剩 <b class="num">' + m.remainDays + '</b> 天') : '';
+
+  updateBoardUI();
 
   const fn = { store:renderStore, rank:renderRank, person:renderPerson,
                day:renderDay, insight:renderInsight, qudao:renderQudao }[VIEW];
@@ -509,9 +515,41 @@ function bindDynamic(){
   };
 }
 
-$$('.tab').forEach(t => t.onclick = () => {
-  $$('.tab').forEach(x => x.classList.remove('on'));
-  t.classList.add('on');
-  VIEW = t.dataset.v;
+/* ---------------- 板块制：销售看板 / 运营看板 ---------------- */
+/* 底部 Tab 栏随板块动态渲染；左上角 logo 点击切换板块（销售=紫，运营=橙） */
+function renderTabs(){
+  const tabs = BOARDS[BOARD].tabs;
+  $('#tabs').innerHTML = tabs.map(v =>
+    '<div class="tab' + (v === VIEW ? ' on' : '') + '" data-v="' + v + '">'
+    + '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + TAB_META[v].svg + '</svg>'
+    + '<span>' + TAB_META[v].name + '</span></div>'
+  ).join('');
+  $$('#tabs .tab').forEach(t => t.onclick = () => goView(t.dataset.v));
+}
+function goView(v){
+  if(!BOARDS[BOARD].tabs.includes(v)) return;
+  VIEW = v; render();
+}
+function updateBoardUI(){
+  renderTabs();
+  document.body.dataset.board = BOARD;
+  const logo = $('#logo');
+  logo.classList.toggle('on', BOARD === 'ops');
+  logo.textContent = BOARD === 'ops' ? '运营' : '销售';
+}
+function setBoard(b){
+  BOARD = b;
+  const tabs = BOARDS[b].tabs;
+  if(!tabs.includes(VIEW)) VIEW = tabs[0];
+  render();
+}
+function toggleBoard(){ setBoard(BOARD === 'sales' ? 'ops' : 'sales'); }
+
+/* 分享链接 #sales / #ops：hash 变化时同步板块（不重载页面） */
+window.addEventListener('hashchange', function(){
+  if(location.hash === '#ops') BOARD = 'ops';
+  else if(location.hash === '#sales') BOARD = 'sales';
+  const tabs = BOARDS[BOARD].tabs;
+  if(!tabs.includes(VIEW)) VIEW = tabs[0];
   render();
 });
