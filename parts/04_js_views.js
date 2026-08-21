@@ -463,11 +463,9 @@ function render(){
     + (m.fetchTime ? ' · ' + m.fetchTime + ' 更新' : (m.dayTitle ? ' · ' + m.dayTitle : ''));
   const tp = m.timeProgress;
   $('#tpVal').textContent = isNum(tp) ? pct(tp,1) : '—';
-  const ring = document.getElementById('tpRing');
-  if(ring) ring.innerHTML = isNum(tp) ? ringSVG(tp, stat(tp), 88) : '';
-  const days = document.getElementById('tpDays');
-  if(days) days.innerHTML = isNum(m.remainDays)
-    ? ('剩 <b class="num">' + m.remainDays + '</b> 天') : '';
+  requestAnimationFrame(() => {
+    $('#tpFill').style.width = (isNum(tp) ? Math.min(tp,1)*100 : 0).toFixed(1) + '%';
+  });
 
   updateBoardUI();
 

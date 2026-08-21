@@ -20,6 +20,98 @@ function log(msg, type){
   box.scrollTop = box.scrollHeight;
 }
 
+/* 打开 / 关闭 */
+$('#btnAdmin').onclick = () => {
+  $('#adminMask').classList.add('on');
+  const t = localStorage.getItem('gh_token');
+  if(t) $('#tokenInput').value = t;
+};
+$('#btnClose').onclick = () => $('#adminMask').classList.remove('on');
+$('#adminMask').onclick = e => { if(e.target.id === 'adminMask') $('#adminMask').classList.remove('on'); };
+
+/* 刷新服务地址可配置：URL ?srv= > localStorage > 默认本机回环
+   token 同理：URL ?token= > localStorage；公网穿透时用于鉴权（不落盘） */
+function _getCfg(k, def){
+  try {
+    const u = new URLSearchParams(location.search);
+    if (u.has(k)) { const v = u.get(k); localStorage.setItem('srv_'+k, v); return v; }
+    const v = localStorage.getItem('srv_'+k);
+    if (v) return v;
+  } catch(e){}
+  return def;
+}
+const REFRESH_SRV   = _getCfg('srv', 'http://localhost:8765');
+const REFRESH_TOKEN = _getCfg('token', '');
+function srvUrl(p){
+  return REFRESH_SRV + p + (REFRESH_TOKEN ? (p.indexOf('?')>=0?'&':'?')+'token='+encodeURIComponent(REFRESH_TOKEN) : '');
+}
+$('#btnRefresh').onclick = async () => {
+  const svg = $('#btnRefresh svg') || $('#btnRefresh');
+  svg.style.transition = 'transform .5s';
+  svg.style.transform = 'rotate(360deg)';
+  setTimeout(() => { svg.style.transform = ''; svg.style.transition = ''; }, 520);
+
+  // 探测本地刷新服务是否在线
+  let alive = false;
+  try {
+    const p = await fetch(srvUrl('/status'), {cache: 'no-store'});
+    alive = p.ok;
+  } catch (e) { alive = false; }
+
+  if (!alive) {
+    toast('本地刷新服务未启动，仅拉已部署版本');
+    return loadRemote(false);
+  }
+
+  // 先瞬间渲染本地最新缓存（毫秒级），不阻塞用户；后台再拉最新覆盖
+  try {
+    const cached = await (await fetch(srvUrl('/data'), {cache: 'no-store'})).json();
+    if (cached && cached.meta && cached.store && cached.people) {
+      DATA = cached; render();
+      $('#liveTag').textContent = '本地缓存 · ' + (cached.meta.fetchTime || '');
+    }
+  } catch (e) {}
+
+  // 触发全流程刷新（异步：服务端立即返回，拉取在后台跑）
+  toast('正在拉取最新数据…');
+  try {
+    await fetch(srvUrl('/refresh'), {cache: 'no-store'});
+  } catch (e) {
+    toast('触发刷新失败');
+    return;
+  }
+
+  // 轮询进度
+  let lastMsg = '';
+  const iv = setInterval(async () => {
+    let s;
+    try {
+      s = await (await fetch(srvUrl('/status'), {cache: 'no-store'})).json();
+    } catch (e) { return; }
+
+    if (s.status === 'running') {
+      if (s.msg && s.msg !== lastMsg) { lastMsg = s.msg; toast(s.msg); }
+      $('#liveTag').textContent = s.msg;
+    } else if (s.status === 'done') {
+      clearInterval(iv);
+      try {
+        const d = await (await fetch(REFRESH_SRV + '/data', {cache: 'no-store'})).json();
+        if (d && d.meta && d.store && d.people) {
+          DATA = d; render();
+          $('#liveTag').textContent = '已刷新 · ' + (d.meta.fetchTime || '');
+          toast('已拉取最新数据');
+          return;
+        }
+      } catch (e) {}
+      toast('取数失败，改用已部署版本');
+      loadRemote(false);
+    } else if (s.status === 'error') {
+      clearInterval(iv);
+      toast('刷新出错：' + (s.msg || '').slice(0, 30));
+    }
+  }, 2000);
+};
+
 /* 选文件 */
 const dz = $('#dropZone'), fi = $('#fileInput');
 dz.onclick = () => fi.click();
