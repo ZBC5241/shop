@@ -466,6 +466,9 @@ function render(){
   requestAnimationFrame(() => {
     $('#tpFill').style.width = (isNum(tp) ? Math.min(tp,1)*100 : 0).toFixed(1) + '%';
   });
+  const days = document.getElementById('tpDays');
+  if(days) days.innerHTML = isNum(m.remainDays)
+    ? ('剩 <b class="num">' + m.remainDays + '</b> 天') : '';
 
   updateBoardUI();
 
