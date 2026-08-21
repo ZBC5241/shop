@@ -463,7 +463,7 @@ function render(){
     + (m.fetchTime ? ' · ' + m.fetchTime + ' 更新' : (m.dayTitle ? ' · ' + m.dayTitle : ''));
   const tp = m.timeProgress;
   const ring = document.getElementById('tpRing');
-  if(ring) ring.innerHTML = tpRingHTML(tp, 70);
+  if(ring) ring.innerHTML = tpRingHTML(tp, 68);
   requestAnimationFrame(() => {
     $('#tpFill').style.width = (isNum(tp) ? Math.min(tp,1)*100 : 0).toFixed(1) + '%';
   });
