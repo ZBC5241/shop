@@ -75,8 +75,8 @@ svg{display:block}
     position:absolute;
     top:6px;
     right:13px;
-    width:68px;
-    height:68px;
+    width:66px;
+    height:66px;
     display:grid;
     place-items:center;
     flex:0 0 auto
@@ -89,7 +89,7 @@ svg{display:block}
 }
 .tp-ring-c{
     position:relative;
-    font-size:14px;
+    font-size:13px;
     font-weight:800;
     line-height:1;
     letter-spacing:-.3px;
@@ -2016,7 +2016,7 @@ function render(){
     + (m.fetchTime ? ' · ' + m.fetchTime + ' 更新' : (m.dayTitle ? ' · ' + m.dayTitle : ''));
   const tp = m.timeProgress;
   const ring = document.getElementById('tpRing');
-  if(ring) ring.innerHTML = tpRingHTML(tp, 68);
+  if(ring) ring.innerHTML = tpRingHTML(tp, 66);
   requestAnimationFrame(() => {
     $('#tpFill').style.width = (isNum(tp) ? Math.min(tp,1)*100 : 0).toFixed(1) + '%';
   });
