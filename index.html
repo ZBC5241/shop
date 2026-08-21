@@ -55,7 +55,7 @@ svg{display:block}
   backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
   box-shadow:0 6px 22px rgba(70,60,130,.06);
 }
-.top-row{display:flex;align-items:center;gap:11px;padding-right:60px}
+.top-row{display:flex;align-items:center;gap:11px;padding-right:68px}
 .logo{
   width:36px;height:36px;border-radius:10px;flex:0 0 auto;
   background:var(--grad);cursor:pointer;
@@ -70,10 +70,10 @@ svg{display:block}
 .top-t h1{font-size:clamp(14px,1.02rem + .35vw,17px);font-weight:700;letter-spacing:.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .top-t p{font-size:11px;color:var(--tx3);margin-top:2px}
 
-/* 时间进度圆环：绝对定位居中于门店名右侧上方区域，不撑高头部 */
-.tp-ring{position:absolute;top:0;right:8px;width:50px;height:50px;display:grid;place-items:center;flex:0 0 auto}
+/* 时间进度圆环：绝对定位居中于门店名右侧上方区域，不撑高头部（保持 v10 高度） */
+.tp-ring{position:absolute;top:0;right:8px;width:60px;height:60px;display:grid;place-items:center;flex:0 0 auto}
 .tp-ring svg{position:absolute;inset:0;width:100%;height:100%}
-.tp-ring-c{position:relative;font-size:12px;font-weight:800;line-height:1;letter-spacing:-.3px;font-variant-numeric:tabular-nums}
+.tp-ring-c{position:relative;font-size:13px;font-weight:800;line-height:1;letter-spacing:-.3px;font-variant-numeric:tabular-nums}
 
 /* 时间进度：tp 区保持 v10 紧凑样式（小数字+进度条+剩余天数） */
 .tp{margin-top:11px}
@@ -1995,7 +1995,7 @@ function render(){
     + (m.fetchTime ? ' · ' + m.fetchTime + ' 更新' : (m.dayTitle ? ' · ' + m.dayTitle : ''));
   const tp = m.timeProgress;
   const ring = document.getElementById('tpRing');
-  if(ring) ring.innerHTML = tpRingHTML(tp, 50);
+  if(ring) ring.innerHTML = tpRingHTML(tp, 60);
   requestAnimationFrame(() => {
     $('#tpFill').style.width = (isNum(tp) ? Math.min(tp,1)*100 : 0).toFixed(1) + '%';
   });
@@ -2063,8 +2063,8 @@ function tpRingHTML(tp, size){
   const w = isNum(tp) ? Math.min(tp, 1) : 0, off = c * (1 - w);
   const lv = tpLevel(tp);
   const svg = '<svg width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">'
-    + '<circle cx="' + (size/2) + '" cy="' + (size/2) + '" r="' + r + '" fill="none" stroke="rgba(30,28,60,.08)" stroke-width="6"/>'
-    + '<circle cx="' + (size/2) + '" cy="' + (size/2) + '" r="' + r + '" fill="none" stroke="' + lv.col + '" stroke-width="6" stroke-linecap="round"'
+    + '<circle cx="' + (size/2) + '" cy="' + (size/2) + '" r="' + r + '" fill="none" stroke="rgba(30,28,60,.08)" stroke-width="5"/>'
+    + '<circle cx="' + (size/2) + '" cy="' + (size/2) + '" r="' + r + '" fill="none" stroke="' + lv.col + '" stroke-width="5" stroke-linecap="round"'
     +   ' stroke-dasharray="' + c.toFixed(1) + '" stroke-dashoffset="' + off.toFixed(1) + '"'
     +   ' transform="rotate(-90 ' + (size/2) + ' ' + (size/2) + ')"'
     +   ' style="transition:stroke-dashoffset 1s cubic-bezier(.22,1,.36,1),stroke 1s"/>'
