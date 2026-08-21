@@ -55,7 +55,7 @@ svg{display:block}
   backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
   box-shadow:0 6px 22px rgba(70,60,130,.06);
 }
-.top-row{display:flex;align-items:center;gap:11px}
+.top-row{display:flex;align-items:center;gap:11px;padding-right:80px}
 .logo{
   width:36px;height:36px;border-radius:10px;flex:0 0 auto;
   background:var(--grad);cursor:pointer;
@@ -70,8 +70,8 @@ svg{display:block}
 .top-t h1{font-size:clamp(14px,1.02rem + .35vw,17px);font-weight:700;letter-spacing:.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .top-t p{font-size:11px;color:var(--tx3);margin-top:2px}
 
-/* 时间进度圆环：放在 tp-h 行右侧，与"本月时间进度"标签同行 */
-.tp-ring{position:relative;width:80px;height:80px;display:grid;place-items:center;flex:0 0 auto}
+/* 时间进度圆环：绝对定位挂右上角，按图缩至 72px 不撑高头部（保持 v10 高度） */
+.tp-ring{position:absolute;top:0;right:8px;width:72px;height:72px;display:grid;place-items:center;flex:0 0 auto}
 .tp-ring svg{position:absolute;inset:0;width:100%;height:100%}
 .tp-ring-c{position:relative;font-size:14px;font-weight:800;line-height:1;letter-spacing:-.3px;font-variant-numeric:tabular-nums}
 
@@ -79,7 +79,7 @@ svg{display:block}
 .tp{margin-top:11px}
 .tp-h{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--tx3);margin-bottom:5px}
 .tp-h b{color:var(--tx);font-weight:700}
-.tp-bar-row{display:flex;align-items:center;gap:8px}
+.tp-bar-row{display:flex;align-items:center;gap:8px;margin-top:6px}
 .tp-bar{flex:1;height:7px;border-radius:5px;background:var(--soft);overflow:hidden;position:relative}
 .tp-fill{height:100%;border-radius:5px;background:var(--grad);box-shadow:0 0 10px rgba(124,58,237,.35);transition:width 1s cubic-bezier(.22,1,.36,1)}
 .tp-days{font-size:11px;color:var(--tx3);white-space:nowrap;letter-spacing:.2px}
@@ -652,11 +652,11 @@ svg{display:block}
         <h1 id="storeName">华为李家村万达授权体验店</h1>
         <p><span id="dataDate">--</span> · <span class="badge-live" id="liveTag">数据已更新</span></p>
       </div>
+      <div class="tp-ring" id="tpRing"></div>
     </div>
     <div class="tp">
       <div class="tp-h">
         <span>本月时间进度</span>
-        <div class="tp-ring" id="tpRing"></div>
       </div>
       <div class="tp-bar-row">
         <div class="tp-bar"><div class="tp-fill" id="tpFill" style="width:0"></div></div>
@@ -1995,7 +1995,7 @@ function render(){
     + (m.fetchTime ? ' · ' + m.fetchTime + ' 更新' : (m.dayTitle ? ' · ' + m.dayTitle : ''));
   const tp = m.timeProgress;
   const ring = document.getElementById('tpRing');
-  if(ring) ring.innerHTML = tpRingHTML(tp, 80);
+  if(ring) ring.innerHTML = tpRingHTML(tp, 72);
   requestAnimationFrame(() => {
     $('#tpFill').style.width = (isNum(tp) ? Math.min(tp,1)*100 : 0).toFixed(1) + '%';
   });
