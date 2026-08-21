@@ -1222,7 +1222,8 @@ function catChartHTML(P){
   const tpPct = isNum(tp) ? Math.min(tp, 1) * 100 : 0;
   let bars = '';
   cats.forEach(c => {
-    const k = P[c];
+    // 增值在 DATA.store.qcs（不在 performance），同 kpiCard('增值', Q['增值'])
+    const k = (c === '增值') ? (DATA.store.qcs && DATA.store.qcs['增值']) : P[c];
     const rate = (k && isNum(k.rate)) ? Math.min(k.rate, 1) : 0;
     const s = k && hasTask(k) ? stat(k.rate) : 'na';
     const col = {done:'var(--green)', over:'var(--purple)', on:'var(--amber)', low:'var(--red)', na:'var(--gray)'}[s];
