@@ -70,10 +70,10 @@ svg{display:block}
 .top-t h1{font-size:clamp(14px,1.02rem + .35vw,17px);font-weight:700;letter-spacing:.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .top-t p{font-size:11px;color:var(--tx3);margin-top:2px}
 
-/* 时间进度圆环：绝对定位挂右上角，按图缩至 72px 不撑高头部（保持 v10 高度） */
-.tp-ring{position:absolute;top:0;right:8px;width:72px;height:72px;display:grid;place-items:center;flex:0 0 auto}
+/* 时间进度圆环：绝对定位挂右上角，不撑高头部（保持 v10 高度） */
+.tp-ring{position:absolute;top:0;right:8px;width:64px;height:64px;display:grid;place-items:center;flex:0 0 auto}
 .tp-ring svg{position:absolute;inset:0;width:100%;height:100%}
-.tp-ring-c{position:relative;font-size:14px;font-weight:800;line-height:1;letter-spacing:-.3px;font-variant-numeric:tabular-nums}
+.tp-ring-c{position:relative;font-size:16px;font-weight:800;line-height:1;letter-spacing:-.3px;font-variant-numeric:tabular-nums}
 
 /* 时间进度：tp 区保持 v10 紧凑样式（小数字+进度条+剩余天数） */
 .tp{margin-top:11px}
@@ -1995,7 +1995,7 @@ function render(){
     + (m.fetchTime ? ' · ' + m.fetchTime + ' 更新' : (m.dayTitle ? ' · ' + m.dayTitle : ''));
   const tp = m.timeProgress;
   const ring = document.getElementById('tpRing');
-  if(ring) ring.innerHTML = tpRingHTML(tp, 72);
+  if(ring) ring.innerHTML = tpRingHTML(tp, 64);
   requestAnimationFrame(() => {
     $('#tpFill').style.width = (isNum(tp) ? Math.min(tp,1)*100 : 0).toFixed(1) + '%';
   });
@@ -2063,8 +2063,8 @@ function tpRingHTML(tp, size){
   const w = isNum(tp) ? Math.min(tp, 1) : 0, off = c * (1 - w);
   const lv = tpLevel(tp);
   const svg = '<svg width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">'
-    + '<circle cx="' + (size/2) + '" cy="' + (size/2) + '" r="' + r + '" fill="none" stroke="rgba(30,28,60,.08)" stroke-width="8"/>'
-    + '<circle cx="' + (size/2) + '" cy="' + (size/2) + '" r="' + r + '" fill="none" stroke="' + lv.col + '" stroke-width="8" stroke-linecap="round"'
+    + '<circle cx="' + (size/2) + '" cy="' + (size/2) + '" r="' + r + '" fill="none" stroke="rgba(30,28,60,.08)" stroke-width="10"/>'
+    + '<circle cx="' + (size/2) + '" cy="' + (size/2) + '" r="' + r + '" fill="none" stroke="' + lv.col + '" stroke-width="10" stroke-linecap="round"'
     +   ' stroke-dasharray="' + c.toFixed(1) + '" stroke-dashoffset="' + off.toFixed(1) + '"'
     +   ' transform="rotate(-90 ' + (size/2) + ' ' + (size/2) + ')"'
     +   ' style="transition:stroke-dashoffset 1s cubic-bezier(.22,1,.36,1),stroke 1s"/>'

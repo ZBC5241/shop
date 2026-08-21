@@ -463,7 +463,7 @@ function render(){
     + (m.fetchTime ? ' · ' + m.fetchTime + ' 更新' : (m.dayTitle ? ' · ' + m.dayTitle : ''));
   const tp = m.timeProgress;
   const ring = document.getElementById('tpRing');
-  if(ring) ring.innerHTML = tpRingHTML(tp, 72);
+  if(ring) ring.innerHTML = tpRingHTML(tp, 64);
   requestAnimationFrame(() => {
     $('#tpFill').style.width = (isNum(tp) ? Math.min(tp,1)*100 : 0).toFixed(1) + '%';
   });
@@ -531,8 +531,8 @@ function tpRingHTML(tp, size){
   const w = isNum(tp) ? Math.min(tp, 1) : 0, off = c * (1 - w);
   const lv = tpLevel(tp);
   const svg = '<svg width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">'
-    + '<circle cx="' + (size/2) + '" cy="' + (size/2) + '" r="' + r + '" fill="none" stroke="rgba(30,28,60,.08)" stroke-width="8"/>'
-    + '<circle cx="' + (size/2) + '" cy="' + (size/2) + '" r="' + r + '" fill="none" stroke="' + lv.col + '" stroke-width="8" stroke-linecap="round"'
+    + '<circle cx="' + (size/2) + '" cy="' + (size/2) + '" r="' + r + '" fill="none" stroke="rgba(30,28,60,.08)" stroke-width="10"/>'
+    + '<circle cx="' + (size/2) + '" cy="' + (size/2) + '" r="' + r + '" fill="none" stroke="' + lv.col + '" stroke-width="10" stroke-linecap="round"'
     +   ' stroke-dasharray="' + c.toFixed(1) + '" stroke-dashoffset="' + off.toFixed(1) + '"'
     +   ' transform="rotate(-90 ' + (size/2) + ' ' + (size/2) + ')"'
     +   ' style="transition:stroke-dashoffset 1s cubic-bezier(.22,1,.36,1),stroke 1s"/>'
