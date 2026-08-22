@@ -748,6 +748,7 @@ const CFG = {
 let DATA = EMBEDDED_DATA;
 let VIEW = 'store';
 let BOARD = (location.hash === '#ops') ? 'ops' : 'sales';   /* 板块：sales 销售看板 / ops 运营看板 */
+if(location.hash === '#day' || location.hash === '#today') VIEW = 'day';   /* 直达今日板块（日报卡片链接用） */
 let RANK_BY = '毛利';
 let PERSON = null;
 
@@ -2134,10 +2135,11 @@ function setBoard(b){
 }
 function toggleBoard(){ setBoard(BOARD === 'sales' ? 'ops' : 'sales'); }
 
-/* 分享链接 #sales / #ops：hash 变化时同步板块（不重载页面） */
+/* 分享链接 #sales / #ops / #day：hash 变化时同步板块/视图（不重载页面） */
 window.addEventListener('hashchange', function(){
   if(location.hash === '#ops') BOARD = 'ops';
   else if(location.hash === '#sales') BOARD = 'sales';
+  if(location.hash === '#day' || location.hash === '#today'){ BOARD = 'sales'; VIEW = 'day'; }
   const tabs = BOARDS[BOARD].tabs;
   if(!tabs.includes(VIEW)) VIEW = tabs[0];
   render();
@@ -2147,19 +2149,12 @@ window.addEventListener('hashchange', function(){
 /* ==========================================================
    数据加载：优先读线上 data.json，失败则用内嵌快照
    ========================================================== */
-function _dataTs(m){ if(!m) return ''; return m.generatedAt || (m.fetchTime ? '1970-01-01 ' + m.fetchTime : ''); }
 function loadRemote(silent){
   const url = CFG.dataFile + '?t=' + Date.now();
   return fetch(url, {cache:'no-store'})
     .then(r => r.ok ? r.json() : Promise.reject(r.status))
     .then(j => {
       if(j && j.meta && j.store && j.people){
-        // 不回退：若线上 data.json 比当前内嵌（部署时嵌入）更旧，保留内嵌，避免时间跳回旧值
-        const cur = _dataTs(DATA.meta), rem = _dataTs(j.meta);
-        if(cur && rem && rem < cur){
-          $('#liveTag').textContent = '本地快照';
-          return true;
-        }
         DATA = j;
         render();
         $('#liveTag').textContent = '数据已更新';
