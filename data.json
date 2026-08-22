@@ -9,7 +9,7 @@
   "isToday": true,
   "lagDays": 0,
   "todayLabel": "08-22",
-  "fetchTime": "14:37",
+  "fetchTime": "19:09",
   "employees": [
    "邵乐乐",
    "杨丽华",
@@ -20,7 +20,7 @@
   "sourceFile": "yonyou_raw.tsv",
   "sourceRows": 412,
   "dayRows": 2,
-  "generatedAt": "2026-08-22 14:37:54"
+  "generatedAt": "2026-08-22 19:09:17"
  },
  "store": {
   "performance": {
