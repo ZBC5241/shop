@@ -2147,12 +2147,19 @@ window.addEventListener('hashchange', function(){
 /* ==========================================================
    数据加载：优先读线上 data.json，失败则用内嵌快照
    ========================================================== */
+function _dataTs(m){ if(!m) return ''; return m.generatedAt || (m.fetchTime ? '1970-01-01 ' + m.fetchTime : ''); }
 function loadRemote(silent){
   const url = CFG.dataFile + '?t=' + Date.now();
   return fetch(url, {cache:'no-store'})
     .then(r => r.ok ? r.json() : Promise.reject(r.status))
     .then(j => {
       if(j && j.meta && j.store && j.people){
+        // 不回退：若线上 data.json 比当前内嵌（部署时嵌入）更旧，保留内嵌，避免时间跳回旧值
+        const cur = _dataTs(DATA.meta), rem = _dataTs(j.meta);
+        if(cur && rem && rem < cur){
+          $('#liveTag').textContent = '本地快照';
+          return true;
+        }
         DATA = j;
         render();
         $('#liveTag').textContent = '数据已更新';
