@@ -21,7 +21,7 @@ import datetime
 
 DEFAULT_XLSX = "/Users/mac/Desktop/李家村销售/李家村8月任务进度.xlsx"
 SHEET = "XS"
-TMP_CSV = "/tmp/_xs_import.csv"
+TMP_CSV = "/Users/mac/Desktop/李家村销售/_xs_import.csv"
 
 # 需要转成纯数字的列（0-based）
 NUM_COLS = {8, 9, 10, 11, 12, 13, 14, 18}
@@ -79,6 +79,7 @@ on run argv
     set lastRow to (item 4 of argv) as integer
 
     tell application "Microsoft Excel"
+        with timeout of 600 seconds
         set displayAlerts to false
         set screen updating to false
 
@@ -113,6 +114,7 @@ on run argv
         set displayAlerts to true
         close tgt saving no
         return n
+        end timeout
     end tell
 end run
 '''
