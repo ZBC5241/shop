@@ -33,3 +33,6 @@ screenshot.js
 *.bak_*
 refresh_server.log
 .refresh_server.pid
+
+# 企微 userid/手机号映射（日报@点赞用；含隐私，禁止入库）
+.wecom_userids
