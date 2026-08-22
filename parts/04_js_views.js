@@ -468,8 +468,18 @@ function render(){
     $('#tpFill').style.width = (isNum(tp) ? Math.min(tp,1)*100 : 0).toFixed(1) + '%';
   });
   const days = document.getElementById('tpDays');
-  if(days) days.innerHTML = isNum(m.remainDays)
-    ? ('剩 <b class="num">' + m.remainDays + '</b> 天') : '';
+  if(days){
+    let rd = m.remainDays;
+    if(!isNum(rd)){                       // 兜底：数据缺 remainDays 时按 meta.date 算本月剩余
+      const ds = (m.date || '').slice(0,10);
+      const d  = ds ? new Date(ds + 'T00:00:00') : null;
+      if(d && !isNaN(d.getTime())){
+        const last = new Date(d.getFullYear(), d.getMonth()+1, 0).getDate();
+        rd = Math.max(1, last - d.getDate());
+      } else rd = 0;
+    }
+    days.innerHTML = '剩 <b class="num">' + rd + '</b> 天';
+  }
 
   updateBoardUI();
 

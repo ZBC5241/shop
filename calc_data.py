@@ -359,9 +359,9 @@ def calc_daily(rxs, name, labels):
 
 # ============================ 复算：每日缺口 ============================
 def remain_days(base):
-    """剩余天数 = (月末 - 当日) - MAX(0, 4 - INT((DAY-1)/7))，与表格公式一致。"""
+    """剩余天数 = 本月天数 - 当日（不含今天），自然月口径。例：8-22 → 9 天。"""
     last = calendar.monthrange(base.year, base.month)[1]
-    return max(1, (last - base.day) - max(0, 4 - (base.day - 1) // 7))
+    return max(1, last - base.day)
 
 
 def calc_gap(perf, qcs, rd, labels):
