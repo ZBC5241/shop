@@ -75,12 +75,21 @@ def main():
         fail("meta.date %s 是未来日期（系统时钟或数据异常）" % mdate)
     if age > 3:
         fail("数据日期 %s 距今天 %d 天（疑似旧缓存，先重跑抓取+calc+merge）" % (mdate, age))
-    # remainDays 自洽：应 ≈ 本月天数 - 当日（自然月口径）
+    # remainDays 自洽：calc_data 用 ref=系统today（同月且today>=数据最新日时）算剩余天数
+    #   即 remainDays = 本月天数 - 今天（不含今天，晨哥拍板口径）
+    #   校验须基于"今天"，不是 meta.date（数据日期常比今天早，是夜间/凌晨抓取的正常现象）
     import calendar
-    last = calendar.monthrange(md.year, md.month)[1]
-    exp_rd = max(1, last - md.day)
-    if rd != exp_rd:
-        fail("remainDays %d 与日期 %s 自洽不符（期望 %d，自然月口径）" % (rd, mdate, exp_rd))
+    if (today.year, today.month) != (md.year, md.month):
+        # 跨月：今天已不在数据所在月，ref 会回退到 base0，remainDays 按数据月末算
+        last = calendar.monthrange(md.year, md.month)[1]
+        exp_rd = max(1, last - md.day)
+        if rd != exp_rd:
+            fail("跨月：remainDays %d 与数据月末 %s 不符（期望 %d）" % (rd, mdate, exp_rd))
+    else:
+        last = calendar.monthrange(today.year, today.month)[1]
+        exp_rd = max(1, last - today.day)
+        if rd != exp_rd:
+            fail("remainDays %d 与今天 %s 自洽不符（期望 %d，自然月口径=本月天数-今天）" % (rd, today.isoformat(), exp_rd))
 
     store = d.get("store") or {}
     qcs = store.get("qcs") or {}
