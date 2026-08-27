@@ -187,29 +187,47 @@ function postingBanner(){
     + '</div>';
 }
 
-/* ============ 今日图表：Donut(按毛利) + Bar(按增值排行) ============ */
+/* ============ 今日图表：Donut(当日增值品类构成) + Bar(当日全员增值排行) ============ */
 function dayChartsHTML(dd, meta){
-  /* Donut 数据：按 cat 聚合 profit（毛利），降序，取前 5 + 其他 */
-  const pfByCat = {};
-  dd.forEach(r => { const c = r.cat || '其他'; pfByCat[c] = (pfByCat[c]||0) + (isNum(r.profit) ? r.profit : 0); });
-  const cats = Object.keys(pfByCat).filter(c => pfByCat[c] > 0).sort((a,b) => pfByCat[b] - pfByCat[a]);
-  const top = cats.slice(0, 5);
-  const restSum = cats.slice(5).reduce((s,c) => s + pfByCat[c], 0);
-  const donutItems = top.map((c,i) => ({ label:c, value:pfByCat[c], color:CHART_PALETTE[i % CHART_PALETTE.length] }));
+  /* 当日增值明细：优先从 dayDetails 取 cat=='增值'，回退到全月增值明细按当日日期过滤 */
+  const dayDate = (meta.date || '').slice(0,10);
+  let zzDay = (dd || []).filter(r => r.cat === '增值');
+  if(!zzDay.length){
+    const zzAll = (DATA.details && DATA.details['增值']) || [];
+    zzDay = zzAll.filter(r => (r.date || '').slice(0,10) === dayDate);
+  }
+
+  /* Donut 数据：当日增值按商品名称聚合毛利，降序，取前 5 + 其他 */
+  const pfByName = {};
+  zzDay.forEach(r => {
+    const n = (r.product || r.name || '其他').replace(/^COOYEE\s*/i,'').replace(/^Cooyee\s*/,'');
+    pfByName[n] = (pfByName[n]||0) + (isNum(r.profit) ? r.profit : 0);
+  });
+  const names = Object.keys(pfByName).filter(c => pfByName[c] > 0).sort((a,b) => pfByName[b] - pfByName[a]);
+  const top = names.slice(0, 5);
+  const restSum = names.slice(5).reduce((s,c) => s + pfByName[c], 0);
+  const donutItems = top.map((c,i) => ({ label:c, value:pfByName[c], color:CHART_PALETTE[i % CHART_PALETTE.length] }));
   if(restSum > 0) donutItems.push({ label:'其他', value:restSum, color:CHART_PALETTE[5 % CHART_PALETTE.length] });
   const totalPf = donutItems.reduce((s,it) => s + it.value, 0);
 
-  /* Bar 数据：按 emp 聚合 cat=='增值' 的 amount，降序，全员都列（含 0） */
+  /* Bar 数据：当日增值按 emp 聚合 amount，降序，全员都列（含 0） */
   const incByEmp = {};
   (meta.employees || []).forEach(n => incByEmp[n] = 0);
-  dd.forEach(r => { if(r.cat === '增值') incByEmp[r.emp] = (incByEmp[r.emp]||0) + (isNum(r.amount) ? r.amount : 0); });
+  zzDay.forEach(r => { incByEmp[r.emp] = (incByEmp[r.emp]||0) + (isNum(r.amount) ? r.amount : 0); });
   const barItems = Object.keys(incByEmp).map(n => ({ label:n, value:incByEmp[n] })).sort((a,b) => b.value - a.value);
 
-  let h = '<div class="sec"><div class="sec-h"><span class="bar"></span><b>今日图表</b><span class="tail">构成 · 排行</span></div>'
-        + '<div class="chart-grid">'
-        +   '<div class="cg-card"><div class="cg-h">品类毛利占比</div>'
+  const hasData = zzDay.length > 0;
+
+  let h = '<div class="sec"><div class="sec-h"><span class="bar"></span><b>今日图表</b><span class="tail">当日增值 · 构成 · 排行</span></div>'
+        + '<div class="chart-grid">';
+  if(!hasData){
+    h += '<div class="cg-card" style="grid-column:1/-1"><div class="empty">今日暂无增值上账数据</div></div>';
+    h += '</div></div>';
+    return h;
+  }
+  h +=   '<div class="cg-card"><div class="cg-h">当日增值品类构成</div>'
         +     '<div class="donut-wrap">' + donutSVG(donutItems, 150)
-        +       '<div class="donut-center"><b class="num">' + moneyShort(totalPf) + '</b><span>总毛利</span></div>'
+        +       '<div class="donut-center"><b class="num">' + moneyShort(totalPf) + '</b><span>当日增值毛利</span></div>'
         +     '</div>'
         +     '<div class="donut-legend">';
   donutItems.forEach(it => {
@@ -221,7 +239,7 @@ function dayChartsHTML(dd, meta){
        + '</div>';
   });
   h +=   '</div></div>'
-      +   '<div class="cg-card"><div class="cg-h">全员增值排行</div>'
+      +   '<div class="cg-card"><div class="cg-h">当日全员增值排行</div>'
       +     '<div class="hb-list">' + hbarSVG(barItems) + '</div>'
       +   '</div>'
       + '</div></div>';
