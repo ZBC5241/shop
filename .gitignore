@@ -1,7 +1,8 @@
-# 业务数据（含商业信息，禁止入库）
-data.json
-yonyou_raw.tsv
-dashboard_data.json
+# 所有业务数据文件（含商业信息/超100MB，禁止入库）
+*.json
+*.tsv
+*.csv
+!parts/*.json
 
 # 企业微信 webhook 密钥（禁止入库）
 .wecom_webhook
@@ -37,14 +38,6 @@ refresh_server.log
 # 企微 userid/手机号映射（日报@点赞用；含隐私，禁止入库）
 .wecom_userids
 
-# 大数据文件（超GitHub 100MB限制）
-sa_mgr_month.json
-sa_warehouse.json
-sa_raw.json
-sa_raw.tsv
-data_multi.json
-yonyou_full_512.tsv
-yonyou_full_512_19col.tsv
-yonyou_mgr_raw.tsv
-sa_mgr_stores.json
-sa_aug_cache.json
+# 临时/备份文件
+*.bak
+*.tmp
