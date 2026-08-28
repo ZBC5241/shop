@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 李家村门店业绩看板 —— 明细复算引擎
-直接从用友云导出的销售明细 TSV 复现《李家村销售》表的全部 SUMIFS 口径，生成 data.json。
+直接从用友云导出的销售明细复现《李家村销售》表的全部 SUMIFS 口径，生成 data.json。
 
 为什么要复算？
     表格里的指标全是 SUMIFS 公式。脚本写完 XS/RXS 明细后，公式的「缓存值」
@@ -11,11 +11,12 @@
 
 口径来源：逐格导出《李家村销售》表的真实公式，1:1 复现，不做任何自创逻辑。
     · 任务量  → 读「8月任务」表常量（纯手工填写，不受公式缓存影响）
-    · 完成量  → 由明细 TSV 复算
+    · 完成量  → 由明细复算
     · 手工项  → 乐回收(常量) / 太力回收(独立表) / 绩效(个人表) 直接读，它们不依赖明细
 
 用法：
-    python calc_data.py <明细.tsv> [--xlsx 路径] [--day YYYY-MM-DD] [-o data.json]
+    python calc_data.py <明细文件> [--xlsx 路径] [--day YYYY-MM-DD] [-o data.json]
+    明细文件支持 .tsv 和 .xlsx（导出按钮直接导出的原始数据xlsx，跳过TSV中转）
 """
 import sys, os, re, json, csv, datetime, argparse, calendar
 import openpyxl
@@ -128,13 +129,71 @@ def load_tsv(path):
         sys.exit("❌ 明细文件是空的")
     head = [h.strip() for h in rd[0]]
     if head[:len(HEADERS)] != HEADERS:
-        sys.exit(f"❌ 明细表头与预期不符\n  期望: {HEADERS}\n  实际: {head}")
+        # 兼容16列TSV（浏览器提取缺库区/门店/销售成本）：表头前16列匹配即可
+        if head[:16] == HEADERS[:16]:
+            print("  [提示] 检测到16列TSV（浏览器提取版），自动补3空列→19列")
+            head = head + HEADERS[16:]
+            for i in range(1, len(rd)):
+                if len(rd[i]) < 19:
+                    rd[i] = rd[i] + [""] * (19 - len(rd[i]))
+        else:
+            sys.exit(f"❌ 明细表头与预期不符\n  期望: {HEADERS}\n  实际: {head}")
     rows = [r + [""] * (len(HEADERS) - len(r)) for r in rd[1:] if any(x.strip() for x in r)]
     return rows
 
 
+def load_xlsx(path):
+    """直接读取用友云导出按钮导出的原始数据xlsx，跳过TSV中转。
+    xlsx结构：第1行表头，第2行起数据，A-S共19列（与HEADERS完全一致）。
+    含空行和重复行，需过滤去重（出库单号+SKU编码）。
+    """
+    import warnings
+    warnings.filterwarnings("ignore", message="Workbook contains no default style")
+    wb = openpyxl.load_workbook(path, read_only=True, data_only=True)
+    ws = wb.active
+    all_rows = list(ws.iter_rows(min_row=1, max_row=ws.max_row, values_only=True))
+    if not all_rows:
+        sys.exit("❌ xlsx明细文件是空的")
+    head = [str(h).strip() if h is not None else "" for h in all_rows[0]]
+    if head[:len(HEADERS)] != HEADERS:
+        sys.exit(f"❌ xlsx表头与预期不符\n  期望: {HEADERS}\n  实际: {head[:19]}")
+    # 过滤空行 + 去重（出库单号+SKU编码），所有值统一转字符串（与TSV行为一致）
+    seen = set()
+    rows = []
+    for r in all_rows[1:]:
+        if not r[0] or not str(r[0]).strip():
+            continue  # 跳过空行
+        cells = []
+        for i, c in enumerate(r[:19]):
+            if c is None:
+                cells.append("")
+            elif isinstance(c, datetime.datetime):
+                cells.append(c.strftime("%Y-%m-%d"))
+            else:
+                cells.append(str(c))
+        key = (cells[0].strip(), cells[5].strip())  # 出库单号 + SKU编码
+        if key in seen:
+            continue  # 跳过重复行
+        seen.add(key)
+        rows.append(cells)
+    return rows
+
+
+def load_detail(path):
+    """统一入口：根据文件扩展名自动选择TSV或xlsx读取方式。"""
+    ext = os.path.splitext(path)[1].lower()
+    if ext == ".xlsx":
+        print(f"  [模式] 直读xlsx（跳过TSV中转）")
+        return load_xlsx(path)
+    else:
+        return load_tsv(path)
+
+
 def day_of(r):
-    return str(r[C["C"]]).strip()[:10]
+    v = r[C["C"]]
+    if isinstance(v, datetime.datetime):
+        return v.strftime("%Y-%m-%d")
+    return str(v).strip()[:10]
 
 
 # ============================ 读表格里的手工项 ============================
@@ -621,6 +680,7 @@ def day_cat(r):
     if d == "07音频":   return "音频"
     if f.startswith("12"): return "HD"
     if "增值" in d:     return "增值"
+    if "运营商" in d:    return "增值"
     return "其他"
 
 
@@ -651,14 +711,14 @@ def build_day_details(rxs):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("tsv")
+    ap.add_argument("detail", help="明细文件路径（.tsv 或 .xlsx）")
     ap.add_argument("--xlsx", default="/Users/mac/Desktop/李家村销售/李家村8月任务进度.xlsx")
     ap.add_argument("--day", help="当日达成基准日，默认取明细里的最大日期")
     ap.add_argument("-o", "--out", default=os.path.join(
         os.path.dirname(os.path.abspath(__file__)), "data.json"))
     a = ap.parse_args()
 
-    xs = load_tsv(a.tsv)
+    xs = load_detail(a.detail)
     if not xs:
         sys.exit("❌ 明细里没有数据行")
 
@@ -716,7 +776,7 @@ def main():
             "todayLabel": f"{ref.month:02d}-{ref.day:02d}",
             "fetchTime": datetime.datetime.now().strftime("%H:%M"),
             "employees": PEOPLE_ORDER,
-            "sourceFile": os.path.basename(a.tsv),
+            "sourceFile": os.path.basename(a.detail),
             "sourceRows": len(xs),
             "dayRows": len(rxs),
             "generatedAt": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),

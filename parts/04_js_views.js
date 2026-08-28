@@ -140,7 +140,7 @@ function renderPerson(){
 }
 
 /* ---------------- 视图 4：今日 ---------------- */
-const DAY_ORDER = ['毛利','销额','增值','手机','音频穿戴','智慧办公','HD','会员','回收','贴膜','电信积分','滞销','优享/会员','尊享/储值'];
+const DAY_ORDER = ['毛利','销额','增值','手机','音频穿戴','智慧办公','HD','会员','回收','贴膜','电信积分','滞销','优享/会员','摄影课','尊享/储值'];
 const GAP_ALIAS = { '会员':'Care+' };
 
 function dayHTML(done, gap){
@@ -197,23 +197,26 @@ function dayChartsHTML(dd, meta){
     zzDay = zzAll.filter(r => (r.date || '').slice(0,10) === dayDate);
   }
 
-  /* Donut 数据：当日增值按商品名称聚合毛利，降序，取前 5 + 其他 */
+  /* Donut 数据：当日增值按商品名称聚合毛利，降序，取前 5 + 其他（含负数项，与每日任务口径一致） */
   const pfByName = {};
+  let totalPfAll = 0;
   zzDay.forEach(r => {
     const n = (r.product || r.name || '其他').replace(/^COOYEE\s*/i,'').replace(/^Cooyee\s*/,'');
-    pfByName[n] = (pfByName[n]||0) + (isNum(r.profit) ? r.profit : 0);
+    const v = isNum(r.profit) ? r.profit : 0;
+    pfByName[n] = (pfByName[n]||0) + v;
+    totalPfAll += v;
   });
-  const names = Object.keys(pfByName).filter(c => pfByName[c] > 0).sort((a,b) => pfByName[b] - pfByName[a]);
+  const names = Object.keys(pfByName).sort((a,b) => Math.abs(pfByName[b]) - Math.abs(pfByName[a]));
   const top = names.slice(0, 5);
   const restSum = names.slice(5).reduce((s,c) => s + pfByName[c], 0);
   const donutItems = top.map((c,i) => ({ label:c, value:pfByName[c], color:CHART_PALETTE[i % CHART_PALETTE.length] }));
-  if(restSum > 0) donutItems.push({ label:'其他', value:restSum, color:CHART_PALETTE[5 % CHART_PALETTE.length] });
-  const totalPf = donutItems.reduce((s,it) => s + it.value, 0);
+  if(Math.abs(restSum) > 0.001) donutItems.push({ label:'其余' + names.slice(5).length + '项', value:restSum, color:CHART_PALETTE[5 % CHART_PALETTE.length] });
+  const totalPf = totalPfAll;
 
-  /* Bar 数据：当日增值按 emp 聚合 amount，降序，全员都列（含 0） */
+  /* Bar 数据：当日增值按 emp 聚合 profit(毛利)，降序，全员都列（含 0） */
   const incByEmp = {};
   (meta.employees || []).forEach(n => incByEmp[n] = 0);
-  zzDay.forEach(r => { incByEmp[r.emp] = (incByEmp[r.emp]||0) + (isNum(r.amount) ? r.amount : 0); });
+  zzDay.forEach(r => { incByEmp[r.emp] = (incByEmp[r.emp]||0) + (isNum(r.profit) ? r.profit : 0); });
   const barItems = Object.keys(incByEmp).map(n => ({ label:n, value:incByEmp[n] })).sort((a,b) => b.value - a.value);
 
   const hasData = zzDay.length > 0;

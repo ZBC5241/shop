@@ -164,7 +164,9 @@ def read_emp_channel():
                     "phone": str(r.get("iMemberid_cphone") or "").strip(),
                 })
                 # 全量索引（含非白名单渠道）：供品类明细补 单号/会员/电话
-                sa_lookup.setdefault((p, bd, str(r.get("productsku_cCode") or "").strip(), amt), []).append({
+                # ⚠️ key 只用 (员工,日期,净额)：切片的 productsku_cCode 是「商品名称」，
+                #    而 details 的 sku 是「SKU编码」，两者交集为 0，加 sku 会导致 0 命中。
+                sa_lookup.setdefault((p, bd, amt), []).append({
                     "code": str(r.get("code") or r.get("id") or "").strip(),
                     "member": str(r.get("iMemberid_name") or "").strip(),
                     "phone": str(r.get("iMemberid_cphone") or "").strip(),
@@ -229,8 +231,8 @@ def read_emp_channel():
                     "phone": str(ws.cell(r, COL_PH).value or "").strip() if COL_PH else "",
                 })
                 # 全量索引（含非白名单渠道）：供品类明细补 单号/会员/电话
+                # ⚠️ 与切片路径统一：key = (员工,日期,净额)，不加 sku（口径不一致会导致 0 命中）
                 sa_lookup.setdefault((p, (str(bd)[:10] if bd else ""),
-                                      str(ws.cell(r, COL_SKU).value or "").strip() if COL_SKU else "",
                                       _num(ws.cell(r, COL_N).value)), []).append({
                     "code": str(ws.cell(r, COL_C).value or "").strip() if COL_C else "",
                     "member": str(ws.cell(r, COL_MEM).value or "").strip() if COL_MEM else "",
@@ -334,19 +336,26 @@ def main():
 
     with open(DATA, encoding="utf-8") as f:
         d = json.load(f)
-    # 单品明细补充 毛利/成本/原价/毛利率：关联 calc_data 已算的 details（按 日期+SKU+净额 精确匹配，回退 日期+SKU）
-    det_idx = {}
-    det_idx_amt = {}
+    # 单品明细补充 毛利/成本/原价/毛利率
+    # ⚠️ 口径坑：details 的 sku 是「SKU编码」，而渠道单品(销售分析)的 sku 是「商品名称」，
+    #    两者交集为 0 → 按 sku 匹配恒 0 命中。改用 (日期,净额) 匹配（实测命中 ~99%）。
+    det_idx = {}       # (date, sku) 兼容旧口径
+    det_idx_amt = {}   # (date, amount)
+    det_idx_full = {}  # (date, amount, qty) 最精确
     for _cat, rows in (d.get("details") or {}).items():
         for r in rows:
-            k = (r.get("date"), r.get("sku", ""))
-            det_idx.setdefault(k, r)
-            det_idx_amt.setdefault((k[0], k[1], r.get("amount")), r)
+            _dt = r.get("date")
+            _sku = r.get("sku", "")
+            _amt = r.get("amount")
+            det_idx.setdefault((_dt, _sku), r)
+            det_idx_amt.setdefault((_dt, _amt), r)
+            det_idx_full.setdefault((_dt, _amt, r.get("qty")), r)
     _enriched = 0
     for _p, _chans in (qd.get("channelItems") or {}).items():
         for _ch, _items in _chans.items():
             for it in _items:
-                dr = (det_idx_amt.get((it.get("date"), it.get("sku", ""), it.get("amount")))
+                dr = (det_idx_full.get((it.get("date"), it.get("amount"), it.get("qty")))
+                      or det_idx_amt.get((it.get("date"), it.get("amount")))
                       or det_idx.get((it.get("date"), it.get("sku", ""))))
                 if not dr:
                     continue
@@ -362,12 +371,13 @@ def main():
     if _enriched:
         print("  [渠道单品] 已补毛利/成本字段 %d 条" % _enriched)
 
-    # 品类达成明细补 单号/会员/电话：按 (员工,日期,SKU,净额) 关联销售分析
+    # 品类达成明细补 单号/会员/电话：按 (员工,日期,净额) 关联销售分析
+    # ⚠️ 不要加 sku：details 的 sku 是编码、销售分析的是商品名称，加进去会 0 命中
     if sa_lookup:
         _hit = 0
         for _cat, rows in (d.get("details") or {}).items():
             for r in rows:
-                info = sa_lookup.get((r.get("emp"), r.get("date"), r.get("sku", ""),
+                info = sa_lookup.get((r.get("emp"), r.get("date"),
                                       _num(r.get("amount"))))
                 if not info:
                     continue
