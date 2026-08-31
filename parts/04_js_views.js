@@ -39,7 +39,7 @@ function renderRank(){
   h += '<div class="cols">';
   list.forEach((it, i) => {
     const s = it.has ? stat(it.rate) : 'na';
-    const colorVar = {done:'--green',over:'--purple',on:'--amber',low:'--red',na:'--gray'}[s];
+    const colorVar = {done:'--red',over:'--red',on:'--amber',low:'--green',zero:'--red',na:'--gray'}[s];
     const w = it.has && isNum(it.rate) ? Math.min(it.rate,1)*100 : 0;
     h += '<div class="rk" data-person="' + esc(it.name) + '">'
       + '<div class="rk-bg" style="width:' + w.toFixed(1) + '%;background:var(' + colorVar + ')"></div>'
@@ -52,7 +52,7 @@ function renderRank(){
       + '<div class="rk-r">'
         + '<div class="p num" style="color:var(' + colorVar + ')">' + (it.has ? pct(it.rate,0) : '—') + '</div>'
         + '<div class="g">' + (it.has && it.k && isNum(it.k.gap)
-            ? (it.k.gap < 0 ? '差 ' + fmtU(Math.abs(it.k.gap), unitOf(dim.k, it.k))
+            ? (it.k.gap < 0 ? '缺 ' + fmtU(-it.k.gap, unitOf(dim.k, it.k))
                             : '超 ' + fmtU(it.k.gap, unitOf(dim.k, it.k)))
             : STAT_TXT[s]) + '</div>'
       + '</div>'
@@ -329,7 +329,7 @@ function renderDay(){
     const items = DAY_SHOW.filter(k => k in d).map(k => [k, MONEY_KEYS.has(k) ? moneyShort(d[k]) : cnt(d[k])]);
     const allZero = items.every(([k]) => !isNum(d[k]) || d[k] === 0);
     h += '<div class="card" style="padding:11px 12px;margin-bottom:8px'
-       + (allZero ? ';border-color:rgba(232,68,58,.22)' : '') + '">'
+       + (allZero ? ';border-color:rgba(34,197,94,.22)' : '') + '">'
       + '<div style="display:flex;align-items:center;gap:7px;margin-bottom:7px">'
         + '<b style="font-size:13px">' + esc(n) + '</b>'
         + (allZero ? '<span style="font-size:10px;color:var(--tx3);background:var(--card2);padding:1px 6px;border-radius:5px;font-weight:600">暂无上账</span>' : '')
@@ -359,8 +359,8 @@ function foot(){
 }
 
 /* ---------------- 视图 5：店长洞察 ---------------- */
-const LV_COLOR = { danger:'--red', warn:'--amber', good:'--green', mid:'--blue', none:'--gray' };
-const LV_TAG   = { danger:'急', warn:'追', good:'稳', mid:'跟得上', none:'无任务' };
+const LV_COLOR = { danger:'--green', warn:'--amber', good:'--red', mid:'--amber', none:'--gray' };
+const LV_TAG   = { danger:'追', warn:'注', good:'稳', mid:'接近', none:'无任务' };
 
 function renderInsight(){
   const I = DATA.insights;
@@ -377,7 +377,7 @@ function renderInsight(){
      + '<div class="bt-c"><div class="bt-v num">' + (T.totalOrders||0) + '</div><div class="bt-l">上账笔数</div></div>'
      + '<div class="bt-c"><div class="bt-v num">' + money(T.totalGross||0,0) + '</div><div class="bt-l">今日毛利</div></div>'
      + '<div class="bt-c"><div class="bt-v num" style="color:var('
-       + ((T.idle||[]).length ? '--red' : '--green') + ')">'
+       + ((T.idle||[]).length ? '--green' : '--red') + ')">'
        + (T.sold||[]).length + '<span style="font-size:12px;color:var(--tx3)">/'
        + ((T.sold||[]).length + (T.idle||[]).length) + '</span></div>'
      + '<div class="bt-l">已开单人数</div></div>'

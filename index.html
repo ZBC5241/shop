@@ -159,18 +159,18 @@ svg{display:block}
 .who-i{display:flex;align-items:center;gap:5px;padding:5px 9px;border-radius:9px;
        font-size:11.5px;background:var(--soft);border:1px solid var(--line)}
 .who-i b{font-weight:700}
-.who-i.on{background:var(--greenDim);border-color:rgba(34,197,94,.30)}
-.who-i.off{background:var(--redDim);border-color:rgba(239,68,68,.30);color:var(--red)}
+.who-i.on{background:var(--redDim);border-color:rgba(239,68,68,.30)}
+.who-i.off{background:var(--greenDim);border-color:rgba(34,197,94,.30);color:var(--green)}
 .who-i .n{font-weight:600}
 .who-i .s{color:var(--tx3);font-size:10.5px}
-.who-i.off .s{color:var(--red);opacity:.82}
+.who-i.off .s{color:var(--green);opacity:.82}
 
 /* 建议卡 */
 .adv{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--tx3);
      border-radius:var(--r);padding:11px 13px;margin-bottom:9px;box-shadow:var(--shadow-s)}
-.adv.danger{border-left-color:var(--red);background:var(--redDim)}
+.adv.danger{border-left-color:var(--green);background:var(--greenDim)}
 .adv.warn{border-left-color:var(--amber);background:var(--amberDim)}
-.adv.good{border-left-color:var(--green);background:var(--greenDim)}
+.adv.good{border-left-color:var(--red);background:var(--redDim)}
 .adv-t{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:800;margin-bottom:4px}
 .adv-t svg{width:15px;height:15px}
 .adv-b{font-size:11.5px;line-height:1.75;color:var(--tx2)}
@@ -186,7 +186,7 @@ svg{display:block}
 .ct-v{font-size:12px;font-weight:800;letter-spacing:-.2px}
 .ct-s{font-size:10px;color:var(--tx3);margin-top:1px}
 .ct-x{position:relative;font-size:10.5px;color:var(--tx3);margin-top:6px;line-height:1.65}
-.ct-x b{color:var(--red);font-weight:700}
+.ct-x b{color:var(--green);font-weight:700}
 
 /* 员工体检行 */
 .pf{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);
@@ -202,8 +202,8 @@ svg{display:block}
 .pf-kl{font-size:9.5px;color:var(--tx3);margin-top:1px}
 .pf-x{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
 .pf-t{font-size:10px;padding:2px 7px;border-radius:6px;font-weight:700}
-.pf-t.g{background:var(--greenDim);color:#15803d}
-.pf-t.b{background:var(--redDim);color:var(--red)}
+.pf-t.g{background:var(--redDim);color:var(--red)}
+.pf-t.b{background:var(--greenDim);color:#15803d}
 
 /* ============ 上账时效提示条 ============ */
 .lag-tip{
@@ -226,10 +226,11 @@ svg{display:block}
   box-shadow:var(--shadow-s);
 }
 .kpi::after{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gray)}
-.kpi.s-done::after{background:var(--green)}
-.kpi.s-over::after{background:var(--purple)}
+.kpi.s-done::after{background:var(--red)}
+.kpi.s-over::after{background:var(--red)}
 .kpi.s-on::after{background:var(--amber)}
-.kpi.s-low::after{background:var(--red)}
+.kpi.s-low::after{background:var(--green)}
+.kpi.s-zero::after{background:var(--red)}
 .kpi-l{font-size:11px;color:var(--tx3);display:flex;align-items:center;gap:5px}
 .kpi-v{font-size:clamp(21px,1.35rem + .55vw,28px);font-weight:800;margin:6px 0 3px;letter-spacing:-.6px}
 .kpi-s{font-size:10.5px;color:var(--tx3)}
@@ -237,15 +238,18 @@ svg{display:block}
   position:absolute;right:11px;top:11px;font-size:11px;font-weight:800;
   padding:2px 7px;border-radius:7px;
 }
-.r-done{background:var(--greenDim);color:#15803d}
-.r-over{background:var(--purpleDim);color:var(--purple)}
+.r-done{background:var(--redDim);color:var(--red)}
+.r-over{background:var(--redDim);color:var(--red)}
 .r-on{background:var(--amberDim);color:#b45309}
-.r-low{background:var(--redDim);color:var(--red)}
+.r-low{background:var(--greenDim);color:#15803d}
+.r-zero{background:var(--redDim);color:var(--red)}
+.r-good{background:var(--redDim);color:var(--red)}
 .r-na{background:var(--grayDim);color:var(--gray)}
 .kpi-bar{height:5px;border-radius:3px;background:var(--soft);margin-top:9px;overflow:hidden}
 .kpi-bar i{display:block;height:100%;border-radius:3px;transition:width .9s cubic-bezier(.22,1,.36,1)}
-.f-done{background:var(--green)} .f-over{background:var(--purple)}
-.f-on{background:var(--amber)} .f-low{background:var(--red)}
+.f-done{background:var(--red)} .f-over{background:var(--red)}
+.f-on{background:var(--amber)} .f-low{background:var(--green)}
+.f-zero{background:var(--red)}
 .f-na{background:var(--gray)}
 
 /* ============ 总览 hero + 图表 ============ */
@@ -289,7 +293,8 @@ svg{display:block}
 .row-bar i{display:block;height:100%;border-radius:3px;transition:width .9s cubic-bezier(.22,1,.36,1)}
 .row-bar .mk{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--purple);border-radius:1px;opacity:.7}
 .row-g{font-size:10.5px;color:var(--tx3);margin-top:6px;display:flex;justify-content:space-between}
-.row-g em{font-style:normal;color:var(--red);font-weight:700}
+.row-g em{font-style:normal;color:var(--green);font-weight:700}
+.stat-low{color:var(--green)}
 /* 品类达成：可点击下钻明细 */
 .row.cat-click{cursor:pointer;transition:background .15s}
 .row.cat-click:active{background:var(--soft)}
@@ -440,10 +445,10 @@ svg{display:block}
 .day-l{font-size:10.5px;color:var(--tx3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .day-v{font-size:clamp(16px,1.1rem + .3vw,21px);font-weight:800;margin-top:3px;letter-spacing:-.3px}
 .day-g{font-size:10px;margin-top:2px;font-weight:700}
-.day.hit{border-color:rgba(34,197,94,.35);background:linear-gradient(180deg,var(--greenDim),var(--panel))}
-.day.miss .day-g{color:var(--red)}
-.day.ok .day-g{color:#15803d}
-.day.zero .day-v{color:var(--tx3)}
+.day.hit{border-color:rgba(239,68,68,.35);background:linear-gradient(180deg,var(--redDim),var(--panel))}
+.day.miss .day-g{color:var(--green)}
+.day.ok .day-g{color:var(--red)}
+.day.zero .day-v{color:var(--red)}
 
 /* ============ QCS ============ */
 .q-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
@@ -794,22 +799,23 @@ function esc(s){
     ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 
-/* 状态判定：done / over / on / low / na */
+/* 状态判定：done / over / on / low / zero / na
+   颜色规则（与Excel底表条件格式一致，晨哥拍板）：
+   红 = 在时间进度内/已达标/超额，绿 = 不在时间进度（落后），零成交 = 红色提醒 */
 function stat(rate){
   const tp = DATA.meta.timeProgress;
   if(!isNum(rate)) return 'na';
   if(rate >= 1) return 'done';
-  if(!isNum(tp) || tp <= 0) return 'on';
+  if(!isNum(tp) || tp <= 0) return 'done';
+  if(rate === 0) return 'zero';
   if(rate >= tp) return 'over';
   if(rate >= tp * CFG.th.on)  return 'on';
-  if(rate >= tp * CFG.th.low) return 'low';
   return 'low';
 }
 function isCritical(rate){
-  const tp = DATA.meta.timeProgress;
-  return isNum(rate) && isNum(tp) && tp > 0 && rate < tp * CFG.th.low;
+  return isNum(rate) && rate === 0;
 }
-const STAT_TXT = { done:'已达成', over:'超进度', on:'跟得上', low:'落后', na:'无任务' };
+const STAT_TXT = { done:'已达成', over:'在进度', on:'接近进度', low:'不在进度', zero:'未开张', na:'无任务' };
 
 /* 进度提示行（short = 缺口量，>0=缺口多少，<0=超额完成）：
    - short>0 未完成：状态词 + 「缺口 X[单位]」
@@ -821,11 +827,11 @@ function gapHintHTML(s, short, fmt, unit){
   if(!isNum(short)) return '';
   let inner;
   if(short > 0){
-    const w = {low:'进度落后', on:'进度正常', over:'进度领先', done:'进度达标'}[s] || STAT_TXT[s] || '进度';
+    const w = {low:'不在进度', on:'接近进度', over:'在进度', done:'已达成', zero:'未开张'}[s] || STAT_TXT[s] || '进度';
     inner = '<span>' + w + '</span><em>缺口 ' + fmt(short) + (unit || '') + '</em>';
   }else{
     const w = (short < 0) ? '超额完成' : '任务已达成';
-    inner = '<span style="color:var(--green);font-weight:700">' + w + '</span>';
+    inner = '<span style="color:var(--red);font-weight:700">' + w + '</span>';
   }
   return '<div class="row-g">' + inner + '</div>';
 }
@@ -878,7 +884,8 @@ function kpiCard(label, k, key){
     + '<div class="kpi-l">' + esc(label) + '</div>'
     + '<div class="kpi-v num">' + fmtU(k.done, u) + '</div>'
     + '<div class="kpi-s num">任务 ' + (hasTask(k) ? fmtU(k.task, u) : '—')
-    + (isNum(k.gap) && hasTask(k) ? ' · 缺 ' + fmtU(Math.abs(k.gap), u) : '') + '</div>'
+    + (isNum(k.gap) && hasTask(k) && k.gap < 0 ? ' · <span style="color:var(--green)">缺 ' + fmtU(-k.gap, u) + '</span>' : '')
+    + (isNum(k.gap) && hasTask(k) && k.gap > 0 ? ' · <span style="color:var(--red)">超 ' + fmtU(k.gap, u) + '</span>' : '') + '</div>'
     + '<div class="kpi-bar"><i class="f-' + s + '" style="width:'
     + (isNum(k.rate) ? Math.min(k.rate,1)*100 : 0).toFixed(1) + '%"></i></div>'
     + '</div>';
@@ -1106,7 +1113,7 @@ function ringSVG(rate, s, size){
   const r = (size - 16) / 2, c = 2 * Math.PI * r;
   const w = isNum(rate) ? Math.min(rate, 1) : 0;
   const off = c * (1 - w);
-  const col = {done:'#22c55e', over:'#7c3aed', on:'#f59e0b', low:'#ef4444', na:'#9aa0bd'}[s] || '#9aa0bd';
+  const col = {done:'#ef4444', over:'#ef4444', on:'#f59e0b', low:'#22c55e', zero:'#ef4444', na:'#9aa0bd'}[s] || '#9aa0bd';
   return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">'
     + '<circle cx="' + (size/2) + '" cy="' + (size/2) + '" r="' + r + '" fill="none" stroke="rgba(30,28,60,.07)" stroke-width="10"/>'
     + '<circle cx="' + (size/2) + '" cy="' + (size/2) + '" r="' + r + '" fill="none" stroke="' + col + '" stroke-width="10" stroke-linecap="round"'
@@ -1203,7 +1210,7 @@ function confetti(n){
 
 function heroRow(label, k){
   const s = hasTask(k) ? stat(k.rate) : 'na';
-  const col = {done:'var(--green)', over:'var(--purple)', on:'var(--amber)', low:'var(--red)', na:'var(--gray)'}[s];
+  const col = {done:'var(--red)', over:'var(--red)', on:'var(--amber)', low:'var(--green)', zero:'var(--red)', na:'var(--gray)'}[s];
   return '<div class="hero-row"><span>' + esc(label) + '</span>'
        + '<b class="num" style="color:' + col + '">' + pct(k && k.rate, 1) + '</b></div>';
 }
@@ -1236,7 +1243,7 @@ function catChartHTML(P){
     const k = (c === '增值') ? (DATA.store.qcs && DATA.store.qcs['增值']) : P[c];
     const rate = (k && isNum(k.rate)) ? Math.min(k.rate, 1) : 0;
     const s = k && hasTask(k) ? stat(k.rate) : 'na';
-    const col = {done:'var(--green)', over:'var(--purple)', on:'var(--amber)', low:'var(--red)', na:'var(--gray)'}[s];
+    const col = {done:'var(--red)', over:'var(--red)', on:'var(--amber)', low:'var(--green)', zero:'var(--red)', na:'var(--gray)'}[s];
     bars += '<div class="mc-b" data-cat="' + esc(c) + '"><div class="mc-track">'
           + '<div class="mc-f" style="height:' + (rate*100).toFixed(0) + '%;background:' + col + '"></div>'
           + (tpPct > 0 ? '<div class="mc-mk" style="bottom:' + tpPct.toFixed(0) + '%"></div>' : '')
@@ -1312,7 +1319,7 @@ function renderStore(){
    names 传入姓名数组则逐人列出；不传只显示单条 */
 function assessHTML(kh, names){
   if(!kh) return '';
-  const gc = v => (isNum(v) && v < 0) ? 'var(--red)' : 'var(--green)';
+  const gc = v => (isNum(v) && v < 0) ? 'var(--green)' : 'var(--red)';   /* 缺=绿(落后)，超/齐=红(领先) */
   let h = '<div class="sec"><div class="sec-h"><span class="bar"></span><b>考核机型</b>'
         + '<span class="tail">未完成 −100/台</span></div>';
   h += '<div class="card" style="padding:13px 14px">';
@@ -1322,7 +1329,7 @@ function assessHTML(kh, names){
      + '<b class="num" style="font-size:24px;letter-spacing:-.5px">' + cnt(kh.task) + '</b>'
      + '<span style="font-size:11.5px;color:var(--tx3)">台</span>'
      + '<span style="flex:1"></span>'
-     + '<span style="font-size:11.5px;color:var(--tx3)">缺口</span>'
+     + '<span style="font-size:11.5px;color:var(--tx3)">' + (isNum(kh.gap) && kh.gap >= 0 ? '超额' : '缺口') + '</span>'
      + '<b class="num" style="font-size:20px;color:' + gc(kh.gap) + '">' + cnt(kh.gap) + '</b>'
      + '</div>';
 
@@ -1356,9 +1363,11 @@ function qcsHTML(Q){
   const dx = Q['电信积分'];
   if(dx){
     const s = hasTask(dx) ? stat(dx.rate) : 'na';
+    const dxs = isNum(dx.gap) ? (dx.gap > 0 ? ' · <span style="color:var(--red)">超 ' + cnt(dx.gap) + '</span>'
+                                          : (dx.gap < 0 ? ' · <span style="color:var(--green)">缺 ' + cnt(-dx.gap) + '</span>' : '')) : '';
     h += '<div class="q"><div class="q-l">电信积分（5分）</div>'
       + '<div class="q-v num">' + cnt(dx.done) + '<small>/ ' + cnt(dx.task) + '</small></div>'
-      + '<div class="q-s">达成 <em class="r-' + s + '" style="padding:1px 4px;border-radius:4px">' + pct(dx.rate,0) + '</em></div></div>';
+      + '<div class="q-s">达成 <em class="r-' + s + '" style="padding:1px 4px;border-radius:4px">' + pct(dx.rate,0) + '</em>' + dxs + '</div></div>';
   }
 
   const hy = Q['会员搭售率'];
@@ -1366,7 +1375,8 @@ function qcsHTML(Q){
     h += '<div class="q"><div class="q-l">会员搭售率（30%）</div>'
       + '<div class="q-v num">' + pct(hy.rate,1) + '</div>'
       + '<div class="q-s">Care+ ' + cnt(hy.care) + ' / 终端 ' + cnt(hy.terminal)
-      + (isNum(hy.gap) ? ' · 缺 <em style="color:' + (hy.gap<0?'var(--red)':'var(--green)') + '">' + cnt(hy.gap) + '</em>' : '')
+      + (isNum(hy.gap) && hy.gap > 0 ? ' · 超 <em style="color:var(--red)">' + cnt(hy.gap) + '</em>' : '')
+      + (isNum(hy.gap) && hy.gap < 0 ? ' · 缺 <em style="color:var(--green)">' + cnt(-hy.gap) + '</em>' : '')
       + '</div></div>';
   }
 
@@ -1375,7 +1385,8 @@ function qcsHTML(Q){
     h += '<div class="q"><div class="q-l">回收搭售率（20%）</div>'
       + '<div class="q-v num">' + pct(hs.rate,1) + '</div>'
       + '<div class="q-s">单数 ' + cnt(hs.orders)
-      + (isNum(hs.gap) ? ' · 缺 <em style="color:' + (hs.gap<0?'var(--red)':'var(--green)') + '">' + cnt(hs.gap) + '</em>' : '')
+      + (isNum(hs.gap) && hs.gap > 0 ? ' · 超 <em style="color:var(--red)">' + cnt(hs.gap) + '</em>' : '')
+      + (isNum(hs.gap) && hs.gap < 0 ? ' · 缺 <em style="color:var(--green)">' + cnt(-hs.gap) + '</em>' : '')
       + '</div></div>';
   }
 
@@ -1384,7 +1395,8 @@ function qcsHTML(Q){
     h += '<div class="q"><div class="q-l">贴膜率（50%）</div>'
       + '<div class="q-v num">' + pct(tm.rate,1) + '</div>'
       + '<div class="q-s">单数 ' + cnt(tm.orders)
-      + (isNum(tm.gap) ? ' · 缺 <em style="color:' + (tm.gap<0?'var(--red)':'var(--green)') + '">' + cnt(tm.gap) + '</em>' : '')
+      + (isNum(tm.gap) && tm.gap > 0 ? ' · 超 <em style="color:var(--red)">' + cnt(tm.gap) + '</em>' : '')
+      + (isNum(tm.gap) && tm.gap < 0 ? ' · 缺 <em style="color:var(--green)">' + cnt(-tm.gap) + '</em>' : '')
       + '</div></div>';
   }
 
@@ -1450,9 +1462,9 @@ function qudaoSections(){
   const lag = isNum(t.rate) && isNum(tp) && t.rate < tp;
   h += '<div style="margin-top:10px;font-size:11.5px;color:var(--tx3);line-height:1.6">'
      + '数据日期 ' + esc(Q.timeDate || '—') + ' · 已过 ' + pct(tp,1)
-     + (lag ? ' <span style="color:#b45309;font-weight:700;display:inline-flex;align-items:center;gap:3px">'
+     + (lag ? ' <span style="color:var(--green);font-weight:700;display:inline-flex;align-items:center;gap:3px">'
               + ic('warn',13) + ' 进度落后</span>'
-            : ' <span style="color:#15803d;font-weight:700">跟上节奏</span>')
+            : ' <span style="color:var(--red);font-weight:700">跟上节奏</span>')
      + '</div>';
   h += '</div></div>';
 
@@ -1592,7 +1604,7 @@ function renderRank(){
   h += '<div class="cols">';
   list.forEach((it, i) => {
     const s = it.has ? stat(it.rate) : 'na';
-    const colorVar = {done:'--green',over:'--purple',on:'--amber',low:'--red',na:'--gray'}[s];
+    const colorVar = {done:'--red',over:'--red',on:'--amber',low:'--green',zero:'--red',na:'--gray'}[s];
     const w = it.has && isNum(it.rate) ? Math.min(it.rate,1)*100 : 0;
     h += '<div class="rk" data-person="' + esc(it.name) + '">'
       + '<div class="rk-bg" style="width:' + w.toFixed(1) + '%;background:var(' + colorVar + ')"></div>'
@@ -1605,7 +1617,7 @@ function renderRank(){
       + '<div class="rk-r">'
         + '<div class="p num" style="color:var(' + colorVar + ')">' + (it.has ? pct(it.rate,0) : '—') + '</div>'
         + '<div class="g">' + (it.has && it.k && isNum(it.k.gap)
-            ? (it.k.gap < 0 ? '差 ' + fmtU(Math.abs(it.k.gap), unitOf(dim.k, it.k))
+            ? (it.k.gap < 0 ? '缺 ' + fmtU(-it.k.gap, unitOf(dim.k, it.k))
                             : '超 ' + fmtU(it.k.gap, unitOf(dim.k, it.k)))
             : STAT_TXT[s]) + '</div>'
       + '</div>'
@@ -1882,7 +1894,7 @@ function renderDay(){
     const items = DAY_SHOW.filter(k => k in d).map(k => [k, MONEY_KEYS.has(k) ? moneyShort(d[k]) : cnt(d[k])]);
     const allZero = items.every(([k]) => !isNum(d[k]) || d[k] === 0);
     h += '<div class="card" style="padding:11px 12px;margin-bottom:8px'
-       + (allZero ? ';border-color:rgba(232,68,58,.22)' : '') + '">'
+       + (allZero ? ';border-color:rgba(34,197,94,.22)' : '') + '">'
       + '<div style="display:flex;align-items:center;gap:7px;margin-bottom:7px">'
         + '<b style="font-size:13px">' + esc(n) + '</b>'
         + (allZero ? '<span style="font-size:10px;color:var(--tx3);background:var(--card2);padding:1px 6px;border-radius:5px;font-weight:600">暂无上账</span>' : '')
@@ -1912,8 +1924,8 @@ function foot(){
 }
 
 /* ---------------- 视图 5：店长洞察 ---------------- */
-const LV_COLOR = { danger:'--red', warn:'--amber', good:'--green', mid:'--blue', none:'--gray' };
-const LV_TAG   = { danger:'急', warn:'追', good:'稳', mid:'跟得上', none:'无任务' };
+const LV_COLOR = { danger:'--green', warn:'--amber', good:'--red', mid:'--amber', none:'--gray' };
+const LV_TAG   = { danger:'追', warn:'注', good:'稳', mid:'接近', none:'无任务' };
 
 function renderInsight(){
   const I = DATA.insights;
@@ -1930,7 +1942,7 @@ function renderInsight(){
      + '<div class="bt-c"><div class="bt-v num">' + (T.totalOrders||0) + '</div><div class="bt-l">上账笔数</div></div>'
      + '<div class="bt-c"><div class="bt-v num">' + money(T.totalGross||0,0) + '</div><div class="bt-l">今日毛利</div></div>'
      + '<div class="bt-c"><div class="bt-v num" style="color:var('
-       + ((T.idle||[]).length ? '--red' : '--green') + ')">'
+       + ((T.idle||[]).length ? '--green' : '--red') + ')">'
        + (T.sold||[]).length + '<span style="font-size:12px;color:var(--tx3)">/'
        + ((T.sold||[]).length + (T.idle||[]).length) + '</span></div>'
      + '<div class="bt-l">已开单人数</div></div>'

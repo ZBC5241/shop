@@ -63,22 +63,23 @@ function esc(s){
     ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 
-/* 状态判定：done / over / on / low / na */
+/* 状态判定：done / over / on / low / zero / na
+   颜色规则（与Excel底表条件格式一致，晨哥拍板）：
+   红 = 在时间进度内/已达标/超额，绿 = 不在时间进度（落后），零成交 = 红色提醒 */
 function stat(rate){
   const tp = DATA.meta.timeProgress;
   if(!isNum(rate)) return 'na';
   if(rate >= 1) return 'done';
-  if(!isNum(tp) || tp <= 0) return 'on';
+  if(!isNum(tp) || tp <= 0) return 'done';
+  if(rate === 0) return 'zero';
   if(rate >= tp) return 'over';
   if(rate >= tp * CFG.th.on)  return 'on';
-  if(rate >= tp * CFG.th.low) return 'low';
   return 'low';
 }
 function isCritical(rate){
-  const tp = DATA.meta.timeProgress;
-  return isNum(rate) && isNum(tp) && tp > 0 && rate < tp * CFG.th.low;
+  return isNum(rate) && rate === 0;
 }
-const STAT_TXT = { done:'已达成', over:'超进度', on:'跟得上', low:'落后', na:'无任务' };
+const STAT_TXT = { done:'已达成', over:'在进度', on:'接近进度', low:'不在进度', zero:'未开张', na:'无任务' };
 
 /* 进度提示行（short = 缺口量，>0=缺口多少，<0=超额完成）：
    - short>0 未完成：状态词 + 「缺口 X[单位]」
@@ -90,11 +91,11 @@ function gapHintHTML(s, short, fmt, unit){
   if(!isNum(short)) return '';
   let inner;
   if(short > 0){
-    const w = {low:'进度落后', on:'进度正常', over:'进度领先', done:'进度达标'}[s] || STAT_TXT[s] || '进度';
+    const w = {low:'不在进度', on:'接近进度', over:'在进度', done:'已达成', zero:'未开张'}[s] || STAT_TXT[s] || '进度';
     inner = '<span>' + w + '</span><em>缺口 ' + fmt(short) + (unit || '') + '</em>';
   }else{
     const w = (short < 0) ? '超额完成' : '任务已达成';
-    inner = '<span style="color:var(--green);font-weight:700">' + w + '</span>';
+    inner = '<span style="color:var(--red);font-weight:700">' + w + '</span>';
   }
   return '<div class="row-g">' + inner + '</div>';
 }
@@ -147,7 +148,8 @@ function kpiCard(label, k, key){
     + '<div class="kpi-l">' + esc(label) + '</div>'
     + '<div class="kpi-v num">' + fmtU(k.done, u) + '</div>'
     + '<div class="kpi-s num">任务 ' + (hasTask(k) ? fmtU(k.task, u) : '—')
-    + (isNum(k.gap) && hasTask(k) ? ' · 缺 ' + fmtU(Math.abs(k.gap), u) : '') + '</div>'
+    + (isNum(k.gap) && hasTask(k) && k.gap < 0 ? ' · <span style="color:var(--green)">缺 ' + fmtU(-k.gap, u) + '</span>' : '')
+    + (isNum(k.gap) && hasTask(k) && k.gap > 0 ? ' · <span style="color:var(--red)">超 ' + fmtU(k.gap, u) + '</span>' : '') + '</div>'
     + '<div class="kpi-bar"><i class="f-' + s + '" style="width:'
     + (isNum(k.rate) ? Math.min(k.rate,1)*100 : 0).toFixed(1) + '%"></i></div>'
     + '</div>';
@@ -375,7 +377,7 @@ function ringSVG(rate, s, size){
   const r = (size - 16) / 2, c = 2 * Math.PI * r;
   const w = isNum(rate) ? Math.min(rate, 1) : 0;
   const off = c * (1 - w);
-  const col = {done:'#22c55e', over:'#7c3aed', on:'#f59e0b', low:'#ef4444', na:'#9aa0bd'}[s] || '#9aa0bd';
+  const col = {done:'#ef4444', over:'#ef4444', on:'#f59e0b', low:'#22c55e', zero:'#ef4444', na:'#9aa0bd'}[s] || '#9aa0bd';
   return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">'
     + '<circle cx="' + (size/2) + '" cy="' + (size/2) + '" r="' + r + '" fill="none" stroke="rgba(30,28,60,.07)" stroke-width="10"/>'
     + '<circle cx="' + (size/2) + '" cy="' + (size/2) + '" r="' + r + '" fill="none" stroke="' + col + '" stroke-width="10" stroke-linecap="round"'
@@ -472,7 +474,7 @@ function confetti(n){
 
 function heroRow(label, k){
   const s = hasTask(k) ? stat(k.rate) : 'na';
-  const col = {done:'var(--green)', over:'var(--purple)', on:'var(--amber)', low:'var(--red)', na:'var(--gray)'}[s];
+  const col = {done:'var(--red)', over:'var(--red)', on:'var(--amber)', low:'var(--green)', zero:'var(--red)', na:'var(--gray)'}[s];
   return '<div class="hero-row"><span>' + esc(label) + '</span>'
        + '<b class="num" style="color:' + col + '">' + pct(k && k.rate, 1) + '</b></div>';
 }
@@ -505,7 +507,7 @@ function catChartHTML(P){
     const k = (c === '增值') ? (DATA.store.qcs && DATA.store.qcs['增值']) : P[c];
     const rate = (k && isNum(k.rate)) ? Math.min(k.rate, 1) : 0;
     const s = k && hasTask(k) ? stat(k.rate) : 'na';
-    const col = {done:'var(--green)', over:'var(--purple)', on:'var(--amber)', low:'var(--red)', na:'var(--gray)'}[s];
+    const col = {done:'var(--red)', over:'var(--red)', on:'var(--amber)', low:'var(--green)', zero:'var(--red)', na:'var(--gray)'}[s];
     bars += '<div class="mc-b" data-cat="' + esc(c) + '"><div class="mc-track">'
           + '<div class="mc-f" style="height:' + (rate*100).toFixed(0) + '%;background:' + col + '"></div>'
           + (tpPct > 0 ? '<div class="mc-mk" style="bottom:' + tpPct.toFixed(0) + '%"></div>' : '')
@@ -581,7 +583,7 @@ function renderStore(){
    names 传入姓名数组则逐人列出；不传只显示单条 */
 function assessHTML(kh, names){
   if(!kh) return '';
-  const gc = v => (isNum(v) && v < 0) ? 'var(--red)' : 'var(--green)';
+  const gc = v => (isNum(v) && v < 0) ? 'var(--green)' : 'var(--red)';   /* 缺=绿(落后)，超/齐=红(领先) */
   let h = '<div class="sec"><div class="sec-h"><span class="bar"></span><b>考核机型</b>'
         + '<span class="tail">未完成 −100/台</span></div>';
   h += '<div class="card" style="padding:13px 14px">';
@@ -591,7 +593,7 @@ function assessHTML(kh, names){
      + '<b class="num" style="font-size:24px;letter-spacing:-.5px">' + cnt(kh.task) + '</b>'
      + '<span style="font-size:11.5px;color:var(--tx3)">台</span>'
      + '<span style="flex:1"></span>'
-     + '<span style="font-size:11.5px;color:var(--tx3)">缺口</span>'
+     + '<span style="font-size:11.5px;color:var(--tx3)">' + (isNum(kh.gap) && kh.gap >= 0 ? '超额' : '缺口') + '</span>'
      + '<b class="num" style="font-size:20px;color:' + gc(kh.gap) + '">' + cnt(kh.gap) + '</b>'
      + '</div>';
 
@@ -625,9 +627,11 @@ function qcsHTML(Q){
   const dx = Q['电信积分'];
   if(dx){
     const s = hasTask(dx) ? stat(dx.rate) : 'na';
+    const dxs = isNum(dx.gap) ? (dx.gap > 0 ? ' · <span style="color:var(--red)">超 ' + cnt(dx.gap) + '</span>'
+                                          : (dx.gap < 0 ? ' · <span style="color:var(--green)">缺 ' + cnt(-dx.gap) + '</span>' : '')) : '';
     h += '<div class="q"><div class="q-l">电信积分（5分）</div>'
       + '<div class="q-v num">' + cnt(dx.done) + '<small>/ ' + cnt(dx.task) + '</small></div>'
-      + '<div class="q-s">达成 <em class="r-' + s + '" style="padding:1px 4px;border-radius:4px">' + pct(dx.rate,0) + '</em></div></div>';
+      + '<div class="q-s">达成 <em class="r-' + s + '" style="padding:1px 4px;border-radius:4px">' + pct(dx.rate,0) + '</em>' + dxs + '</div></div>';
   }
 
   const hy = Q['会员搭售率'];
@@ -635,7 +639,8 @@ function qcsHTML(Q){
     h += '<div class="q"><div class="q-l">会员搭售率（30%）</div>'
       + '<div class="q-v num">' + pct(hy.rate,1) + '</div>'
       + '<div class="q-s">Care+ ' + cnt(hy.care) + ' / 终端 ' + cnt(hy.terminal)
-      + (isNum(hy.gap) ? ' · 缺 <em style="color:' + (hy.gap<0?'var(--red)':'var(--green)') + '">' + cnt(hy.gap) + '</em>' : '')
+      + (isNum(hy.gap) && hy.gap > 0 ? ' · 超 <em style="color:var(--red)">' + cnt(hy.gap) + '</em>' : '')
+      + (isNum(hy.gap) && hy.gap < 0 ? ' · 缺 <em style="color:var(--green)">' + cnt(-hy.gap) + '</em>' : '')
       + '</div></div>';
   }
 
@@ -644,7 +649,8 @@ function qcsHTML(Q){
     h += '<div class="q"><div class="q-l">回收搭售率（20%）</div>'
       + '<div class="q-v num">' + pct(hs.rate,1) + '</div>'
       + '<div class="q-s">单数 ' + cnt(hs.orders)
-      + (isNum(hs.gap) ? ' · 缺 <em style="color:' + (hs.gap<0?'var(--red)':'var(--green)') + '">' + cnt(hs.gap) + '</em>' : '')
+      + (isNum(hs.gap) && hs.gap > 0 ? ' · 超 <em style="color:var(--red)">' + cnt(hs.gap) + '</em>' : '')
+      + (isNum(hs.gap) && hs.gap < 0 ? ' · 缺 <em style="color:var(--green)">' + cnt(-hs.gap) + '</em>' : '')
       + '</div></div>';
   }
 
@@ -653,7 +659,8 @@ function qcsHTML(Q){
     h += '<div class="q"><div class="q-l">贴膜率（50%）</div>'
       + '<div class="q-v num">' + pct(tm.rate,1) + '</div>'
       + '<div class="q-s">单数 ' + cnt(tm.orders)
-      + (isNum(tm.gap) ? ' · 缺 <em style="color:' + (tm.gap<0?'var(--red)':'var(--green)') + '">' + cnt(tm.gap) + '</em>' : '')
+      + (isNum(tm.gap) && tm.gap > 0 ? ' · 超 <em style="color:var(--red)">' + cnt(tm.gap) + '</em>' : '')
+      + (isNum(tm.gap) && tm.gap < 0 ? ' · 缺 <em style="color:var(--green)">' + cnt(-tm.gap) + '</em>' : '')
       + '</div></div>';
   }
 
@@ -719,9 +726,9 @@ function qudaoSections(){
   const lag = isNum(t.rate) && isNum(tp) && t.rate < tp;
   h += '<div style="margin-top:10px;font-size:11.5px;color:var(--tx3);line-height:1.6">'
      + '数据日期 ' + esc(Q.timeDate || '—') + ' · 已过 ' + pct(tp,1)
-     + (lag ? ' <span style="color:#b45309;font-weight:700;display:inline-flex;align-items:center;gap:3px">'
+     + (lag ? ' <span style="color:var(--green);font-weight:700;display:inline-flex;align-items:center;gap:3px">'
               + ic('warn',13) + ' 进度落后</span>'
-            : ' <span style="color:#15803d;font-weight:700">跟上节奏</span>')
+            : ' <span style="color:var(--red);font-weight:700">跟上节奏</span>')
      + '</div>';
   h += '</div></div>';
 
