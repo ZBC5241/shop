@@ -815,9 +815,9 @@ function stat(rate){
 function isCritical(rate){
   return isNum(rate) && rate === 0;
 }
-/* 绩效得分颜色：满分100，≥60 达标→红，<60 未达标→绿（晨哥2026-09-01拍板：红=达标语义） */
+/* 绩效得分颜色：满分105（100基础分+全科生加5分），≥100 达标→红，<100 未达标→绿（晨哥2026-09-01拍板：红=达标语义） */
 function perfCol(v){
-  return (isNum(v) && v >= 60) ? 'color:var(--red)' : 'color:var(--green)';
+  return (isNum(v) && v >= 100) ? 'color:var(--red)' : 'color:var(--green)';
 }
 /* 全科生搭售率数值颜色：gap>=0（达标/超额）→红，gap<0（未达标）→绿（晨哥2026-09-01） */
 function qRateCol(gap){
