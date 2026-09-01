@@ -79,6 +79,15 @@ function stat(rate){
 function isCritical(rate){
   return isNum(rate) && rate === 0;
 }
+/* 绩效得分颜色：满分100，≥60 达标→红，<60 未达标→绿（晨哥2026-09-01拍板：红=达标语义） */
+function perfCol(v){
+  return (isNum(v) && v >= 60) ? 'color:var(--red)' : 'color:var(--green)';
+}
+/* 全科生搭售率数值颜色：gap>=0（达标/超额）→红，gap<0（未达标）→绿（晨哥2026-09-01） */
+function qRateCol(gap){
+  if(!isNum(gap)) return '';
+  return gap >= 0 ? 'color:var(--red)' : 'color:var(--green)';
+}
 const STAT_TXT = { done:'已达成', over:'在进度', on:'接近进度', low:'不在进度', zero:'未开张', na:'无任务' };
 
 /* 进度提示行（short = 缺口量，>0=缺口多少，<0=超额完成）：
@@ -563,8 +572,8 @@ function renderSales(){
   if(isNum(P['绩效'])){
     h += '<div class="sec"><div class="card" style="padding:14px;text-align:center">'
        + '<div style="font-size:11px;color:var(--tx3)">门店综合绩效得分</div>'
-       + '<div style="font-size:30px;font-weight:800;margin-top:4px;letter-spacing:-1px" class="num">'
-       + P['绩效'].toFixed(2) + '</div></div></div>';
+       + '<div style="font-size:30px;font-weight:800;margin-top:4px;letter-spacing:-1px" class="num '
+       + perfCol(P['绩效']).replace('color:', '') + '">' + P['绩效'].toFixed(2) + '</div></div></div>';
   }
 
   h += '</div>';
@@ -637,7 +646,7 @@ function qcsHTML(Q){
   const hy = Q['会员搭售率'];
   if(hy){
     h += '<div class="q"><div class="q-l">会员搭售率（30%）</div>'
-      + '<div class="q-v num">' + pct(hy.rate,1) + '</div>'
+      + '<div class="q-v num" ' + qRateCol(hy.gap) + '>' + pct(hy.rate,1) + '</div>'
       + '<div class="q-s">Care+ ' + cnt(hy.care) + ' / 终端 ' + cnt(hy.terminal)
       + (isNum(hy.gap) && hy.gap > 0 ? ' · 超 <em style="color:var(--red)">' + cnt(hy.gap) + '</em>' : '')
       + (isNum(hy.gap) && hy.gap < 0 ? ' · 缺 <em style="color:var(--green)">' + cnt(-hy.gap) + '</em>' : '')
@@ -647,7 +656,7 @@ function qcsHTML(Q){
   const hs = Q['回收搭售率'];
   if(hs){
     h += '<div class="q"><div class="q-l">回收搭售率（20%）</div>'
-      + '<div class="q-v num">' + pct(hs.rate,1) + '</div>'
+      + '<div class="q-v num" ' + qRateCol(hs.gap) + '>' + pct(hs.rate,1) + '</div>'
       + '<div class="q-s">单数 ' + cnt(hs.orders)
       + (isNum(hs.gap) && hs.gap > 0 ? ' · 超 <em style="color:var(--red)">' + cnt(hs.gap) + '</em>' : '')
       + (isNum(hs.gap) && hs.gap < 0 ? ' · 缺 <em style="color:var(--green)">' + cnt(-hs.gap) + '</em>' : '')
@@ -657,7 +666,7 @@ function qcsHTML(Q){
   const tm = Q['贴膜率'];
   if(tm){
     h += '<div class="q"><div class="q-l">贴膜率（50%）</div>'
-      + '<div class="q-v num">' + pct(tm.rate,1) + '</div>'
+      + '<div class="q-v num" ' + qRateCol(tm.gap) + '>' + pct(tm.rate,1) + '</div>'
       + '<div class="q-s">单数 ' + cnt(tm.orders)
       + (isNum(tm.gap) && tm.gap > 0 ? ' · 超 <em style="color:var(--red)">' + cnt(tm.gap) + '</em>' : '')
       + (isNum(tm.gap) && tm.gap < 0 ? ' · 缺 <em style="color:var(--green)">' + cnt(-tm.gap) + '</em>' : '')

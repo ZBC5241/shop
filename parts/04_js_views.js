@@ -130,8 +130,8 @@ function renderPerson(){
   if(isNum(P['绩效'])){
     h += '<div class="sec"><div class="card" style="padding:14px;text-align:center">'
       + '<div style="font-size:11px;color:var(--tx3)">个人绩效得分</div>'
-      + '<div style="font-size:30px;font-weight:800;margin-top:4px;letter-spacing:-1px" class="num">'
-      + P['绩效'].toFixed(2) + '</div></div></div>';
+      + '<div style="font-size:30px;font-weight:800;margin-top:4px;letter-spacing:-1px" class="num '
+      + perfCol(P['绩效']).replace('color:', '') + '">' + P['绩效'].toFixed(2) + '</div></div></div>';
   }
 
   h += foot();
