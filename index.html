@@ -38,7 +38,6 @@ body{
     radial-gradient(1100px 520px at 50% -10%, rgba(124,58,237,.10), transparent 60%),
     radial-gradient(820px 460px at 100% -2%, rgba(168,85,247,.07), transparent 55%),
     var(--bg);
-  background-attachment:fixed;
 }
 .num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
 svg{display:block}
@@ -1339,7 +1338,6 @@ body{
     radial-gradient(22rem 19rem at 8% 94%,rgba(135,214,194,.11),transparent 70%),
     radial-gradient(20rem 17rem at 102% 88%,rgba(255,211,171,.09),transparent 72%),
     linear-gradient(180deg,#eef3f5 0%,#e9eef1 53%,#edf1f2 100%)!important;
-  background-attachment:fixed!important;
 }
 body::before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;background:radial-gradient(20rem 13rem at 28% 8%,rgba(255,255,255,.28),transparent 75%),radial-gradient(19rem 16rem at 78% 70%,rgba(175,211,232,.08),transparent 75%)}
 body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(180deg,rgba(255,255,255,.14),transparent 33%,rgba(42,50,59,.018))}
@@ -1665,7 +1663,8 @@ body{
     radial-gradient(23rem 19rem at calc(8% + var(--lg-scroll) * .009%) calc(94% - var(--lg-scroll) * .006%),rgba(137,214,195,.105),transparent 70%),
     radial-gradient(20rem 17rem at 102% 88%,rgba(255,212,174,.08),transparent 72%),
     linear-gradient(180deg,#eef3f5 0%,#e9eef1 53%,#edf1f2 100%)!important;
-  background-attachment:fixed!important;
+  /* 【17号修复】移除 background-attachment:fixed —— iOS Safari 上固定背景逐帧重新光栅化，
+     与 backdrop-filter 玻璃层叠加会导致「黑线闪烁」，改为随页面滚动 */
 }
 
 /* 系统玻璃核心：更少乳白遮罩 + 更真实的上亮下暗 + 轻量背景增益 */
@@ -1974,8 +1973,8 @@ body[data-board="ops"] .ai-order-text,
 body[data-board="ops"] .ai-review-item,
 body[data-board="ops"] .ai-log-item{opacity:1;}
 @media(max-width:767px){
-  .tabs{will-change:backdrop-filter,transform;}
-  .top{will-change:backdrop-filter;}
+  /* 【17号修复】移除 will-change:backdrop-filter —— iOS 合成器对 backdrop-filter 的
+     will-change 提升会产生独立透明层，滚动时边缘易闪出黑线；现代 Safari 自行管理该层 */
 }
 
 </style>
@@ -5461,27 +5460,16 @@ if(location.protocol === 'http:' || location.protocol === 'https:'){
 </script>
 
 <script id="ios26-v36-dynamic-material-engine">
-/* 视觉材质引擎：仅更新 CSS 变量，不读取/修改业务数据，不接管任何按钮或导航。 */
+/* 【17号修复】原「动态材质引擎」会在每次滚动时逐帧改写 --lg-scroll / --lg-angle / --lg-lift
+   并切换 lg-scrolled / lg-deep 两个类，迫使全页玻璃卡（大量 backdrop-filter）每帧重算渐变，
+   在 iOS Safari 上与常驻动画叠加引发「AI洞察页黑线不停闪烁」。
+   现冻结为静态默认材质（:root 中 --lg-scroll:0 等即最终值），视觉不变、滚动零重算。
+   如需恢复视差效果，须先确认不再使用 background-attachment:fixed 且在低端设备实测。 */
 (function(){
   const root=document.documentElement;
-  let ticking=false,lastY=-1;
-  function apply(){
-    ticking=false;
-    const y=Math.max(0,window.scrollY||document.documentElement.scrollTop||0);
-    if(Math.abs(y-lastY)<1)return;
-    lastY=y;
-    const p=Math.min(1,y/720);
-    const angle=128 + Math.sin(p*Math.PI)*7;
-    root.style.setProperty('--lg-scroll',String(Math.round(y)));
-    root.style.setProperty('--lg-angle',angle.toFixed(2)+'deg');
-    root.style.setProperty('--lg-lift',(1 + Math.sin(p*Math.PI)*0.007).toFixed(4));
-    root.classList.toggle('lg-scrolled',y>22);
-    root.classList.toggle('lg-deep',y>360);
-  }
-  function onScroll(){if(!ticking){ticking=true;requestAnimationFrame(apply)}}
-  addEventListener('scroll',onScroll,{passive:true});
-  addEventListener('resize',onScroll,{passive:true});
-  apply();
+  root.style.setProperty('--lg-scroll','0');
+  root.style.setProperty('--lg-angle','128deg');
+  root.style.setProperty('--lg-lift','1');
 })();
 </script>
 
