@@ -21,7 +21,9 @@ fi
 echo "✅ index.html 存在 ($(du -h index.html | cut -f1))"
 
 echo "===== 1. 本地提交 ====="
-git add index.html .gitignore
+# data.json 必须入库（2026-09-06 修复：.gitignore 已加 !data.json 例外，
+# 此前只 add index.html 导致线上 data.json 长期滞后，靠 18号 手动补推才更新）
+git add index.html data.json .gitignore
 git commit -m "$MSG" >/dev/null 2>&1 && echo "✅ 本地提交: $MSG" || echo "ℹ️ 无新改动，跳过提交"
 
 echo "===== 2. 通道A：SSH over 443 直连 GitHub ====="
@@ -50,5 +52,5 @@ fi
 echo "❌ SSH-443 通道不可用。请检查："
 echo "   - GitHub 公钥：cat ~/.ssh/github_push.pub 是否已贴进 GitHub SSH keys"
 echo "   - 验证命令：ssh -T git@github.com"
-echo "   - 备用方案：GitHub 连接器云端 push_files / Gitee 中转"
+echo "   - 备用方案：GitHub 连接器云端 push_files（Gitee 中转方案已于 2026-09-05 废除）"
 exit 2

@@ -70,15 +70,13 @@ def main():
         "渠道挂账合并"
     )
 
-    # Step 4: build（打包index.html）—— V2.9 主页模式下已停用
-    # 主页固定为 V2.9（AI洞察行动指南），看板更新只刷 data.json，不再重建 index.html。
-    # 切回 parts 业绩看板：删 .homepage_v29 标记 + 取消下面注释即可。
-    # timings["build"] = run(
-    #     [PY, os.path.join(BASE, "build.py")],
-    #     "打包看板"
-    # )
-    timings["build"] = 0.0
-    print("⏭️ 跳过 build.py：主页固定为 V2.9，看板更新仅刷新 data.json")
+    # Step 4: build —— V2.9 主页模式：把最新 data.json 注入 v29_template.html 生成 index.html
+    # （芯不动、只换壳：数据管线照旧，前端壳为 V2.9；build_v29 自带占位符/日期/行数校验）
+    # 切回 parts 业绩看板：删 .homepage_v29 标记 + 恢复调用 build.py 即可。
+    timings["build"] = run(
+        [PY, os.path.join(BASE, "build_v29.py")],
+        "注入数据生成V2.9主页"
+    )
 
     # Step 5: push（推送GitHub上线）
     if not args.no_push:
