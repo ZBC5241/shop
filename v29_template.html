@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#f6f7fb">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<title>李家村万达 · AI洞察行动指南 V2.9 · 正式版冲刺 · 检查点闭环版</title>
+<title>李家村万达 · AI店长</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ctext y='19' font-size='19'%3E%F0%9F%93%8A%3C/text%3E%3C/svg%3E">
 <style>
 :root{
@@ -1193,7 +1193,7 @@ body[data-board="ops"] .ai-note{font-size:9.5px;line-height:1.65;padding:8px 4px
 
 
 
-/* ============ V2.6 正式版候选：经营闭环引擎 ============ */
+/* ============ 经营闭环引擎 ============ */
 .v26-war{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow-s);padding:14px}
 .v26-war-head{display:flex;align-items:flex-start;gap:10px}.v26-war-icon{width:32px;height:32px;border-radius:10px;background:var(--grad);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:900;box-shadow:0 4px 12px rgba(124,58,237,.20)}
 .v26-war-title{font-size:14px;font-weight:850;line-height:1.45}.v26-war-sub{font-size:10.5px;color:var(--tx3);line-height:1.6;margin-top:3px}.v26-war-badge{margin-left:auto;font-size:9px;font-weight:850;color:var(--purple);background:var(--purpleDim);padding:4px 8px;border-radius:8px;white-space:nowrap}
@@ -1307,7 +1307,7 @@ body[data-board="ops"] .tab.on{color:var(--purple)!important}
    ============================================================ */
 /* ---- merged from ios26-v35-formal-five-page-polish ---- */
 /* ============================================================
-   V3.5 · iOS26 Liquid Glass 正式版候选 · 五页逐组件验收
+   iOS26 Liquid Glass · 五页组件规范
    从 V2.9 原始源码重新生成。仅视觉层，业务/DOM/JS/Tab逻辑不改。
    重点：AI洞察页专项收口，消除历史紫色/深色/浅字样式冲突。
    ============================================================ */
@@ -1491,7 +1491,7 @@ body[data-board="ops"] .ai-stage.done:after,body[data-board="ops"] .ai-stage.on:
 
 
 /* ============================================================
-   V3.5 · 五页正式版逐组件收口
+   五页组件统一规范
    目标：五个 AI 工作页使用同一套信息层级、同一套玻璃材质、同一套可读性标准。
    ============================================================ */
 body[data-board="ops"]{
@@ -1643,8 +1643,8 @@ body[data-board="ops"] :is(.ai-date,.ai-metric span,.ai-section-h small,.ai-cat-
 
 /* ---- merged from ios26-v36-dynamic-material ---- */
 /* ============================================================
-   V3.6 · iOS 26 Dynamic Material Layer
-   基于 V3.5 五页正式版候选。只提升玻璃材质，不改变信息架构、配色系统、DOM 或业务逻辑。
+   iOS 26 Dynamic Material Layer
+   只提升玻璃材质，不改变信息架构、配色系统、DOM 或业务逻辑。
    ============================================================ */
 :root{
   --lg-angle:128deg;
@@ -1657,7 +1657,7 @@ body[data-board="ops"] :is(.ai-date,.ai-metric span,.ai-section-h small,.ai-cat-
   --lg-shadow-a:.068;
 }
 
-/* 背景保留 V3.5 的银灰/冰蓝体系，只增加可被玻璃采样的极低对比环境层 */
+/* 背景保留银灰/冰蓝体系，只增加可被玻璃采样的极低对比环境层 */
 body{
   background:
     radial-gradient(36rem 25rem at calc(-7% + var(--lg-scroll) * .018%) calc(-5% + var(--lg-scroll) * .010%),rgba(255,255,255,.90),transparent 64%),
@@ -1715,7 +1715,7 @@ body[data-board="ops"] :is(.ai-summary,.ai-problem,.ai-person,.ai-cat,.ai-order,
   box-shadow:0 4px 11px rgba(47,62,78,.055),inset 0 1px 0 rgba(255,255,255,.98),inset 0 -1px 0 rgba(54,70,88,.055)!important;
 }
 
-/* AI 页面大卡仍然保持 V3.5 的中性冰晶色，不重新引入深色或紫色 */
+/* AI 页面大卡保持中性冰晶色，不重新引入深色或紫色 */
 body[data-board="ops"] .ai-hero{
   color:var(--tx)!important;
   background-image:
@@ -1771,7 +1771,7 @@ html.lg-deep{--lg-hi:.11;--lg-lift:.995;--lg-shadow-y:12px;--lg-shadow-a:.080}
 
 /* ---- merged from ios26-v37-release-polish ---- */
 /* ============================================================
-   V3.7 · Release polish
+   Release polish
    仅做封版前精修：字阶、间距、控件、二级卡片、状态层级。
    不改 DOM / 数据 / 导航 / 业务逻辑 / 主色方向。
    ============================================================ */
@@ -1882,7 +1882,7 @@ body[data-board="ops"] :is(.f-low,.good,.ok){filter:saturate(.82)}
 }
 
 /* ---- merged from ios26-v38-final-candidate-01 ---- */
-/* V3.8 Final Candidate 01 — final consistency & legibility pass
+/* Final consistency & legibility pass
    Visual only. No DOM, data, navigation, or business logic changes. */
 :root{
   --fc-title:#1f2730;
@@ -1979,6 +1979,171 @@ body[data-board="ops"] .ai-log-item{opacity:1;}
 }
 
 </style>
+<style id="ios26-production-release-guards">
+/* Production UI guards: task sheet, legibility, safe-area and stable interaction states. */
+.action-mask{
+  background:rgba(25,33,42,.28)!important;
+  backdrop-filter:blur(14px) saturate(120%)!important;
+  -webkit-backdrop-filter:blur(14px) saturate(120%)!important;
+}
+.action-mask.on{align-items:flex-end!important}
+.action-sheet{
+  width:100%!important;
+  max-height:min(90dvh,820px)!important;
+  overflow:auto!important;
+  overscroll-behavior:contain!important;
+  -webkit-overflow-scrolling:touch!important;
+  border-radius:30px 30px 0 0!important;
+  padding:10px 16px calc(18px + var(--safeB))!important;
+  background:
+    linear-gradient(180deg,rgba(246,250,252,.84),rgba(232,239,243,.76))!important;
+  border:1px solid rgba(255,255,255,.82)!important;
+  border-bottom:0!important;
+  box-shadow:
+    0 -18px 52px rgba(35,48,62,.16),
+    inset 0 1px 0 rgba(255,255,255,.98),
+    inset 0 -1px 0 rgba(255,255,255,.24)!important;
+  backdrop-filter:blur(28px) saturate(145%) brightness(1.035)!important;
+  -webkit-backdrop-filter:blur(28px) saturate(145%) brightness(1.035)!important;
+}
+.action-sheet .grab{
+  width:38px!important;height:5px!important;border-radius:999px!important;
+  margin:0 auto 15px!important;background:rgba(83,96,110,.22)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.66)!important;
+}
+.action-sheet-head{
+  display:flex!important;align-items:flex-start!important;gap:12px!important;
+  padding:0 1px 12px!important;border-bottom:1px solid rgba(170,184,197,.18)!important;
+}
+.action-sheet-title{font-size:18px!important;font-weight:800!important;letter-spacing:-.25px!important;color:#1f2933!important;line-height:1.35!important}
+.action-sheet-sub{font-size:11.5px!important;color:#687582!important;line-height:1.55!important;margin-top:4px!important}
+.action-close{
+  margin-left:auto!important;width:36px!important;height:36px!important;border-radius:50%!important;
+  background:rgba(255,255,255,.48)!important;color:#52606d!important;
+  border:1px solid rgba(255,255,255,.72)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.92),0 3px 10px rgba(42,58,74,.06)!important;
+  font-size:20px!important;line-height:1!important;
+}
+.action-focus{
+  margin:12px 0!important;padding:11px 12px!important;border-radius:14px!important;
+  background:linear-gradient(180deg,rgba(229,243,255,.64),rgba(240,248,252,.48))!important;
+  border:1px solid rgba(93,167,224,.16)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.78)!important;
+}
+.action-focus b{font-size:11px!important;color:#126fb9!important;font-weight:800!important}
+.action-focus span{font-size:11.5px!important;color:#4f5e6b!important;line-height:1.62!important;margin-top:4px!important}
+.action-form{margin-top:12px!important}
+.action-field{margin-bottom:13px!important}
+.action-field label{
+  font-size:11.5px!important;font-weight:750!important;color:#44515e!important;
+  margin-bottom:6px!important;align-items:flex-end!important;
+}
+.action-field label small{font-size:10px!important;font-weight:500!important;color:#778491!important;line-height:1.4!important;text-align:right!important}
+.action-field input,.action-field textarea,.action-field select{
+  min-height:44px!important;border-radius:13px!important;
+  border:1px solid rgba(167,183,197,.48)!important;
+  background:rgba(255,255,255,.62)!important;color:#25313c!important;
+  padding:10px 11px!important;font-size:12px!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.88),0 2px 8px rgba(47,63,79,.025)!important;
+  backdrop-filter:blur(10px) saturate(120%)!important;
+  -webkit-backdrop-filter:blur(10px) saturate(120%)!important;
+}
+.action-field textarea{min-height:86px!important;line-height:1.6!important}
+.action-field input::placeholder,.action-field textarea::placeholder{color:#8b97a3!important;opacity:1!important}
+.action-field input:focus,.action-field textarea:focus,.action-field select:focus{
+  border-color:rgba(10,132,255,.44)!important;
+  box-shadow:0 0 0 3px rgba(10,132,255,.085),inset 0 1px 0 rgba(255,255,255,.94)!important;
+}
+.action-grid{gap:9px!important}
+.action-customer{gap:8px!important;margin-bottom:8px!important}
+.action-customer span{
+  width:32px!important;height:32px!important;border-radius:10px!important;
+  background:rgba(255,255,255,.45)!important;color:#697684!important;
+  border:1px solid rgba(255,255,255,.64)!important;
+}
+.action-evidence{
+  border:1px dashed rgba(128,151,171,.42)!important;border-radius:14px!important;
+  padding:12px!important;background:rgba(255,255,255,.38)!important;
+}
+.action-evidence input{min-height:0!important;background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important;font-size:11px!important}
+.action-evidence-name{font-size:10.5px!important;color:#6c7986!important;margin-top:7px!important;line-height:1.5!important}
+.action-validation{
+  margin-top:9px!important;padding:9px 10px!important;border-radius:11px!important;
+  font-size:10.8px!important;line-height:1.55!important;
+  background:rgba(245,170,66,.105)!important;color:#8a5a16!important;
+  border:1px solid rgba(229,157,57,.14)!important;
+}
+.action-validation.ok{background:rgba(46,170,131,.105)!important;color:#21785e!important;border-color:rgba(46,170,131,.14)!important}
+.ai-stagebar{margin:11px 2px 13px!important}
+.ai-stage{font-size:9px!important;color:#788592!important}
+
+/* Bottom action area: no white slab under “稍后”. It is one continuous glass control shelf. */
+.action-sheet-actions{
+  display:flex!important;gap:9px!important;position:sticky!important;
+  bottom:calc(-18px - var(--safeB))!important;
+  z-index:8!important;
+  margin:14px -16px calc(-18px - var(--safeB))!important;
+  padding:12px 16px calc(14px + var(--safeB))!important;
+  background:linear-gradient(180deg,rgba(234,241,245,.28) 0%,rgba(235,242,246,.82) 28%,rgba(235,242,246,.94) 100%)!important;
+  border-top:1px solid rgba(255,255,255,.68)!important;
+  box-shadow:0 -10px 24px rgba(55,70,85,.055),inset 0 1px 0 rgba(255,255,255,.70)!important;
+  backdrop-filter:blur(24px) saturate(140%)!important;
+  -webkit-backdrop-filter:blur(24px) saturate(140%)!important;
+}
+.action-sheet-actions button{
+  min-height:48px!important;border-radius:15px!important;padding:12px 13px!important;
+  font-size:13px!important;font-weight:800!important;letter-spacing:-.08px!important;
+  transition:transform .14s ease,filter .14s ease!important;
+}
+.action-sheet-actions button:active{transform:scale(.975)!important;filter:brightness(.985)!important}
+.act-ghost{
+  background:linear-gradient(180deg,rgba(255,255,255,.58),rgba(255,255,255,.34))!important;
+  color:#4c5a67!important;border:1px solid rgba(255,255,255,.82)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.98),0 4px 12px rgba(48,64,80,.045)!important;
+}
+.act-primary{
+  background:linear-gradient(180deg,#2495ff,#0a84ff)!important;color:#fff!important;
+  border:1px solid rgba(255,255,255,.24)!important;
+  box-shadow:0 8px 18px rgba(10,132,255,.20),inset 0 1px 0 rgba(255,255,255,.32)!important;
+}
+.act-dark{
+  background:linear-gradient(180deg,#44515e,#303b46)!important;color:#fff!important;
+  border:1px solid rgba(255,255,255,.18)!important;
+  box-shadow:0 7px 16px rgba(43,55,67,.14),inset 0 1px 0 rgba(255,255,255,.18)!important;
+}
+.act-good{
+  background:linear-gradient(180deg,#3bb78e,#2eaa83)!important;color:#fff!important;
+  border:1px solid rgba(255,255,255,.22)!important;
+  box-shadow:0 7px 16px rgba(46,170,131,.16),inset 0 1px 0 rgba(255,255,255,.24)!important;
+}
+.act-danger{
+  background:rgba(230,96,91,.105)!important;color:#c04c48!important;
+  border:1px solid rgba(230,96,91,.16)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.70)!important;
+}
+
+/* Final legibility guard for AI pages */
+body[data-board="ops"] :is(.ai-stage-mini,.ai-action-meta span,.ai-log-time,.ai-live-time,.ai-action-status,.ai-order-badge,.v29-badge){
+  color:#697784!important;
+}
+body[data-board="ops"] :is(.ai-action-target,.ai-action-standard,.ai-action-result,.ai-order-text,.ai-person-body,.ai-prob-why,.ai-learning-body,.ai-review-item,.ai-log-text){
+  color:#4e5c69!important;
+}
+
+@media(min-width:768px){
+  .action-mask.on{align-items:center!important;padding:24px!important}
+  .action-sheet{max-width:640px!important;max-height:86dvh!important;border-radius:28px!important;border-bottom:1px solid rgba(255,255,255,.82)!important}
+  .action-sheet-actions{bottom:calc(-18px - var(--safeB))!important;border-radius:0 0 28px 28px!important}
+}
+@media(max-width:420px){
+  .action-sheet{padding-left:14px!important;padding-right:14px!important}
+  .action-sheet-actions{margin-left:-14px!important;margin-right:-14px!important;padding-left:14px!important;padding-right:14px!important}
+  .action-grid.three{grid-template-columns:1fr!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .action-sheet,.action-mask.on,.action-sheet-actions button{animation:none!important;transition:none!important}
+}
+</style>
 </head>
 <body>
 
@@ -2024,7 +2189,7 @@ body[data-board="ops"] .ai-log-item{opacity:1;}
     <div class="fld">
       <label>GitHub 访问密钥</label>
       <input type="password" id="tokenInput" placeholder="ghp_ 或 github_pat_ 开头" autocomplete="off">
-      <div class="hint">只需填一次，之后自动记住。留空则只在本机预览，不同步线上。</div>
+      <div class="hint">只需填一次，之后自动记住。留空则本次更新仅保存在当前设备，不同步线上。</div>
     </div>
 
     <div class="fld">
@@ -3283,11 +3448,14 @@ function aiJump(id){ const el=document.getElementById(id); if(el) el.scrollIntoV
 function iaLocalDateKey(){
   const d=new Date(), y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0'); return y+'-'+m+'-'+day;
 }
-/* 现场事实未补齐人数：在岗员工（不含张博晨）中，当日现场信号仍为"未记录"的人数 */
 function iaMissingRealityCount(date){
+  /* 现场事实未补齐人数：在岗员工中当日现场信号仍为「未记录」的个数 */
   try{
-    const active=(DATA.insights&&DATA.insights.people||[]).filter(p=>p&&p.name&&p.name!=='张博晨');
-    return active.filter(p=>{ const s=iaRealityOne(date,p.name); return !s.status || s.status==='未记录'; }).length;
+    const active = (DATA.insights && DATA.insights.people || []).filter(p => p && p.name && p.name !== '张博晨');
+    return active.filter(function(p){
+      const s = iaRealityOne(date, p.name);
+      return !s.status || s.status === '未记录';
+    }).length;
   }catch(e){ return 0; }
 }
 function iaBusinessPhase(date,ctx,plan){
@@ -3422,7 +3590,7 @@ function renderOperatorReviewBoard(plan,date,ctx){
    V2.7 连续经营记忆引擎
    目的：今天不从零开始。保存每日“结果 + 现场 + 行动 + 客户 + 方法验证”，
    第二天自动提示昨日未收口、到期客户、连续卡点与已验证打法。
-   本地原型使用 localStorage；正式多人版应迁移到服务端经营事件表。
+   经营记忆使用 localStorage 持久化。
    ========================================================== */
 const V27_MEMORY_KEY='ljc_ai_memory_v27_1';
 const V27_CARRY_PREFIX='ljc_ai_carry_v27_';
@@ -3560,7 +3728,7 @@ function renderV28Handoff(date,plan,activePeople){
   let h='<section class="ai-section" data-ai-page="review" id="v28Handoff"><div class="ai-section-h"><span class="ai-spark">交</span><b>店长每日交接</b><small>把“今天没收口什么、明天先抓什么”留下来，下一班不重新猜</small></div><div class="v28-panel">';
   h+='<div class="v28-grid"><div class="v28-card"><div class="v28-card-h"><b>系统自动带出的交接风险</b><span>仅基于已记录事实</span></div><p>未闭环行动 '+unfinished+' 项 · 到期续跟客户 '+due.length+' 人 · 连续员工卡点 '+rep.length+' 人'+(prev?' · 上一记录日 '+prev:'')+'。</p></div><div class="v28-card"><div class="v28-card-h"><b>交接原则</b><span>店长负责</span></div><p>明天不是复制今天所有任务，而是先接住未收口事项、到期客户和连续异常；已经验证无效的动作必须换方法。</p></div></div>';
   h+='<div class="v28-handoff" style="margin-top:9px"><div class="v28-handbox"><label>① 未收口 / 风险</label><textarea id="v28h-unresolved" placeholder="今天还有什么必须让下一班知道？">'+iaEsc(o.unresolved||'')+'</textarea></div><div class="v28-handbox"><label>② 客户机会</label><textarea id="v28h-customers" placeholder="哪些客户明天必须接着追？">'+iaEsc(o.customers||'')+'</textarea></div><div class="v28-handbox"><label>③ 人员状态</label><textarea id="v28h-team" placeholder="谁需要辅导、陪访或重点保护？">'+iaEsc(o.team||'')+'</textarea></div><div class="v28-handbox"><label>④ 明日第一优先级</label><textarea id="v28h-tomorrow" placeholder="明天开门第一件事做什么？">'+iaEsc(o.tomorrow||'')+'</textarea></div></div><div class="v28-hand-actions"><button class="ghost" onclick="v28FillAutoHandoff(\''+date+'\')">按当前事实自动填充</button><button class="primary" onclick="v28SaveHandoff(\''+date+'\')">保存交接</button></div>';
-  if(o.updatedAt)h+='<div class="v28-auto">最近保存：'+iaEsc(o.updatedAt)+'。正式多人版应记录交班人 / 接班人 / 已读确认。</div>';
+  if(o.updatedAt)h+='<div class="v28-auto">最近保存：'+iaEsc(o.updatedAt)+'。</div>';
   h+='</div></section>';return h;
 }
 
@@ -3614,15 +3782,11 @@ function renderV29ManagerIntervention(date,plan,activePeople){
 }
 function renderV29Attribution(date,plan){
   const rows=v27CustomerRows(plan,date)||[];const matched=rows.filter(c=>c.matched||c.stage==='成交');const invite=rows.filter(c=>c.stage==='邀约'||c.stage==='到店');
-  let h='<section class="ai-section" data-ai-page="customer" id="v29Attribution"><div class="ai-section-h"><span class="ai-spark">链</span><b>客户 → 成交归因链</b><small>正式版必须知道这单来自哪次跟进，而不是只知道最后卖了什么</small></div><div class="v29-panel"><div class="v29-chain">';
+  let h='<section class="ai-section" data-ai-page="customer" id="v29Attribution"><div class="ai-section-h"><span class="ai-spark">链</span><b>客户 → 成交归因链</b><small>识别这单来自哪次跟进，而不只是看到最终卖了什么</small></div><div class="v29-panel"><div class="v29-chain">';
   const stages=[['触达','客户被首次记录','需要员工/客户标识'],['有效沟通','需求与意向明确','必须留下产品、预算或阻塞'],['邀约','约定下一步时间','不是“有空再联系”'],['到店/体验','进入真实销售机会','结合现场体验与方案'],['成交','销售数据产生结果','优先用手机号/会员标识匹配'],['归因验证','判断前序动作是否贡献','只做证据充分的归因']];
   stages.forEach(x=>h+='<div class="v29-chain-row"><div class="v29-chain-stage">'+x[0]+'</div><div class="v29-chain-main"><b>'+x[1]+'</b><span>'+x[2]+'</span></div></div>');
-  h+='</div><div class="v29-formal" style="margin-top:10px"><b>当前样本：'+rows.length+' 位客户 · 邀约/到店 '+invite.length+' · 已成交/匹配 '+matched.length+'</b><p>当前单HTML只能利用已填写客户记录和可识别手机号做弱归因。正式多人版需要客户ID、跟进事件、销售单号与会员/手机号映射，才能形成可审计的“谁跟进 → 何时到店 → 买了什么 → 毛利多少”。</p></div></div></section>';return h;
+  h+='</div><div class="v29-formal" style="margin-top:10px"><b>当前样本：'+rows.length+' 位客户 · 邀约/到店 '+invite.length+' · 已成交/匹配 '+matched.length+'</b><p>归因依据：已填写客户记录与可识别手机号匹配。系统会沿“跟进 → 到店 → 成交”链路展示当前可确认的证据。</p></div></div></section>';return h;
 }
-function renderV29FormalReadiness(date){
-  return '<section class="ai-section" data-ai-page="review" id="v29Formal"><div class="ai-section-h"><span class="ai-spark">正</span><b>正式版成熟度</b><small>把“产品逻辑完成”和“真正上线”分开看</small></div><div class="v29-panel"><div class="v29-grid"><div class="v29-kpi"><b>已具备</b><span>经营诊断 / 员工分流 / 行动闭环</span></div><div class="v29-kpi"><b>已具备</b><span>客户经营 / 多日记忆 / 店长交接</span></div><div class="v29-kpi"><b>冲刺中</b><span>检查点 / 介入 / 归因 / 打法验证</span></div><div class="v29-kpi"><b>待工程化</b><span>账号权限 / 服务端 / 多设备同步</span></div></div><div class="v29-formal" style="margin-top:10px"><b>V3.0 正式版定义</b><p>不是“页面看起来完整”就叫正式版。产品逻辑层至少要做到：每天知道现在该抓什么、谁负责、上一轮有没有执行、结果有没有响应、客户机会是否延续、问题是否连续、店长何时必须介入、第二天如何承接。工程上线层还必须补账号、权限、云端数据库、证据存储、日志和多设备同步。</p></div></div></section>';
-}
-
 function renderInsight(){
   const I = DATA.insights || {};
   const S = (DATA.store && DATA.store.performance) || {};
@@ -3854,9 +4018,7 @@ function renderInsight(){
   h += renderV26EffectMatrix(actionPlan, m.date || 'today');
   h += renderV27ContinuityLearning(m.date || 'today');
   h += renderV28Handoff(m.date || 'today', actionPlan, activePeople);
-  h += renderV29FormalReadiness(m.date || 'today');
 
-  h += '<div class="ai-note" data-ai-page="review">V2.9 在连续经营驾驶舱之上继续加入检查点持久化、店长介入、客户成交归因链与正式版成熟度：让系统开始回答“最近发生了什么、这个人是不是连续卡在同一环节、哪些方法该升级/停止、下一班必须接住什么”。所有判断只使用已记录事实；当前仍为本机 localStorage 原型，正式多人版需要服务端账号、权限、任务、客户、证据、交接与经营事件表实现跨设备同步。</div>';
   h += foot();
   h += '</div>';
   return h;
@@ -3866,7 +4028,7 @@ function renderInsight(){
 
 /* ==========================================================
    AI洞察行动指南：从“分析”进入“目标→执行→证据→验收→闭环”
-   单HTML原型使用 localStorage；正式多人版应替换为服务端任务/客户/证据表。
+   行动状态使用 localStorage 持久化。
    ========================================================== */
 const IA_STATUS = {
   todo:{txt:'待开始',cls:'todo',step:0},
@@ -4019,7 +4181,7 @@ function buildActionForm(task,st){
     f+='<div class="action-field"><label>退货主因</label><select data-af="reason"><option value="">请选择</option>'+['质量/故障','价格原因','冲动消费/反悔','体验不符合预期','型号/配置选择错误','其他'].map(x=>'<option '+(r.reason===x?'selected':'')+'>'+x+'</option>').join('')+'</select></div>';
   }
   if(task.type!=='core') f+='<div class="action-field"><label>执行结果 / 真实反馈 <small>不能只写“已完成”</small></label><textarea data-note placeholder="写明发生了什么、客户/员工反馈、下一步">'+iaEsc(st.note||'')+'</textarea></div>';
-  f+='<div class="action-field"><label>执行证据 <small>照片/截图/反馈文件；原型仅记录文件名</small></label><div class="action-evidence"><input type="file" id="actionEvidence" accept="image/*,.pdf"><div class="action-evidence-name" id="actionEvidenceName">'+(st.evidence?'已记录：'+iaEsc(st.evidence):'尚未选择证明文件')+'</div></div></div>';
+  f+='<div class="action-field"><label>执行证据 <small>照片 / 截图 / 反馈文件</small></label><div class="action-evidence"><input type="file" id="actionEvidence" accept="image/*,.pdf"><div class="action-evidence-name" id="actionEvidenceName">'+(st.evidence?'已记录：'+iaEsc(st.evidence):'尚未选择证明文件')+'</div></div></div>';
   const pass=iaAutoPass(task,st);
   f+='<div class="action-validation '+(pass?'ok':'')+'">'+(pass?'✓ 当前记录已达到系统执行标准，可提交店长验收。':'当前记录尚未达到验收标准；系统不会因为“点了完成”就自动闭环。')+'</div></div>';
   return f;
@@ -4095,7 +4257,7 @@ function iaResponse(task,st){
   if(task.type==='quality'){
     const db=c.bundleCount-(b.bundleCount||0); return {kind:db>0?'positive':'neutral',title:db>0?'新增搭售结构已出现':'暂未出现新增搭售结构',text:db>0?'行动开始后新增可识别搭售 '+db+' 笔。':'等待下一笔成交数据；若动作已做但持续无搭售，应复盘客户异议和推荐方式。'};
   }
-  if(task.type==='ops') return {kind:'neutral',title:'运营动作已进入执行证据链',text:'企微/群/WPS目前不在销售 data.json 中，先以执行记录验收；正式版接入运营数据后再自动判断效果。'};
+  if(task.type==='ops') return {kind:'neutral',title:'运营动作已进入执行证据链',text:'企微 / 群 / WPS 当前以执行记录作为验收依据；有对应运营数据时再结合结果判断效果。'};
   if(task.type==='return') return {kind:'neutral',title:'退货复盘属于预防型动作',text:'当前先验证原因与改进动作是否闭环；后续可追踪同类机型退货是否下降。'};
   return {kind:'neutral',title:'等待下一轮数据',text:'系统将在新数据到达后重新判断。'};
 }
@@ -4342,8 +4504,8 @@ function buildActionForm(task,st){
   if(task.type!=='core'){
     f+='<div class="action-field"><label>执行结果 / 真实反馈 <small>不能只写“已完成”</small></label><textarea data-note placeholder="写明发生了什么、客户/员工反馈、下一步">'+iaEsc(st.note||'')+'</textarea></div>';
   }
-  f+='<div class="action-field"><label>执行证据 <small>照片/截图/反馈文件；图片≤450KB可保存在本机原型</small></label><div class="action-evidence"><input type="file" id="actionEvidence" accept="image/*,.pdf"><div class="action-evidence-name" id="actionEvidenceName">'+(st.evidence?'已记录：'+iaEsc(st.evidence):'尚未选择证明文件')+'</div>'
-    +(st.evidenceData?'<div class="ai-evidence-preview"><img src="'+st.evidenceData+'" alt=""><span>本机证据预览；正式多人版应上传到云端。</span></div>':'')+'</div></div>';
+  f+='<div class="action-field"><label>执行证据 <small>图片证据 ≤ 450KB，可保存在当前设备</small></label><div class="action-evidence"><input type="file" id="actionEvidence" accept="image/*,.pdf"><div class="action-evidence-name" id="actionEvidenceName">'+(st.evidence?'已记录：'+iaEsc(st.evidence):'尚未选择证明文件')+'</div>'
+    +(st.evidenceData?'<div class="ai-evidence-preview"><img src="'+st.evidenceData+'" alt=""><span>证据预览 · 已保存在当前设备</span></div>':'')+'</div></div>';
   const pass=iaAutoPass(task,st);
   f+='<div class="action-validation '+(pass?'ok':'')+'">'+(pass?'✓ 当前记录已达到系统执行标准，可提交店长验收。':'当前记录尚未达到验收标准；系统不会因为“点了完成”就自动闭环。')+'</div></div>';
   return f;
@@ -4682,7 +4844,7 @@ function renderV26WarOrder(ctx,date,plan){
   const first=stats.review>0?'先完成待验收，避免“执行了但没人确认”':(idle.length?'本时段至少拉出第二个有效产出点':'保持开单面，开始提成交质量');
   const second='把手机 '+cnt(Math.max(ctx.cPhone.gap||0,0))+' 台 / 毛利 '+moneyShort(Math.max(ctx.cProfit.gap||0,0))+' / 增值 '+moneyShort(Math.max(ctx.cValue.gap||0,0))+' 的缺口拆到具体人和具体客户动作';
   const third=due>0?'优先推进24小时内 '+due+' 个已有后续动作的客户，不再先做无差别拉新':'所有有效沟通必须留下“下一步 + 下次时间”，让客户池能滚动起来';
-  return '<section class="ai-section" data-ai-page="command"><div class="ai-section-h"><span class="ai-spark">令</span><b>店长今日作战令</b><small>把洞察压缩成这一时段真正要赢的三件事</small></div><div class="v26-war"><div class="v26-war-head"><div class="v26-war-icon">令</div><div><div class="v26-war-title">'+iaEsc(phase.badge)+' · 当前只盯三件事</div><div class="v26-war-sub">下一检查点：'+iaEsc(phase.window||'下一轮数据更新')+'。到点不是重新催，而是看执行和数据响应。</div></div><span class="v26-war-badge">正式版候选</span></div><div class="v26-war-thesis"><b>当前过程瓶颈：'+iaEsc(b.title)+'</b><br>'+iaEsc(b.text)+'</div><div class="v26-goals">'
+  return '<section class="ai-section" data-ai-page="command"><div class="ai-section-h"><span class="ai-spark">令</span><b>店长今日作战令</b><small>把洞察压缩成这一时段真正要赢的三件事</small></div><div class="v26-war"><div class="v26-war-head"><div class="v26-war-icon">令</div><div><div class="v26-war-title">'+iaEsc(phase.badge)+' · 当前只盯三件事</div><div class="v26-war-sub">下一检查点：'+iaEsc(phase.window||'下一轮数据更新')+'。到点不是重新催，而是看执行和数据响应。</div></div><span class="v26-war-badge">当前重点</span></div><div class="v26-war-thesis"><b>当前过程瓶颈：'+iaEsc(b.title)+'</b><br>'+iaEsc(b.text)+'</div><div class="v26-goals">'
     +'<div class="v26-goal"><div class="v26-goal-top"><span class="v26-goal-no">01</span><b>人员结果</b></div><p>'+iaEsc(first)+'</p><div class="v26-goal-foot"><span>证据：现场+上账</span><button onclick="goView(\'aiteam\')">看员工</button></div></div>'
     +'<div class="v26-goal"><div class="v26-goal-top"><span class="v26-goal-no">02</span><b>核心目标</b></div><p>'+iaEsc(second)+'</p><div class="v26-goal-foot"><span>证据：手机/毛利/增值</span><button onclick="openInsightAction(\'core-gap\')">拆目标</button></div></div>'
     +'<div class="v26-goal"><div class="v26-goal-top"><span class="v26-goal-no">03</span><b>下一笔成交</b></div><p>'+iaEsc(third)+'</p><div class="v26-goal-foot"><span>证据：客户漏斗</span><button onclick="goView(\'aicustomer\')">看机会</button></div></div></div>'
@@ -4699,7 +4861,7 @@ function renderV26EscalationLadder(activePeople,date,plan){
   let level=1,why='员工可先按系统动作自行处理。';if(verify.length)level=Math.max(level,1);if(conversion.length)level=Math.max(level,2);if(conversion.some(x=>['solution','closing'].includes(x.md.stage)))level=3;if(over.length||review.length>2||doneNo.length>=2)level=4;
   const now=level===4?'存在超时/多项待验收/重复无响应，店长要停止继续派任务，先清阻塞和方法问题。':level===3?'已经进入方案/成交卡点，下一组关键客户建议店长陪访或共同成交。':level===2?'有接待未成交，店长先做案例复盘和演练，不急着直接接管客户。':'先让员工按明确动作自纠，并补齐现场证据。';
   const defs=[['L1','员工自纠','明确下一动作 + 截止时间 + 证据；适合空档拓客、现场补录。'],['L2','店长辅导','复盘最近客户、演练一次改法；适合有客未成交但卡点还不明确。'],['L3','店长陪访','店长参与下一组重点客户的体验/方案/异议处理；适合方案或成交卡点。'],['L4','店长接管异常','先停新增任务，处理超时、待验收、上账异常或连续“动作完成但结果不动”。']];
-  return '<section class="ai-section" data-ai-page="action"><div class="ai-section-h"><span class="ai-spark">阶</span><b>店长介入阶梯</b><small>什么时候该放手，什么时候必须亲自上</small></div><div class="v26-ladder"><div class="v26-ladder-grid">'+defs.map((x,i)=>'<div class="v26-level '+(i+1===level?'active':'')+'"><div class="v26-level-code">'+x[0]+'</div><div><b>'+x[1]+'</b><p>'+x[2]+'</p></div></div>').join('')+'</div><div class="v26-ladder-now"><b>当前建议介入等级：L'+level+'</b><br>'+iaEsc(now)+'<br><span style="color:var(--tx3)">正式版权限原则：员工不能验收自己的任务；店长介入解决卡点，不代替员工做日常动作。</span></div></div></section>';
+  return '<section class="ai-section" data-ai-page="action"><div class="ai-section-h"><span class="ai-spark">阶</span><b>店长介入阶梯</b><small>什么时候该放手，什么时候必须亲自上</small></div><div class="v26-ladder"><div class="v26-ladder-grid">'+defs.map((x,i)=>'<div class="v26-level '+(i+1===level?'active':'')+'"><div class="v26-level-code">'+x[0]+'</div><div><b>'+x[1]+'</b><p>'+x[2]+'</p></div></div>').join('')+'</div><div class="v26-ladder-now"><b>当前建议介入等级：L'+level+'</b><br>'+iaEsc(now)+'<br><span style="color:var(--tx3)">权限原则：员工不能验收自己的任务；店长介入解决卡点，不代替员工做日常动作。</span></div></div></section>';
 }
 function v26OppPriority(r){
   const now=Date.now(),t=r.nextAt?new Date(r.nextAt).getTime():NaN,soon=isFinite(t)&&t<=now+24*3600*1000,over=isFinite(t)&&t<now;
@@ -4721,7 +4883,7 @@ function renderV26EffectMatrix(plan,date){
    +q('warn','做了，但结果没响应',a.method.length,'不要再机械催同一动作，下一轮转查客户质量、销售技能、商品/价格或方案问题。',a.method)
    +q('','还没有做到闭环',a.exec.length,'优先抓执行、证据和验收；动作没做之前，没有资格判断方法是否有效。',a.exec)
    +q('purple','结果变了，但动作未闭环',a.attrib.length,'只能说明同期数据变化，不能把结果直接归因给这项动作；先完成验收再判断。',a.attrib)
-   +'</div><div class="v26-formal-note"><b>正式版经营原则：</b>没执行 → 管执行；执行到位但没结果 → 管方法；执行和结果同时改善 → 做二次验证后再沉淀为门店打法。避免把相关性当因果。</div></div></section>';
+   +'</div><div class="v26-formal-note"><b>经营原则：</b>没执行 → 管执行；执行到位但没结果 → 管方法；执行和结果同时改善 → 做二次验证后再沉淀为门店打法。避免把相关性当因果。</div></div></section>';
 }
 
 
@@ -4846,7 +5008,6 @@ function goView(v){
   VIEW = v;
   try{
     const hm = {insight:'#insight',aiteam:'#ai-team',aiaction:'#ai-action',aicustomer:'#ai-customer',aireview:'#ai-review'};
-    /* 业绩板块不写 hash（晨哥要求 URL 干净无 #sales 后缀）；#insight 等 AI 子页路由保留 */
     history.replaceState(null,'', BOARD==='ops' ? (hm[v]||'#insight') : location.pathname + location.search);
   }catch(e){}
   render();
@@ -4871,29 +5032,25 @@ function setBoard(b){
   else if(!tabs.includes(VIEW)) VIEW = tabs[0];
   try{ history.replaceState(null,'', b==='ops' ? '#insight' : location.pathname + location.search); }catch(e){}
   render();
-  /* 从业绩看板切到 AI：立即静默拉一次最新数据，保证所见即最新（修复“点AI数据不变”） */
   if(b === 'ops' && prev !== 'ops' && (location.protocol==='http:'||location.protocol==='https:')) loadRemote(true);
 }
 function toggleBoard(){ setBoard(BOARD === 'sales' ? 'ops' : 'sales'); }
 
-/* 分享链接：仅 AI 子页保留 hash 路由（#insight 等）；#sales/#qudao 旧链接兼容 */
 window.addEventListener('hashchange', function(){
+  const h = location.hash;
   const aiHashes = ['#ops','#ops-insight','#insight','#ai-team','#ai-action','#ai-customer','#ai-review'];
-  const oldHashes = ['#sales','#qudao'];
-  if(aiHashes.includes(location.hash)){
+  const aiViews = {'#ops':'insight','#ops-insight':'insight','#insight':'insight','#ai-team':'aiteam','#ai-action':'aiaction','#ai-customer':'aicustomer','#ai-review':'aireview'};
+  if(aiHashes.includes(h)){
     BOARD = 'ops';
-    const hv = {'#ops':'insight','#ops-insight':'insight','#insight':'insight','#ai-team':'aiteam','#ai-action':'aiaction','#ai-customer':'aicustomer','#ai-review':'aireview'};
-    if(hv[location.hash]) VIEW = hv[location.hash];
-    const tabs = BOARDS[BOARD].tabs;
-    if(!tabs.includes(VIEW)) VIEW = tabs[0];
-    render();
-    /* 分享链接进入 AI 子页时同样静默拉最新，保证所见即最新 */
-    if(location.protocol==='http:'||location.protocol==='https:') loadRemote(true);
-  }else if(oldHashes.includes(location.hash)){
+    VIEW = aiViews[h] || 'insight';
+  }else if(h === '#sales' || h === '#qudao'){
     BOARD = 'sales';
-    VIEW = location.hash === '#qudao' ? 'qudao' : 'store';
-    render();
+    VIEW = (h === '#qudao') ? 'qudao' : 'store';
+  }else{
+    return;
   }
+  if(BOARD === 'ops' && (location.protocol==='http:'||location.protocol==='https:')) loadRemote(true);
+  render();
 });
 
 
@@ -5255,7 +5412,7 @@ $('#btnParse').onclick = async () => {
     /* 先本地生效 */
     DATA = json;
     render();
-    $('#liveTag').textContent = '本机预览';
+    $('#liveTag').textContent = '仅当前设备';
     log('✓ 页面已刷新', 'ok');
 
     /* 同步线上 */
@@ -5267,8 +5424,8 @@ $('#btnParse').onclick = async () => {
       log('店员刷新页面即可看到新数据', 'ok');
       toast('已更新，店员刷新可见');
     }else{
-      log('未填密钥，仅本机生效，店员看到的还是旧数据', 'wa');
-      toast('仅本机预览');
+      log('未填密钥，本次更新仅保存在当前设备，线上数据不会变化', 'wa');
+      toast('仅在当前设备更新');
     }
   }catch(err){
     log('✗ ' + (err.message || err), 'er');
