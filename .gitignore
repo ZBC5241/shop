@@ -3,6 +3,7 @@
 *.tsv
 *.csv
 !parts/*.json
+!data.json
 
 # 企业微信 webhook 密钥（禁止入库）
 .wecom_webhook
