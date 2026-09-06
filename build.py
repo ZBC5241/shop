@@ -17,6 +17,11 @@ PY = sys.executable
 
 
 def main():
+    # V2.9 主页模式：主页固定为 AI洞察行动指南 V2.9（晨哥手搓，fetch data.json 驱动）。
+    # 看板更新不再重建 index.html，避免覆盖 V2.9。存在 .homepage_v29 标记即跳过生成。
+    if os.path.exists(os.path.join(BASE, ".homepage_v29")):
+        print("⏭️ V2.9 主页模式：跳过 index.html 生成（主页固定为 V2.9，看板更新仅刷新 data.json）")
+        return
     data_path = os.path.join(BASE, "data.json")
 
     if "--xlsx" in sys.argv:

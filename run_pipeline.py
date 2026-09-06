@@ -40,7 +40,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("maoli_xlsx", help="毛利明细表xlsx路径")
     ap.add_argument("sa_xlsx", help="销售分析xlsx路径")
-    ap.add_argument("--task-xlsx", default="/Users/mac/Desktop/李家村销售/李家村8月任务进度.xlsx",
+    ap.add_argument("--task-xlsx", default="/Users/mac/Desktop/李家村销售/李家村月度任务进度.xlsx",
                     help="任务进度xlsx（手工项来源）")
     ap.add_argument("--no-push", action="store_true", help="不推送GitHub")
     ap.add_argument("--no-sa", action="store_true", help="跳过销售分析更新")
@@ -70,11 +70,15 @@ def main():
         "渠道挂账合并"
     )
 
-    # Step 4: build（打包index.html）
-    timings["build"] = run(
-        [PY, os.path.join(BASE, "build.py")],
-        "打包看板"
-    )
+    # Step 4: build（打包index.html）—— V2.9 主页模式下已停用
+    # 主页固定为 V2.9（AI洞察行动指南），看板更新只刷 data.json，不再重建 index.html。
+    # 切回 parts 业绩看板：删 .homepage_v29 标记 + 取消下面注释即可。
+    # timings["build"] = run(
+    #     [PY, os.path.join(BASE, "build.py")],
+    #     "打包看板"
+    # )
+    timings["build"] = 0.0
+    print("⏭️ 跳过 build.py：主页固定为 V2.9，看板更新仅刷新 data.json")
 
     # Step 5: push（推送GitHub上线）
     if not args.no_push:
@@ -106,9 +110,60 @@ def main():
         print(f"  日期: {meta.get('date')} | 明细 {meta.get('sourceRows')} 行")
         print(f"  毛利: ¥{g.get('done',0):,.0f} / ¥{g.get('task',0):,.0f} ({(g.get('rate') or 0):.1%})")
         print(f"  销额: ¥{sales.get('done',0):,.0f} | 手机: {phone.get('done',0):.0f}台")
+        q = data.get("qudao") or {}
+        qt = q.get("total") or {}
+        print(f"  渠道: ¥{qt.get('done',0):,.0f} / ¥{qt.get('task',0):,.0f} ({(qt.get('rate') or 0):.1%}) [数据日期 {q.get('timeDate','—')}]")
         print(f"  线上: https://zbc5241.github.io/shop/")
     except Exception:
         pass
+
+    # 数据新鲜度自检（SOP 第五节固化为强制校验）
+    try:
+        import datetime
+        today = datetime.date.today().strftime("%Y-%m-%d")
+        month = today[:7]
+        problems = []
+        q = data.get("qudao") or {}
+        td = str(q.get("timeDate") or "")[:10]
+        if td != today:
+            problems.append(f"渠道数据日期 {td or '空'} ≠ 今日 {today}")
+        # 渠道流水最大日期必须落在当月（防旧月残留：本月应为当月数据）
+        cache_p = os.path.join(BASE, "sa_aug_cache.json")
+        if os.path.exists(cache_p):
+            recs = json.load(open(cache_p, encoding="utf-8")).get("records", [])
+            dates = sorted(str(r.get("dDate") or "")[:10] for r in recs if r.get("dDate"))
+            if dates:
+                if not dates[-1].startswith(month):
+                    problems.append(f"渠道流水最新日期 {dates[-1]} 不在当月 {month}（疑似旧月数据残留）")
+            else:
+                problems.append("sa_cache 无任何流水记录")
+            # 一致性校验：data.json 渠道达成必须等于缓存按当月白名单重算值
+            # （能抓佳「merge回退到底表旧sheet口径」——本事故的决定性信号）
+            qd_channels = {"三大地图", "小红书", "大众点评", "异业", "社区", "企业上门购"}
+            expect = 0.0
+            for r in recs:
+                d10 = str(r.get("dDate") or "")[:10]
+                if d10.startswith(month) and str(r.get("retailVouchHeaderDefineCharacter__HWHKQD_name") or "").strip() in qd_channels:
+                    try:
+                        expect += float(r.get("fNetMoney") or 0)
+                    except (TypeError, ValueError):
+                        pass
+            got = float((q.get("total") or {}).get("done") or 0)
+            if abs(expect - got) > 1:
+                problems.append(f"渠道达成不一致：看板 ¥{got:,.0f} vs 缓存当月白名单重算 ¥{expect:,.0f}（疑似回退旧口径）")
+        else:
+            problems.append("sa_aug_cache.json 不存在")
+        if problems:
+            print("\n🚨 数据新鲜度自检未通过：")
+            for p in problems:
+                print(f"   · {p}")
+            print("   ⚠️ 本次推送已中止，禁止上线可能过期的数据（SOP红线）")
+            sys.exit(3)
+        print("\n✅ 数据新鲜度自检通过（渠道=今日，流水=当月）")
+    except SystemExit:
+        raise
+    except Exception as _e:
+        print(f"\n⚠️ 自检异常（不拦截）: {_e}")
 
 
 if __name__ == "__main__":
