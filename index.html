@@ -5494,6 +5494,35 @@ html.lg26-on .tabs::before{
           mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
           mask-composite:exclude;
 }
+/* 色散边：再叠一圈低透明度彩虹微偏移环（真机玻璃边缘的光谱分离感），零性能成本 */
+html.lg26-on .top::after,
+html.lg26-on .tabs::after{
+  content:"";position:absolute;inset:0;border-radius:inherit;padding:2px;pointer-events:none;z-index:2;
+  background:conic-gradient(from 30deg,
+    rgba(255,72,90,.38),rgba(255,170,70,.30) 14%,rgba(255,236,110,.24) 28%,
+    rgba(90,235,150,.28) 46%,rgba(70,190,255,.38) 62%,rgba(170,120,255,.34) 80%,
+    rgba(255,72,90,.38));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;
+          mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+          mask-composite:exclude;
+  transform:translate(.5px,.35px);filter:blur(.4px);
+}
+/* 按压液感：iOS 26 原生控件级反馈——按下压扁+玻璃增透，松手 spring 回弹（只动 transform/opacity） */
+html.lg26-on .tab.on{
+  transition:transform .5s cubic-bezier(.32,1.25,.34,1)!important;
+}
+html.lg26-on .tab.on:active{
+  transform:scale(.86);
+  transition:transform .09s ease!important;
+}
+html.lg26-on .logo{
+  transition:transform .5s cubic-bezier(.32,1.25,.34,1)!important;
+}
+html.lg26-on .logo:active{
+  transform:scale(.88)!important;
+  transition:transform .09s ease!important;
+}
 /* 边缘折射：向心取样位移（放大边缘 = 玻璃「厚」感），替换原 backdrop-filter 链，视觉参数保持一致 */
 html.lg26-on .top{
   -webkit-backdrop-filter:url(#lgEdge) blur(17px) saturate(160%) contrast(1.02)!important;
@@ -5507,6 +5536,12 @@ html.lg26-on .tabs{
 html.lg26-on body[data-board="ops"] .ai-hero{
   -webkit-backdrop-filter:url(#lgEdge) blur(18px) saturate(132%) brightness(1.02)!important;
           backdrop-filter:url(#lgEdge) blur(18px) saturate(132%) brightness(1.02)!important;
+}
+/* 玻璃颗粒层：静态噪声贴图（canvas 生成 dataURL，无 backdrop-filter、无滤镜链），
+   fixed 层背景静态不随滚动重绘，安全复刻真机玻璃微颗粒 */
+.lg-grain{
+  position:fixed;inset:0;pointer-events:none;z-index:2147483000;opacity:.5;
+  background-repeat:repeat;background-size:128px 128px;
 }
 </style>
 
@@ -5530,7 +5565,7 @@ html.lg26-on body[data-board="ops"] .ai-hero{
         var dx = (x - half) / half, dy = (y - half) / half;
         var d = Math.max(Math.abs(dx), Math.abs(dy));
         var len = Math.hypot(dx, dy) || 1;
-        var k = d * d * 34;   /* 全域向心取样 = 边缘放大，不越界取样（避免边缘毛边） */
+        var k = d < .5 ? d * d * 13 : Math.pow(d, 1.6) * 26;   /* 不对称边缘：内半段克制、外半段骤强 */
         var i = (y * size + x) * 4;
         img.data[i]   = Math.max(0, Math.min(255, Math.round(128 - (dx / len) * k)));
         img.data[i+1] = Math.max(0, Math.min(255, Math.round(128 - (dy / len) * k)));
@@ -5546,10 +5581,28 @@ html.lg26-on body[data-board="ops"] .ai-hero{
       + '<feFlood flood-color="#808080" result="base"/>'
       + '<feImage href="' + url + '" xlink:href="' + url + '" result="map" preserveAspectRatio="none"/>'
       + '<feComposite in="map" in2="base" operator="over" result="map2"/>'
-      + '<feDisplacementMap in="SourceGraphic" in2="map2" scale="12" xChannelSelector="R" yChannelSelector="G"/>'
+      + '<feDisplacementMap in="SourceGraphic" in2="map2" scale="22" xChannelSelector="R" yChannelSelector="G"/>'
       + '</filter>';
     document.body.appendChild(svg);
     document.documentElement.classList.add('lg26-on');
+    /* 玻璃颗粒层：128px 噪声贴图平铺（静态背景图，非滤镜，滚动零重算）。
+       灰阶单像素噪声 = 真机玻璃的细微颗粒质感，透明度已内建在像素里 */
+    try{
+      var g = document.createElement('canvas'); g.width = g.height = 128;
+      var gx = g.getContext('2d'); var gid = gx.createImageData(128, 128);
+      var gv = 0, seed = 20260907;
+      var rnd = function(){ seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; };
+      for (var p = 0; p < gid.data.length; p += 4){
+        gv = Math.floor(rnd() * 255);
+        gid.data[p] = gid.data[p+1] = gid.data[p+2] = gv;
+        gid.data[p+3] = rnd() < .5 ? 0 : 14;   /* 约 50% 像素极低透明度 → opacity .5 后实际 ≈2.7% */
+      }
+      gx.putImageData(gid, 0, 0);
+      var grainEl = document.createElement('div');
+      grainEl.className = 'lg-grain';
+      grainEl.style.backgroundImage = 'url(' + g.toDataURL() + ')';
+      document.body.appendChild(grainEl);
+    }catch(e2){ /* 颗粒失败不影响折射 */ }
   }catch(e){ /* 门禁任何异常 = 完全不增强，保持现状 */ }
 })();
 </script>
