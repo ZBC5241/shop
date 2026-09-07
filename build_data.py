@@ -8,7 +8,7 @@
       仅做必要的格式清洗（#DIV/0! -> null，"85%" -> 0.85，去千分位）
 
 用法：
-    python build_data.py /path/to/李家村8月任务进度.xlsx [输出.json]
+    python build_data.py /path/to/李家村月度任务进度.xlsx [输出.json]
 """
 import sys, os, json, datetime, calendar
 import openpyxl
@@ -22,31 +22,62 @@ def _is_formula(cell):
     v = cell.value
     return isinstance(v, str) and v.startswith("=")
 
+
+def load_people(xlsx):
+    """从底表「月任务」sheet B4:B7 动态读取人员名单（空名跳过），
+    张博晨固定追加（不背任务）。设置模块级 PEOPLE_ORDER / P1~P4_ROWS。
+    行号映射规律：
+      月任务 row 4~7  → P1: row4~8(张博晨=8)  P2: row14~18(张博晨=18)
+                       P3: row28~32(张博晨=32) P4: row38~41(无张博晨)
+    """
+    global PEOPLE_ORDER, P1_ROWS, P2_ROWS, P3_ROWS, P4_ROWS
+    import openpyxl as _opx
+    wbf = _opx.load_workbook(xlsx, data_only=False)
+    tk = wbf[[s for s in wbf.sheetnames if s.endswith("月任务")][0]]
+    task_people, task_rows = [], {}
+    for r in range(4, 8):                   # B4~B7
+        nm = tk.cell(r, 2).value
+        if nm and str(nm).strip():
+            nm = str(nm).strip()
+            task_people.append(nm)
+            task_rows[nm] = r
+    PEOPLE_ORDER = task_people + ["张博晨"]
+    # P1: 任务行号直接用月任务行号，张博晨=8
+    P1_ROWS = dict(task_rows)
+    P1_ROWS["张博晨"] = 8
+    # P2: 任务行号 + 10，张博晨=18
+    P2_ROWS = {n: r + 10 for n, r in task_rows.items()}
+    P2_ROWS["张博晨"] = 18
+    # P3: 任务行号 + 24，张博晨=32
+    P3_ROWS = {n: r + 24 for n, r in task_rows.items()}
+    P3_ROWS["张博晨"] = 32
+    # P4: 任务行号 + 34，无张博晨
+    P4_ROWS = {n: r + 34 for n, r in task_rows.items()}
+
+
 SHEET = "李家村销售"
 
 # ---------- 表格坐标（1-based 行号，0-based 列索引） ----------
 ROW_TIME = 1                       # 时间进度行：B1=日期, I1=进度
-PEOPLE_ORDER = ["邵乐乐", "杨丽华", "李泽", "陈超磊", "张博晨"]
+PEOPLE_ORDER = []                   # 动态填充
+TASK_XLSX_DEFAULT = "/Users/mac/Desktop/李家村销售/李家村月度任务进度.xlsx"
 
-# 区块1：业绩考核
-P1_ROWS = {"邵乐乐": 4, "杨丽华": 5, "李泽": 6, "陈超磊": 7, "张博晨": 8}
+# 以下 P1~P4 行号映射由 load_people() 动态设置
+P1_ROWS = {}
 P1_TOTAL_ROW = 9
 P1_BLOCKS = [("毛利", 1), ("手机", 5), ("PC", 9), ("平板", 13), ("穿戴", 17),
              ("音频", 21), ("HD", 25), ("智慧办公", 29), ("音频穿戴", 33), ("销额", 37)]
 P1_SCORE_COL = 41                  # 绩效
 
-# 区块2：全科生 / 增值
-P2_ROWS = {"邵乐乐": 14, "杨丽华": 15, "李泽": 16, "陈超磊": 17, "张博晨": 18}
+P2_ROWS = {}
 P2_TOTAL_ROW = 19
 
-# 区块3：当日达成
-P3_ROWS = {"邵乐乐": 28, "杨丽华": 29, "李泽": 30, "陈超磊": 31, "张博晨": 32}
+P3_ROWS = {}
 P3_TOTAL_ROW = 33
 P3_LABEL_ROW = 26                  # 项目名所在行
 P3_TITLE_CELL = (25, 2)            # B25 = "08-09达成"
 
-# 区块4：每日缺口（注意：无张博晨）
-P4_ROWS = {"邵乐乐": 38, "杨丽华": 39, "李泽": 40, "陈超磊": 41}
+P4_ROWS = {}                       # 每日缺口（不含张博晨）
 P4_TOTAL_ROW = 42
 P4_LABEL_ROW = 36
 
@@ -96,7 +127,7 @@ def read_perf(ws, row):
 
 def read_qcs(ws, row):
     return {
-        "电信积分":   {"task": cell(ws, row, 1), "done": cell(ws, row, 2),
+        "合约":       {"task": cell(ws, row, 1), "done": cell(ws, row, 2),
                      "gap": cell(ws, row, 3), "rate": cell(ws, row, 4)},
         "会员搭售率": {"terminal": cell(ws, row, 5), "care": cell(ws, row, 6),
                      "gap": cell(ws, row, 7), "rate": cell(ws, row, 8)},
@@ -106,7 +137,7 @@ def read_qcs(ws, row):
                      "rate": cell(ws, row, 14)},
         # 摄影课（列15/16）按需求不再提取
         "考核机型":   {"task": cell(ws, row, 17), "gap": cell(ws, row, 18)},
-        "乐回收":     {"orders": cell(ws, row, 19), "amount": cell(ws, row, 20),
+        "乐机收":     {"orders": cell(ws, row, 19), "amount": cell(ws, row, 20),
                      "增值": cell(ws, row, 21)},
         "太力回收":   {"orders": cell(ws, row, 22), "amount": cell(ws, row, 23),
                      "增值": cell(ws, row, 24)},
@@ -127,7 +158,7 @@ def read_labels(ws, label_row, start=1, end=15):
     return out
 
 
-# 渠道挂账「完成额」严格对齐《李家村8月任务进度.xlsx》「渠道挂账」sheet 的 C 列数组公式：
+# 渠道挂账「完成额」严格对齐《李家村月度任务进度.xlsx》「渠道挂账」sheet 的 C 列数组公式：
 #   =SUM(SUMIFS(销售分析!$AM:$AM, 销售分析!$G:$G, A{r}, 销售分析!$P:$P,
 #              {"三大地图","小红书","大众点评","异业","社区","企业上门购"}))
 # 即从「销售分析」sheet 按 营业员(G列)+6获客渠道(P列) 实时聚合 销售净额(AM列)。
@@ -256,6 +287,8 @@ def main():
     src = sys.argv[1]
     out = sys.argv[2] if len(sys.argv) > 2 else os.path.join(
         os.path.dirname(os.path.abspath(__file__)), "data.json")
+
+    load_people(src)  # 动态读取人员名单 + 行号映射
 
     wb = openpyxl.load_workbook(src, data_only=True)
     wb_f = openpyxl.load_workbook(src, data_only=False)  # 仅用于识别公式

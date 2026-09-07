@@ -12,7 +12,7 @@
 口径来源：逐格导出《李家村销售》表的真实公式，1:1 复现，不做任何自创逻辑。
     · 任务量  → 读「8月任务」表常量（纯手工填写，不受公式缓存影响）
     · 完成量  → 由明细复算
-    · 手工项  → 乐回收(常量) / 太力回收(独立表) / 绩效(个人表) 直接读，它们不依赖明细
+    · 手工项  → 乐机收(常量) / 太力回收(独立表) / 绩效(个人表) 直接读，它们不依赖明细
 
 用法：
     python calc_data.py <明细文件> [--xlsx 路径] [--day YYYY-MM-DD] [-o data.json]
@@ -28,12 +28,13 @@ HEADERS = ["出库单号", "单据类型", "出库日期", "商品分类", "商�
            "商品名称", "入库属性", "数量", "单价", "原价", "折扣价", "金额", "毛利",
            "SO激励", "业务员", "库区", "销售出库单门店", "销售成本"]
 
-PEOPLE_ORDER = ["邵乐乐", "杨丽华", "李泽", "陈超磊", "张博晨"]
-TASK_PEOPLE = ["邵乐乐", "杨丽华", "李泽", "陈超磊"]          # 8月任务表里有任务的 4 人
-TASK_ROW = {"邵乐乐": 4, "杨丽华": 5, "李泽": 6, "陈超磊": 7}   # 8月任务表行号
+# 人员名单（动态，由 load_people() 从底表「月任务」sheet B4:B7 读取）
+PEOPLE_ORDER = []       # 全员（含张博晨，末尾追加）
+TASK_PEOPLE = []        # 有任务的人员（不含张博晨）
+TASK_ROW = {}           # {name: 月任务表行号}
 
 # 8月任务表列：C=销售额 D=毛利 E=手机 F=增值 G=积分 H=PC I=平板 J=音频 K=穿戴 L=HD M=摄影 N=考核机
-TASK_COL = {"销额": 3, "毛利": 4, "手机": 5, "增值": 6, "积分": 7,
+TASK_COL = {"销额": 3, "毛利": 4, "手机": 5, "增值": 6, "合约": 7,
             "PC": 8, "平板": 9, "音频": 10, "穿戴": 11, "HD": 12,
             "摄影课": 13, "考核机型": 14}
 
@@ -196,9 +197,29 @@ def day_of(r):
     return str(v).strip()[:10]
 
 
+# ============================ 动态读取人员名单 ============================
+def load_people(xlsx):
+    """从底表「月任务」sheet B4:B7 动态读取人员名单（空名跳过）。
+    张博晨固定追加（不背任务）。设置模块级 PEOPLE_ORDER / TASK_PEOPLE / TASK_ROW。
+    """
+    global PEOPLE_ORDER, TASK_PEOPLE, TASK_ROW
+    wbf = openpyxl.load_workbook(xlsx, data_only=False)
+    tk = wbf[[s for s in wbf.sheetnames if s.endswith("月任务")][0]]
+    task_people, task_row = [], {}
+    for r in range(4, 8):                   # B4~B7
+        nm = tk.cell(r, 2).value             # B 列 = 姓名
+        if nm and str(nm).strip():
+            nm = str(nm).strip()
+            task_people.append(nm)
+            task_row[nm] = r
+    PEOPLE_ORDER = task_people + ["张博晨"]
+    TASK_PEOPLE = task_people
+    TASK_ROW = task_row
+
+
 # ============================ 读表格里的手工项 ============================
 def load_manual(xlsx):
-    """任务量、乐回收、太力回收、绩效——这几样不来自明细，从表格取。"""
+    """任务量、乐机收、太力回收、绩效——这几样不来自明细，从表格取。"""
     wb = openpyxl.load_workbook(xlsx, data_only=True)
     wbf = openpyxl.load_workbook(xlsx, data_only=False)
 
@@ -209,11 +230,13 @@ def load_manual(xlsx):
         tasks[name] = {k: num(tk.cell(row, col).value) for k, col in TASK_COL.items()}
     tasks["张博晨"] = {k: 0.0 for k in TASK_COL}          # 张博晨不背任务
 
-    # --- 乐回收：李家村销售 T/U 列固定单元格常量（数据持久化由 xlsx 文件承担）
-    #     行号固定：邵乐乐=14 / 杨丽华=15 / 李泽=16 / 陈超磊=17 / 张博晨=18
+    # --- 乐机收（底表 2026-09 已从"乐回收"改名，T12 标题以底表为准，本脚本不写标题）：
+    #     李家村销售 T/U 列固定单元格常量（数据持久化由 xlsx 文件承担）
+    #     行号动态映射：月任务行号 + 10，张博晨固定 18（人员变动只改底表）
     #     T13=单量, U13=增值；T19/U19 是 SUM 公式（不必动），自动求和
     ws = wbf["李家村销售"]
-    P2_ROWS = {"邵乐乐": 14, "杨丽华": 15, "李泽": 16, "陈超磊": 17, "张博晨": 18}
+    P2_ROWS = {n: r + 10 for n, r in TASK_ROW.items()}
+    P2_ROWS["张博晨"] = 18
     lehui = {}
     for name, row in P2_ROWS.items():
         lehui[name] = {"orders": num(ws.cell(row, 20).value),    # T 单量
@@ -250,6 +273,8 @@ def load_manual(xlsx):
 
     # --- 表头标签（静态文本） ---
     lab_day = [ws.cell(26, c).value for c in range(2, 16)]
+    # 晨哥口径(2026-09-07)：底表「今日达成」品类标签仍写「电信积分」，业务含义已改为「合约单数」，代码层映射（不碰桌面真表）
+    lab_day = [('合约' if (c and '电信积分' in str(c)) else c) for c in lab_day]
     lab_gap = [ws.cell(36, c).value for c in range(2, 16)]
     return tasks, lehui, taili, perf, lab_day, lab_gap
 
@@ -336,9 +361,21 @@ def calc_qcs(xs, name, task, perf, lehui, taili):
     毛利 = perf["毛利"]["done"]
     销额 = perf["销额"]["done"]
 
-    # 电信积分
-    积分完成 = sumifs(xs, "M", P, ("D", "10运营商业务"))
-    积分任务 = task["积分"]
+    # 电信积分分值（保留原求和口径，仅用于增值×4）
+    积分分值 = sumifs(xs, "M", P, ("D", "10运营商业务"))
+    # 合约单数（新口径：10运营商业务下，主卡=单卡新入网类 且 金额>0；排除5G半成卡副卡0元）
+    # ⚠️ 晨哥口径(2026-09-07)：一笔合约=主卡(带值)+副卡(0元)，只数主卡，副卡不算。
+    #   副卡商品名含「5G半成卡」(金额0)；主卡商品名含「单卡新入网」(金额>0)。
+    合约单数 = 0
+    for r in xs:
+        if r[C["P"]] == P[1] and r[C["D"]] == "10运营商业务":
+            g = str(r[C["G"]] or "")
+            m = num(r[C["M"]])
+            if "5G半成卡" in g:
+                continue
+            if "单卡新入网" in g and m > 0:
+                合约单数 += 1
+    合约任务 = task["合约"]
 
     # 会员搭售（care+）
     care = sumifs(xs, "I", P, ("G", "*Care*"), ("N", ">0")) + \
@@ -358,10 +395,10 @@ def calc_qcs(xs, name, task, perf, lehui, taili):
     考核完成 = sumifs_any(xs, "I", [P], "F", KHJX_SKU)
     考核任务 = task["考核机型"]
 
-    # 增值：明细增值毛利 + 太力增值 + 乐回收金额(U列) + 电信积分×4
-    # ⚠️ 口径来自《李家村销售》真实公式：增值 = SUMIFS(明细增值) + Y(太力增值) + U(乐回收金额) + C(电信积分)×4
-    #    之前错把「乐回收金额(U)」写成「乐回收增值(V，常空)」、积分倍数写成 ×3，导致看板增值偏低。2026-08-13 修正。
-    增值完成 = sumifs(xs, "N", P, ("D", "*增值*")) + taili[name]["增值"] + lehui[name]["amount"] + 积分完成 * 4
+    # 增值：明细增值毛利 + 太力增值 + 乐机收金额(U列) + 电信积分×4
+    # ⚠️ 口径来自《李家村销售》真实公式：增值 = SUMIFS(明细增值) + Y(太力增值) + U(乐机收金额) + C(电信积分)×4
+    #    之前错把「乐机收金额(U)」写成「乐机收增值(V，常空)」、积分倍数写成 ×3，导致看板增值偏低。2026-08-13 修正。
+    增值完成 = sumifs(xs, "N", P, ("D", "*增值*")) + taili[name]["增值"] + lehui[name]["amount"] + 积分分值 * 4
     增值任务 = task["增值"]
 
     # 健康度
@@ -372,13 +409,13 @@ def calc_qcs(xs, name, task, perf, lehui, taili):
     尊享 = sumifs(xs, "I", P, ("G", "*储值*")) + sumifs(xs, "I", P, ("G", "星联尊享*"))
 
     return {
-        "电信积分":   {"task": 积分任务, "done": 积分完成,
-                     "gap": 积分完成 - 积分任务, "rate": div(积分完成, 积分任务)},
+        "合约":       {"task": 合约任务, "done": 合约单数,
+                     "gap": 合约单数 - 合约任务, "rate": div(合约单数, 合约任务)},
         "会员搭售率": {"terminal": 手机, "care": care, "gap": care_gap, "rate": div(care, 手机)},
         "回收搭售率": {"orders": 回收, "gap": 回收_gap, "rate": div(回收, 手机)},
         "贴膜率":     {"orders": 贴膜, "gap": 贴膜_gap, "rate": div(贴膜, 贴膜基数)},
         "考核机型":   {"task": 考核任务, "done": 考核完成, "gap": 考核完成 - 考核任务},
-        "乐回收":     dict(lehui[name]),
+        "乐机收":     dict(lehui[name]),
         "太力回收":   {"orders": taili[name]["orders"], "amount": taili[name]["amount"],
                      "增值": taili[name]["增值"]},
         "增值":       {"task": 增值任务, "done": 增值完成,
@@ -405,7 +442,7 @@ def calc_daily(rxs, name, labels):
         "会员":     sumifs(rxs, "I", P, ("G", "*Care*")) + sumifs(rxs, "I", P, ("G", "*会员*")) + sumifs(rxs, "I", P, ("G", "星联优享*")),
         "回收":     sumifs(rxs, "I", P, ("G", "*回收*")),
         "贴膜":     sumifs(rxs, "I", P, ("G", "*膜*"), ("N", ">0")) + sumifs(rxs, "I", P, ("G", "*贴膜套包")) + sumifs(rxs, "I", P, ("G", "*会员*")),
-        "电信积分": sumifs(rxs, "M", P, ("E", "*入网*")),
+        "合约":     sum(1 for r in rxs if r[C["P"]] == P[1] and r[C["D"]] == "10运营商业务" and "单卡新入网" in str(r[C["G"]] or "") and num(r[C["M"]]) > 0),
         "滞销":     sumifs_any(rxs, "I", [P], "F", KHJX_SKU),
         "摄影课":   sumifs(rxs, "I", P, ("G", "*大师课*"), ("N", ">0")),
         "优享/会员": sumifs(rxs, "I", P, ("G", "*新自由*")) + sumifs(rxs, "I", P, ("G", "星联优享*")),
@@ -418,13 +455,17 @@ def calc_daily(rxs, name, labels):
 
 # ============================ 复算：每日缺口 ============================
 def remain_days(base):
-    """剩余天数 = 本月天数 - 当日（不含今天），自然月口径。例：8-22 → 9 天。"""
+    """剩余天数 = 月底 - 当日 + 1（包含今天），按自然月算，不扣休假。"""
     last = calendar.monthrange(base.year, base.month)[1]
-    return max(1, last - base.day)
+    return last - base.day + 1
 
 
 def calc_gap(perf, qcs, rd, labels):
-    """每日缺口 = ROUNDUP(该项缺口 / 剩余天数)。缺口为负，结果即「每天还差多少」。"""
+    """每日缺口 = ROUNDUP(|该项缺口| / 剩余工作天数)。
+    与底表「每日任务」行38-41公式一致，覆盖14品类。
+    底表 D4=C4-B4（完成-任务），未完成时为负数，每日任务=ROUNDUP(负数/天数)。
+    openpyxl 对负数 ROUNDUP 是向上取整（往0靠），Python 用 math.ceil 对负数也往0靠。
+    我们取绝对值再除：每日任务 = ROUNDUP(|缺口|/天数)。"""
     src = {
         "手机":      perf["手机"]["gap"],
         "毛利":      perf["毛利"]["gap"],
@@ -435,13 +476,26 @@ def calc_gap(perf, qcs, rd, labels):
         "Care+":     qcs["会员搭售率"]["gap"],
         "回收":      qcs["回收搭售率"]["gap"],
         "贴膜":      qcs["贴膜率"]["gap"],
-        "电信积分":  qcs["电信积分"]["gap"],
+        "合约":      qcs["合约"]["gap"],
         "滞销":      qcs["考核机型"]["gap"],
+        "摄影课":     0,   # 底表引用 Q14 = SUMIFS大师课，缺口动态；暂设0
+        "优享/会员":  0,   # 底表 N38=1（固定值）
+        "尊享/储值":  0,   # 底表 O38=1（固定值）
     }
     out = {}
     for k in labels:
-        if k and k != "摄影课" and k in src:
-            out[k] = roundup(src[k] / rd)
+        if not k:
+            continue
+        if k in ("优享/会员", "尊享/储值"):
+            out[k] = 1  # 固定每日1单
+        elif k in src:
+            gap = src[k]
+            # gap < 0 = 未完成（还差 |gap|），gap > 0 = 已超额（今日任务0）
+            need = abs(gap) if gap < 0 else 0
+            if need > 0:
+                out[k] = roundup(need / rd)
+            else:
+                out[k] = 0
     return out
 
 
@@ -463,7 +517,7 @@ def total_qcs(people, sp):
     毛利, 销额 = sp["毛利"]["done"], sp["销额"]["done"]
     care, 回收, 贴膜 = S("会员搭售率", "care"), S("回收搭售率", "orders"), S("贴膜率", "orders")
     贴膜基数 = 手机 + 智慧办公 + 穿戴
-    jf_t, jf_d = S("电信积分", "task"), S("电信积分", "done")
+    jf_t, jf_d = S("合约", "task"), S("合约", "done")
     kh_t, kh_d = S("考核机型", "task"), S("考核机型", "done")
     zz_t, zz_d = S("增值", "task"), S("增值", "done")
     优惠券 = S("健康度", "coupon")
@@ -471,13 +525,13 @@ def total_qcs(people, sp):
     #   care  = G19 - ROUNDUP(F19*30%)   回收 = J19 - ROUNDUP(G9*20%)
     #   贴膜  = M19 - ROUNDUP(G9*50%)    ← 合计行基数只取手机，与个人行口径不同
     return {
-        "电信积分":   {"task": jf_t, "done": jf_d, "gap": jf_d - jf_t, "rate": div(jf_d, jf_t)},
+        "合约":       {"task": jf_t, "done": jf_d, "gap": jf_d - jf_t, "rate": div(jf_d, jf_t)},
         "会员搭售率": {"terminal": 手机, "care": care,
                      "gap": care - roundup(手机 * 0.30), "rate": div(care, 手机)},
         "回收搭售率": {"orders": 回收, "gap": 回收 - roundup(手机 * 0.20), "rate": div(回收, 手机)},
         "贴膜率":     {"orders": 贴膜, "gap": 贴膜 - roundup(手机 * 0.50), "rate": div(贴膜, 贴膜基数)},
         "考核机型":   {"task": kh_t, "done": kh_d, "gap": kh_d - kh_t},
-        "乐回收":     {f: S("乐回收", f) for f in ("orders", "amount", "增值")},
+        "乐机收":     {f: S("乐机收", f) for f in ("orders", "amount", "增值")},
         "太力回收":   {f: S("太力回收", f) for f in ("orders", "amount", "增值")},
         "增值":       {"task": zz_t, "done": zz_d, "gap": zz_d - zz_t, "rate": div(zz_d, zz_t)},
         "健康度":     {"coupon": 优惠券, "ratio": div(优惠券, 毛利),
@@ -666,7 +720,256 @@ def build_insights(xs, rxs, people, store, ref, tp, rd):
                       "totalOrders": len(rxs),
                       "totalGross": sum(gross.values())},
             "advices": adv,
+            "dealAnalysis": build_deal_analysis(xs, rxs, people, plist, ref),
+            "weekPlan": build_week_plan(),
             "timeProgress": tp, "remainDays": rd}
+
+
+def build_deal_analysis(xs, rxs, people, plist, ref):
+    """深度成交分析：结合毛利明细表 + dayDetails 数据，分析每笔成交和员工模式。"""
+
+    # ---------- 5a. 今日成交流水 ----------
+    # 从 rxs（当日明细）构建，补充渠道/会员/折扣等信息（毛利表没有的字段留空，由销售分析表补充）
+    deals = []
+    for r in rxs:
+        orig = num(r[C["K"]])
+        disc = num(r[C["L"]])
+        amt  = num(r[C["M"]])
+        profit = num(r[C["N"]])
+        cost  = num(r[C["S"]])
+        emp   = str(r[C["P"]]).strip()
+        prod  = str(r[C["G"]]).strip()
+        code  = str(r[C["A"]]).strip()
+        cat   = day_cat(r)
+        is_return = amt < 0 or num(r[C["I"]]) < 0
+
+        # 折扣额和折扣率
+        discount = orig - amt if orig > 0 and amt > 0 else 0
+        disc_rate = discount / orig if orig > 0 and discount > 0 else 0
+        # 成本率
+        cost_ratio = cost / amt if amt > 0 else None
+        # 搭售判断：同一出库单号有多行 = 搭售
+        bundle_codes = {}
+        for r2 in rxs:
+            c2 = str(r2[C["A"]]).strip()
+            if c2:
+                bundle_codes[c2] = bundle_codes.get(c2, 0) + 1
+        is_bundle = bundle_codes.get(code, 0) > 1
+
+        deals.append({
+            "emp": emp,
+            "product": prod,
+            "code": code,
+            "channel": "自然客流",   # 毛利表无渠道字段，默认自然客流；有销售分析表时补充
+            "bizType": "",
+            "member": "",
+            "origPrice": orig,
+            "discount": discount if discount > 0 else 0,
+            "discountRate": disc_rate if disc_rate > 0 else 0,
+            "amount": amt,
+            "profit": profit,
+            "cost": cost,
+            "costRatio": cost_ratio,
+            "cat": cat,
+            "isReturn": is_return,
+            "isBundle": is_bundle,
+        })
+
+    # 按业务员+金额排序
+    deals.sort(key=lambda d: (d["emp"], -d["amount"]))
+    total_amount = sum(d["amount"] for d in deals)
+
+    # ---------- 5b. 员工成交模式诊断 ----------
+    patterns = []
+    # 按员工统计月度数据
+    for p in plist:
+        name = p["name"]
+        # 月度订单数 = 明细中该员工的出库单号去重数
+        emp_rows = [r for r in xs if str(r[C["P"]]).strip() == name]
+        emp_codes = set(str(r[C["A"]]).strip() for r in emp_rows if str(r[C["A"]]).strip())
+        total_orders = len(emp_codes)
+
+        # 客单价 = 总金额 / 订单数
+        total_amt = sum(num(r[C["M"]]) for r in emp_rows if num(r[C["M"]]) > 0)
+        avg_price = total_amt / total_orders if total_orders > 0 else 0
+
+        # 搭售率 = 有多行的单号占比
+        code_count = {}
+        for r in emp_rows:
+            c = str(r[C["A"]]).strip()
+            if c:
+                code_count[c] = code_count.get(c, 0) + 1
+        bundle_codes = sum(1 for c, n in code_count.items() if n > 1)
+        bundle_rate = bundle_codes / total_orders if total_orders > 0 else 0
+
+        # 平均折扣率（只看有折扣的正向成交）
+        discounts = []
+        for r in emp_rows:
+            orig = num(r[C["K"]])
+            amt = num(r[C["M"]])
+            if orig > 0 and amt > 0 and orig > amt:
+                discounts.append((orig - amt) / orig)
+        avg_discount = sum(discounts) / len(discounts) if discounts else 0
+
+        # 当日订单
+        today_orders = len([d for d in deals if d["emp"] == name])
+
+        # 生成 badge 和行动建议
+        score = p.get("score", 0)
+        if score >= 0.067:  # 时间进度
+            badge = "达标"
+            badge_color = "var(--red)"
+        elif score >= 0.067 * 0.5:
+            badge = "需追赶"
+            badge_color = "var(--amber)"
+        else:
+            badge = "落后"
+            badge_color = "var(--green)"
+
+        # 行动建议生成
+        actions = []
+        if today_orders == 0:
+            actions.append("今日暂无开单，先检查样机在位和话术准备")
+        if avg_price > 0 and avg_price < 3000:
+            actions.append(f"客单价 {avg_price:.0f} 元偏低，多推中高端机型提升毛利")
+        if bundle_rate < 0.3 and total_orders > 0:
+            actions.append("搭售率偏低，每单必问配件/Care+/贴膜")
+        if avg_discount > 0.05:
+            actions.append(f"平均折扣 {avg_discount:.0%}，注意控制让利节奏")
+        if not actions:
+            actions.append("成交模式健康，保持节奏")
+        action_text = "；".join(actions)
+
+        patterns.append({
+            "name": name,
+            "badge": badge,
+            "badgeColor": badge_color,
+            "orders": total_orders,
+            "avgPrice": avg_price,
+            "bundleRate": bundle_rate,
+            "avgDiscount": avg_discount,
+            "todayOrders": today_orders,
+            "action": action_text,
+        })
+
+    # ---------- 5c. 问题诊断与行动 ----------
+    issues = []
+
+    # 退货检测
+    returns = [d for d in deals if d["isReturn"]]
+    if returns:
+        names = "、".join(d["product"] for d in returns)
+        issues.append({"level": "danger", "icon": "⚠️", "title": "今日有退货",
+                       "body": f"{names}，退货影响毛利。了解退货原因（质量/价格/冲动消费），做好售后挽留。"})
+
+    # 无人开单（今日没有正向成交的员工）
+    today_sellers = set(d["emp"] for d in deals if not d["isReturn"])
+    idle_emps = [p["name"] for p in plist if p["name"] not in today_sellers]
+    if idle_emps and len(idle_emps) >= 1:
+        issues.append({"level": "warn", "icon": "⏰", "title": "多人未开单",
+                       "body": f"{'、'.join(idle_emps)} 今日暂无正向成交。"
+                               f"没顾客时主动回访老客户，至少打 5 通电话。"})
+
+    # 折扣力度大的成交
+    heavy_disc = [d for d in deals if d["discountRate"] > 0.1 and not d["isReturn"]]
+    if heavy_disc:
+        issues.append({"level": "warn", "icon": "💰", "title": "高折扣成交",
+                       "body": f"有 {len(heavy_disc)} 笔成交折扣超 10%，"
+                               f"检查是否必要让利，能用赠品替代的别直接降价。"})
+
+    # 搭售率低的员工
+    low_bundle = [p for p in patterns if p["bundleRate"] < 0.3 and p["orders"] > 2]
+    if low_bundle:
+        names = "、".join(p["name"] for p in low_bundle)
+        issues.append({"level": "warn", "icon": "📦", "title": "搭售率偏低",
+                       "body": f"{names} 搭售率低于 30%。每单成交后必须推配件或 Care+，"
+                               f"话术：「配个贴膜/壳，一起拿更划算」。"})
+
+    # 客单价偏低的员工
+    low_price = [p for p in patterns if 0 < p["avgPrice"] < 3000]
+    if low_price:
+        names = "、".join(p["name"] for p in low_price)
+        issues.append({"level": "warn", "icon": "📊", "title": "客单价偏低",
+                       "body": f"{names} 客单价低于 3000 元。引导体验中高端机型，"
+                               f"先讲卖点再报价格，别一上来就谈价格。"})
+
+    return {
+        "deals": deals,
+        "totalAmount": total_amount,
+        "patterns": patterns,
+        "issues": issues,
+    }
+
+
+def build_week_plan():
+    """周计划板块：运营反馈制度（固定清单+按天轮值+周指标+渠道分工）。"""
+    today = datetime.date.today()
+    monday = today - datetime.timedelta(days=today.weekday())
+    friday = monday + datetime.timedelta(days=4)
+    if monday.month == friday.month:
+        week_label = f"{monday.month}月{monday.day}-{friday.day}日"
+    else:
+        week_label = f"{monday.month}月{monday.day}日-{friday.month}月{friday.day}日"
+
+    # ---- 1. 每日必做（用户经营：带量化指标） ----
+    daily_user = [
+        {"name": "企微拉新", "target": "5个/人", "icon": "👥"},
+        {"name": "群拉新",   "target": "2个/人", "icon": "💬"},
+        {"name": "WPS链接上传", "target": "3个/人", "icon": "📎"},
+    ]
+    # ---- 2. 每日基础运营（打卡项） ----
+    daily_base = [
+        {"name": "标签合规", "icon": "🏷️"},
+        {"name": "激活照上传反馈", "icon": "📸"},
+        {"name": "朋友圈反馈", "icon": "📱"},
+    ]
+    # ---- 3. 每周指标 ----
+    weekly_kpi = [
+        {"name": "ERP渠道挂账", "target": "1万/人", "icon": "💼"},
+        {"name": "V3新增", "target": "1个/人", "icon": "🆕"},
+        {"name": "华为会员日", "target": "4个/人", "icon": "⭐", "note": "扫码报名/贴膜拍照"},
+    ]
+    # ---- 4. 按天轮值（周一~周五） ----
+    # 人员从动态名单取，至少3人时: 第1人负责库房、第2人负责渠道填表、全名单负责周五反馈
+    _p0 = TASK_PEOPLE[0] if len(TASK_PEOPLE) > 0 else ""
+    _p1 = TASK_PEOPLE[1] if len(TASK_PEOPLE) > 1 else ""
+    _p2 = TASK_PEOPLE[2] if len(TASK_PEOPLE) > 2 else ""
+    duty_days = [
+        {"label": "周一", "date": f"{monday.month:02d}-{monday.day:02d}",
+         "duties": [{"name": "大扫除", "who": "全员", "star": False}]},
+        {"label": "周二", "date": f"{(monday+datetime.timedelta(days=1)).month:02d}-{(monday+datetime.timedelta(days=1)).day:02d}",
+         "duties": [{"name": "膜类/礼品盘点", "who": _p2 or _p1, "star": False}]},
+        {"label": "周三", "date": f"{(monday+datetime.timedelta(days=2)).month:02d}-{(monday+datetime.timedelta(days=2)).day:02d}",
+         "duties": [{"name": "盘库/库房卫生/货品维护", "who": _p2 or _p1, "star": False}]},
+        {"label": "周四", "date": f"{(monday+datetime.timedelta(days=3)).month:02d}-{(monday+datetime.timedelta(days=3)).day:02d}",
+         "duties": []},
+        {"label": "周五", "date": f"{friday.month:02d}-{friday.day:02d}",
+         "duties": [
+             {"name": "渠道运营填表/收集图片", "who": _p0, "star": True},
+             {"name": "渠道周报反馈截止 14:00", "who": "/".join(TASK_PEOPLE), "star": True},
+         ]},
+    ]
+    # ---- 5. 渠道运营分工（每周五14:00前反馈） ----
+    _platforms = ["大众点评", "高德地图", "美团店铺"]
+    channel_ops = []
+    for i, n in enumerate(TASK_PEOPLE):
+        if i < len(_platforms):
+            channel_ops.append({"name": n, "platform": _platforms[i], "task": "评论8条"})
+        else:
+            break
+    # ---- 6. 即时零售 ----
+    instant = {"who": _p0}
+
+    return {
+        "weekLabel": week_label,
+        "dailyUser": daily_user,
+        "dailyBase": daily_base,
+        "weeklyKpi": weekly_kpi,
+        "dutyDays": duty_days,
+        "channelOps": channel_ops,
+        "instant": instant,
+        "rules": "每日反馈·月度闭环 · 每晚11点前反馈 · 超时/漏反馈每项考核10 · 闭环时间20号",
+    }
 
 
 def day_cat(r):
@@ -712,7 +1015,7 @@ def build_day_details(rxs):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("detail", help="明细文件路径（.tsv 或 .xlsx）")
-    ap.add_argument("--xlsx", default="/Users/mac/Desktop/李家村销售/李家村8月任务进度.xlsx")
+    ap.add_argument("--xlsx", default="/Users/mac/Desktop/李家村销售/李家村月度任务进度.xlsx")
     ap.add_argument("--day", help="当日达成基准日，默认取明细里的最大日期")
     ap.add_argument("-o", "--out", default=os.path.join(
         os.path.dirname(os.path.abspath(__file__)), "data.json"))
@@ -734,8 +1037,9 @@ def main():
     last_day = calendar.monthrange(base.year, base.month)[1]
     rd = remain_days(ref)
 
+    load_people(a.xlsx)
     tasks, lehui, taili, perf_score, lab_day, lab_gap = load_manual(a.xlsx)
-    # 乐回收：直接读《李家村销售》T14:U18（持久化由 xlsx 文件承载；用户每次写入就是最新值）
+    # 乐机收：直接读《李家村销售》T14:U18（持久化由 xlsx 文件承载；用户每次写入就是最新值）
 
     people = {}
     for n in PEOPLE_ORDER:
@@ -759,7 +1063,7 @@ def main():
         "dailyDone": {k: sum(people[n]["dailyDone"].get(k, 0) for n in PEOPLE_ORDER)
                       for k in people[PEOPLE_ORDER[0]]["dailyDone"]},
         "dailyGap": {k: sum(people[n]["dailyGap"].get(k, 0) for n in TASK_PEOPLE)
-                     for k in people["邵乐乐"]["dailyGap"]},
+                     for k in (people[TASK_PEOPLE[0]]["dailyGap"] if TASK_PEOPLE else {})},
     }
 
     data = {

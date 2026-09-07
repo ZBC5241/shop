@@ -633,12 +633,12 @@ function qcsHTML(Q){
   if(!Q) return '<div class="empty">暂无数据</div>';
   let h = '<div class="q-grid">';
 
-  const dx = Q['电信积分'];
+  const dx = Q['合约'];
   if(dx){
     const s = hasTask(dx) ? stat(dx.rate) : 'na';
     const dxs = isNum(dx.gap) ? (dx.gap > 0 ? ' · <span style="color:var(--red)">超 ' + cnt(dx.gap) + '</span>'
                                           : (dx.gap < 0 ? ' · <span style="color:var(--green)">缺 ' + cnt(-dx.gap) + '</span>' : '')) : '';
-    h += '<div class="q"><div class="q-l">电信积分（5分）</div>'
+    h += '<div class="q"><div class="q-l">合约（单数）</div>'
       + '<div class="q-v num">' + cnt(dx.done) + '<small>/ ' + cnt(dx.task) + '</small></div>'
       + '<div class="q-s">达成 <em class="r-' + s + '" style="padding:1px 4px;border-radius:4px">' + pct(dx.rate,0) + '</em>' + dxs + '</div></div>';
   }
@@ -673,13 +673,13 @@ function qcsHTML(Q){
       + '</div></div>';
   }
 
-  /* 回收业务：乐回收(《李家村销售》T14:U18 直读) + 太力回收 合并为单卡两行 */
-  const lh = Q['乐回收'];
+  /* 回收业务：乐机收(《李家村销售》T14:U18 直读) + 太力回收 合并为单卡两行 */
+  const lh = Q['乐机收'];
   const th = Q['太力回收'];
   if(lh || th){
     let _rows = '';
     if(lh){
-      _rows += '<div class="q-s">乐回收 <b class="num">' + cnt(lh.orders)
+      _rows += '<div class="q-s">乐机收 <b class="num">' + cnt(lh.orders)
             + '</b> 单 · 公司净利 ' + money(lh.amount) + '</div>';
     }
     if(th){
@@ -799,7 +799,7 @@ function dayMetricItems(k){
     return dd.filter(r => khj.some(p => r.sku.indexOf(p) === 0));
   }
   const rx = { '贴膜':/膜|套包/, '回收':/回收/, '会员':/Care|会员|星联优享/,
-               '电信积分':/入网/, '摄影课':/大师课/ }[k];
+               '合约':/入网/, '摄影课':/大师课/ }[k];
   if(rx) return dd.filter(r => ((k === '贴膜' || k === '摄影课') ? (r.amount > 0 && rx.test(r.product)) : rx.test(r.product)));
   return null;
 }

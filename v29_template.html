@@ -2865,12 +2865,12 @@ function qcsHTML(Q){
   if(!Q) return '<div class="empty">暂无数据</div>';
   let h = '<div class="q-grid">';
 
-  const dx = Q['电信积分'];
+  const dx = Q['合约'];
   if(dx){
     const s = hasTask(dx) ? stat(dx.rate) : 'na';
     const dxs = isNum(dx.gap) ? (dx.gap > 0 ? ' · <span style="color:var(--red)">超 ' + cnt(dx.gap) + '</span>'
                                           : (dx.gap < 0 ? ' · <span style="color:var(--green)">缺 ' + cnt(-dx.gap) + '</span>' : '')) : '';
-    h += '<div class="q"><div class="q-l">电信积分（5分）</div>'
+    h += '<div class="q"><div class="q-l">合约（单数）</div>'
       + '<div class="q-v num">' + cnt(dx.done) + '<small>/ ' + cnt(dx.task) + '</small></div>'
       + '<div class="q-s">达成 <em class="r-' + s + '" style="padding:1px 4px;border-radius:4px">' + pct(dx.rate,0) + '</em>' + dxs + '</div></div>';
   }
@@ -3031,7 +3031,7 @@ function dayMetricItems(k){
     return dd.filter(r => khj.some(p => r.sku.indexOf(p) === 0));
   }
   const rx = { '贴膜':/膜|套包/, '回收':/回收/, '会员':/Care|会员|星联优享/,
-               '电信积分':/入网/, '摄影课':/大师课/ }[k];
+               '合约':/入网/, '摄影课':/大师课/ }[k];
   if(rx) return dd.filter(r => ((k === '贴膜' || k === '摄影课') ? (r.amount > 0 && rx.test(r.product)) : rx.test(r.product)));
   return null;
 }
@@ -3077,7 +3077,7 @@ const RANK_DIMS = [
   {k:'音频穿戴', src:'performance'},
   {k:'穿戴',   src:'performance'},
   {k:'增值',   src:'qcs'},
-  {k:'电信积分', src:'qcs'},
+  {k:'合约', src:'qcs'},
 ];
 
 function renderRank(){
@@ -3210,7 +3210,7 @@ function renderPerson(){
 }
 
 /* ---------------- 视图 4：今日 ---------------- */
-const DAY_ORDER = ['毛利','销额','增值','手机','音频穿戴','智慧办公','HD','会员','回收','贴膜','电信积分','滞销','优享/会员','摄影课','尊享/储值'];
+const DAY_ORDER = ['毛利','销额','增值','手机','音频穿戴','智慧办公','HD','会员','回收','贴膜','合约','滞销','优享/会员','摄影课','尊享/储值'];
 const GAP_ALIAS = { '会员':'Care+' };
 
 function dayHTML(done, gap){
@@ -3332,7 +3332,7 @@ function renderDay(){
   /* 今日品类：统一排序（毛利/手机/增值置顶，其余按毛利降序），大数字=毛利合计 */
   const dayDone = DATA.store.dailyDone || {};
   const MONEY_CATS = ['毛利','手机','PC','平板','穿戴','音频','HD','智慧办公','音频穿戴','增值'];
-  const SPECIALS = [['回收','单'],['贴膜','单'],['电信积分','分'],['滞销','台'],['摄影课','课']];
+  const SPECIALS = [['回收','单'],['贴膜','单'],['合约','分'],['滞销','台'],['摄影课','课']];
   const PRIORITY = ['毛利','手机','增值'];
   const mkCat = (c) => {
     if(c === '毛利'){
@@ -3392,7 +3392,7 @@ function renderDay(){
   /* 第2层：每人今日（展示所有销售品类） */
   h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>每人今日</b>'
      + '<span class="tail">全部销售品类</span></div>';
-  const DAY_SHOW = ['销额','毛利','手机','PC','平板','穿戴','音频','音频穿戴','智慧办公','HD','增值','会员','回收','贴膜','电信积分','滞销','优享/会员','摄影课','尊享/储值'];
+  const DAY_SHOW = ['销额','毛利','手机','PC','平板','穿戴','音频','音频穿戴','智慧办公','HD','增值','会员','回收','贴膜','合约','滞销','优享/会员','摄影课','尊享/储值'];
   DATA.meta.employees.forEach(n => {
     const p = DATA.people[n]; if(!p) return;
     const d = p.dailyDone || {};
@@ -3830,7 +3830,7 @@ function renderInsight(){
     dailyInfo('手机','手机','台'), dailyInfo('毛利','毛利','元'), dailyInfo('增值','增值','元'),
     dailyInfo('智慧办公','智慧办公','台'), dailyInfo('音频穿戴','音频穿戴','件'), dailyInfo('HD','HD','台'),
     dailyInfo('Care+','Care+','单'), dailyInfo('回收','回收','单'), dailyInfo('贴膜','贴膜','单'),
-    dailyInfo('电信积分','电信积分','分'), dailyInfo('滞销','滞销','台'), dailyInfo('摄影课','摄影课','单'),
+    dailyInfo('合约','合约','分'), dailyInfo('滞销','滞销','台'), dailyInfo('摄影课','摄影课','单'),
     dailyInfo('优享/会员','优享/会员','单'), dailyInfo('尊享/储值','尊享/储值','单')
   ];
   const cPhone = cats[0], cProfit = cats[1], cValue = cats[2];
@@ -5132,7 +5132,7 @@ function readPerf(grid, row){
 function readQcs(grid, row){
   const G = c => g(grid,row,c);
   return {
-    '电信积分':  {task:G(1),done:G(2),gap:G(3),rate:G(4)},
+    '合约':  {task:G(1),done:G(2),gap:G(3),rate:G(4)},
     '会员搭售率':{terminal:G(5),care:G(6),gap:G(7),rate:G(8)},
     '回收搭售率':{orders:G(9),gap:G(10),rate:G(11)},
     '贴膜率':    {orders:G(12),gap:G(13),rate:G(14)},

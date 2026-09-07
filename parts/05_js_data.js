@@ -27,14 +27,35 @@ function loadRemote(silent){
    浏览器端 Excel 解析 —— 与 build_data.py 保持完全一致
    ========================================================== */
 const SHEET_NAME = '李家村销售';
-const PEOPLE_ORDER = ['邵乐乐','杨丽华','李泽','陈超磊','张博晨'];
-const P1_ROWS = {'邵乐乐':4,'杨丽华':5,'李泽':6,'陈超磊':7,'张博晨':8}, P1_TOTAL = 9;
-const P2_ROWS = {'邵乐乐':14,'杨丽华':15,'李泽':16,'陈超磊':17,'张博晨':18}, P2_TOTAL = 19;
-const P3_ROWS = {'邵乐乐':28,'杨丽华':29,'李泽':30,'陈超磊':31,'张博晨':32}, P3_TOTAL = 33, P3_LABEL = 26;
-const P4_ROWS = {'邵乐乐':38,'杨丽华':39,'李泽':40,'陈超磊':41}, P4_TOTAL = 42, P4_LABEL = 36;
+
+/* 人员名单/行号动态化（2026-09-05，与 calc_data.py load_people() 同口径）：
+   从底表「月任务」sheet B4:B7 发现非空姓名，张博晨固定追加（不背任务）。
+   行号映射：P1=月任务行号、P2=+10、P3=+24、P4=+34；张博晨固定 8/18/32，P4 无张。
+   以后人员变动只改底表，本文件不再需要改代码。 */
+const P1_TOTAL = 9, P2_TOTAL = 19, P3_TOTAL = 33, P4_TOTAL = 42;
+const P3_LABEL = 26, P4_LABEL = 36;
 const P1_BLOCKS = [['毛利',1],['手机',5],['PC',9],['平板',13],['穿戴',17],
                    ['音频',21],['HD',25],['智慧办公',29],['音频穿戴',33],['销额',37]];
 const P1_SCORE = 41;
+
+/* 从「月任务」sheet 动态发现人员（B4:B7 非空名，空行跳过），失败返回 null */
+function discoverPeople(wb){
+  const sn = (wb.SheetNames || []).find(s => /月任务$/.test(s));
+  if(!sn) return null;
+  const grid = XLSX.utils.sheet_to_json(wb.Sheets[sn],
+               {header:1, defval:null, raw:true, blankrows:true});
+  const task = [], rows = {P1:{}, P2:{}, P3:{}, P4:{}};
+  for(let r = 4; r <= 7; r++){
+    const v = grid[r-1] ? grid[r-1][1] : null;          /* B 列（0-based col 1） */
+    const nm = (v === null || v === undefined) ? '' : String(v).trim();
+    if(!nm) continue;
+    task.push(nm);
+    rows.P1[nm] = r; rows.P2[nm] = r + 10; rows.P3[nm] = r + 24; rows.P4[nm] = r + 34;
+  }
+  if(!task.length) return null;
+  rows.P1['张博晨'] = 8; rows.P2['张博晨'] = 18; rows.P3['张博晨'] = 32;
+  return { order: task.concat(['张博晨']), rows: rows };
+}
 
 function xnum(v){
   if(v === null || v === undefined) return null;
@@ -69,12 +90,12 @@ function readPerf(grid, row){
 function readQcs(grid, row){
   const G = c => g(grid,row,c);
   return {
-    '电信积分':  {task:G(1),done:G(2),gap:G(3),rate:G(4)},
+    '合约':      {task:G(1),done:G(2),gap:G(3),rate:G(4)},
     '会员搭售率':{terminal:G(5),care:G(6),gap:G(7),rate:G(8)},
     '回收搭售率':{orders:G(9),gap:G(10),rate:G(11)},
     '贴膜率':    {orders:G(12),gap:G(13),rate:G(14)},
     '考核机型':  {task:G(17),gap:G(18)},
-    '乐回收':    {orders:G(19),amount:G(20),'增值':G(21)},
+    '乐机收':    {orders:G(19),amount:G(20),'增值':G(21)},
     '太力回收':  {orders:G(22),amount:G(23),'增值':G(24)},
     '增值':      {task:G(25),done:G(26),gap:G(27),rate:G(28)},
     '健康度':    {coupon:G(29),ratio:G(30),grossMargin:G(31),'增值率':G(32)},
@@ -140,12 +161,18 @@ function parseWorkbook(ab, fileName){
   const ws = wb.Sheets[SHEET_NAME];
   const grid = XLSX.utils.sheet_to_json(ws, {header:1, defval:null, raw:true, blankrows:true});
 
+  /* 人员名单/行号从底表「月任务」sheet 动态发现（人员变动只改底表） */
+  const dyn = discoverPeople(wb);
+  if(!dyn) throw new Error('「月任务」表 B4:B7 未发现任何姓名，无法解析人员名单');
+  const PEOPLE = dyn.order, R1 = dyn.rows.P1, R2 = dyn.rows.P2,
+        R3 = dyn.rows.P3, R4 = dyn.rows.P4;
+
   /* 结构校验：防止模板被改动导致静默错位 */
   const nameCol = r => { const x = grid[r-1]; return x && x[0] ? String(x[0]).trim() : ''; };
   const bad = [];
-  PEOPLE_ORDER.forEach(n => {
-    if(nameCol(P1_ROWS[n]) !== n) bad.push('业绩考核区第' + P1_ROWS[n] + '行应为「' + n + '」，实为「' + nameCol(P1_ROWS[n]) + '」');
-    if(nameCol(P2_ROWS[n]) !== n) bad.push('全科生区第' + P2_ROWS[n] + '行应为「' + n + '」，实为「' + nameCol(P2_ROWS[n]) + '」');
+  PEOPLE.forEach(n => {
+    if(nameCol(R1[n]) !== n) bad.push('业绩考核区第' + R1[n] + '行应为「' + n + '」，实为「' + nameCol(R1[n]) + '」');
+    if(nameCol(R2[n]) !== n) bad.push('全科生区第' + R2[n] + '行应为「' + n + '」，实为「' + nameCol(R2[n]) + '」');
   });
   if(nameCol(P1_TOTAL) !== '合计') bad.push('第' + P1_TOTAL + '行应为「合计」');
   if(bad.length) throw new Error('表格结构和预期不一致，为避免读出错数已中止：\n· ' + bad.slice(0,4).join('\n· '));
@@ -170,7 +197,7 @@ function parseWorkbook(ab, fileName){
     meta:{
       storeName:'华为李家村万达授权体验店',
       date:dateStr, dayTitle:dayTitle, timeProgress:tp,
-      employees:PEOPLE_ORDER.slice(),
+      employees:PEOPLE.slice(),
       sourceFile:fileName,
       generatedAt: now.getFullYear() + '-' + pad(now.getMonth()+1) + '-' + pad(now.getDate())
                  + ' ' + pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds())
@@ -183,12 +210,12 @@ function parseWorkbook(ab, fileName){
     },
     people:{}
   };
-  PEOPLE_ORDER.forEach(n => {
+  PEOPLE.forEach(n => {
     out.people[n] = {
-      performance: readPerf(grid, P1_ROWS[n]),
-      qcs:         readQcs(grid, P2_ROWS[n]),
-      dailyDone:   readFlat(grid, P3_ROWS[n], d3, 1),
-      dailyGap:    P4_ROWS[n] ? readFlat(grid, P4_ROWS[n], d4, 1) : {}
+      performance: readPerf(grid, R1[n]),
+      qcs:         readQcs(grid, R2[n]),
+      dailyDone:   readFlat(grid, R3[n], d3, 1),
+      dailyGap:    R4[n] ? readFlat(grid, R4[n], d4, 1) : {}
     };
   });
 

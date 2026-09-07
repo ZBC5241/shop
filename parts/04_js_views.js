@@ -7,7 +7,7 @@ const RANK_DIMS = [
   {k:'音频穿戴', src:'performance'},
   {k:'穿戴',   src:'performance'},
   {k:'增值',   src:'qcs'},
-  {k:'电信积分', src:'qcs'},
+  {k:'合约', src:'qcs'},
 ];
 
 function renderRank(){
@@ -140,7 +140,7 @@ function renderPerson(){
 }
 
 /* ---------------- 视图 4：今日 ---------------- */
-const DAY_ORDER = ['毛利','销额','增值','手机','音频穿戴','智慧办公','HD','会员','回收','贴膜','电信积分','滞销','优享/会员','摄影课','尊享/储值'];
+const DAY_ORDER = ['毛利','销额','增值','手机','音频穿戴','智慧办公','HD','会员','回收','贴膜','合约','滞销','优享/会员','摄影课','尊享/储值'];
 const GAP_ALIAS = { '会员':'Care+' };
 
 function dayHTML(done, gap){
@@ -153,17 +153,19 @@ function dayHTML(done, gap){
     const gk = (GAP_ALIAS[k] && (GAP_ALIAS[k] in gap)) ? GAP_ALIAS[k] : k;
     const gv = gap[gk];
     const isM = MONEY_KEYS.has(k);
-    const hit = isNum(gv) && gv >= 0;
+    /* dailyGap 口径（calc_data.calc_gap）：正数=今日任务，0=无任务；缺口=任务-完成 */
+    const hasT = isNum(gv) && gv > 0;
+    const dvNum = isNum(dv) ? dv : 0;
+    const doneUp = hasT && dvNum >= gv;   /* 完成 >= 任务 = 已达成 */
     const zero = !isNum(dv) || dv === 0;
     let cls = 'day';
-    if(hit) cls += ' hit ok'; else if(isNum(gv)) cls += ' miss';
+    if(doneUp) cls += ' hit ok'; else if(hasT) cls += ' miss';
     if(zero) cls += ' zero';
     h += '<div class="' + cls + '" data-metric="' + esc(k) + '" onclick="clickDayMetric(\'' + esc(k) + '\')">'
       + '<div class="day-l">' + esc(k) + '</div>'
       + '<div class="day-v num">' + (isM ? moneyShort(dv) : cnt(dv)) + '</div>'
-      + '<div class="day-g num">' + (isNum(gv)
-          ? (gv >= 0 ? '达标 +' + (isM ? moneyShort(gv) : cnt(gv))
-                     : (isM ? moneyShort(gv) : cnt(gv)))
+      + '<div class="day-g num">' + (hasT
+          ? (doneUp ? '达成 ✓' : '任务 ' + (isM ? moneyShort(gv) : cnt(gv)))
           : '&nbsp;') + '</div>'
       + '</div>';
   });
@@ -262,7 +264,7 @@ function renderDay(){
   /* 今日品类：统一排序（毛利/手机/增值置顶，其余按毛利降序），大数字=毛利合计 */
   const dayDone = DATA.store.dailyDone || {};
   const MONEY_CATS = ['毛利','手机','PC','平板','穿戴','音频','HD','智慧办公','音频穿戴','增值'];
-  const SPECIALS = [['回收','单'],['贴膜','单'],['电信积分','分'],['滞销','台'],['摄影课','课']];
+  const SPECIALS = [['回收','单'],['贴膜','单'],['合约','单'],['滞销','台'],['摄影课','课']];
   const PRIORITY = ['毛利','手机','增值'];
   const mkCat = (c) => {
     if(c === '毛利'){
@@ -322,7 +324,7 @@ function renderDay(){
   /* 第2层：每人今日（展示所有销售品类） */
   h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>每人今日</b>'
      + '<span class="tail">全部销售品类</span></div>';
-  const DAY_SHOW = ['销额','毛利','手机','PC','平板','穿戴','音频','音频穿戴','智慧办公','HD','增值','会员','回收','贴膜','电信积分','滞销','优享/会员','摄影课','尊享/储值'];
+  const DAY_SHOW = ['销额','毛利','手机','PC','平板','穿戴','音频','音频穿戴','智慧办公','HD','增值','会员','回收','贴膜','合约','滞销','优享/会员','摄影课','尊享/储值'];
   DATA.meta.employees.forEach(n => {
     const p = DATA.people[n]; if(!p) return;
     const d = p.dailyDone || {};
@@ -469,9 +471,186 @@ function renderInsight(){
      + '综合分 = 毛利 50% + 手机 30% + 增值 20%，与时间进度 ' + pct(tp,0) + ' 对比</div>';
   h += '</div>';
 
+  h += '</div>';
+
+  /* ---- 5. 深度成交分析 ---- */
+  const DX = I.dealAnalysis;
+  if(DX){
+    /* 5a. 成交透视 */
+    const deals = DX.deals || [];
+    if(deals.length){
+      h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>成交透视</b>'
+         + '<span class="tail">今日 ' + deals.length + ' 笔 · 金额 ' + money(DX.totalAmount||0,0) + '</span></div>';
+      deals.forEach(d => {
+        const chCls = d.channel === '自然客流' ? 'nat' : (d.channel === '三大地图' ? 'map' : (d.channel === '老客户转介' ? 'ref' : 'nat'));
+        h += '<div class="tx-card">'
+           + '<div class="tx-top">'
+           + '<span class="tx-emp">' + esc(d.emp) + '</span>'
+           + '<span class="tx-ch ' + chCls + '">' + esc(d.channel || '自然客流') + '</span>'
+           + (d.bizType ? '<span class="tx-type">' + esc(d.bizType) + '</span>' : '')
+           + (d.member ? '<span class="tx-ch vip">会员:' + esc(d.member) + '</span>' : '')
+           + '</div>'
+           + '<div class="tx-prod">' + esc(d.product) + '</div>'
+           + '<div class="tx-grid">'
+           + '<div class="tx-k"><div class="tx-kv num">' + money(d.origPrice||0,0) + '</div><div class="tx-kl">原价</div></div>'
+           + '<div class="tx-k"><div class="tx-kv num">' + (d.discount ? money(d.discount,0) : '—') + '</div><div class="tx-kl">折扣</div></div>'
+           + '<div class="tx-k"><div class="tx-kv num">' + money(d.amount||0,0) + '</div><div class="tx-kl">成交价</div></div>'
+           + '<div class="tx-k"><div class="tx-kv num" style="color:' + (d.profit>=0 ? 'var(--red)' : 'var(--green)') + '">' + money(d.profit||0,0) + '</div><div class="tx-kl">毛利</div></div>'
+           + '</div>';
+        let tags = '';
+        if(d.discountRate && d.discountRate > 0) tags += '<span class="tx-tag disc">折扣' + pct(d.discountRate,1) + '</span>';
+        if(d.isBundle) tags += '<span class="tx-tag bund">搭售</span>';
+        if(d.isReturn) tags += '<span class="tx-tag ret">退货</span>';
+        if(d.member) tags += '<span class="tx-tag mem">会员</span>';
+        if(d.costRatio) tags += '<span class="tx-tag" style="background:var(--grayDim);color:var(--gray)">成本率' + pct(d.costRatio,1) + '</span>';
+        if(tags) h += '<div class="tx-tags">' + tags + '</div>';
+        h += '</div>';
+      });
+      h += '</div>';
+    }
+
+    /* 5b. 员工成交模式 */
+    const pats = DX.patterns || [];
+    if(pats.length){
+      h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>员工成交模式</b>'
+         + '<span class="tail">月度订单 + 今日动态</span></div>';
+      pats.forEach(p => {
+        h += '<div class="tx-pf">'
+           + '<div class="tx-pf-h">'
+           + '<span class="tx-pf-n">' + esc(p.name) + '</span>'
+           + (p.badge ? '<span class="tx-pf-badge" style="background:' + (p.badgeColor||'var(--gray)') + '">' + esc(p.badge) + '</span>' : '')
+           + '</div>'
+           + '<div class="tx-pf-stats">'
+           + '<div class="tx-pf-k"><div class="tx-pf-kv num">' + (p.orders||0) + '</div><div class="tx-pf-kl">总笔数</div></div>'
+           + '<div class="tx-pf-k"><div class="tx-pf-kv num">' + money(p.avgPrice||0,0) + '</div><div class="tx-pf-kl">客单价</div></div>'
+           + '<div class="tx-pf-k"><div class="tx-pf-kv num">' + pct(p.bundleRate||0,0) + '</div><div class="tx-pf-kl">搭售率</div></div>'
+           + '<div class="tx-pf-k"><div class="tx-pf-kv num">' + pct(p.avgDiscount||0,0) + '</div><div class="tx-pf-kl">平均折扣</div></div>'
+           + '</div>'
+           + '<div class="tx-pf-act">' + (p.action || '') + '</div>'
+           + '</div>';
+      });
+      h += '</div>';
+    }
+
+    /* 5c. 问题诊断与行动 */
+    const issues = DX.issues || [];
+    if(issues.length){
+      h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>问题诊断与行动</b>'
+         + '<span class="tail">' + issues.length + ' 条 · 自动识别</span></div>';
+      issues.forEach(it => {
+        h += '<div class="adv ' + esc(it.level) + '">'
+           + '<div class="adv-t"><i>' + esc(it.icon||'') + '</i>' + esc(it.title) + '</div>'
+           + '<div class="adv-b">' + esc(it.body) + '</div></div>';
+      });
+      h += '</div>';
+    }
+  }
+
+  /* ---- 6. 周计划（运营反馈制度） ---- */
+  const WP = I.weekPlan;
+  if(WP){
+    h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>运营周计划</b>'
+       + '<span class="tail">' + esc(WP.weekLabel||'') + '</span></div>';
+
+    /* 6a. 每日必做（用户经营） */
+    const DU = WP.dailyUser || [];
+    if(DU.length){
+      h += '<div class="wp-sec-t">✅ 用户经营 · 每日反馈（月度闭环，停止反馈）</div>';
+      h += '<div class="wp-kpis">';
+      DU.forEach(k => {
+        h += '<div class="wp-kpi"><div class="wp-kpi-i">' + (k.icon||'•') + '</div>'
+           + '<div class="wp-kpi-n">' + esc(k.name) + '</div>'
+           + '<div class="wp-kpi-t num">' + esc(k.target) + '</div></div>';
+      });
+      h += '</div>';
+    }
+
+    /* 6b. 每周指标 */
+    const WK = WP.weeklyKpi || [];
+    if(WK.length){
+      h += '<div class="wp-sec-t">🎯 每周指标 · 每晚11点前反馈</div>';
+      h += '<div class="wp-kpis">';
+      WK.forEach(k => {
+        h += '<div class="wp-kpi' + (k.star ? ' st' : '') + '"><div class="wp-kpi-i">' + (k.icon||'•') + '</div>'
+           + '<div class="wp-kpi-n">' + esc(k.name) + (k.star ? ' ⭐' : '') + '</div>'
+           + '<div class="wp-kpi-t num">' + esc(k.target) + '</div>'
+           + (k.note ? '<div class="wp-kpi-note">' + esc(k.note) + '</div>' : '')
+           + '</div>';
+      });
+      h += '</div>';
+    }
+
+    /* 6c. 每日基础运营打卡 */
+    const DB = WP.dailyBase || [];
+    if(DB.length){
+      h += '<div class="wp-sec-t">✅ 基础运营 · 每日打卡</div>';
+      h += '<div class="wp-checks">';
+      DB.forEach(k => {
+        h += '<div class="wp-check"><span class="wp-check-i">' + (k.icon||'•') + '</span>' + esc(k.name) + '</div>';
+      });
+      h += '</div>';
+    }
+
+    /* 6d. 渠道运营分工（周五14:00截止） */
+    const CO = WP.channelOps || [];
+    if(CO.length){
+      h += '<div class="wp-sec-t">📢 渠道运营 · 每周五 14:00 前反馈</div>';
+      CO.forEach(c => {
+        h += '<div class="wp-who">'
+           + '<span class="wp-who-n">' + esc(c.name) + '</span>'
+           + '<span class="wp-who-p">' + esc(c.platform) + '</span>'
+           + '<span class="wp-who-t">' + esc(c.task) + '</span>'
+           + '</div>';
+      });
+    }
+
+    /* 6e. 按天轮值 */
+    const DD = WP.dutyDays || [];
+    if(DD.length){
+      h += '<div class="wp-sec-t">🗓️ 按天轮值</div>';
+      h += '<div class="wp-tab" id="wpTab">';
+      DD.forEach((d,i) => {
+        h += '<button class="' + (i===0 ? 'on' : '') + '" onclick="wpSwitch(' + i + ')">'
+           + esc(d.label) + ' <small>' + esc(d.date||'') + '</small></button>';
+      });
+      h += '</div>';
+      DD.forEach((d,i) => {
+        h += '<div class="wp-grid" id="wpDay' + i + '" style="display:' + (i===0?'grid':'none') + '">';
+        const duties = d.duties || [];
+        if(!duties.length){
+          h += '<div class="wp-empty">当日无固定轮值项</div>';
+        } else {
+          duties.forEach(t => {
+            h += '<div class="wp-row">'
+               + '<div class="wp-name' + (t.who==='全员' ? ' all' : '') + '">' + esc(t.who) + '</div>'
+               + '<div class="wp-task">' + esc(t.name) + (t.star ? ' ⭐' : '') + '</div>'
+               + '</div>';
+          });
+        }
+        h += '</div>';
+      });
+    }
+
+    /* 6f. 即时零售 + 公共规则 */
+    if(WP.instant && WP.instant.who){
+      h += '<div class="wp-who"><span class="wp-who-n">' + esc(WP.instant.who) + '</span>'
+         + '<span class="wp-who-p">即时零售</span><span class="wp-who-t">常态化负责</span></div>';
+    }
+    h += '<div class="wp-rules">' + esc(WP.rules||'')
+       + '<br>门店陈列卫生全员负责，早上检查不合格考核50元；样机陈列全员负责，点检扣分责任到人</div>';
+
+    h += '</div>';
+  }
+
   h += foot();
   h += '</div>';
   return h;
+}
+
+/* 周计划切换 */
+function wpSwitch(idx){
+  $$('.wp-tab button').forEach((b,i) => b.classList.toggle('on', i===idx));
+  $$('[id^="wpDay"]').forEach((el,i) => el.style.display = (i===idx?'grid':'none'));
 }
 
 /* ---------------- 主渲染 ---------------- */
