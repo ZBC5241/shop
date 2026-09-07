@@ -204,12 +204,15 @@ def load_people(xlsx):
     """
     global PEOPLE_ORDER, TASK_PEOPLE, TASK_ROW
     wbf = openpyxl.load_workbook(xlsx, data_only=False)
-    tk = wbf[[s for s in wbf.sheetnames if s.endswith("月任务")][0]]
+    tk = wbf[[s for s in wbf.sheetnames if s.endswith("月任务") or s.endswith("度任务")][0]]
     task_people, task_row = [], {}
     for r in range(4, 8):                   # B4~B7
         nm = tk.cell(r, 2).value             # B 列 = 姓名
         if nm and str(nm).strip():
             nm = str(nm).strip()
+            # 底表「合计」行是汇总值（已并入 store.qcs 顶层），不当人员 tab
+            if nm == "合计":
+                continue
             task_people.append(nm)
             task_row[nm] = r
     PEOPLE_ORDER = task_people + ["张博晨"]
@@ -224,7 +227,7 @@ def load_manual(xlsx):
     wbf = openpyxl.load_workbook(xlsx, data_only=False)
 
     # --- 任务量：8月任务表，纯常量 ---
-    tk = wbf[[s for s in wbf.sheetnames if s.endswith("月任务")][0]]
+    tk = wbf[[s for s in wbf.sheetnames if s.endswith("月任务") or s.endswith("度任务")][0]]
     tasks = {}
     for name, row in TASK_ROW.items():
         tasks[name] = {k: num(tk.cell(row, col).value) for k, col in TASK_COL.items()}

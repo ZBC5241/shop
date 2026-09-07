@@ -1,26 +1,25 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-李家村销售看板 · 乐回收更新工具
+李家村销售看板 · 乐机收更新工具
 ==================================
 
 **职责**：
-    把"乐回收"当日明细写入《李家村销售》sheet 的固定单元格：
+    把"乐机收"（底表已从"乐回收"改名）当日明细写入《李家村销售》sheet 的固定单元格：
         T14:T18  ← 单量（成交量/总单量）
         U14:U18  ← 增值（公司净利）
 
-    写入完成后，由表内 SUM 公式 T19/U19 自动汇总，cal_data.py 复算时直接读。
+    写入完成后，由表内 SUM 公式 T19/U19 自动汇总，calc_data.py 复算时直接读。
     **xlsx 文件即为持久化**，不需要额外的 JSON / 数据库。
 
-**写入单元格映射（铁律·不可改）**：
-        行14 → 邵乐乐      行16 → 李泽
-        行15 → 杨丽华      行17 → 陈超磊
-                       行18 → 张博晨
+**写入单元格映射（动态）**：
+    行号 = 月任务行号 + 10，张博晨固定 18；人员名单从底表「月任务」B4:B7 动态读取，
+    与 calc_data.py 同源。人员变动（入职/离职）只需改底表。
 
 **用法**：
     # JSON 字符串（推荐）
     python update_lehuishou.py --xlsx 路径 \\
-        --data '{"邵乐乐":[8,138],"李泽":[7,451],"陈超磊":[6,1197],"杨丽华":[5,1067]}'
+        --data '{"邵乐乐":[8,138],"李泽":[7,451],"杨丽华":[5,1067]}'
 
     # 交互式（直接输入一行一人）
     python update_lehuishou.py --xlsx 路径
@@ -36,16 +35,21 @@ import argparse, json, os, sys, datetime
 import openpyxl
 
 LEHUI_SHEET = "李家村销售"
-LEHUI_ROWS = {
-    "邵乐乐": 14,
-    "杨丽华": 15,
-    "李泽":  16,
-    "陈超磊": 17,
-    "张博晨": 18,
-}
-# T=单量列(20), U=增值列(21); T19/U19 是 SUM 公式, 不要碰
 LEHUI_COL_T = 20
 LEHUI_COL_U = 21
+
+
+def load_rows(xlsx):
+    """从底表动态生成 {姓名: 行号} 映射（月任务行号 + 10，张博晨固定 18）。"""
+    wbf = openpyxl.load_workbook(xlsx, data_only=False)
+    tk = wbf[[s for s in wbf.sheetnames if s.endswith("月任务") or s.endswith("度任务")][0]]
+    rows = {}
+    for r in range(4, 8):
+        nm = tk.cell(r, 2).value
+        if nm and str(nm).strip():
+            rows[str(nm).strip()] = r + 10
+    rows["张博晨"] = 18
+    return rows
 
 
 def _num(v):
@@ -61,10 +65,12 @@ def _num(v):
 def update_lehuishou(xlsx, data, verify=True):
     """把 {姓名:(单量, 增值)} 写到 T/U 列。
 
+    行号映射由 load_rows() 从底表动态生成。
     返回更新后的 {姓名: {orders, amount}}，便于调用方核对 / 看板展示。
     """
     if not os.path.exists(xlsx):
         sys.exit(f"❌ 找不到表: {xlsx}")
+    LEHUI_ROWS = load_rows(xlsx)
     wb = openpyxl.load_workbook(xlsx)
     if LEHUI_SHEET not in wb.sheetnames:
         sys.exit(f"❌ 表里没有 [{LEHUI_SHEET}] sheet: {xlsx}")
@@ -93,7 +99,7 @@ def update_lehuishou(xlsx, data, verify=True):
                          "status": "已更新"}
 
     # 保护行头与公式行不动
-    # T12=乐回收标题, T13=单量表头, U13=增值表头, T19/U19=SUM 公式
+    # T12=乐机收标题(底表承载, 本脚本不写), T13=单量表头, U13=增值表头, T19/U19=SUM 公式
     # openpyxl 不会因 .value=None 而清掉公式（T19/U19 本就是字符串 "=SUM(...)"），只要别显式 set None 就好。
 
     wb.save(xlsx)
@@ -110,7 +116,7 @@ def update_lehuishou(xlsx, data, verify=True):
     return written
 
 
-def parse_kv_args(argv_data):
+def parse_kv_args(argv_data, LEHUI_ROWS):
     """从 argv 里取 --邵乐乐 8 138 风格的参数。
     argv_data: list of (name, orders, amount) tuples 来自 parse_known_args 的 unknown。
     """
@@ -120,7 +126,7 @@ def parse_kv_args(argv_data):
     for i in range(0, len(argv_data), 3):
         name = argv_data[i].lstrip("-").strip()
         if name not in LEHUI_ROWS:
-            sys.exit(f"❌ 姓名 [{name}] 不在固定单元格映射里: {list(LEHUI_ROWS)}")
+            sys.exit(f"❌ 姓名 [{name}] 不在动态人员映射里: {list(LEHUI_ROWS)}")
         try:
             orders = float(argv_data[i + 1])
             amount = float(argv_data[i + 2])
@@ -131,12 +137,15 @@ def parse_kv_args(argv_data):
 
 
 def main():
-    ap = argparse.ArgumentParser(description="乐回收更新工具（写入李家村销售表 T/U 列）")
-    ap.add_argument("--xlsx", required=True, help="李家村8月任务进度.xlsx 路径")
+    ap = argparse.ArgumentParser(description="乐机收更新工具（写入李家村销售表 T/U 列）")
+    ap.add_argument("--xlsx", required=True, help="李家村月度任务进度.xlsx 路径")
     ap.add_argument("--data", help="JSON：{姓名: [单量, 增值], ...}")
     ap.add_argument("--no-verify", action="store_true",
                     help="跳过公式完整性校验（不推荐）")
     args, unknown = ap.parse_known_args()
+
+    # 行号映射从底表动态生成
+    LEHUI_ROWS = load_rows(args.xlsx)
 
     data = {}
     if args.data:
@@ -146,12 +155,12 @@ def main():
             sys.exit(f"❌ --data 不是合法 JSON: {e}")
         for name, val in raw.items():
             if name not in LEHUI_ROWS:
-                sys.exit(f"❌ 姓名 [{name}] 不在固定映射: {list(LEHUI_ROWS)}")
+                sys.exit(f"❌ 姓名 [{name}] 不在动态映射: {list(LEHUI_ROWS)}")
             if not (isinstance(val, (list, tuple)) and len(val) == 2):
                 sys.exit(f"❌ {name} 必须是 [单量, 增值] 两元素数组: {val!r}")
             data[name] = (val[0], val[1])
 
-    kv = parse_kv_args(unknown)
+    kv = parse_kv_args(unknown, LEHUI_ROWS)
     for k, v in kv.items():
         data[k] = v
 

@@ -14,10 +14,13 @@ refresh_today_block.py —— 刷新《李家村销售》表「今日达成」�
 
 用法：
   python3 refresh_today_block.py --tsv yonyou_raw.tsv \
-      --xlsx "/Users/mac/Desktop/李家村销售/李家村8月任务进度.xlsx" \
+      --xlsx "/Users/mac/Desktop/李家村销售/李家村月度任务进度.xlsx" \
       --data data.json
 """
 import argparse, csv, json, os, shutil, subprocess, sys, datetime, time
+
+BASE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, BASE)
 
 # RXS 表头顺序（列 A~S）：出库单号/单据类型/出库日期/商品分类/商品sku分类/商品SKU编码/
 #   商品名称/入库属性/数量/单价/原价/折扣价/金额/毛利/SO激励/业务员/库区/销售出库单门店/销售成本
@@ -30,7 +33,20 @@ FIRST_DATA_ROW = 28     # B28 起 5 位营业员
 N_PEOPLE = 5
 TOTAL_ROW = 33          # B33 合计
 BLOCK_COLS = range(2, 15)   # B~N
-PEOPLE = ["邵乐乐", "杨丽华", "李泽", "陈超磊", "张博晨"]
+
+
+def load_people(xlsx):
+    """从底表「月任务」sheet B4:B7 动态读取人员名单（空名跳过），张博晨固定追加。
+    与 calc_data.py / build_data.py 同源，人员变动只改底表。"""
+    import openpyxl
+    wbf = openpyxl.load_workbook(xlsx, data_only=False)
+    tk = wbf[[s for s in wbf.sheetnames if s.endswith("月任务") or s.endswith("度任务")][0]]
+    ppl = []
+    for r in range(4, 8):
+        nm = tk.cell(r, 2).value
+        if nm and str(nm).strip():
+            ppl.append(str(nm).strip())
+    return ppl + ["张博晨"]
 
 
 def num(v):
@@ -121,7 +137,7 @@ def recalc_xlsx(xlsx):
         return False
 
 
-def read_block(xlsx):
+def read_block(xlsx, PEOPLE):
     """（保留备用）读「今日达成」区块缓存值（data_only）。"""
     import openpyxl
     wb = openpyxl.load_workbook(xlsx, data_only=True)
@@ -156,7 +172,7 @@ CAT_LABELS = ["手机", "毛利", "增值", "智慧办公", "音频穿戴", "HD"
               "回收", "贴膜", "电信积分", "滞销", "摄影课", "优享/会员"]
 
 
-def py_calc_block(tsv, day):
+def py_calc_block(tsv, day, PEOPLE):
     """Python 复刻「今日达成」区块公式口径，返回 (labels, per_person, total, sales_by, sales_total)。
 
     复用 calc_data.calc_daily（SUMIFS 口径，已验证与表格公式一致），并补齐 calc_daily 漏掉的『摄影课』。
@@ -190,6 +206,9 @@ def main():
         return 1
     print("  数据日(最新出库日期): %s" % day)
 
+    # 人员名单动态读取（与 calc_data 同源，人员变动只改底表）
+    PEOPLE = load_people(a.xlsx)
+
     # 备份 RXS（仅保留一份轮换备份）
     bak = a.xlsx + ".bak_rxs"
     shutil.copy(a.xlsx, bak)
@@ -202,7 +221,7 @@ def main():
         recalc_xlsx(a.xlsx)
 
     # 当日达成一律用 Python 口径（与表格公式等价，稳定可复现）
-    labels, per_person, total, sales_by, sales_total = py_calc_block(a.tsv, day)
+    labels, per_person, total, sales_by, sales_total = py_calc_block(a.tsv, day, PEOPLE)
     store_daily = dict(total)
     store_daily["销额"] = sales_total
 

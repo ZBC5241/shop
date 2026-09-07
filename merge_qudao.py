@@ -17,7 +17,7 @@ import build_data as bd
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 DATA = sys.argv[1] if len(sys.argv) > 1 else os.path.join(BASE, "data.json")
-XLSX = sys.argv[2] if len(sys.argv) > 2 else "/Users/mac/Desktop/李家村销售/李家村8月任务进度.xlsx"
+XLSX = sys.argv[2] if len(sys.argv) > 2 else "/Users/mac/Desktop/李家村销售/李家村月度任务进度.xlsx"
 
 AUG_CACHE = os.path.join(BASE, "sa_aug_cache.json")   # 8 月李家村切片（纯HTTP 抓取后本地筛得）
 
@@ -127,16 +127,32 @@ def read_emp_channel():
 
     口径：与「渠道挂账」完成列公式一致（SUMIFS 从销售分析表提取白名单渠道净额，
           垫付/预订也算——晨哥 2026-08-19 拍板），保证逐人渠道明细合计 == 渠道挂账完成额；
-          仅白名单获客渠道；按单据日期过滤 8 月切片。
+          仅白名单获客渠道；按单据日期过滤 8 月切片；员工名单按底表
+          「月任务」B4:B7+张博晨 过滤（2026-09-05 动态化改造，离职人员不再入榜）。
     来源优先级：
       1) sa_aug_cache.json（纯HTTP 抓取的 8 月全量切片，最新最全）
-      2) xlsx「销售分析」sheet（用户导出，兜底）
+      2) xlsx「销售分析」sheet（用户导出，兑底）
     返回：( { 员工名: [ {channel, amount, bills}, ... 按白名单顺序 ] },
-           { 员工名: { 渠道: [ {date, code, product, sku, qty, amount, member, phone}, ... ] } } )
+           { 员工名: { 渠道: [ {date, code, product, sku, qty, amount, member, phone}, ... ] } }, sa_lookup )
     """
     emp = {}
     items = {}
     sa_lookup = {}
+
+    # 现役名单：从底表「月任务」B4:B7 动态读取（空名跳过）+ 张博晨（不背任务）。
+    # sa_lookup 保持全量不过滤（品类明细补单号/会员/电话需要离职人员的历史流水）。
+    active = set()
+    try:
+        _wbf = openpyxl.load_workbook(XLSX, data_only=False)
+        _tk = _wbf[[s for s in _wbf.sheetnames if s.endswith("月任务") or s.endswith("度任务")][0]]
+        for _r in range(4, 8):
+            _nm = _tk.cell(_r, 2).value
+            if _nm and str(_nm).strip():
+                active.add(str(_nm).strip())
+        _wbf.close()
+    except Exception as e:
+        print("  [员工×渠道] 底表现役名单读取失败，退回不过滤: %s" % e)
+    active.add("张博晨")
 
     # —— 来源 1：sa_aug_cache.json（用友云 8 月切片，最全）——
     if os.path.exists(AUG_CACHE):
@@ -149,21 +165,22 @@ def read_emp_channel():
                 if not p or not c:
                     continue
                 amt = _num(r.get("fNetMoney"))
-                d = emp.setdefault(p, {}).setdefault(c, {"amount": 0.0, "bills": 0})
-                d["amount"] += amt
-                d["bills"]  += 1
                 bd = str(r.get("dDate") or r.get("vouchdate") or "")[:10]
-                items.setdefault(p, {}).setdefault(c, []).append({
-                    "date": bd,
-                    "code": str(r.get("code") or r.get("id") or "").strip(),
-                    "product": str(r.get("product_cName") or r.get("oid_userDefine_2394043221715451912") or "").strip(),
-                    "sku": str(r.get("productsku_cCode") or r.get("product_cCode") or "").strip(),
-                    "qty": _num(r.get("fQuantity")),
-                    "amount": amt,
-                    "member": str(r.get("iMemberid_name") or "").strip(),
-                    "phone": str(r.get("iMemberid_cphone") or "").strip(),
-                })
-                # 全量索引（含非白名单渠道）：供品类明细补 单号/会员/电话
+                if p in active:
+                    d = emp.setdefault(p, {}).setdefault(c, {"amount": 0.0, "bills": 0})
+                    d["amount"] += amt
+                    d["bills"]  += 1
+                    items.setdefault(p, {}).setdefault(c, []).append({
+                        "date": bd,
+                        "code": str(r.get("code") or r.get("id") or "").strip(),
+                        "product": str(r.get("product_cName") or r.get("oid_userDefine_2394043221715451912") or "").strip(),
+                        "sku": str(r.get("productsku_cCode") or r.get("product_cCode") or "").strip(),
+                        "qty": _num(r.get("fQuantity")),
+                        "amount": amt,
+                        "member": str(r.get("iMemberid_name") or "").strip(),
+                        "phone": str(r.get("iMemberid_cphone") or "").strip(),
+                    })
+                # 全量索引（含非白名单渠道与离职人员）：供品类明细补 单号/会员/电话
                 # ⚠️ key 只用 (员工,日期,净额)：切片的 productsku_cCode 是「商品名称」，
                 #    而 details 的 sku 是「SKU编码」，两者交集为 0，加 sku 会导致 0 命中。
                 sa_lookup.setdefault((p, bd, amt), []).append({
@@ -216,21 +233,22 @@ def read_emp_channel():
                 c = str(ws.cell(r, COL_P).value or "").strip()
                 if not p or not c:
                     continue
-                d = emp.setdefault(p, {}).setdefault(c, {"amount": 0.0, "bills": 0})
-                d["amount"] += _num(ws.cell(r, COL_N).value)
-                d["bills"]  += 1
-                # 单品明细（供下钻到订单/商品级）
-                items.setdefault(p, {}).setdefault(c, []).append({
-                    "date": str(bd)[:10] if bd else "",
-                    "code": str(ws.cell(r, COL_C).value or "").strip() if COL_C else "",
-                    "product": str(ws.cell(r, COL_PRO).value or "").strip() if COL_PRO else "",
-                    "sku": str(ws.cell(r, COL_SKU).value or "").strip() if COL_SKU else "",
-                    "qty": _num(ws.cell(r, COL_QTY).value) if COL_QTY else 0,
-                    "amount": _num(ws.cell(r, COL_N).value),
-                    "member": str(ws.cell(r, COL_MEM).value or "").strip() if COL_MEM else "",
-                    "phone": str(ws.cell(r, COL_PH).value or "").strip() if COL_PH else "",
-                })
-                # 全量索引（含非白名单渠道）：供品类明细补 单号/会员/电话
+                if p in active:
+                    d = emp.setdefault(p, {}).setdefault(c, {"amount": 0.0, "bills": 0})
+                    d["amount"] += _num(ws.cell(r, COL_N).value)
+                    d["bills"]  += 1
+                    # 单品明细（供下钻到订单/商品级）
+                    items.setdefault(p, {}).setdefault(c, []).append({
+                        "date": str(bd)[:10] if bd else "",
+                        "code": str(ws.cell(r, COL_C).value or "").strip() if COL_C else "",
+                        "product": str(ws.cell(r, COL_PRO).value or "").strip() if COL_PRO else "",
+                        "sku": str(ws.cell(r, COL_SKU).value or "").strip() if COL_SKU else "",
+                        "qty": _num(ws.cell(r, COL_QTY).value) if COL_QTY else 0,
+                        "amount": _num(ws.cell(r, COL_N).value),
+                        "member": str(ws.cell(r, COL_MEM).value or "").strip() if COL_MEM else "",
+                        "phone": str(ws.cell(r, COL_PH).value or "").strip() if COL_PH else "",
+                    })
+                # 全量索引（含非白名单渠道与离职人员）：供品类明细补 单号/会员/电话
                 # ⚠️ 与切片路径统一：key = (员工,日期,净额)，不加 sku（口径不一致会导致 0 命中）
                 sa_lookup.setdefault((p, (str(bd)[:10] if bd else ""),
                                       _num(ws.cell(r, COL_N).value)), []).append({
@@ -303,6 +321,76 @@ def restore_qudao_formulas(xlsx):
         return False
 
 
+def build_qudao_from_cache():
+    """从 sa_aug_cache.json（每日导出销售分析表的当月流水）聚合渠道达成。
+
+    口径与「渠道挂账」C列公式一致：白名单渠道、含垫付/预订（晨哥 2026-08-19 拍板），
+    月份边界 = 数据中最大日期所在自然月（避免跨月残留）。
+    返回与 bd.read_qudao 同结构的 dict，失败返回 None。
+    """
+    import datetime
+    if not os.path.exists(AUG_CACHE):
+        return None
+    try:
+        recs = json.load(open(AUG_CACHE, encoding="utf-8")).get("records", [])
+    except Exception as e:
+        print("  [渠道达成] sa_cache 读取失败: %s" % e)
+        return None
+    if not recs:
+        return None
+
+    dates = sorted(str(r.get("dDate") or "")[:10] for r in recs if r.get("dDate"))
+    month = dates[-1][:7]  # 以最新流水日期所在月为当月
+
+    # 人员名单 + 行号从底表动态读取（与 calc_data.py / build_data.py 同源）
+    import openpyxl as _opx
+    _wbf = _opx.load_workbook(XLSX, data_only=False)
+    _tk = _wbf[[s for s in _wbf.sheetnames if s.endswith("月任务") or s.endswith("度任务")][0]]
+    tasks = {}
+    for r in range(4, 8):
+        nm = _tk.cell(r, 2).value
+        if nm and str(nm).strip():
+            nm = str(nm).strip()
+            # 渠道任务额从底表「渠道挂账」sheet 读取，回退 32000
+            tasks[nm] = 32000.0
+    _wbf.close()
+
+    agg = {}
+    for r in recs:
+        d = str(r.get("dDate") or "")[:10]
+        if not d.startswith(month):
+            continue
+        ch = str(r.get("retailVouchHeaderDefineCharacter__HWHKQD_name") or "").strip()
+        if ch not in bd.QUDAO_CHANNELS:
+            continue
+        p = str(r.get("iEmployeeid_name") or "").strip()
+        if not p:
+            continue
+        agg[p] = agg.get(p, 0.0) + _num(r.get("fNetMoney"))
+
+    people = []
+    for nm, task in tasks.items():
+        done = round(agg.get(nm, 0.0), 2)
+        people.append({"name": nm, "task": task, "done": done,
+                       "gap": round(task - done, 2), "rate": round(done / task, 6)})
+    t_task = sum(p["task"] for p in people)
+    t_done = round(sum(p["done"] for p in people), 2)
+    today = datetime.date.today()
+    return {
+        "timeDate": today.strftime("%Y-%m-%d"),
+        "timeRate": today.day / _days_in_month(today),
+        "total": {"task": t_task, "done": t_done,
+                  "gap": round(t_task - t_done, 2),
+                  "rate": round(t_done / t_task, 6) if t_task else 0.0},
+        "people": people,
+    }
+
+
+def _days_in_month(d):
+    import calendar
+    return calendar.monthrange(d.year, d.month)[1]
+
+
 def main():
     if not os.path.exists(DATA):
         print("✗ 找不到 data.json，请先运行 calc_data.py")
@@ -314,10 +402,15 @@ def main():
     # Step A：恢复 C 列公式（保持「完成」为活公式，Excel 打开自动重算）
     restore_qudao_formulas(XLSX)
 
-    # Step B：重新读取（含最新写入的 C 列）做合并
-    wb = openpyxl.load_workbook(XLSX, data_only=True)
-    wb_f = openpyxl.load_workbook(XLSX, data_only=False)
-    qd = bd.read_qudao(wb, wb_f)
+    # Step B：渠道达成不再读底表「渠道挂账」C列（其 SUMIFS 引用的底表内部「销售分析」
+    # sheet 已停止更新，会拿到旧月份数据）。改为直接从 sa_aug_cache（每日导出的销售
+    # 分析表解析出的当月流水）按白名单渠道聚合，口径与挂账公式一致（含垫付/预订）。
+    qd = build_qudao_from_cache()
+    if not qd:
+        print("[渠道] sa_cache 无当月数据，回退底表口径")
+        wb = openpyxl.load_workbook(XLSX, data_only=True)
+        wb_f = openpyxl.load_workbook(XLSX, data_only=False)
+        qd = bd.read_qudao(wb, wb_f)
     if not qd:
         print("[渠道] 未找到「渠道挂账」数据，跳过")
         return 0
