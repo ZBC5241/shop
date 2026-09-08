@@ -13,7 +13,7 @@
 #   ./fetch_and_check.sh --no-fetch  不重新抓数，直接用现有 yonyou_raw.tsv 判断（测试用）
 set -e
 BASE="/Users/mac/WorkBuddy/Claw"
-XLSX="/Users/mac/Desktop/李家村销售/李家村8月任务进度.xlsx"
+XLSX="/Users/mac/Desktop/李家村销售/李家村9月任务进度.xlsx"
 TSV="$BASE/yonyou_raw.tsv"
 PY="/Users/mac/.workbuddy/binaries/python/versions/3.13.12/bin/python3"
 NO_FETCH=0

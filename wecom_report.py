@@ -30,8 +30,8 @@ POSTER_PY = os.path.join(BASE, "poster_build.py")
 POSTER_PNG = os.path.join(BASE, "poster_today.png")
 PYTHON = sys.executable
 
-# 李家村月度任务进度表（含「渠道挂账」sheet）
-TARGET_XLSX = "/Users/mac/Desktop/李家村销售/李家村8月任务进度.xlsx"
+# 李家村9月任务进度表（含「渠道挂账」sheet）
+TARGET_XLSX = "/Users/mac/Desktop/李家村销售/李家村9月任务进度.xlsx"
 
 # 增值当日任务（晨哥定：周内 1600/天）。其余板块按「全月任务 ÷ 当月工作日」均摊。
 DAILY_VALUEADDED = 1600

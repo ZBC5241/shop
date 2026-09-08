@@ -17,7 +17,7 @@ import build_data as bd
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 DATA = sys.argv[1] if len(sys.argv) > 1 else os.path.join(BASE, "data.json")
-XLSX = sys.argv[2] if len(sys.argv) > 2 else "/Users/mac/Desktop/李家村销售/李家村月度任务进度.xlsx"
+XLSX = sys.argv[2] if len(sys.argv) > 2 else "/Users/mac/Desktop/李家村销售/李家村9月任务进度.xlsx"
 
 AUG_CACHE = os.path.join(BASE, "sa_aug_cache.json")   # 8 月李家村切片（纯HTTP 抓取后本地筛得）
 

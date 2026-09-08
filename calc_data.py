@@ -1018,7 +1018,7 @@ def build_day_details(rxs):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("detail", help="明细文件路径（.tsv 或 .xlsx）")
-    ap.add_argument("--xlsx", default="/Users/mac/Desktop/李家村销售/李家村月度任务进度.xlsx")
+    ap.add_argument("--xlsx", default="/Users/mac/Desktop/李家村销售/李家村9月任务进度.xlsx")
     ap.add_argument("--day", help="当日达成基准日，默认取明细里的最大日期")
     ap.add_argument("-o", "--out", default=os.path.join(
         os.path.dirname(os.path.abspath(__file__)), "data.json"))

@@ -14,7 +14,7 @@ refresh_today_block.py —— 刷新《李家村销售》表「今日达成」�
 
 用法：
   python3 refresh_today_block.py --tsv yonyou_raw.tsv \
-      --xlsx "/Users/mac/Desktop/李家村销售/李家村月度任务进度.xlsx" \
+      --xlsx "/Users/mac/Desktop/李家村销售/李家村9月任务进度.xlsx" \
       --data data.json
 """
 import argparse, csv, json, os, shutil, subprocess, sys, datetime, time

@@ -19,7 +19,7 @@ import sys
 import shutil
 import datetime
 
-DEFAULT_XLSX = "/Users/mac/Desktop/李家村销售/李家村8月任务进度.xlsx"
+DEFAULT_XLSX = "/Users/mac/Desktop/李家村销售/李家村9月任务进度.xlsx"
 SHEET = "XS"
 TMP_CSV = "/Users/mac/Desktop/李家村销售/_xs_import.csv"
 

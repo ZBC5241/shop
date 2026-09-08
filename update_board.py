@@ -17,7 +17,7 @@ update_board.py — 李家村看板一键更新（SOP 脚本化）
 
 前置条件：
   - 用友云登录态有效（~/.agent-browser/sessions/yonyou-default.json）
-  - 桌面表格存在（/Users/mac/Desktop/李家村销售/李家村8月任务进度.xlsx）
+  - 桌面表格存在（/Users/mac/Desktop/李家村销售/李家村9月任务进度.xlsx）
   - 若登录态失效（HTTP 401），需先用 agent-browser 重新登录用友云
 
 退出码：0 成功 / 1 失败
@@ -28,7 +28,7 @@ BASE = os.path.dirname(os.path.abspath(__file__))
 PY = sys.executable
 
 # ---------- 配置 ----------
-XLSX = "/Users/mac/Desktop/李家村销售/李家村8月任务进度.xlsx"
+XLSX = "/Users/mac/Desktop/李家村销售/李家村9月任务进度.xlsx"
 YONYOU_TSV = os.path.join(BASE, "yonyou_raw.tsv")           # HTTP截断版（500行）
 FULL_TSV = os.path.join(BASE, "yonyou_full_512.tsv")         # 浏览器提取版（512行，完整）
 SA_CACHE = os.path.join(BASE, "sa_aug_cache.json")           # 8月销售分析切片

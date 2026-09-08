@@ -40,7 +40,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("maoli_xlsx", help="毛利明细表xlsx路径")
     ap.add_argument("sa_xlsx", help="销售分析xlsx路径")
-    ap.add_argument("--task-xlsx", default="/Users/mac/Desktop/李家村销售/李家村月度任务进度.xlsx",
+    ap.add_argument("--task-xlsx", default="/Users/mac/Desktop/李家村销售/李家村9月任务进度.xlsx",
                     help="任务进度xlsx（手工项来源）")
     ap.add_argument("--no-push", action="store_true", help="不推送GitHub")
     ap.add_argument("--no-sa", action="store_true", help="跳过销售分析更新")

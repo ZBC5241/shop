@@ -138,7 +138,7 @@ def parse_kv_args(argv_data, LEHUI_ROWS):
 
 def main():
     ap = argparse.ArgumentParser(description="乐机收更新工具（写入李家村销售表 T/U 列）")
-    ap.add_argument("--xlsx", required=True, help="李家村月度任务进度.xlsx 路径")
+    ap.add_argument("--xlsx", required=True, help="李家村9月任务进度.xlsx 路径")
     ap.add_argument("--data", help="JSON：{姓名: [单量, 增值], ...}")
     ap.add_argument("--no-verify", action="store_true",
                     help="跳过公式完整性校验（不推荐）")

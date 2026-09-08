@@ -8,7 +8,7 @@
       仅做必要的格式清洗（#DIV/0! -> null，"85%" -> 0.85，去千分位）
 
 用法：
-    python build_data.py /path/to/李家村月度任务进度.xlsx [输出.json]
+    python build_data.py /path/to/李家村9月任务进度.xlsx [输出.json]
 """
 import sys, os, json, datetime, calendar
 import openpyxl
@@ -63,7 +63,7 @@ SHEET = "李家村销售"
 # ---------- 表格坐标（1-based 行号，0-based 列索引） ----------
 ROW_TIME = 1                       # 时间进度行：B1=日期, I1=进度
 PEOPLE_ORDER = []                   # 动态填充
-TASK_XLSX_DEFAULT = "/Users/mac/Desktop/李家村销售/李家村月度任务进度.xlsx"
+TASK_XLSX_DEFAULT = "/Users/mac/Desktop/李家村销售/李家村9月任务进度.xlsx"
 
 # 以下 P1~P4 行号映射由 load_people() 动态设置
 P1_ROWS = {}
@@ -161,7 +161,7 @@ def read_labels(ws, label_row, start=1, end=15):
     return out
 
 
-# 渠道挂账「完成额」严格对齐《李家村月度任务进度.xlsx》「渠道挂账」sheet 的 C 列数组公式：
+# 渠道挂账「完成额」严格对齐《李家村9月任务进度.xlsx》「渠道挂账」sheet 的 C 列数组公式：
 #   =SUM(SUMIFS(销售分析!$AM:$AM, 销售分析!$G:$G, A{r}, 销售分析!$P:$P,
 #              {"三大地图","小红书","大众点评","异业","社区","企业上门购"}))
 # 即从「销售分析」sheet 按 营业员(G列)+6获客渠道(P列) 实时聚合 销售净额(AM列)。

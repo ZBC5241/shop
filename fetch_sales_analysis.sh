@@ -9,7 +9,7 @@
 set -e
 
 BASE="/Users/mac/WorkBuddy/Claw"
-XLSX="/Users/mac/Desktop/李家村销售/李家村8月任务进度.xlsx"
+XLSX="/Users/mac/Desktop/李家村销售/李家村9月任务进度.xlsx"
 DOWN="$HOME/Downloads"
 ACCOUNT="18161914293"
 PY="/Users/mac/.workbuddy/binaries/python/versions/3.13.12/bin/python3"

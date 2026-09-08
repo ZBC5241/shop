@@ -53,7 +53,7 @@ agent-browser close --all 2>/dev/null || true
 PASS="$(security find-generic-password -s yonyou -w 2>/dev/null)"
 if [ -z "$PASS" ]; then
   echo "✗ 钥匙串里没有用友密码。先执行："
-  echo "  security add-generic-password -s yonyou -a $ACCOUNT -w 110110"
+  echo "  security add-generic-password -s yonyou -a $ACCOUNT -w <密码>"
   exit 1
 fi
 
@@ -183,7 +183,7 @@ else:
 
 # ========== Step 2: 复算 data.json ==========
 log "▶ [2/3] 复算 data.json ..."
-python3 "$SHOP_DIR/calc_data.py" "$TSV" --xlsx "/Users/mac/Desktop/李家村销售/李家村8月任务进度.xlsx" -o "$DATA_JSON" 2>&1 || {
+python3 "$SHOP_DIR/calc_data.py" "$TSV" --xlsx "/Users/mac/Desktop/李家村销售/李家村9月任务进度.xlsx" -o "$DATA_JSON" 2>&1 || {
   # 如果没有 xlsx 任务进度表，用纯明细复算（不依赖 xlsx）
   log "  无任务进度表，用纯明细模式复算…"
   python3 "$SHOP_DIR/calc_data.py" "$TSV" -o "$DATA_JSON" 2>&1
@@ -196,7 +196,7 @@ python3 "$SHOP_DIR/calc_data.py" "$TSV" --xlsx "/Users/mac/Desktop/李家村销�
 log "▶ [2.4] 刷新今日达成区块(写RXS→重算→读刷新值) …"
 python3 "$SHOP_DIR/refresh_today_block.py" \
   --tsv "$TSV" \
-  --xlsx "/Users/mac/Desktop/李家村销售/李家村8月任务进度.xlsx" \
+  --xlsx "/Users/mac/Desktop/李家村销售/李家村9月任务进度.xlsx" \
   --data "$DATA_JSON" 2>&1 \
   || echo "  [警告] 今日达成区块刷新失败，沿用 calc_data 复算值"
 
@@ -204,7 +204,7 @@ python3 "$SHOP_DIR/refresh_today_block.py" \
 # merge_qudao 内部先复算最新完成额写入「渠道挂账」sheet C 列(落表)，再读 C 列，
 # 实现「取渠道挂账 sheet 表、最新拉取的数据」——定时任务每次跑都会刷新该值。
 log "▶ [2.5] 最新拉取渠道口径(复算→写C列→读回)注入 data.json …"
-python3 "$SHOP_DIR/merge_qudao.py" "$DATA_JSON" "/Users/mac/Desktop/李家村销售/李家村8月任务进度.xlsx" 2>&1 \
+python3 "$SHOP_DIR/merge_qudao.py" "$DATA_JSON" "/Users/mac/Desktop/李家村销售/李家村9月任务进度.xlsx" 2>&1 \
   || echo "  [警告] 渠道合并失败，渠道挂账可能用旧数据"
 
 # ========== Step 3: 生成日报 HTML ==========
