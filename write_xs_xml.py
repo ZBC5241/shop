@@ -44,7 +44,9 @@ HEADERS = [
     "销售出库单门店", "销售成本",
 ]
 
-# 列属性：索引(0-based)→(数字列?, 样式id)
+# 列属性：索引(0-based)→(数字列?, 样式id)。样式id仅为回退默认：
+# WPS/Excel 另存时 styles.xml 会重排 ID（如 2026-09-10 C列 367→221 导致写入损坏），
+# 运行时用 probe_styles() 从底表现有数据行动态探测覆盖。
 COL_STYLES = {
     0: (False, 220), 1: (False, 220), 2: (True, 367), 3: (False, 220),
     4: (False, 222), 5: (False, 220), 6: (False, 220), 7: (False, 222),
@@ -52,8 +54,9 @@ COL_STYLES = {
     12: (True, 223), 13: (True, 223), 14: (True, 226), 15: (False, 227),
     16: (False, 220), 17: (False, 220), 18: (True, 223),
 }
-TAIL_STYLE = 212        # T..AW 列样式
-ROW_ATTRS = 'ht="21" customFormat="1" customHeight="1" s="191"'
+TAIL_STYLE = 212        # T..AW 列样式（回退默认，运行时动态探测）
+ROW_ATTRS_DEFAULT = 'ht="21" customFormat="1" customHeight="1" s="191"'
+ROW_ATTRS = ROW_ATTRS_DEFAULT   # 运行时动态探测覆盖
 MIN_LAST_ROW = 770      # 空行填充下限（保持原表观感）
 DATE_EPOCH = datetime.date(1899, 12, 30)  # Excel 序列数纪元
 
@@ -82,6 +85,31 @@ def num_str(v):
 def esc(s):
     return (str(s).replace("&", "&amp;").replace("<", "&lt;")
             .replace(">", "&gt;"))
+
+
+def probe_styles(xml):
+    """从底表 XS 现有第2数据行扫描样式号/行属性，动态覆盖默认值。
+    防御 WPS/Excel 另存后 styles.xml ID 重排导致硬编码失效（2026-09-10 事故根治）。"""
+    global TAIL_STYLE, ROW_ATTRS
+    m = re.search(r'<row r="2"([^>]*)>(.*?)</row>', xml, re.S)
+    if not m:
+        return False
+    attrs, inner = m.group(1), m.group(2)
+    # 列样式
+    found = dict(re.findall(r'<c r="([A-Z]+)2" s="(\d+)"', inner))
+    for ci in range(19):
+        col = get_column_letter(ci + 1)
+        if col in found:
+            is_num = COL_STYLES[ci][0]
+            COL_STYLES[ci] = (is_num, int(found[col]))
+    tail = found.get("T")
+    if tail:
+        TAIL_STYLE = int(tail)
+    # 行属性：去掉 r=/spans= 后原样保留（含 s=、ht= 等）
+    cleaned = re.sub(r'\s*spans="[^"]*"', "", attrs).strip()
+    if cleaned:
+        ROW_ATTRS = cleaned
+    return True
 
 
 def load_rows(src):
@@ -193,6 +221,14 @@ def main():
     if not m1:
         sys.exit("❌ 原XS表头行提取失败")
     header_row1 = m1.group(0)
+
+    # 动态探测样式号（防御 WPS 另存后样式 ID 重排，2026-09-10 事故根治）
+    if probe_styles(xml):
+        date_sid = COL_STYLES[2][1]
+        print(f"→ 样式探测: C列日期={date_sid} 尾列={TAIL_STYLE} 行属性已同步")
+    else:
+        ROW_ATTRS = ROW_ATTRS_DEFAULT
+        print("→ 样式探测: XS无第2行，使用回退默认样式")
 
     new_sheetdata, last = build_rows_xml(rows, header_row1)
     last_data = len(rows) + 1

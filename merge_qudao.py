@@ -343,16 +343,30 @@ def build_qudao_from_cache():
     month = dates[-1][:7]  # 以最新流水日期所在月为当月
 
     # 人员名单 + 行号从底表动态读取（与 calc_data.py / build_data.py 同源）
+    # 渠道任务额从底表「渠道挂账」sheet B 列按姓名读取（2026-09-10 晨哥更新为 41400/人），
+    # 缺名/无值回退 32000，保证人员变动后仍可运行
     import openpyxl as _opx
     _wbf = _opx.load_workbook(XLSX, data_only=False)
     _tk = _wbf[[s for s in _wbf.sheetnames if s.endswith("月任务") or s.endswith("度任务")][0]]
     tasks = {}
+    _qd = _wbf["渠道挂账"] if "渠道挂账" in _wbf.sheetnames else None
     for r in range(4, 8):
         nm = _tk.cell(r, 2).value
         if nm and str(nm).strip():
             nm = str(nm).strip()
-            # 渠道任务额从底表「渠道挂账」sheet 读取，回退 32000
-            tasks[nm] = 32000.0
+            t = 32000.0
+            if _qd is not None:
+                for qr in range(4, _qd.max_row + 1):
+                    qnm = str(_qd.cell(qr, 1).value or "").strip()
+                    if qnm == nm:
+                        _v = _qd.cell(qr, 2).value
+                        if _v is not None and not (isinstance(_v, str) and _v.startswith("=")):
+                            try:
+                                t = float(_v)
+                            except (TypeError, ValueError):
+                                pass
+                        break
+            tasks[nm] = t
     _wbf.close()
 
     agg = {}
