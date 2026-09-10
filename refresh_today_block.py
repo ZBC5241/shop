@@ -167,9 +167,9 @@ def read_block(xlsx, PEOPLE):
     return labels, per_person, total, sales_by, sales_total
 
 
-# 13 品类标签（与《李家村销售》B26:N26 一致）
+# 13 品类标签（与《李家村销售》B26:N26 对齐；底表「电信积分」列语义已改「合约」，代码层统一显示合约）
 CAT_LABELS = ["手机", "毛利", "增值", "智慧办公", "音频穿戴", "HD", "会员",
-              "回收", "贴膜", "电信积分", "滞销", "摄影课", "优享/会员"]
+              "回收", "贴膜", "合约", "滞销", "摄影课", "优享/会员"]
 
 
 def py_calc_block(tsv, day, PEOPLE):

@@ -59,7 +59,7 @@ $('#btnParse').onclick = async () => {
     log('  数据日期 ' + (json.meta.date || '未知'), 'in');
     log('  时间进度 ' + (isNum(json.meta.timeProgress) ? pct(json.meta.timeProgress,1) : '—'), 'in');
     log('  门店毛利 ' + money(gm.done) + ' / ' + money(gm.task) + '（' + pct(gm.rate,1) + '）', 'in');
-    PEOPLE_ORDER.forEach(n => {
+    (json.meta.employees || []).forEach(n => {
       const p = json.people[n].performance['毛利'];
       log('  ' + n + '：' + money(p.done) + (hasTaskRaw(p) ? '' : '（未分配任务）'), 'in');
     });

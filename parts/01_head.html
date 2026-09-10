@@ -218,6 +218,86 @@ svg{display:block}
 .lag-tip.warn{border-left-color:var(--amber);background:var(--amberDim)}
 .lag-tip.warn b{color:#b45309}
 
+/* ============ 深度成交分析 ============ */
+/* 成交流水卡片 */
+.tx-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);
+  padding:10px 12px;margin-bottom:8px;box-shadow:var(--shadow-s)}
+.tx-top{display:flex;align-items:center;gap:7px;margin-bottom:6px;flex-wrap:wrap}
+.tx-emp{font-size:12px;font-weight:800;white-space:nowrap}
+.tx-ch{font-size:9.5px;padding:2px 7px;border-radius:5px;font-weight:700;white-space:nowrap}
+.tx-ch.nat{background:var(--blueDim);color:var(--blue)}
+.tx-ch.map{background:var(--purpleDim);color:var(--purple)}
+.tx-ch.ref{background:var(--amberDim);color:#b45309}
+.tx-ch.vip{background:var(--redDim);color:var(--red)}
+.tx-type{font-size:9.5px;padding:2px 6px;border-radius:5px;font-weight:700;background:var(--soft);color:var(--tx3)}
+.tx-prod{font-size:11px;color:var(--tx2);line-height:1.5;margin-bottom:5px}
+.tx-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+.tx-k{background:var(--soft);border-radius:8px;padding:5px 7px;text-align:center}
+.tx-kv{font-size:12px;font-weight:800;letter-spacing:-.2px}
+.tx-kl{font-size:9px;color:var(--tx3);margin-top:1px}
+.tx-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
+.tx-tag{font-size:9.5px;padding:2px 6px;border-radius:5px;font-weight:700;white-space:nowrap}
+.tx-tag.disc{background:var(--amberDim);color:#b45309}
+.tx-tag.bund{background:var(--purpleDim);color:var(--purple)}
+.tx-tag.ret{background:var(--greenDim);color:#15803d}
+.tx-tag.mem{background:var(--blueDim);color:var(--blue)}
+
+/* 员工成交模式卡 */
+.tx-pf{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);
+  padding:11px 12px;margin-bottom:8px;box-shadow:var(--shadow-s)}
+.tx-pf-h{display:flex;align-items:center;gap:8px;margin-bottom:7px;flex-wrap:wrap}
+.tx-pf-n{font-size:12.5px;font-weight:800}
+.tx-pf-badge{font-size:9px;padding:2px 6px;border-radius:5px;font-weight:700;color:#fff}
+.tx-pf-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:6px}
+.tx-pf-k{background:var(--soft);border-radius:8px;padding:5px 7px;text-align:center}
+.tx-pf-kv{font-size:13px;font-weight:800;letter-spacing:-.2px}
+.tx-pf-kl{font-size:9px;color:var(--tx3);margin-top:1px}
+.tx-pf-act{font-size:11px;color:var(--tx2);line-height:1.7;padding:7px 9px;background:var(--soft);
+  border-radius:9px;border-left:3px solid var(--blue)}
+.tx-pf-act b{color:var(--blue)}
+
+/* ============ 周计划 ============ */
+.wp-tab{display:flex;gap:3px;margin-bottom:8px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.wp-tab::-webkit-scrollbar{height:0}
+.wp-tab button{flex:none;padding:5px 13px;border:1px solid var(--line);border-radius:8px;
+  background:var(--panel);font-size:11px;font-weight:700;color:var(--tx2);cursor:pointer;
+  transition:.16s;white-space:nowrap;font-family:inherit}
+.wp-tab button.on{background:var(--grad);color:#fff;border-color:transparent;box-shadow:var(--shadow-s)}
+.wp-tab button small{font-size:9px;font-weight:400;opacity:.75}
+.wp-grid{display:grid;gap:7px}
+.wp-row{display:grid;grid-template-columns:52px 1fr;gap:8px;align-items:start}
+.wp-name{font-size:11.5px;font-weight:800;padding:7px 0;text-align:center;background:var(--soft);
+  border-radius:8px;color:var(--tx)}
+.wp-task{background:var(--panel);border:1px solid var(--line);border-radius:8px;
+  padding:7px 10px;font-size:11px;color:var(--tx2);line-height:1.65}
+.wp-task .done{color:var(--red);font-weight:700}
+.wp-task .todo{color:var(--tx3)}
+.wp-empty{padding:20px 0;text-align:center;color:var(--tx3);font-size:11px}
+
+/* 运营周计划分区 */
+.wp-sec-t{font-size:11px;font-weight:800;color:var(--tx2);margin:12px 0 7px;display:flex;align-items:center;gap:5px}
+.wp-sec-t:first-child{margin-top:0}
+.wp-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.wp-kpi{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+  padding:8px 6px;text-align:center;box-shadow:var(--shadow-s);position:relative}
+.wp-kpi.st{border-color:rgba(245,158,11,.45);background:var(--amberDim)}
+.wp-kpi-i{font-size:14px;line-height:1.2}
+.wp-kpi-n{font-size:10.5px;font-weight:700;color:var(--tx);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wp-kpi-t{font-size:11px;font-weight:800;color:var(--blue);margin-top:1px}
+.wp-kpi-note{font-size:8.5px;color:var(--tx3);margin-top:2px;line-height:1.4}
+.wp-checks{display:flex;flex-wrap:wrap;gap:6px}
+.wp-check{display:flex;align-items:center;gap:5px;background:var(--panel);border:1px solid var(--line);
+  border-radius:8px;padding:6px 10px;font-size:11px;font-weight:600;color:var(--tx2);box-shadow:var(--shadow-s)}
+.wp-check-i{font-size:12px}
+.wp-who{display:flex;align-items:center;gap:7px;background:var(--panel);border:1px solid var(--line);
+  border-radius:10px;padding:8px 11px;margin-bottom:6px;box-shadow:var(--shadow-s)}
+.wp-who-n{font-size:11.5px;font-weight:800;color:var(--tx);flex:none}
+.wp-who-p{font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;background:var(--purpleDim);color:var(--purple);flex:none}
+.wp-who-t{font-size:11px;color:var(--tx2);margin-left:auto;text-align:right}
+.wp-name.all{background:var(--amberDim);color:#b45309}
+.wp-rules{font-size:10px;color:var(--tx3);line-height:1.8;background:var(--soft);
+  border-radius:9px;padding:8px 11px;margin-top:10px}
+
 /* ============ 核心 KPI ============ */
 .kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .kpi{
@@ -661,7 +741,7 @@ svg{display:block}
 .row.flash{animation:flashPulse .6s ease 2}
 @keyframes flashPulse{0%,100%{background:var(--purpleDim)}50%{background:var(--soft)}}
 
-/* —— 回收业务合并两行（乐回收 + 太力回收）—— */
+/* —— 回收业务合并两行（乐机收 + 太力回收）—— */
 .rec-list{margin-top:6px;display:flex;flex-direction:column;gap:3px}
 .rec-list .q-s{font-size:13px;color:var(--tx2);padding:1px 0}
 .rec-list .num{color:var(--tx1);margin:0 2px;font-weight:700}

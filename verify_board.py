@@ -8,14 +8,15 @@ verify_board.py —— 看板推送前强制校验（铁律：不通过不许 pu
   用户每次打开看到的是错的。本脚本在 build 之后、git push 之前自动跑，
   任何一项不达标直接非零退出，CI/人工都不能放行推送。
 
-校验项：
-  1) data.json 存在且可解析
-  2) meta.date == 今天（或显式 --day 指定日），确保不是旧缓存数据
-  3) meta.remainDays 为 1~31 的整数（剩余天数口径有效）
-  4) store.qcs.增值 存在且 done>0（增值柱有数）
-  5) qudao 字段存在且 done>0（运营看板渠道数据，漏跑 merge_qudao 会被抓出）
-  6) people 含全部 5 名业务员且每人 qcs/performance 非空
-  7) 销售核心指标：门店毛利 done>0、销额>0
+ 校验项：
+   1) data.json 存在且可解析
+   2) meta.date == 今天（或显式 --day 指定日），确保不是旧缓存数据
+   3) meta.remainDays 为 1~31 的整数（剩余天数口径有效）
+   4) store.qcs.增值 存在且 done>0（增值柱有数）
+   5) qudao 字段存在且 done>0（运营看板渠道数据，漏跑 merge_qudao 会被抓出）
+   6) people 含 meta.employees 全部业务员且每人 qcs/performance 非空
+      （名单以 data.json 自身为准——人员已动态化，从底表自动适配，不再写死）
+   7) 销售核心指标：门店毛利 done>0、销额>0
 
 用法：
   python verify_board.py [data.json] [--day YYYY-MM-DD]
@@ -25,9 +26,6 @@ import sys, os, json, datetime, argparse
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(BASE, "data.json")
-
-# 应有业务员（与 calc_data 固定名单一致）
-EXPECT_PEOPLE = ["邵乐乐", "杨丽华", "李泽", "陈超磊", "张博晨"]
 
 
 def fail(msg):
@@ -76,20 +74,20 @@ def main():
     if age > 3:
         fail("数据日期 %s 距今天 %d 天（疑似旧缓存，先重跑抓取+calc+merge）" % (mdate, age))
     # remainDays 自洽：calc_data 用 ref=系统today（同月且today>=数据最新日时）算剩余天数
-    #   即 remainDays = 本月天数 - 今天（不含今天，晨哥拍板口径）
+    #   即 remainDays = 本月天数 - 今天 + 1（含当天，晨哥拍板口径，calc_data.remain_days 同源）
     #   校验须基于"今天"，不是 meta.date（数据日期常比今天早，是夜间/凌晨抓取的正常现象）
     import calendar
     if (today.year, today.month) != (md.year, md.month):
         # 跨月：今天已不在数据所在月，ref 会回退到 base0，remainDays 按数据月末算
         last = calendar.monthrange(md.year, md.month)[1]
-        exp_rd = max(1, last - md.day)
+        exp_rd = max(1, last - md.day + 1)
         if rd != exp_rd:
             fail("跨月：remainDays %d 与数据月末 %s 不符（期望 %d）" % (rd, mdate, exp_rd))
     else:
         last = calendar.monthrange(today.year, today.month)[1]
-        exp_rd = max(1, last - today.day)
+        exp_rd = max(1, last - today.day + 1)
         if rd != exp_rd:
-            fail("remainDays %d 与今天 %s 自洽不符（期望 %d，自然月口径=本月天数-今天）" % (rd, today.isoformat(), exp_rd))
+            fail("remainDays %d 与今天 %s 自洽不符（期望 %d，自然月口径=本月天数-今天+1，含当天）" % (rd, today.isoformat(), exp_rd))
 
     store = d.get("store") or {}
     qcs = store.get("qcs") or {}
@@ -107,12 +105,15 @@ def main():
     if not (isinstance(qd, (int, float)) and qd > 0):
         fail("qudao.total.done 无有效数据（运营看板渠道为空，重跑 merge_qudao.py）")
 
-    # 6) 业务员齐全
+    # 6) 业务员齐全（名单以 data.json 自身 meta.employees 为准，人员动态化后不再写死）
     people = d.get("people") or {}
-    missing = [p for p in EXPECT_PEOPLE if p not in people]
+    expect_people = meta.get("employees") or list(people.keys())
+    if not expect_people:
+        fail("meta.employees 缺失且 people 为空，无法校验业务员")
+    missing = [p for p in expect_people if p not in people]
     if missing:
         fail("业务员缺失: %s" % ",".join(missing))
-    for p in EXPECT_PEOPLE:
+    for p in expect_people:
         pp = people[p] or {}
         if not (pp.get("qcs") or pp.get("performance")):
             fail("业务员 %s 数据为空" % p)
@@ -128,7 +129,7 @@ def main():
     print("    日期 %s / 剩余 %d 天" % (mdate, rd))
     print("    增值完成 %.0f / 渠道完成 %.0f(达成%.1f%%)" % (
         zengzhi.get("done", 0), qd, ((qudao.get("total") or {}).get("rate") or 0) * 100))
-    print("    业务员 %d 人齐全 / 门店毛利 %.0f" % (len(EXPECT_PEOPLE), maoli_done or 0))
+    print("    业务员 %d 人齐全 / 门店毛利 %.0f" % (len(expect_people), maoli_done or 0))
     print("    → 可安全推送")
     sys.exit(0)
 

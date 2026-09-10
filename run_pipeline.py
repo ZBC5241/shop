@@ -44,10 +44,26 @@ def main():
                     help="任务进度xlsx（手工项来源）")
     ap.add_argument("--no-push", action="store_true", help="不推送GitHub")
     ap.add_argument("--no-sa", action="store_true", help="跳过销售分析更新")
+    ap.add_argument("--no-xs", action="store_true", help="跳过写底表XS（含sync_xs失败重试跳过）")
     args = ap.parse_args()
 
     total_start = time.time()
     timings = {}
+
+    # Step 0: 同步写底表 XS（恢复旧SOP断点 2026-09-10 晨哥拍板）
+    #   用 write_xs_xml.py 做 XML 级原位替换：零公式/条件格式损伤，不依赖Excel
+    #   （Excel AppleEvent 在本机假死不可用；openpyxl 整本重写会丢条件格式样式）
+    #   软失败设计：写XS失败只告警不阻塞看板，看板口径仍由 calc_data 直读明细 xlsx 保证准确。
+    if not args.no_xs:
+        t0 = time.time()
+        print(f"\n{'='*60}\n▶ 同步写底表XS\n{'='*60}")
+        r = subprocess.run(
+            [PY, os.path.join(BASE, "write_xs_xml.py"), args.maoli_xlsx],
+            cwd=BASE,
+        )
+        timings["sync_xs"] = time.time() - t0
+        if r.returncode != 0:
+            print("⚠️ 写底表XS失败（软失败不阻塞看板，下次运行自动重试）")
 
     # Step 1: 更新sa_cache（从销售分析xlsx提取渠道数据）
     if not args.no_sa:

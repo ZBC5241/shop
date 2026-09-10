@@ -33,7 +33,7 @@ PEOPLE_ORDER = []       # 全员（含张博晨，末尾追加）
 TASK_PEOPLE = []        # 有任务的人员（不含张博晨）
 TASK_ROW = {}           # {name: 月任务表行号}
 
-# 8月任务表列：C=销售额 D=毛利 E=手机 F=增值 G=积分 H=PC I=平板 J=音频 K=穿戴 L=HD M=摄影 N=考核机
+# 9月任务表列：C=销售额 D=毛利 E=手机 F=增值 G=合约 H=PC I=平板 J=音频 K=穿戴 L=HD M=摄影课程 N=考核机
 TASK_COL = {"销额": 3, "毛利": 4, "手机": 5, "增值": 6, "合约": 7,
             "PC": 8, "平板": 9, "音频": 10, "穿戴": 11, "HD": 12,
             "摄影课": 13, "考核机型": 14}
@@ -254,8 +254,8 @@ def load_manual(xlsx):
         who = str(tl.cell(r, 22).value or "").strip()         # V 销售员姓名
         if who in taili:
             if state == "已付款":
-                taili[who]["orders"] += num(tl.cell(r, 27).value)   # AA 数量
-            taili[who]["amount"] += num(tl.cell(r, 28).value)       # AB 回收价（SUMIF 不筛状态）
+                taili[who]["orders"] += num(tl.cell(r, 28).value)   # AB 数量（W14 公式：SUMIFS(AB,V,姓名,J,"已付款")）
+            taili[who]["amount"] += num(tl.cell(r, 29).value)       # AC 回收价（X14 公式：SUMIF(V,姓名,AC)，不筛状态）
     for n in taili:
         taili[n]["增值"] = taili[n]["amount"] * 0.14
 
@@ -276,9 +276,12 @@ def load_manual(xlsx):
 
     # --- 表头标签（静态文本） ---
     lab_day = [ws.cell(26, c).value for c in range(2, 16)]
-    # 晨哥口径(2026-09-07)：底表「今日达成」品类标签仍写「电信积分」，业务含义已改为「合约单数」，代码层映射（不碰桌面真表）
-    lab_day = [('合约' if (c and '电信积分' in str(c)) else c) for c in lab_day]
     lab_gap = [ws.cell(36, c).value for c in range(2, 16)]
+    # 晨哥口径：底表「今日达成/每日任务」部分标签仍写「电信积分」，
+    # 但 9 月新底表已改按「合约」考核（当日达成 K28=SUMIFS(RXS!M,E:*入网*)=入网积分，
+    # 每日任务 K38 引用 $D14=合约缺口单数）。代码层统一映射为「合约」（不碰桌面真表）。
+    lab_day = [('合约' if (c and '电信积分' in str(c)) else c) for c in lab_day]
+    lab_gap = [('合约' if (c and '电信积分' in str(c)) else c) for c in lab_gap]
     return tasks, lehui, taili, perf, lab_day, lab_gap
 
 
@@ -364,20 +367,10 @@ def calc_qcs(xs, name, task, perf, lehui, taili):
     毛利 = perf["毛利"]["done"]
     销额 = perf["销额"]["done"]
 
-    # 电信积分分值（保留原求和口径，仅用于增值×4）
-    积分分值 = sumifs(xs, "M", P, ("D", "10运营商业务"))
-    # 合约单数（新口径：10运营商业务下，主卡=单卡新入网类 且 金额>0；排除5G半成卡副卡0元）
-    # ⚠️ 晨哥口径(2026-09-07)：一笔合约=主卡(带值)+副卡(0元)，只数主卡，副卡不算。
-    #   副卡商品名含「5G半成卡」(金额0)；主卡商品名含「单卡新入网」(金额>0)。
-    合约单数 = 0
-    for r in xs:
-        if r[C["P"]] == P[1] and r[C["D"]] == "10运营商业务":
-            g = str(r[C["G"]] or "")
-            m = num(r[C["M"]])
-            if "5G半成卡" in g:
-                continue
-            if "单卡新入网" in g and m > 0:
-                合约单数 += 1
+    # 合约单数（新口径 2026-09-08，照搬底表 C14 公式）：
+    #   C14 = SUMIFS(XS!$I:$I, XS!$P:$P, 姓名, XS!$E:$E, "合约入网")
+    #   按「商品sku分类=合约入网」对数量列求和（取代旧「单卡新入网且金额>0」口径）。
+    合约单数 = int(round(sumifs(xs, "I", P, ("E", "合约入网"))))
     合约任务 = task["合约"]
 
     # 会员搭售（care+）
@@ -398,10 +391,10 @@ def calc_qcs(xs, name, task, perf, lehui, taili):
     考核完成 = sumifs_any(xs, "I", [P], "F", KHJX_SKU)
     考核任务 = task["考核机型"]
 
-    # 增值：明细增值毛利 + 太力增值 + 乐机收金额(U列) + 电信积分×4
-    # ⚠️ 口径来自《李家村销售》真实公式：增值 = SUMIFS(明细增值) + Y(太力增值) + U(乐机收金额) + C(电信积分)×4
-    #    之前错把「乐机收金额(U)」写成「乐机收增值(V，常空)」、积分倍数写成 ×3，导致看板增值偏低。2026-08-13 修正。
-    增值完成 = sumifs(xs, "N", P, ("D", "*增值*")) + taili[name]["增值"] + lehui[name]["amount"] + 积分分值 * 4
+    # 增值（新口径 2026-09-08，照搬底表 AA14 公式）：
+    #   AA14 = SUM(SUMIFS(XS!$N:$N, 姓名, D={"*增值*","*运营商业*"})) + Y14(太力增值) + U14(乐机收)
+    #   运营商业务毛利直接计入增值，「电信积分×4」已从底表移除。
+    增值完成 = sumifs_any(xs, "N", [P], "D", ["*增值*", "*运营商业*"]) + taili[name]["增值"] + lehui[name]["amount"]
     增值任务 = task["增值"]
 
     # 健康度
@@ -445,7 +438,9 @@ def calc_daily(rxs, name, labels):
         "会员":     sumifs(rxs, "I", P, ("G", "*Care*")) + sumifs(rxs, "I", P, ("G", "*会员*")) + sumifs(rxs, "I", P, ("G", "星联优享*")),
         "回收":     sumifs(rxs, "I", P, ("G", "*回收*")),
         "贴膜":     sumifs(rxs, "I", P, ("G", "*膜*"), ("N", ">0")) + sumifs(rxs, "I", P, ("G", "*贴膜套包")) + sumifs(rxs, "I", P, ("G", "*会员*")),
-        "合约":     sum(1 for r in rxs if r[C["P"]] == P[1] and r[C["D"]] == "10运营商业务" and "单卡新入网" in str(r[C["G"]] or "") and num(r[C["M"]]) > 0),
+        # 当日合约：底表 K28=SUMIFS(RXS!M,E:*入网*) 计「积分」（99/单），
+        # 但月度 C14/每日任务 K38 均为「单数」口径；为与任务侧单数对齐，按 C14 公式结构对当日明细计数
+        "合约":     int(round(sumifs(rxs, "I", P, ("E", "合约入网")))),
         "滞销":     sumifs_any(rxs, "I", [P], "F", KHJX_SKU),
         "摄影课":   sumifs(rxs, "I", P, ("G", "*大师课*"), ("N", ">0")),
         "优享/会员": sumifs(rxs, "I", P, ("G", "*新自由*")) + sumifs(rxs, "I", P, ("G", "星联优享*")),

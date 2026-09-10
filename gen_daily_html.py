@@ -144,7 +144,7 @@ def main():
 
     # 全科生/增值
     qcs = store.get("qcs", {})
-    dfh = qcs.get("电信积分", {})
+    dfh = qcs.get("合约", {})
     zz = qcs.get("增值", {})
 
     # 当日达成
@@ -189,7 +189,7 @@ def main():
 
     # 每日达成摘要（按《李家村销售》今日达成区块 13 品类字段，如实展示；销额已在顶部 KPI 展示）
     _CAT_ORDER = ["手机", "毛利", "增值", "智慧办公", "音频穿戴", "HD", "会员",
-                  "回收", "贴膜", "电信积分", "滞销", "摄影课", "优享/会员"]
+                  "回收", "贴膜", "合约", "滞销", "摄影课", "优享/会员"]
     cats_shown = [k for k in _CAT_ORDER if k in daily_done]
     daily_items = ""
     for k in cats_shown:
@@ -311,7 +311,7 @@ def main():
   <h2>全科生考核</h2>
   <div class="kpi-grid">
     <div class="kpi-card">
-      <div class="label">电信积分</div>
+      <div class="label">合约</div>
       <div class="value">{dfh.get('done',0) or 0:.0f}</div>
       <div class="sub">任务 {dfh.get('task',0) or 0:.0f}</div>
     </div>
