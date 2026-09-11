@@ -62,6 +62,24 @@ def count_tsv_rows(path):
         return sum(1 for line in f if line.strip()) - 1
 
 
+def max_tsv_date(path):
+    """扫描日期列（第3列出库日期），返回最大日期 YYYY-MM-DD；无数据返回 None。"""
+    if not os.path.exists(path):
+        return None
+    best = None
+    with open(path, encoding="utf-8-sig") as f:
+        for i, line in enumerate(f):
+            if i == 0:
+                continue
+            parts = line.rstrip("\n").split("\t")
+            if len(parts) < 3:
+                continue
+            d = parts[2].strip()[:10]
+            if len(d) == 10 and d[4] == "-" and d > (best or ""):
+                best = d
+    return best
+
+
 def main():
     use_cache = "--use-cache" in sys.argv
     t_total = time.time()
@@ -82,25 +100,40 @@ def main():
         if rc != 0:
             print("⚠️ 销售分析拉取失败，尝试用已有数据继续")
 
-    # ===== Step 3: 选择数据源（500行截断检测）=====
+    # ===== Step 3: 选择数据源（按日期新鲜度，行数仅参考）=====
+    # 2026-09-11 修复：旧逻辑按"行数多者胜"，导致8月遗留快照 yonyou_full_512.tsv(512行)
+    # 覆盖 9 月实时数据(211行)。改为按数据最大日期选源：日期旧的一律淘汰。
     print(f"\n{'='*60}")
-    print("  Step 3/5: 检查数据源")
+    print("  Step 3/5: 检查数据源（按日期新鲜度）")
     print(f"{'='*60}")
     http_rows = count_tsv_rows(YONYOU_TSV)
     full_rows = count_tsv_rows(FULL_TSV)
-    print(f"  HTTP截断版 yonyou_raw.tsv: {http_rows} 行")
-    print(f"  浏览器提取版 yonyou_full_512.tsv: {full_rows} 行")
+    http_date = max_tsv_date(YONYOU_TSV)
+    full_date = max_tsv_date(FULL_TSV)
+    print(f"  HTTP实时版 yonyou_raw.tsv: {http_rows} 行 | 最大日期 {http_date or '—'}")
+    print(f"  浏览器快照 yonyou_full_512.tsv: {full_rows} 行 | 最大日期 {full_date or '—'}")
 
-    # 优先用完整版（浏览器提取），HTTP截断版仅做备份
-    if full_rows > http_rows:
-        tsv_path = FULL_TSV
-        print(f"  ✅ 使用浏览器提取版（{full_rows} 行 > HTTP版 {http_rows} 行，更完整）")
-    elif http_rows > 0:
-        tsv_path = YONYOU_TSV
-        print(f"  ✅ 使用HTTP版（{http_rows} 行，浏览器版不存在或更少）")
-    else:
+    def later(d1, d2):
+        if not d1: return False
+        if not d2: return True
+        return d1 > d2
+
+    if http_rows == 0 and full_rows == 0:
         print("❌ 没有可用的毛利明细数据")
         return 1
+    # 快照不存在/无数据 → 直接用 HTTP
+    if full_rows == 0 or not full_date:
+        tsv_path = YONYOU_TSV
+        print(f"  ✅ 使用HTTP实时版（快照不存在或过期）")
+    elif later(full_date, http_date):
+        tsv_path = FULL_TSV
+        print(f"  ✅ 使用浏览器快照（{full_date} 晚于 HTTP {http_date}）")
+    elif http_rows > 0:
+        tsv_path = YONYOU_TSV
+        print(f"  ✅ 使用HTTP实时版（{http_date} ≥ 快照 {full_date}，快照为旧月份遗留数据，淘汰）")
+    else:
+        tsv_path = FULL_TSV
+        print(f"  ✅ HTTP版无数据，回退浏览器快照")
 
     # ===== Step 4: 复算 data.json =====
     rc = run([PY, "calc_data.py", tsv_path], "Step 4/5: 复算 data.json（SUMIFS 1:1复现）")
