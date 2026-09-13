@@ -274,6 +274,23 @@ def load_manual(xlsx):
         else:
             perf[n] = num(v)
 
+    # --- 兜底：底表带 fullCalcOnLoad="1"，openpyxl 读不到公式缓存值（L18 恒为 None）。
+    #     此时按底表公式原样精算（perf_score.py），口径与个人表逐项对齐、不臆造。
+    if any(v is None for v in perf.values()):
+        try:
+            from perf_score import compute_perf
+            alt = compute_perf(xlsx)
+            fixed = []
+            for n in perf:
+                if perf[n] is None and alt.get(n) is not None:
+                    perf[n] = alt[n]
+                    fixed.append(n)
+            if fixed:
+                print("   ↳ 绩效按底表公式重算: " + "、".join(
+                    "%s=%.2f" % (n, perf[n]) for n in fixed))
+        except Exception as e:
+            print("   ⚠️ 绩效公式重算失败（看板该卡将空缺）:", e)
+
     # --- 表头标签（静态文本） ---
     lab_day = [ws.cell(26, c).value for c in range(2, 16)]
     lab_gap = [ws.cell(36, c).value for c in range(2, 16)]
