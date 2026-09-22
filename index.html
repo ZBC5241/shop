@@ -2657,18 +2657,20 @@ function donutSVG(items, size){
 
 /* 横向条形排行：items=[{label,value}] 已降序。maxV 不传时自动取 items 中最大值。返回 HTML 字符串。 */
 function hbarSVG(items, maxV){
-  if(!maxV) maxV = items.reduce((m,it) => Math.max(m, isNum(it.value) ? it.value : 0), 1);
+  if(!maxV) maxV = items.reduce((m,it) => Math.max(m, Math.abs(isNum(it.value) ? it.value : 0)), 1);
   const mv = Math.max(maxV, 1);
   let h = '';
   items.forEach((it, i) => {
     const v = isNum(it.value) ? it.value : 0;
-    const w = v > 0 ? Math.max(v / mv * 100, 4) : 0;
-    const col = CHART_PALETTE[i % CHART_PALETTE.length];
-    const valTxt = v > 0 ? moneyShort(v) : '0';
+    const av = Math.abs(v);
+    const neg = v < 0;
+    const w = av > 0 ? Math.max(av / mv * 100, 4) : 0;
+    const col = neg ? 'var(--red,#ef4444)' : CHART_PALETTE[i % CHART_PALETTE.length];
+    const valTxt = av > 0 ? moneyShort(v) : '0';
     h += '<div class="hb-row">'
        +   '<span class="hb-name">' + esc(it.label) + '</span>'
-       +   '<span class="hb-track"><span class="hb-fill" style="width:' + w.toFixed(1) + '%;background:' + col + '"></span></span>'
-       +   '<span class="hb-v num">' + valTxt + '</span>'
+       +   '<span class="hb-track"><span class="hb-fill" style="width:' + w.toFixed(1) + '%;background:' + col + (neg ? ';margin-left:auto' : '') + '"></span></span>'
+       +   '<span class="hb-v num"' + (neg ? ' style="color:var(--red,#ef4444)"' : '') + '>' + valTxt + '</span>'
        + '</div>';
   });
   return h;
@@ -3267,20 +3269,20 @@ function dayChartsHTML(dd, meta){
     zzDay = zzAll.filter(r => (r.date || '').slice(0,10) === dayDate);
   }
 
-  /* Donut 数据：2026-09-21 改版（晨哥拍板）——按「sku分类」聚合（底表品类维度：贴膜/合约入网/三方配件/权益系列…），
-     替代原「按商品名」聚合；点击图例展开该品类当日逐单明细。口径不变：cat=='增值'（增值+运营商业务毛利），
-     与底表「今日达成」同构 */
-  const byType = {}, rowsByType = {};
+  /* Donut 数据：当日增值按商品名称聚合毛利，降序，取前 5 + 其他（含负数项，与每日任务口径一致）。2026-09-22 晨哥拍板回退按产品明细显示 */
+  const pfByName = {};
   let totalPfAll = 0;
   zzDay.forEach(r => {
-    const t = (r.type || '').trim() || '其他';
+    const n = (r.product || r.name || '其他').replace(/^COOYEE\s*/i,'').replace(/^Cooyee\s*/,'');
     const v = isNum(r.profit) ? r.profit : 0;
-    byType[t] = (byType[t]||0) + v;
+    pfByName[n] = (pfByName[n]||0) + v;
     totalPfAll += v;
-    (rowsByType[t] = rowsByType[t] || []).push(r);
   });
-  const names = Object.keys(byType).sort((a,b) => Math.abs(byType[b]) - Math.abs(byType[a]));
-  const donutItems = names.map((c,i) => ({ label:c, value:byType[c], color:CHART_PALETTE[i % CHART_PALETTE.length] }));
+  const names = Object.keys(pfByName).sort((a,b) => Math.abs(pfByName[b]) - Math.abs(pfByName[a]));
+  const top = names.slice(0, 5);
+  const restSum = names.slice(5).reduce((s,c) => s + pfByName[c], 0);
+  const donutItems = top.map((c,i) => ({ label:c, value:pfByName[c], color:CHART_PALETTE[i % CHART_PALETTE.length] }));
+  if(Math.abs(restSum) > 0.001) donutItems.push({ label:'其余' + names.slice(5).length + '项', value:restSum, color:CHART_PALETTE[5 % CHART_PALETTE.length] });
   const totalPf = totalPfAll;
 
   /* Bar 数据：当日增值按 emp 聚合 profit(毛利)，降序，全员都列（含 0） */
@@ -3298,25 +3300,16 @@ function dayChartsHTML(dd, meta){
     h += '</div></div>';
     return h;
   }
-  h +=   '<div class="cg-card"><div class="cg-h">当日增值品类构成'
-        +   '<small style="font-size:10px;color:var(--tx3);font-weight:500;margin-left:6px">按品类 · 点品类名看逐单 · 口径对齐底表今日达成</small></div>'
+  h +=   '<div class="cg-card"><div class="cg-h">当日增值品类构成</div>'
         +     '<div class="donut-wrap">' + donutSVG(donutItems, 150)
         +       '<div class="donut-center"><b class="num">' + moneyShort(totalPf) + '</b><span>当日增值毛利</span></div>'
         +     '</div>'
         +     '<div class="donut-legend">';
-  donutItems.forEach((it, di) => {
-    const rows = (rowsByType[it.label] || []).slice().sort((a,b) => (b.profit||0) - (a.profit||0));
-    const det = rows.map(r => '<div style="display:flex;justify-content:space-between;gap:8px;padding:3px 0;border-top:1px dashed rgba(30,28,60,.08)">'
-        + '<span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--tx2)">' + esc((r.product || r.name || '—').replace(/^COOYEE\s*/i,'').replace(/^Cooyee\s*/,'')) + '</span>'
-        + '<span class="num" style="color:var(--tx3);white-space:nowrap">×' + (isNum(r.qty) ? r.qty : 1) + '</span>'
-        + '<span class="num" style="font-weight:700;white-space:nowrap;color:' + ((r.profit||0) < 0 ? 'var(--red,#ef4444)' : 'var(--tx1,#1e1c3c)') + '">' + moneyShort(r.profit) + '</span>'
-      + '</div>').join('');
-    h += '<div class="dl-i" style="cursor:pointer" onclick="var d=document.getElementById(\'zzdet' + di + '\');if(d)d.style.display=d.style.display===\'none\'?\'block\':\'none\'">'
-       +   '<span class="dl-swatch" style="background:' + it.color + '"></span>'
+  donutItems.forEach(it => {
+    h += '<div class="dl-i"><span class="dl-swatch" style="background:' + it.color + '"></span>'
        +   '<span class="dl-t">' + esc(it.label) + '</span>'
        +   '<span class="dl-v num">' + moneyShort(it.value) + '</span>'
-       + '</div>'
-       + '<div id="zzdet' + di + '" style="display:none;padding:2px 10px 6px 20px;font-size:10.5px">' + det + '</div>';
+       + '</div>';
   });
   h +=   '</div></div>'
       +   '<div class="cg-card"><div class="cg-h">当日全员增值排行</div>'
