@@ -423,20 +423,23 @@ function donutSVG(items, size){
     + parts + '</svg>';
 }
 
-/* 横向条形排行：items=[{label,value}] 已降序。maxV 不传时自动取 items 中最大值。返回 HTML 字符串。 */
+/* 横向条形排行：items=[{label,value}] 已降序。maxV 不传时自动取 items 中最大绝对值。返回 HTML 字符串。
+   负值处理（2026-09-21晨哥定稿）：负值红色反向条+真实负数金额，条形基准取绝对值最大值。 */
 function hbarSVG(items, maxV){
-  if(!maxV) maxV = items.reduce((m,it) => Math.max(m, isNum(it.value) ? it.value : 0), 1);
+  if(!maxV) maxV = items.reduce((m,it) => Math.max(m, Math.abs(isNum(it.value) ? it.value : 0)), 1);
   const mv = Math.max(maxV, 1);
   let h = '';
   items.forEach((it, i) => {
     const v = isNum(it.value) ? it.value : 0;
-    const w = v > 0 ? Math.max(v / mv * 100, 4) : 0;
-    const col = CHART_PALETTE[i % CHART_PALETTE.length];
-    const valTxt = v > 0 ? moneyShort(v) : '0';
+    const av = Math.abs(v);
+    const neg = v < 0;
+    const w = av > 0 ? Math.max(av / mv * 100, 4) : 0;
+    const col = neg ? 'var(--red,#ef4444)' : CHART_PALETTE[i % CHART_PALETTE.length];
+    const valTxt = av > 0 ? moneyShort(v) : '0';
     h += '<div class="hb-row">'
        +   '<span class="hb-name">' + esc(it.label) + '</span>'
-       +   '<span class="hb-track"><span class="hb-fill" style="width:' + w.toFixed(1) + '%;background:' + col + '"></span></span>'
-       +   '<span class="hb-v num">' + valTxt + '</span>'
+       +   '<span class="hb-track"><span class="hb-fill" style="width:' + w.toFixed(1) + '%;background:' + col + (neg ? ';margin-left:auto' : '') + '"></span></span>'
+       +   '<span class="hb-v num"' + (neg ? ' style="color:var(--red,#ef4444)"' : '') + '>' + valTxt + '</span>'
        + '</div>';
   });
   return h;

@@ -147,12 +147,10 @@ def main():
         bak = os.path.join(bak_dir, "%s_备份%s.xlsx" % (base, stamp))
         shutil.copy2(xlsx, bak)
         print("→ 已备份:", bak)
-        # 只保留最近 10 份备份
-        baks = sorted(
-            [f for f in os.listdir(bak_dir) if f.startswith(base + "_备份")]
-        )
-        for old in baks[:-10]:
-            os.remove(os.path.join(bak_dir, old))
+        # 只保留最近一次备份（2026-09-20：减轻储存压力）
+        for old in [f for f in os.listdir(bak_dir) if f.startswith(base) and f.endswith(".xlsx")]:
+            if old != os.path.basename(bak):
+                os.remove(os.path.join(bak_dir, old))
 
     # 写中间 CSV（不含表头，从 A2 开始贴）
     with open(TMP_CSV, "w", encoding="utf-8-sig", newline="") as f:

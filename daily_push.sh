@@ -96,9 +96,13 @@ STAGE="2.处理数据+生成看板+推送上线"
 "${PYTHON}" "${PIPELINE_SCRIPT}" "${PROFIT_FILE}" "${SALES_FILE}" 2>&1 | tail -10
 
 echo ""
-echo "▶ 3. 推送卡片（模式: ${CARD_MODE:-智能选片}）"
-STAGE="3.推送卡片"
-"${PYTHON}" "${PUSH_SCRIPT}" ${PUSH_ARGS}
+if [ "${SKIP_WECOM:-0}" = "1" ]; then
+  echo "▶ 3. 企微推送：静默档跳过（SKIP_WECOM=1，看板已上线）"
+else
+  echo "▶ 3. 推送卡片（模式: ${CARD_MODE:-智能选片}）"
+  STAGE="3.推送卡片"
+  "${PYTHON}" "${PUSH_SCRIPT}" ${PUSH_ARGS}
+fi
 
 STAGE="完成"
 echo ""

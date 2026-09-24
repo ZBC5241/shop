@@ -88,8 +88,10 @@ def main():
     bak = os.path.join(bak_dir, f"{base}_备份{stamp}.xlsx")
     shutil.copy2(target, bak)
     print(f"→ 已备份: {os.path.basename(bak)}")
-    for old in sorted(f for f in os.listdir(bak_dir) if f.startswith(base + "_备份"))[:-10]:
-        os.remove(os.path.join(bak_dir, old))
+    # 只保留最近一次备份（2026-09-20：减轻储存压力）
+    for old in [f for f in os.listdir(bak_dir) if f.startswith(base) and f.endswith(".xlsx")]:
+        if old != os.path.basename(bak):
+            os.remove(os.path.join(bak_dir, old))
 
     # XML 原位替换：只在「李家村销售」sheet XML 内替换 T/U 单元格
     with zipfile.ZipFile(target, "r") as zin:

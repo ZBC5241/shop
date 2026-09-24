@@ -95,12 +95,54 @@ def do_login(page, account):
         if "login" not in url.lower() and "cas" not in url.lower():
             break
     time.sleep(3)
+    dismiss_modal(page)
     log(f"✅ 登录成功：{account['label']}")
     return True
 
 
+def dismiss_modal(page, max_rounds=4):
+    """关闭用友云平台公告/通知类模态弹窗（wui-modal-mask，如"发票查验功能升级通知"）。
+    2026-09-23 20:07 档事故修复：公告遮罩拦截全部点击导致导出失败。幂等可重复调用。"""
+    for i in range(max_rounds):
+        try:
+            if not page.query_selector('.wui-modal-mask'):
+                return True
+        except Exception:
+            return True
+        log(f"检测到平台模态弹窗，尝试关闭（第{i+1}次）…")
+        try:
+            closed = page.evaluate("""() => {
+                const sels = ['.wui-modal-close', '.wui-icon-close',
+                              '.wui-modal-header [class*="close"]',
+                              '.wui-modal-footer button', '.wui-btn-primary'];
+                for (const s of sels) {
+                    for (const b of document.querySelectorAll(s)) {
+                        const r = b.getBoundingClientRect();
+                        if (r.width > 0 && r.height > 0) { b.click(); return 'btn:' + s; }
+                    }
+                }
+                return null;
+            }""")
+            if closed:
+                log(f"  已点击关闭元素 {closed}")
+        except Exception as e:
+            log(f"  JS 关闭异常：{e}")
+        try:
+            page.keyboard.press('Escape')
+        except Exception:
+            pass
+        page.wait_for_timeout(1200)
+    try:
+        gone = not page.query_selector('.wui-modal-mask')
+        log(f"  模态弹窗{'已关闭' if gone else '仍存在（继续以最佳努力执行）'}")
+        return gone
+    except Exception:
+        return True
+
+
 def open_report(page, report_id, report_name):
     """从工作台点击报表入口打开报表面板"""
+    dismiss_modal(page)
     el_id = f"recent-{report_id}"
     # 等待报表入口出现（工作台可能渲染较慢），最多30秒
     entry_ready = False
@@ -162,6 +204,7 @@ def query_data(page, report_name):
 
 
 def export_profit_detail(page, context):
+    dismiss_modal(page)
     """导出毛利明细表（在当前页面操作，不需要新标签）"""
     log("═══ 导出毛利明细表 ═══")
 
@@ -236,6 +279,7 @@ def export_profit_detail(page, context):
 
 
 def export_sales_analysis(page, context):
+    dismiss_modal(page)
     """导出销售分析（需要关闭毛利报表，打开销售分析）"""
     log("═══ 导出销售分析 ═══")
 

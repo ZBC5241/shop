@@ -308,8 +308,10 @@ def main():
     bak = os.path.join(bak_dir, "%s_备份%s.xlsx" % (base, stamp))
     shutil.copy2(xlsx, bak)
     print("→ 已备份:", os.path.basename(bak))
-    for old in sorted([f for f in os.listdir(bak_dir) if f.startswith(base + "_备份")])[:-10]:
-        os.remove(os.path.join(bak_dir, old))
+    # 只保留最近一次备份（2026-09-20：减轻储存压力）
+    for old in [f for f in os.listdir(bak_dir) if f.startswith(base) and f.endswith(".xlsx")]:
+        if old != os.path.basename(bak):
+            os.remove(os.path.join(bak_dir, old))
 
     print("→ 写入「销售分析」(保留标题+A2表头，清空A3起重贴)…")
     import_into(xlsx, rows)

@@ -18,7 +18,7 @@ write_xs_xml.py — XML级原位替换底表 XS sheet（恢复旧SOP"写底表"�
     3. 日期列 C 存 Excel 序列数（s=367 日期格式显示）。
     4. 空行填充到 770 行（全 49 列带样式），保持原表观感。
     5. fullCalcOnLoad 置位：打开文件即全量重算 SUMIFS。
-    6. 写前自动备份（保留最近10份），写后自动校验。
+    6. 写前自动备份（只保留最近一次），写后自动校验。
 
 用法：
     python write_xs_xml.py <毛利明细.xlsx> [目标.xlsx]
@@ -36,6 +36,26 @@ from openpyxl.utils import get_column_letter
 
 DEFAULT_XLSX = "/Users/mac/Desktop/李家村销售/李家村9月任务进度.xlsx"
 XS_SHEET_FILE = "xl/worksheets/sheet4.xml"  # XS = 第4个sheet
+
+
+def find_sheet_xml(target, sheet_name):
+    """从 workbook.xml + rels 动态解析 sheet_name 对应的 worksheets xml 路径
+    （sheetN.xml 编号与 sheet 顺序无必然对应，且 WPS 另存可能重排，必须动态解析）。"""
+    with zipfile.ZipFile(target, "r") as z:
+        wbx = z.read("xl/workbook.xml").decode("utf-8")
+    m = (re.search(r'<sheet[^>]*name="%s"[^>]*r:id="(rId\d+)"' % re.escape(sheet_name), wbx)
+         or re.search(r'<sheet[^>]*r:id="(rId\d+)"[^>]*name="%s"' % re.escape(sheet_name), wbx))
+    if not m:
+        sys.exit(f"❌ workbook.xml 里找不到 sheet「{sheet_name}」")
+    rid = m.group(1)
+    with zipfile.ZipFile(target, "r") as z:
+        rels = z.read("xl/_rels/workbook.xml.rels").decode("utf-8")
+    m2 = (re.search(r'<Relationship[^>]*Id="%s"[^>]*Target="([^"]+)"' % rid, rels)
+          or re.search(r'<Relationship[^>]*Target="([^"]+)"[^>]*Id="%s"' % rid, rels))
+    if not m2:
+        sys.exit(f"❌ workbook.xml.rels 里找不到 {rid} 的 Target")
+    t = m2.group(1).lstrip("/")
+    return t if t.startswith("xl/") else "xl/" + t
 
 HEADERS = [
     "出库单号", "单据类型", "出库日期", "商品分类", "商品sku分类",
@@ -203,7 +223,7 @@ def main():
     gross = sum(float(r[13] or 0) for r in rows if num_str(r[13]) is not None)
     print(f"→ 明细去重后 {len(rows)} 行，毛利合计 ¥{gross:,.2f}")
 
-    # 备份（保留最近10份）
+    # 备份（只保留最近一次）
     bak_dir = os.path.join(os.path.dirname(target), "_备份")
     os.makedirs(bak_dir, exist_ok=True)
     stamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -211,8 +231,10 @@ def main():
     bak = os.path.join(bak_dir, f"{base}_备份{stamp}.xlsx")
     shutil.copy2(target, bak)
     print(f"→ 已备份: {os.path.basename(bak)}")
-    for old in sorted(f for f in os.listdir(bak_dir) if f.startswith(base + "_备份"))[:-10]:
-        os.remove(os.path.join(bak_dir, old))
+    # 只保留最近一次备份（2026-09-20：减轻储存压力）
+    for old in [f for f in os.listdir(bak_dir) if f.startswith(base) and f.endswith(".xlsx")]:
+        if old != os.path.basename(bak):
+            os.remove(os.path.join(bak_dir, old))
 
     # 提取原行1（表头）作为模板
     with zipfile.ZipFile(target, "r") as zin:
@@ -233,6 +255,25 @@ def main():
     new_sheetdata, last = build_rows_xml(rows, header_row1)
     last_data = len(rows) + 1
 
+    # ===== 【2026-09-22 新增】同步写 RXS（当日流水，底表「今日达成」区块的数据源）=====
+    # 缺陷史：管线此前只写 XS，RXS 停留在最后一次手工写入（9/19，且误含未过滤的全公司行），
+    # 而底表「今日达成」公式（D28 等）全部引用 RXS 且无日期条件 → RXS 必须只含最近营业日行，
+    # 否则底表当日数字永远停在旧日期，与看板对不上（晨哥 2026-09-21 质疑的根因）。
+    data_max = max(r[2][:10] for r in rows)
+    rows_today = [r for r in rows if r[2][:10] == data_max]
+    RXS_SHEET_FILE = find_sheet_xml(target, "RXS")
+    with zipfile.ZipFile(target, "r") as zr:
+        rxs_xml = zr.read(RXS_SHEET_FILE).decode("utf-8")
+    m1r = re.search(r'<row r="1"[^>]*>.*?</row>', rxs_xml, re.S)
+    if not m1r:
+        sys.exit("❌ 原RXS表头行提取失败")
+    header_row1_rxs = m1r.group(0)
+    if probe_styles(rxs_xml):          # RXS 样式独立探测（在 XS sheetData 已构建之后，不影响 XS）
+        print(f"→ 样式探测(RXS): C列日期={COL_STYLES[2][1]}")
+    else:
+        ROW_ATTRS = ROW_ATTRS_DEFAULT
+    rxs_sheetdata, rxs_last = build_rows_xml(rows_today, header_row1_rxs)
+
     # 原位替换
     tmp_fd, tmp_path = tempfile.mkstemp(suffix=".xlsx")
     os.close(tmp_fd)
@@ -246,6 +287,13 @@ def main():
                            new_sheetdata, x, count=1, flags=re.S)
                 x = re.sub(r'<dimension ref="[^"]+"',
                            f'<dimension ref="A1:AW{last}"', x, count=1)
+                data = x.encode("utf-8")
+            elif item.filename == RXS_SHEET_FILE:
+                x = data.decode("utf-8")
+                x = re.sub(r"<sheetData>.*?</sheetData>|<sheetData/>",
+                           rxs_sheetdata, x, count=1, flags=re.S)
+                x = re.sub(r'<dimension ref="[^"]+"',
+                           f'<dimension ref="A1:AW{rxs_last}"', x, count=1)
                 data = x.encode("utf-8")
             elif item.filename == "xl/workbook.xml":
                 x = data.decode("utf-8")
@@ -274,6 +322,10 @@ def main():
     # 校验 4人口径 ≤ 全门店（差额=非本店业务员）且总毛利一致
     gall = sum(float(v[1] or 0) for v in vals if num_str(str(v[1] or "")) is not None)
     assert abs(gall - gross) < 0.01, f"总毛利不符: {gall} vs {gross}"
+    # RXS 同步校验：当日行数一致
+    n_rxs = sum(1 for r in wb2["RXS"].iter_rows(min_row=2, values_only=True) if r[0] is not None)
+    assert n_rxs == len(rows_today), f"RXS 行数不符: {n_rxs} vs {len(rows_today)}"
+    print(f"✓ RXS 已同步: {n_rxs} 行（{data_max} 当日流水）")
     aa = wb2["李家村销售"]["AA14"].value
     assert hasattr(aa, "text") and "SUMIFS" in aa.text, "AA14公式丢失"
     cf_count = sum(

@@ -1047,6 +1047,8 @@ def main():
     base0 = datetime.date.fromisoformat(data_max)
     ref = today if (today.year, today.month) == (base0.year, base0.month) and today >= base0 else base0
     day = a.day or ref.isoformat()
+    # 【2026-09-24 晨哥指令撤销回退】当天无流水就如实显示当天（含 0 态），不再回退最近营业日。
+    #   （9/22 加的回退逻辑按晨哥本次指令移除：忠实当天。）
     rxs = [r for r in xs if day_of(r) == day]
     base = datetime.date.fromisoformat(day)
     last_day = calendar.monthrange(base.year, base.month)[1]
