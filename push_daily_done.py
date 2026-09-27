@@ -37,9 +37,13 @@ def confirmed_submitted(date_str):
         return False, None
 
 
-def build_card(date_str, submit_time=None):
-    """日清日结样式：一句话「今日日报已交」+ 提交成功时间。"""
+def build_card(date_str, submit_time=None, fail=False):
+    """日清日结样式：一句话「今日日报已交/提交失败」+ 时间。"""
     md = date_str[5:7] + "-" + date_str[8:10]
+    if fail:
+        L = [f"**❌ 今日日报提交失败 · {md}**"]
+        L.append(f"> <font color=\"comment\">请检查后重试</font>")
+        return "\n".join(L)
     L = [f"**✅ 今日日报已交 · {md}**"]
     if submit_time:
         L.append(f"> <font color=\"comment\">提交成功时间：{submit_time}</font>")
@@ -57,17 +61,30 @@ def send_markdown(wh, content):
 
 def main():
     date_str = datetime.date.today().isoformat()
+    fail = False
     args = sys.argv[1:]
     for i, a in enumerate(args):
         if a == "--date" and i + 1 < len(args):
             date_str = args[i + 1]
-    ok, submit_time = confirmed_submitted(date_str)
-    if not ok:
-        print(f"⚠️ 当日 outbox 无记录（{date_str}），可能未提交，不推送")
-        return
+        if a == "--fail":
+            fail = True
     wh = load_webhook()
     if not wh:
         print("❌ 未配置 webhook")
+        return
+    if fail:
+        # 失败卡片：不查 outbox（失败通常没记录），直接推失败卡
+        card = build_card(date_str, fail=True)
+        print(card)
+        try:
+            resp = send_markdown(wh, card)
+            print("📤 推送结果:", resp)
+        except Exception as e:
+            print("❌ 推送失败:", e)
+        return
+    ok, submit_time = confirmed_submitted(date_str)
+    if not ok:
+        print(f"⚠️ 当日 outbox 无记录（{date_str}），可能未提交，不推送")
         return
     card = build_card(date_str, submit_time)
     print(card)
