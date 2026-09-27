@@ -9,7 +9,7 @@
   "isToday": true,
   "lagDays": 0,
   "todayLabel": "09-27",
-  "fetchTime": "22:48",
+  "fetchTime": "23:02",
   "employees": [
    "邵乐乐",
    "杨丽华",
@@ -19,7 +19,7 @@
   "sourceFile": "门店毛利明细表-华为终端.xlsx",
   "sourceRows": 720,
   "dayRows": 25,
-  "generatedAt": "2026-09-27 22:48:40"
+  "generatedAt": "2026-09-27 23:02:10"
  },
  "store": {
   "performance": {
@@ -5659,7 +5659,7 @@
     "emp": "杨丽华",
     "sku": "07.001.013.005.005",
     "code": "LS002501862609270014",
-    "member": "今喜",
+    "member": "张炜",
     "phone": "19209300377"
    },
    {
@@ -6727,7 +6727,7 @@
     "emp": "杨丽华",
     "sku": "07.001.013.005.005",
     "code": "LS002501862609270014",
-    "member": "今喜",
+    "member": "张炜",
     "phone": "19209300377"
    },
    {
@@ -8505,7 +8505,7 @@
     "emp": "杨丽华",
     "sku": "15.005.014",
     "code": "LS002501862609270014",
-    "member": "今喜",
+    "member": "张炜",
     "phone": "19209300377"
    },
    {
@@ -13295,7 +13295,7 @@
       "sku": "星联尊享-2000",
       "qty": 1.0,
       "amount": 800.0,
-      "member": "今喜",
+      "member": "张炜",
       "phone": "19209300377",
       "origPrice": 800.0,
       "discPrice": 0.0,
@@ -13310,7 +13310,7 @@
       "sku": "华为-手提袋-小",
       "qty": 4.0,
       "amount": 0.0,
-      "member": "今喜",
+      "member": "张炜",
       "phone": "19209300377",
       "origPrice": 0.0,
       "discPrice": 0.0,
@@ -13325,7 +13325,7 @@
       "sku": "华为 FreeClip2 耳机 T0027  冰莓紫",
       "qty": 1.0,
       "amount": 1200.0,
-      "member": "今喜",
+      "member": "张炜",
       "phone": "19209300377",
       "origPrice": 1200.0,
       "discPrice": 0.0,
