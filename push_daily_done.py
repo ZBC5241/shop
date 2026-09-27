@@ -17,23 +17,32 @@ def load_webhook():
 
 
 def confirmed_submitted(date_str):
-    """outbox 反查确认当日已提交（≥1 条才推）。"""
+    """outbox 反查确认当日已提交（≥1 条），返回提交时间 HH:MM（取最新一条）。"""
     try:
         r = subprocess.run(
             [DWS, "report", "outbox", "list",
              "--start", f"{date_str}T00:00:00+08:00",
              "--end", f"{date_str}T23:59:59+08:00", "-y"],
             capture_output=True, text=True, timeout=60)
-        return len(json.loads(r.stdout).get("_internalDetailCommands", [])) >= 1
+        d = json.loads(r.stdout)
+        cmds = d.get("_internalDetailCommands", [])
+        if not cmds:
+            return False, None
+        # 从 markdown 表格首行取「日期」列（形如 2026-09-26 23:16）
+        md = d.get("agentDisplay", {}).get("markdown", "")
+        import re
+        m = re.search(r"\| (\d{4}-\d{2}-\d{2} \d{2}:\d{2}) \|", md)
+        return True, (m.group(1)[-5:] if m else None)
     except Exception:
-        return False
+        return False, None
 
 
-def build_card(date_str):
-    """日清日结样式：一句话「今日日报已交」+ 日期。"""
+def build_card(date_str, submit_time=None):
+    """日清日结样式：一句话「今日日报已交」+ 提交成功时间。"""
     md = date_str[5:7] + "-" + date_str[8:10]
-    L = []
-    L.append(f"**✅ 今日日报已交 · {md}**")
+    L = [f"**✅ 今日日报已交 · {md}**"]
+    if submit_time:
+        L.append(f"> <font color=\"comment\">提交成功时间：{submit_time}</font>")
     return "\n".join(L)
 
 
@@ -52,14 +61,15 @@ def main():
     for i, a in enumerate(args):
         if a == "--date" and i + 1 < len(args):
             date_str = args[i + 1]
-    if not confirmed_submitted(date_str):
+    ok, submit_time = confirmed_submitted(date_str)
+    if not ok:
         print(f"⚠️ 当日 outbox 无记录（{date_str}），可能未提交，不推送")
         return
     wh = load_webhook()
     if not wh:
         print("❌ 未配置 webhook")
         return
-    card = build_card(date_str)
+    card = build_card(date_str, submit_time)
     print(card)
     try:
         resp = send_markdown(wh, card)
