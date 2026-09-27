@@ -30,11 +30,10 @@ def confirmed_submitted(date_str):
 
 
 def build_card(date_str):
-    """日清日结样式：标题 Emoji + 一句话 + 灰色落款。"""
+    """日清日结样式：一句话「今日日报已交」+ 日期。"""
     md = date_str[5:7] + "-" + date_str[8:10]
     L = []
     L.append(f"**✅ 今日日报已交 · {md}**")
-    L.append("> <font color=\"comment\">李家村·华为</font>")
     return "\n".join(L)
 
 
