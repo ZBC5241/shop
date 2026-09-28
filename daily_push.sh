@@ -68,7 +68,12 @@ if [ "$MODE" = "check" ]; then
     echo ""
     echo "▶ 3. 检查不上账"
     STAGE="3.检查不上账"
-    "${PYTHON}" "${PUSH_SCRIPT}" --check-no-data
+    if [ "${SKIP_WECOM:-1}" = "1" ]; then
+      echo "    （SKIP_WECOM=1，不上账提醒仅本地检查，不推企微群）"
+      "${PYTHON}" "${PUSH_SCRIPT}" --check-no-data --dry
+    else
+      "${PYTHON}" "${PUSH_SCRIPT}" --check-no-data
+    fi
 
     STAGE="完成"
     echo ""
@@ -96,8 +101,8 @@ STAGE="2.处理数据+生成看板+推送上线"
 "${PYTHON}" "${PIPELINE_SCRIPT}" "${PROFIT_FILE}" "${SALES_FILE}" 2>&1 | tail -10
 
 echo ""
-if [ "${SKIP_WECOM:-0}" = "1" ]; then
-  echo "▶ 3. 企微推送：静默档跳过（SKIP_WECOM=1，看板已上线）"
+if [ "${SKIP_WECOM:-1}" = "1" ]; then
+  echo "▶ 3. 企微推送：默认跳过（SKIP_WECOM=1，晨哥 2026-09-28 指令：看板不推企微群）"
 else
   echo "▶ 3. 推送卡片（模式: ${CARD_MODE:-智能选片}）"
   STAGE="3.推送卡片"

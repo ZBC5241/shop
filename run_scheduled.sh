@@ -20,8 +20,8 @@ M=$(date +%M)
 case "$H:$M" in
   14:07|18:07|20:07) MODE="progress"; export SKIP_WECOM=1 ;;
   22:27|22:47)       MODE="progress"; export SKIP_WECOM=1 ;;
-  23:01)  MODE="report" ;;
-  *)      MODE="report" ;;
+  23:01)  MODE="report";  export SKIP_WECOM=1 ;;   # 晨哥 2026-09-28：收官档也不推企微群
+  *)      MODE="report";  export SKIP_WECOM=1 ;;
 esac
 
 "$SCRIPT" push "$MODE"
