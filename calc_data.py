@@ -399,8 +399,14 @@ def calc_qcs(xs, name, task, perf, lehui, taili):
     回收 = sumifs(xs, "I", P, ("G", "*回收*")) + taili[name]["orders"] + lehui[name]["orders"]
     回收_gap = 回收 - roundup(手机 * 0.20)
 
-    # 贴膜
-    贴膜 = sumifs(xs, "I", P, ("G", "*膜*"), ("N", ">0")) + sumifs(xs, "I", P, ("G", "*贴膜套包"))
+    # 贴膜（新口径 2026-09-28，照搬底表 M14:M18 公式）：
+    #   M = SUMIFS(XS!I, 姓名, G("*膜*")且M<>0) + SUMIFS(XS!I, 姓名, "*贴膜套包") + AH(会员体系)
+    #   AH 口径：销售员 = *会员*+星联优享*；店长(PEOPLE_ORDER[-1],底表18行) = *新自由*+星联优享*
+    if name == PEOPLE_ORDER[-1]:
+        mem = sumifs(xs, "I", P, ("G", "*新自由*")) + sumifs(xs, "I", P, ("G", "星联优享*"))
+    else:
+        mem = sumifs(xs, "I", P, ("G", "*会员*")) + sumifs(xs, "I", P, ("G", "星联优享*"))
+    贴膜 = sumifs(xs, "I", P, ("G", "*膜*"), ("M", "<>0")) + sumifs(xs, "I", P, ("G", "*贴膜套包")) + mem
     贴膜基数 = 手机 + 智慧办公 + 穿戴
     贴膜_gap = 贴膜 - roundup(贴膜基数 * 0.50)
 
