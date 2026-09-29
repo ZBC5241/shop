@@ -172,9 +172,12 @@ def load_xlsx(path):
                 cells.append(c.strftime("%Y-%m-%d"))
             else:
                 cells.append(str(c))
-        key = (cells[0].strip(), cells[5].strip())  # 出库单号 + SKU编码
+        # 去重（2026-09-30 修复）：key = 整行签名。旧 key（出库单号+SKU编码）会把
+        # 同单同SKU但入库属性不同的合法两行误删（如 XSCK26090300157 的 GT7 MSC+专供，
+        # 丢邵乐乐毛利338）。完全相同的行才是用友导出重复，保留首行。
+        key = tuple(cells)
         if key in seen:
-            continue  # 跳过重复行
+            continue  # 跳过完全相同的重复行
         seen.add(key)
         rows.append(cells)
     return rows

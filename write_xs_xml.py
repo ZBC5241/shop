@@ -11,8 +11,9 @@ write_xs_xml.py — XML级原位替换底表 XS sheet（恢复旧SOP"写底表"�
     只换 XS sheet 的 sheetData 数据行，其余全部原样保留。
 
 关键设计：
-    1. 去重规则与 calc_data.py 完全一致（出库单号+SKU编码，保留首行）
+    1. 去重规则与 calc_data.py 完全一致（整行签名，完全相同的行保留首行）
        —— 保证底表 SUMIFS 与看板口径永不劈叉。
+       （2026-09-30 修复：旧 key「出库单号+SKU编码」会误删同单同SKU不同属性的合法行）
     2. 数据行/空行按列固定样式写入（s=220/367/222/223/224/225/226/227/212），
        保留行高 ht=21、自定义格式，WPS/Excel 打开观感与手工粘贴一致。
     3. 日期列 C 存 Excel 序列数（s=367 日期格式显示）。
@@ -158,7 +159,10 @@ def load_rows(src):
                 cells[18] = str(float(cells[12]) - float(cells[13]))
             except (ValueError, TypeError):
                 pass
-        key = (cells[0].strip(), cells[5].strip())  # 出库单号+SKU编码
+        # 去重（2026-09-30 修复）：key = 整行签名。旧 key（出库单号+SKU编码）会把
+        # 同单同SKU但入库属性不同的合法两行误删（如 XSCK26090300157 的 GT7 MSC+专供，
+        # 丢邵乐乐毛利338）。完全相同的行才是用友导出重复，保留首行。
+        key = tuple(cells)
         if key in seen:
             continue
         seen.add(key)
