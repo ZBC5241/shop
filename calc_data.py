@@ -19,7 +19,63 @@
     明细文件支持 .tsv 和 .xlsx（导出按钮直接导出的原始数据xlsx，跳过TSV中转）
 """
 import sys, os, re, json, csv, datetime, argparse, calendar
+import zipfile
+import shutil
 import openpyxl
+
+# ==================== 底表完整性防护（2026-10-01 17hao 加固） ====================
+# 背景：看板流水线会重写桌面底表（write_xlsx/update_sales_analysis），若写入中途被
+#       打断（WPS 同开 / 进程中断），底表会变成损坏的 zip（BadZipFile），导致整个
+#       流程在 load_workbook 处抛异常、推送告警。这里在读底表前先做完整性校验，
+#       损坏则自动用最近一次 _备份 恢复，保证流程不因底表坏而中断。
+def _xlsx_ok(path):
+    """校验 xlsx 是否为有效 zip 且能被 openpyxl 打开。"""
+    if not os.path.isfile(path):
+        return False
+    try:
+        with zipfile.ZipFile(path, 'r') as z:
+            # 校验 zip 中央目录完整
+            bad = z.testzip()
+            if bad is not None:
+                return False
+        # 进一步用 openpyxl 验证可读（含 sheet）
+        wb = openpyxl.load_workbook(path, data_only=False)
+        if not wb.sheetnames:
+            return False
+        return True
+    except Exception:
+        return False
+
+
+def _backup_dir(xlsx):
+    return os.path.join(os.path.dirname(os.path.abspath(xlsx)), "_备份")
+
+
+def ensure_xlsx_ok(xlsx):
+    """底表完整性校验 + 自动恢复。返回最终可用的 xlsx 路径；全部失败则抛异常。"""
+    if _xlsx_ok(xlsx):
+        return xlsx
+    print(f"  ⚠️ 底表损坏或不可读: {xlsx}", file=sys.stderr)
+    # 尝试从 _备份 恢复：优先最近的、可用的
+    bak_dir = _backup_dir(xlsx)
+    base = os.path.splitext(os.path.basename(xlsx))[0]
+    if os.path.isdir(bak_dir):
+        cands = [f for f in os.listdir(bak_dir)
+                 if f.startswith(base) and f.endswith(".xlsx") and "_备份" in f]
+        # 按 mtime 从新到旧，找第一个可用的
+        cands.sort(key=lambda f: os.path.getmtime(os.path.join(bak_dir, f)), reverse=True)
+        for cf in cands:
+            cp = os.path.join(bak_dir, cf)
+            if _xlsx_ok(cp):
+                shutil.copy2(cp, xlsx)
+                os.system('xattr -c "%s" 2>/dev/null' % xlsx)
+                print(f"  ✅ 已用备份恢复底表: {cf}", file=sys.stderr)
+                return xlsx
+    # 备份也都不可用：抛异常，让上层明确失败而非静默
+    raise RuntimeError(
+        f"底表 {xlsx} 损坏且无可用备份可恢复（_备份 目录: {bak_dir}）。"
+        f"请用 WPS 重新保存，或从微信/晨哥处拿正确版本覆盖。"
+    )
 
 # ---------- 明细列（与用友云导出、XS/RXS 完全一致的 19 列） ----------
 # Excel 列字母 -> 0-based 下标
@@ -1063,6 +1119,7 @@ def main():
     last_day = calendar.monthrange(base.year, base.month)[1]
     rd = remain_days(ref)
 
+    ensure_xlsx_ok(a.xlsx)   # 2026-10-01 17hao：读前完整性校验 + 损坏自动恢复
     load_people(a.xlsx)
     tasks, lehui, taili, perf_score, lab_day, lab_gap = load_manual(a.xlsx)
     # 乐机收：直接读《李家村销售》T14:U18（持久化由 xlsx 文件承载；用户每次写入就是最新值）
