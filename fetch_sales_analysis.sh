@@ -9,7 +9,7 @@
 set -e
 
 BASE="/Users/mac/WorkBuddy/Claw"
-XLSX="/Users/mac/Desktop/李家村销售/李家村9月任务进度.xlsx"
+XLSX=$(ls -t /Users/mac/Desktop/李家村销售/李家村*任务进度.xlsx 2>/dev/null | grep -v '~\$' | head -1)
 DOWN="$HOME/Downloads"
 ACCOUNT="18161914293"
 PY="/Users/mac/.workbuddy/binaries/python/versions/3.13.12/bin/python3"

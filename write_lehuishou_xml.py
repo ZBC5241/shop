@@ -26,7 +26,11 @@ import sys
 import tempfile
 import zipfile
 
-DEFAULT_XLSX = "/Users/mac/Desktop/李家村销售/李家村9月任务进度.xlsx"
+try:
+    from ljc_paths import find_task_xlsx
+    DEFAULT_XLSX = find_task_xlsx() or "/Users/mac/Desktop/李家村销售/李家村10月任务进度.xlsx"
+except ImportError:
+    DEFAULT_XLSX = "/Users/mac/Desktop/李家村销售/李家村10月任务进度.xlsx"
 TARGET_SHEET_FILE = "xl/worksheets/sheet3.xml"  # 李家村销售 = 第3个sheet
 
 # 与 calc_data.py 同源：月任务行号+10，张博晨固定18

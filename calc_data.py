@@ -265,15 +265,18 @@ def load_people(xlsx):
     wbf = openpyxl.load_workbook(xlsx, data_only=False)
     tk = wbf[[s for s in wbf.sheetnames if s.endswith("月任务") or s.endswith("度任务")][0]]
     task_people, task_row = [], {}
-    for r in range(4, 8):                   # B4~B7
+    r = 4
+    while True:                              # B4 起动态读到「合计」行前，支持人员增减
         nm = tk.cell(r, 2).value             # B 列 = 姓名
-        if nm and str(nm).strip():
-            nm = str(nm).strip()
-            # 底表「合计」行是汇总值（已并入 store.qcs 顶层），不当人员 tab
-            if nm == "合计":
-                continue
-            task_people.append(nm)
-            task_row[nm] = r
+        if not (nm and str(nm).strip()):
+            break
+        nm = str(nm).strip()
+        # 底表「合计」行是汇总值（已并入 store.qcs 顶层），不当人员 tab
+        if nm == "合计":
+            break
+        task_people.append(nm)
+        task_row[nm] = r
+        r += 1
     PEOPLE_ORDER = task_people + ["张博晨"]
     TASK_PEOPLE = task_people
     TASK_ROW = task_row
@@ -1095,11 +1098,18 @@ def build_day_details(rxs):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("detail", help="明细文件路径（.tsv 或 .xlsx）")
-    ap.add_argument("--xlsx", default="/Users/mac/Desktop/李家村销售/李家村9月任务进度.xlsx")
+    ap.add_argument("--xlsx", default=None,
+                    help="任务进度xlsx（缺省=动态发现最新底表）")
     ap.add_argument("--day", help="当日达成基准日，默认取明细里的最大日期")
     ap.add_argument("-o", "--out", default=os.path.join(
         os.path.dirname(os.path.abspath(__file__)), "data.json"))
     a = ap.parse_args()
+    if a.xlsx is None:
+        try:
+            from ljc_paths import find_task_xlsx
+            a.xlsx = find_task_xlsx() or "/Users/mac/Desktop/李家村销售/李家村10月任务进度.xlsx"
+        except ImportError:
+            a.xlsx = "/Users/mac/Desktop/李家村销售/李家村10月任务进度.xlsx"
 
     xs = load_detail(a.detail)
     if not xs:

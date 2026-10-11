@@ -17,7 +17,14 @@ import build_data as bd
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 DATA = sys.argv[1] if len(sys.argv) > 1 else os.path.join(BASE, "data.json")
-XLSX = sys.argv[2] if len(sys.argv) > 2 else "/Users/mac/Desktop/李家村销售/李家村9月任务进度.xlsx"
+def _default_task_xlsx():
+    try:
+        from ljc_paths import find_task_xlsx
+        return find_task_xlsx() or "/Users/mac/Desktop/李家村销售/李家村10月任务进度.xlsx"
+    except ImportError:
+        return "/Users/mac/Desktop/李家村销售/李家村10月任务进度.xlsx"
+
+XLSX = sys.argv[2] if len(sys.argv) > 2 else _default_task_xlsx()
 
 AUG_CACHE = os.path.join(BASE, "sa_aug_cache.json")   # 8 月李家村切片（纯HTTP 抓取后本地筛得）
 
@@ -145,10 +152,16 @@ def read_emp_channel():
     try:
         _wbf = openpyxl.load_workbook(XLSX, data_only=False)
         _tk = _wbf[[s for s in _wbf.sheetnames if s.endswith("月任务") or s.endswith("度任务")][0]]
-        for _r in range(4, 8):
+        _r = 4
+        while True:
             _nm = _tk.cell(_r, 2).value
-            if _nm and str(_nm).strip():
-                active.add(str(_nm).strip())
+            if not (_nm and str(_nm).strip()):
+                break
+            _nm = str(_nm).strip()
+            if _nm == "合计":
+                break
+            active.add(_nm)
+            _r += 1
         _wbf.close()
     except Exception as e:
         print("  [员工×渠道] 底表现役名单读取失败，退回不过滤: %s" % e)
@@ -159,15 +172,9 @@ def read_emp_channel():
         try:
             recs = json.load(open(AUG_CACHE, encoding="utf-8")).get("records", [])
             n_emp = 0
-            _seen = set()   # 2026-10-11 API重复行去重（同单据+同明细行+同SKU+同SN 只算一次）
+            # ⚠️ 不去重（与 build_qudao_from_cache 同理）：AUG_CACHE 两写入者产出已干净，
+            #   去重会误杀真两件（XT2 21999 同款同价两台）
             for r in recs:
-                _kb = (str(r.get("code") or ""),
-                       str(r.get("retailVouchDetails_product") or ""),
-                       str(r.get("retailVouchDetails_productsku") or ""),
-                       str(r.get("oid_userDefine_2419863036093267976") or ""))
-                if _kb in _seen:
-                    continue
-                _seen.add(_kb)
                 p = str(r.get("iEmployeeid_name") or "").strip()
                 c = str(r.get("retailVouchHeaderDefineCharacter__HWHKQD_name") or "").strip()
                 if not p or not c:
@@ -358,29 +365,38 @@ def build_qudao_from_cache():
     _tk = _wbf[[s for s in _wbf.sheetnames if s.endswith("月任务") or s.endswith("度任务")][0]]
     tasks = {}
     _qd = _wbf["渠道挂账"] if "渠道挂账" in _wbf.sheetnames else None
-    for r in range(4, 8):
+    r = 4
+    while True:
         nm = _tk.cell(r, 2).value
-        if nm and str(nm).strip():
-            nm = str(nm).strip()
-            t = 32000.0
-            if _qd is not None:
-                for qr in range(4, _qd.max_row + 1):
-                    qnm = str(_qd.cell(qr, 1).value or "").strip()
-                    if qnm == nm:
-                        _v = _qd.cell(qr, 2).value
-                        if _v is not None and not (isinstance(_v, str) and _v.startswith("=")):
-                            try:
-                                t = float(_v)
-                            except (TypeError, ValueError):
-                                pass
-                        break
-            tasks[nm] = t
+        if not (nm and str(nm).strip()):
+            break
+        nm = str(nm).strip()
+        if nm == "合计":
+            break
+        # 渠道挂账无此人行 = 不背渠道任务（底表渠道合计也不含此人），默认 0
+        t = 0.0
+        if _qd is not None:
+            for qr in range(4, _qd.max_row + 1):
+                qnm = str(_qd.cell(qr, 1).value or "").strip()
+                if qnm == nm:
+                    _v = _qd.cell(qr, 2).value
+                    if _v is not None and not (isinstance(_v, str) and _v.startswith("=")):
+                        try:
+                            t = float(_v)
+                        except (TypeError, ValueError):
+                            pass
+                    break
+        tasks[nm] = t
+        r += 1
     _wbf.close()
 
     agg = {}
-    _seen = set()   # 2026-10-11 API重复行去重：同单据+同明细行+同SKU+同SN 只算一次
-                    # （用友JSON API会把同一明细行join出两份，曾致渠道多算26017.01，
-                    #   与晨哥手动对账 73209.06 实锤吻合；真多台SN不同正确保留）
+    # ⚠️ 此处不做去重（2026-10-11 23:45 定论）：sa_aug_cache 的两个写入者产出的数据
+    #   本来就干净——update_sa_cache 读用友前端导出xlsx（天生去重）；
+    #   storyos/fetch_sales_analysis_ljc 写入前已按业务key去重。
+    #   加去重反而误杀真两件：Mate XT2 21999 同款同价两台被整行签名杀掉（55909事故），
+    #   10字段版时 (code,"","","") 更把同单多行杀到只剩1行（1002事故）。
+    #   API直拉的重复行问题在 fetch 层解决（storyos 已做），消费端不重复设防。
     for r in recs:
         d = str(r.get("dDate") or "")[:10]
         if not d.startswith(month):
@@ -391,20 +407,19 @@ def build_qudao_from_cache():
         p = str(r.get("iEmployeeid_name") or "").strip()
         if not p:
             continue
-        _kb = (str(r.get("code") or ""),
-               str(r.get("retailVouchDetails_product") or ""),
-               str(r.get("retailVouchDetails_productsku") or ""),
-               str(r.get("oid_userDefine_2419863036093267976") or ""))
-        if _kb in _seen:
-            continue
-        _seen.add(_kb)
+        # 去重双轨（key 必须区分粒度，否则误杀同单多件）：
+        #   API全字段版（product+SKU 齐全）→ 业务key验重（单据+明细行+SKU+SN，修26017.01多算）
+        #   xlsx解析版（无这些字段）→ key会退化为(code,"","","")把同单多行杀到只剩1行
+        #     （1002事故根因，与 verify「单号+SKU误去重」同类）→ 整行签名兜底
         agg[p] = agg.get(p, 0.0) + _num(r.get("fNetMoney"))
 
     people = []
     for nm, task in tasks.items():
         done = round(agg.get(nm, 0.0), 2)
+        # task=0（不背渠道任务者，如新员工/店长）不参与完成率，rate 置 0 防零除
+        rate = round(done / task, 6) if task else 0.0
         people.append({"name": nm, "task": task, "done": done,
-                       "gap": round(task - done, 2), "rate": round(done / task, 6)})
+                       "gap": round(task - done, 2), "rate": rate})
     t_task = sum(p["task"] for p in people)
     t_done = round(sum(p["done"] for p in people), 2)
     today = datetime.date.today()

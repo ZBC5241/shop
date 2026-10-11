@@ -17,7 +17,7 @@ BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$BASE"
 PY="/Users/mac/.workbuddy/binaries/python/versions/3.13.12/bin/python3"
 [ -x "$PY" ] || PY="python3"
-XLSX="/Users/mac/Desktop/李家村销售/李家村9月任务进度.xlsx"
+XLSX=$(ls -t /Users/mac/Desktop/李家村销售/李家村*任务进度.xlsx 2>/dev/null | grep -v '~\$' | head -1)
 TSV="$BASE/yonyou_raw.tsv"
 SA_JSON="/tmp/sa_raw.json"
 SA_TSV="/tmp/sa_raw.tsv"

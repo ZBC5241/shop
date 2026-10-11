@@ -59,6 +59,11 @@ if [ "$MODE" = "check" ]; then
     eval $("${PYTHON}" "${FETCH_SCRIPT}" --account store 2>&1 | grep "^PROFIT_FILE\|^SALES_FILE")
     echo "  ✅ 毛利明细表: ${PROFIT_FILE##*/}"
     echo "  ✅ 销售分析: ${SALES_FILE##*/}"
+    # 拉数文件隔离（防 storyos 每5分钟拉数覆盖共享下载目录，见 push 模式注释）
+    RAW_DIR="$SHOP_DIR/data_raw"
+    mkdir -p "$RAW_DIR"
+    [ -n "$PROFIT_FILE" ] && [ -f "$PROFIT_FILE" ] && cp -f "$PROFIT_FILE" "$RAW_DIR/门店毛利明细表-华为终端.xlsx" && PROFIT_FILE="$RAW_DIR/门店毛利明细表-华为终端.xlsx"
+    [ -n "$SALES_FILE" ] && [ -f "$SALES_FILE" ] && cp -f "$SALES_FILE" "$RAW_DIR/销售分析.xlsx" && SALES_FILE="$RAW_DIR/销售分析.xlsx"
 
     echo ""
     echo "▶ 2. 处理数据 + 更新看板"
@@ -94,6 +99,18 @@ if [ -z "$PROFIT_FILE" ] || [ -z "$SALES_FILE" ] || [ ! -f "$PROFIT_FILE" ] || [
   echo "  ❌ 导出失败（文件缺失），终止推送，避免推送旧数据"
   exit 1
 fi
+
+# ---- 拉数文件隔离（2026-10-11 23:45 事故修复）----
+# playwright-mcp 下载目录与 storyos（多店看板，每5分钟拉数）共享同名文件，
+# storyos 会把刚拉的李家村单店明细覆盖成 17店全量（9029行事故）。
+# 拉完立即拷贝到 shop 专属 data_raw/，管线从隔离副本读。
+RAW_DIR="$SHOP_DIR/data_raw"
+mkdir -p "$RAW_DIR"
+cp -f "$PROFIT_FILE" "$RAW_DIR/门店毛利明细表-华为终端.xlsx"
+cp -f "$SALES_FILE"  "$RAW_DIR/销售分析.xlsx"
+PROFIT_FILE="$RAW_DIR/门店毛利明细表-华为终端.xlsx"
+SALES_FILE="$RAW_DIR/销售分析.xlsx"
+echo "  🔒 已隔离至 data_raw/（防 storyos 覆盖）"
 
 echo ""
 echo "▶ 2. 处理数据 + 生成看板 + 推送GitHub上线"

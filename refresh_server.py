@@ -23,7 +23,11 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import urlparse, parse_qs
 
 BASE = os.path.dirname(os.path.abspath(__file__))
-XLSX = "/Users/mac/Desktop/李家村销售/李家村9月任务进度.xlsx"
+try:
+    from ljc_paths import find_task_xlsx
+    XLSX = find_task_xlsx() or "/Users/mac/Desktop/李家村销售/李家村10月任务进度.xlsx"
+except ImportError:
+    XLSX = "/Users/mac/Desktop/李家村销售/李家村10月任务进度.xlsx"
 PORT = 8765
 PY = sys.executable
 
