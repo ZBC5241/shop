@@ -159,7 +159,15 @@ def read_emp_channel():
         try:
             recs = json.load(open(AUG_CACHE, encoding="utf-8")).get("records", [])
             n_emp = 0
+            _seen = set()   # 2026-10-11 API重复行去重（同单据+同明细行+同SKU+同SN 只算一次）
             for r in recs:
+                _kb = (str(r.get("code") or ""),
+                       str(r.get("retailVouchDetails_product") or ""),
+                       str(r.get("retailVouchDetails_productsku") or ""),
+                       str(r.get("oid_userDefine_2419863036093267976") or ""))
+                if _kb in _seen:
+                    continue
+                _seen.add(_kb)
                 p = str(r.get("iEmployeeid_name") or "").strip()
                 c = str(r.get("retailVouchHeaderDefineCharacter__HWHKQD_name") or "").strip()
                 if not p or not c:
@@ -370,6 +378,9 @@ def build_qudao_from_cache():
     _wbf.close()
 
     agg = {}
+    _seen = set()   # 2026-10-11 API重复行去重：同单据+同明细行+同SKU+同SN 只算一次
+                    # （用友JSON API会把同一明细行join出两份，曾致渠道多算26017.01，
+                    #   与晨哥手动对账 73209.06 实锤吻合；真多台SN不同正确保留）
     for r in recs:
         d = str(r.get("dDate") or "")[:10]
         if not d.startswith(month):
@@ -380,6 +391,13 @@ def build_qudao_from_cache():
         p = str(r.get("iEmployeeid_name") or "").strip()
         if not p:
             continue
+        _kb = (str(r.get("code") or ""),
+               str(r.get("retailVouchDetails_product") or ""),
+               str(r.get("retailVouchDetails_productsku") or ""),
+               str(r.get("oid_userDefine_2419863036093267976") or ""))
+        if _kb in _seen:
+            continue
+        _seen.add(_kb)
         agg[p] = agg.get(p, 0.0) + _num(r.get("fNetMoney"))
 
     people = []
