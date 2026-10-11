@@ -32,7 +32,20 @@ def confirmed_submitted(date_str):
         md = d.get("agentDisplay", {}).get("markdown", "")
         import re
         m = re.search(r"\| (\d{4}-\d{2}-\d{2} \d{2}:\d{2}) \|", md)
-        return True, (m.group(1)[-5:] if m else None)
+        t = m.group(1)[-5:] if m else None
+        # 修改日：outbox「日期」= createTime（首次提交时间）；取 modifiedTime（修改后时间）更准
+        try:
+            rid_m = re.search(r"--report-id (\S+)", cmds[0].get("command", ""))
+            if rid_m:
+                r2 = subprocess.run(
+                    [DWS, "report", "entry", "get", "--report-id", rid_m.group(1), "--format", "json"],
+                    capture_output=True, text=True, timeout=60)
+                mt = json.loads(r2.stdout).get("result", {}).get("modifiedTime")
+                if mt:
+                    t = datetime.datetime.fromtimestamp(mt / 1000).strftime("%H:%M")
+        except Exception:
+            pass
+        return True, t
     except Exception:
         return False, None
 
