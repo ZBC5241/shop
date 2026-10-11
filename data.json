@@ -9,7 +9,7 @@
   "isToday": true,
   "lagDays": 0,
   "todayLabel": "10-11",
-  "fetchTime": "23:45",
+  "fetchTime": "23:49",
   "employees": [
    "邵乐乐",
    "杨丽华",
@@ -20,7 +20,7 @@
   "sourceFile": "门店毛利明细表-华为终端.xlsx",
   "sourceRows": 591,
   "dayRows": 45,
-  "generatedAt": "2026-10-11 23:45:35"
+  "generatedAt": "2026-10-11 23:49:31"
  },
  "store": {
   "performance": {
@@ -9245,9 +9245,9 @@
   "timeRate": 0.3548387096774194,
   "total": {
    "task": 124200.0,
-   "done": 55909.06,
-   "gap": 68290.94,
-   "rate": 0.450153
+   "done": 77908.06,
+   "gap": 46291.94,
+   "rate": 0.627279
   },
   "people": [
    {
@@ -9267,9 +9267,9 @@
    {
     "name": "李泽",
     "task": 41400.0,
-    "done": 23001.0,
-    "gap": 18399.0,
-    "rate": 0.55558
+    "done": 45000.0,
+    "gap": -3600.0,
+    "rate": 1.086957
    },
    {
     "name": "新员工",
@@ -9347,8 +9347,8 @@
    "李泽": [
     {
      "channel": "三大地图",
-     "amount": 23001.0,
-     "bills": 6
+     "amount": 45000.0,
+     "bills": 7
     },
     {
      "channel": "小红书",
@@ -9759,6 +9759,21 @@
       "profit": -18.9865,
       "gpr": null,
       "cost": 18.99
+     },
+     {
+      "date": "2026-10-02",
+      "code": "LS002501272610020001",
+      "product": "华为 Mate XT2 ULTIMATE DESIGN LAP-AL10  16GB+512GB  皓白",
+      "sku": "华为 Mate XT2 ULTIMATE DESIGN LAP-AL10  16GB+512GB  皓白",
+      "qty": 1.0,
+      "amount": 21999.0,
+      "member": "孙振强",
+      "phone": "13219820828",
+      "origPrice": 22500.0,
+      "discPrice": 501.0,
+      "profit": 1792.92,
+      "gpr": 0.0815,
+      "cost": 20206.08
      },
      {
       "date": "2026-10-02",
