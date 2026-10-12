@@ -1,15 +1,15 @@
 {
  "meta": {
   "storeName": "华为李家村万达授权体验店",
-  "date": "2026-10-11",
-  "dayTitle": "10-11达成",
-  "timeProgress": 0.3548387096774194,
-  "remainDays": 21,
-  "refDate": "2026-10-11",
+  "date": "2026-10-12",
+  "dayTitle": "10-12达成",
+  "timeProgress": 0.3870967741935484,
+  "remainDays": 20,
+  "refDate": "2026-10-12",
   "isToday": true,
   "lagDays": 0,
-  "todayLabel": "10-11",
-  "fetchTime": "23:49",
+  "todayLabel": "10-12",
+  "fetchTime": "14:08",
   "employees": [
    "邵乐乐",
    "杨丽华",
@@ -17,18 +17,18 @@
    "新员工",
    "张博晨"
   ],
-  "sourceFile": "门店毛利明细表-华为终端.xlsx",
+  "sourceFile": "李家村门店毛利明细表-华为终端.xlsx",
   "sourceRows": 591,
-  "dayRows": 45,
-  "generatedAt": "2026-10-11 23:49:31"
+  "dayRows": 0,
+  "generatedAt": "2026-10-12 14:08:08"
  },
  "store": {
   "performance": {
    "毛利": {
     "task": 225000.0,
-    "done": 96836.32219999998,
-    "gap": -128163.67780000002,
-    "rate": 0.43038365422222213
+    "done": 96836.2938,
+    "gap": -128163.7062,
+    "rate": 0.430383528
    },
    "手机": {
     "task": 180.0,
@@ -84,7 +84,7 @@
     "gap": -1120481.25,
     "rate": 0.39433445945945944
    },
-   "绩效": 44.3993874
+   "绩效": 44.399377199999996
   },
   "qcs": {
    "合约": {
@@ -126,15 +126,15 @@
    },
    "增值": {
     "task": 52000.0,
-    "done": 24679.292200000004,
-    "gap": -27320.707799999996,
-    "rate": 0.47460177307692314
+    "done": 24679.2638,
+    "gap": -27320.7362,
+    "rate": 0.47460122692307694
    },
    "健康度": {
-    "coupon": 27710.379999999997,
-    "ratio": 0.28615688174080617,
-    "grossMargin": 0.13274000455779922,
-    "增值率": 0.03382955160508212
+    "coupon": 28995.379999999997,
+    "ratio": 0.2994267837210432,
+    "grossMargin": 0.1327399656280253,
+    "增值率": 0.03382951267530821
    },
    "星联会员": {
     "优享": 5.0,
@@ -143,26 +143,26 @@
    }
   },
   "dailyDone": {
-   "手机": 5.0,
-   "毛利": 4573.3231,
-   "增值": 1047.5331,
+   "手机": 0.0,
+   "毛利": 0.0,
+   "增值": 0.0,
    "智慧办公": 0.0,
-   "音频穿戴": 4.0,
+   "音频穿戴": 0.0,
    "HD": 0.0,
-   "会员": 1.0,
+   "会员": 0.0,
    "回收": 0.0,
-   "贴膜": 10.0,
+   "贴膜": 0.0,
    "合约": 0,
-   "滞销": 1.0,
+   "滞销": 0.0,
    "摄影课": 0.0,
-   "优享/会员": 1.0,
+   "优享/会员": 0.0,
    "尊享/储值": 0.0,
-   "销额": 34479.0
+   "销额": 0.0
   },
   "dailyGap": {
    "手机": 7.0,
-   "毛利": 6038.0,
-   "增值": 1301.0,
+   "毛利": 6339.0,
+   "增值": 1366.0,
    "智慧办公": 4.0,
    "音频穿戴": 6.0,
    "HD": 1.0,
@@ -181,9 +181,9 @@
    "performance": {
     "毛利": {
      "task": 60000.0,
-     "done": 36055.88379999998,
-     "gap": -23944.11620000002,
-     "rate": 0.6009313966666664
+     "done": 36055.88019999999,
+     "gap": -23944.119800000008,
+     "rate": 0.6009313366666665
     },
     "手机": {
      "task": 55.0,
@@ -239,7 +239,7 @@
      "gap": -196364.33000000002,
      "rate": 0.5754284756756757
     },
-    "绩效": 63.028168
+    "绩效": 63.028161
    },
    "qcs": {
     "合约": {
@@ -281,15 +281,15 @@
     },
     "增值": {
      "task": 17000.0,
-     "done": 9767.5538,
-     "gap": -7232.4462,
-     "rate": 0.5745619882352941
+     "done": 9767.5502,
+     "gap": -7232.4498,
+     "rate": 0.5745617764705883
     },
     "健康度": {
-     "coupon": 13431.76,
-     "ratio": 0.37252616173563347,
-     "grossMargin": 0.1354793357838879,
-     "增值率": 0.03670140796985237
+     "coupon": 13721.76,
+     "ratio": 0.38056926980803546,
+     "grossMargin": 0.1354793222569526,
+     "增值率": 0.03670139444291703
     },
     "星联会员": {
      "优享": 1.0,
@@ -298,26 +298,26 @@
     }
    },
    "dailyDone": {
-    "手机": 1.0,
-    "毛利": 705.5251000000001,
-    "增值": 385.43510000000003,
+    "手机": 0.0,
+    "毛利": 0.0,
+    "增值": 0.0,
     "智慧办公": 0.0,
-    "音频穿戴": 2.0,
+    "音频穿戴": 0.0,
     "HD": 0.0,
     "会员": 0.0,
     "回收": 0.0,
-    "贴膜": 7.0,
+    "贴膜": 0.0,
     "合约": 0,
     "滞销": 0.0,
     "摄影课": 0.0,
     "优享/会员": 0.0,
     "尊享/储值": 0.0,
-    "销额": 4797.0
+    "销额": 0.0
    },
    "dailyGap": {
     "手机": 2.0,
-    "毛利": 1141.0,
-    "增值": 345.0,
+    "毛利": 1198.0,
+    "增值": 362.0,
     "智慧办公": 1.0,
     "音频穿戴": 1.0,
     "HD": 0,
@@ -335,9 +335,9 @@
    "performance": {
     "毛利": {
      "task": 60000.0,
-     "done": 29254.905099999996,
-     "gap": -30745.094900000004,
-     "rate": 0.4875817516666666
+     "done": 29254.896500000003,
+     "gap": -30745.103499999997,
+     "rate": 0.48758160833333336
     },
     "手机": {
      "task": 55.0,
@@ -393,7 +393,7 @@
      "gap": -236952.77,
      "rate": 0.4876696864864865
     },
-    "绩效": 53.229741
+    "绩效": 53.229726
    },
    "qcs": {
     "合约": {
@@ -435,15 +435,15 @@
     },
     "增值": {
      "task": 17000.0,
-     "done": 7018.835100000002,
-     "gap": -9981.164899999998,
-     "rate": 0.4128726529411766
+     "done": 7018.826499999999,
+     "gap": -9981.1735,
+     "rate": 0.41287214705882347
     },
     "健康度": {
-     "coupon": 6085.669999999999,
-     "ratio": 0.208022209581531,
-     "grossMargin": 0.12970633733786044,
-     "增值率": 0.031119136776807242
+     "coupon": 6484.669999999999,
+     "ratio": 0.22166101322559792,
+     "grossMargin": 0.12970629920837423,
+     "增值率": 0.031119098647321
     },
     "星联会员": {
      "优享": 2.0,
@@ -452,26 +452,26 @@
     }
    },
    "dailyDone": {
-    "手机": 3.0,
-    "毛利": 2968.0551,
-    "增值": 561.3551,
+    "手机": 0.0,
+    "毛利": 0.0,
+    "增值": 0.0,
     "智慧办公": 0.0,
-    "音频穿戴": 2.0,
+    "音频穿戴": 0.0,
     "HD": 0.0,
-    "会员": 1.0,
+    "会员": 0.0,
     "回收": 0.0,
-    "贴膜": 1.0,
+    "贴膜": 0.0,
     "合约": 0,
-    "滞销": 1.0,
+    "滞销": 0.0,
     "摄影课": 0.0,
-    "优享/会员": 1.0,
+    "优享/会员": 0.0,
     "尊享/储值": 0.0,
-    "销额": 23584.0
+    "销额": 0.0
    },
    "dailyGap": {
     "手机": 2.0,
-    "毛利": 1465.0,
-    "增值": 476.0,
+    "毛利": 1538.0,
+    "增值": 500.0,
     "智慧办公": 1.0,
     "音频穿戴": 2.0,
     "HD": 0,
@@ -489,9 +489,9 @@
    "performance": {
     "毛利": {
      "task": 60000.0,
-     "done": 32948.7904,
-     "gap": -27051.209600000002,
-     "rate": 0.5491465066666666
+     "done": 32948.7742,
+     "gap": -27051.2258,
+     "rate": 0.5491462366666666
     },
     "手机": {
      "task": 55.0,
@@ -547,7 +547,7 @@
      "gap": -230802.14999999997,
      "rate": 0.5009683243243244
     },
-    "绩效": 50.239028
+    "绩效": 50.238999
    },
    "qcs": {
     "合约": {
@@ -589,15 +589,15 @@
     },
     "增值": {
      "task": 17000.0,
-     "done": 7929.160400000001,
-     "gap": -9070.8396,
-     "rate": 0.46642120000000004
+     "done": 7929.144200000001,
+     "gap": -9070.8558,
+     "rate": 0.46642024705882357
     },
     "健康度": {
-     "coupon": 7933.949999999999,
-     "ratio": 0.24079639658031268,
-     "grossMargin": 0.1422058530107206,
-     "增值率": 0.0342219852277438
+     "coupon": 8529.949999999999,
+     "ratio": 0.2588852000448623,
+     "grossMargin": 0.1422057830920744,
+     "增值率": 0.0342219153090976
     },
     "星联会员": {
      "优享": 2.0,
@@ -606,26 +606,26 @@
     }
    },
    "dailyDone": {
-    "手机": 1.0,
-    "毛利": 899.7429,
-    "增值": 100.74289999999999,
+    "手机": 0.0,
+    "毛利": 0.0,
+    "增值": 0.0,
     "智慧办公": 0.0,
     "音频穿戴": 0.0,
     "HD": 0.0,
     "会员": 0.0,
     "回收": 0.0,
-    "贴膜": 2.0,
+    "贴膜": 0.0,
     "合约": 0,
     "滞销": 0.0,
     "摄影课": 0.0,
     "优享/会员": 0.0,
     "尊享/储值": 0.0,
-    "销额": 6098.0
+    "销额": 0.0
    },
    "dailyGap": {
     "手机": 2.0,
-    "毛利": 1289.0,
-    "增值": 432.0,
+    "毛利": 1353.0,
+    "增值": 454.0,
     "智慧办公": 1.0,
     "音频穿戴": 2.0,
     "HD": 1.0,
@@ -778,8 +778,8 @@
    },
    "dailyGap": {
     "手机": 1.0,
-    "毛利": 2143.0,
-    "增值": 48.0,
+    "毛利": 2250.0,
+    "增值": 50.0,
     "智慧办公": 1.0,
     "音频穿戴": 1.0,
     "HD": 0,
@@ -942,10 +942,10 @@
     "task": 1.0,
     "done": 0.0,
     "rate": 0,
-    "lag": -0.3548387096774194,
+    "lag": -0.3870967741935484,
     "level": "danger",
     "lastDate": "2026-10-06",
-    "coldDays": 5,
+    "coldDays": 6,
     "needPerDay": 1.0,
     "sellers": {},
     "zeroPeople": [
@@ -959,10 +959,10 @@
     "task": 13.0,
     "done": 2.0,
     "rate": 0.15384615384615385,
-    "lag": -0.20099255583126552,
+    "lag": -0.23325062034739452,
     "level": "danger",
     "lastDate": "2026-10-10",
-    "coldDays": 1,
+    "coldDays": 2,
     "needPerDay": 1.0,
     "sellers": {
      "杨丽华": 2.0
@@ -980,10 +980,10 @@
     "task": 20.0,
     "done": 7.0,
     "rate": 0.35,
-    "lag": -0.004838709677419395,
+    "lag": -0.0370967741935484,
     "level": "mid",
     "lastDate": "2026-10-06",
-    "coldDays": 5,
+    "coldDays": 6,
     "needPerDay": 1.0,
     "sellers": {
      "邵乐乐": 5.0,
@@ -1001,10 +1001,10 @@
     "task": 85.0,
     "done": 31.0,
     "rate": 0.36470588235294116,
-    "lag": 0.009867172675521785,
-    "level": "good",
+    "lag": -0.02239089184060722,
+    "level": "mid",
     "lastDate": "2026-10-11",
-    "coldDays": 0,
+    "coldDays": 1,
     "needPerDay": 3.0,
     "sellers": {
      "邵乐乐": 16.0,
@@ -1022,10 +1022,10 @@
     "task": 40.0,
     "done": 15.0,
     "rate": 0.375,
-    "lag": 0.020161290322580627,
-    "level": "good",
+    "lag": -0.012096774193548376,
+    "level": "mid",
     "lastDate": "2026-10-11",
-    "coldDays": 0,
+    "coldDays": 1,
     "needPerDay": 2.0,
     "sellers": {
      "邵乐乐": 8.0,
@@ -1043,10 +1043,10 @@
     "task": 180.0,
     "done": 83.0,
     "rate": 0.46111111111111114,
-    "lag": 0.10627240143369177,
+    "lag": 0.07401433691756276,
     "level": "good",
     "lastDate": "2026-10-11",
-    "coldDays": 0,
+    "coldDays": 1,
     "needPerDay": 5.0,
     "sellers": {
      "邵乐乐": 29.0,
@@ -1061,11 +1061,11 @@
   "people": [
    {
     "name": "邵乐乐",
-    "score": 0.5735599141622102,
+    "score": 0.5735598418092691,
     "毛利": {
-     "done": 36055.88379999998,
+     "done": 36055.88019999999,
      "task": 60000.0,
-     "rate": 0.6009313966666664
+     "rate": 0.6009313366666665
     },
     "手机": {
      "done": 29.0,
@@ -1073,12 +1073,12 @@
      "rate": 0.5272727272727272
     },
     "增值": {
-     "done": 9767.5538,
+     "done": 9767.5502,
      "task": 17000.0,
-     "rate": 0.5745619882352941
+     "rate": 0.5745617764705883
     },
-    "毛利率": 0.1354793357838879,
-    "券占比": 0.37252616173563347,
+    "毛利率": 0.1354793222569526,
+    "券占比": 0.38056926980803546,
     "strong": [
      "手机",
      "平板",
@@ -1088,18 +1088,18 @@
     "weak": [
      "电脑"
     ],
-    "todayGross": 705.5251000000001,
-    "todayPhone": 1.0,
+    "todayGross": 0.0,
+    "todayPhone": 0.0,
     "rank": 1,
     "level": "good"
    },
    {
     "name": "杨丽华",
-    "score": 0.4954563155124777,
+    "score": 0.4954561426693404,
     "毛利": {
-     "done": 29254.905099999996,
+     "done": 29254.896500000003,
      "task": 60000.0,
-     "rate": 0.4875817516666666
+     "rate": 0.48758160833333336
     },
     "手机": {
      "done": 31.0,
@@ -1107,12 +1107,12 @@
      "rate": 0.5636363636363636
     },
     "增值": {
-     "done": 7018.835100000002,
+     "done": 7018.826499999999,
      "task": 17000.0,
-     "rate": 0.4128726529411766
+     "rate": 0.41287214705882347
     },
-    "毛利率": 0.12970633733786044,
-    "券占比": 0.208022209581531,
+    "毛利率": 0.12970629920837423,
+    "券占比": 0.22166101322559792,
     "strong": [
      "手机",
      "电脑"
@@ -1120,18 +1120,18 @@
     "weak": [
      "平板"
     ],
-    "todayGross": 2968.0551,
-    "todayPhone": 3.0,
+    "todayGross": 0.0,
+    "todayPhone": 0.0,
     "rank": 2,
     "level": "good"
    },
    {
     "name": "李泽",
-    "score": 0.48785749333333334,
+    "score": 0.487857167745098,
     "毛利": {
-     "done": 32948.7904,
+     "done": 32948.7742,
      "task": 60000.0,
-     "rate": 0.5491465066666666
+     "rate": 0.5491462366666666
     },
     "手机": {
      "done": 22.0,
@@ -1139,12 +1139,12 @@
      "rate": 0.4
     },
     "增值": {
-     "done": 7929.160400000001,
+     "done": 7929.144200000001,
      "task": 17000.0,
-     "rate": 0.46642120000000004
+     "rate": 0.46642024705882357
     },
-    "毛利率": 0.1422058530107206,
-    "券占比": 0.24079639658031268,
+    "毛利率": 0.1422057830920744,
+    "券占比": 0.2588852000448623,
     "strong": [
      "手机",
      "音频"
@@ -1154,8 +1154,8 @@
      "平板",
      "HD 智慧屏"
     ],
-    "todayGross": 899.7429,
-    "todayPhone": 1.0,
+    "todayGross": 0.0,
+    "todayPhone": 0.0,
     "rank": 3,
     "level": "good"
    },
@@ -1194,28 +1194,15 @@
    }
   ],
   "today": {
-   "sold": [
-    {
-     "name": "杨丽华",
-     "orders": 18,
-     "gross": 2968.0551
-    },
-    {
-     "name": "李泽",
-     "orders": 9,
-     "gross": 899.7429
-    },
-    {
-     "name": "邵乐乐",
-     "orders": 18,
-     "gross": 705.5251000000001
-    }
-   ],
+   "sold": [],
    "idle": [
+    "邵乐乐",
+    "杨丽华",
+    "李泽",
     "新员工"
    ],
-   "totalOrders": 45,
-   "totalGross": 4573.3231
+   "totalOrders": 0,
+   "totalGross": 0
   },
   "advices": [
    {
@@ -1228,12 +1215,12 @@
     "level": "warn",
     "icon": "🧊",
     "title": "断销品类",
-    "body": "平板（5天，最后 10-06） 已经连续多天零动销。先查三件事：样机是否在位、有没有货、店员会不会讲卖点。"
+    "body": "平板（6天，最后 10-06） 已经连续多天零动销。先查三件事：样机是否在位、有没有货、店员会不会讲卖点。"
    },
    {
     "level": "warn",
     "icon": "📉",
-    "title": "进度落后（时间已过 35%）",
+    "title": "进度落后（时间已过 39%）",
     "body": "电脑 还差 11台，日均要 1台。建议把这几项拆到人头，早会点名报进度。"
    },
    {
@@ -1246,7 +1233,7 @@
     "level": "warn",
     "icon": "⏰",
     "title": "今日还没开单",
-    "body": "新员工 今天暂无上账记录。先确认是没卖还是没及时上账，卖了要立刻补账。"
+    "body": "邵乐乐、杨丽华、李泽、新员工 今天暂无上账记录。先确认是没卖还是没及时上账，卖了要立刻补账。"
    },
    {
     "level": "good",
@@ -1258,823 +1245,12 @@
     "level": "good",
     "icon": "✅",
     "title": "进度健康",
-    "body": "穿戴 36%、音频 38%、手机 46% 已跑赢时间进度，保持节奏就行。"
+    "body": "手机 46% 已跑赢时间进度，保持节奏就行。"
    }
   ],
   "dealAnalysis": {
-   "deals": [
-    {
-     "emp": "李泽",
-     "product": "华为 Pura90 Pro MLN-AL00  12GB+512GB  椰青白",
-     "code": "XSCK26101100714",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": 5899.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": 5899.0,
-     "profit": 799.0,
-     "cost": 5100.0,
-     "costRatio": 0.8645533141210374,
-     "cat": "手机",
-     "isReturn": false,
-     "isBundle": true
-    },
-    {
-     "emp": "李泽",
-     "product": "199贴膜套包",
-     "code": "XSCK26101100706",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": 199.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": 199.0,
-     "profit": 199.0,
-     "cost": 0.0,
-     "costRatio": 0.0,
-     "cat": "增值",
-     "isReturn": false,
-     "isBundle": true
-    },
-    {
-     "emp": "李泽",
-     "product": "MOCOLL 铂金1 系列 2.5D二强高清全屏钢化玻璃膜-Pura X Max  黑色",
-     "code": "XSCK26101100171",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": 0.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": 0.0,
-     "profit": -17.0,
-     "cost": 17.0,
-     "costRatio": null,
-     "cat": "增值",
-     "isReturn": false,
-     "isBundle": true
-    },
-    {
-     "emp": "李泽",
-     "product": "华为-手提袋-小",
-     "code": "XSCK26101100171",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": 0.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": 0.0,
-     "profit": 0.0,
-     "cost": 0.0,
-     "costRatio": null,
-     "cat": "其他",
-     "isReturn": false,
-     "isBundle": true
-    },
-    {
-     "emp": "李泽",
-     "product": "华为-手提袋-小",
-     "code": "XSCK26101100706",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": 0.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": 0.0,
-     "profit": 0.0,
-     "cost": 0.0,
-     "costRatio": null,
-     "cat": "其他",
-     "isReturn": false,
-     "isBundle": true
-    },
-    {
-     "emp": "李泽",
-     "product": "Cooyee华为P70/P80/P90pro高清钢化膜",
-     "code": "XSCK26101100708",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": 0.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": 0.0,
-     "profit": -19.0,
-     "cost": 19.0,
-     "costRatio": null,
-     "cat": "增值",
-     "isReturn": false,
-     "isBundle": true
-    },
-    {
-     "emp": "李泽",
-     "product": "Cooyee华为Pura90Pro铝合金镜头膜 银色 带定位器",
-     "code": "XSCK26101100708",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": 0.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": 0.0,
-     "profit": -26.0,
-     "cost": 26.0,
-     "costRatio": null,
-     "cat": "增值",
-     "isReturn": false,
-     "isBundle": true
-    },
-    {
-     "emp": "李泽",
-     "product": "华为-手提袋-小",
-     "code": "XSCK26101100714",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": 0.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": 0.0,
-     "profit": 0.0,
-     "cost": 0.0,
-     "costRatio": null,
-     "cat": "其他",
-     "isReturn": false,
-     "isBundle": true
-    },
-    {
-     "emp": "李泽",
-     "product": "COOYEE 华为P70 pro-P70 pro+ 热弯全胶钢化膜",
-     "code": "XSCK26101100976",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": 0.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": 0.0,
-     "profit": -36.2571,
-     "cost": 36.26,
-     "costRatio": null,
-     "cat": "增值",
-     "isReturn": false,
-     "isBundle": false
-    },
-    {
-     "emp": "杨丽华",
-     "product": "华为 PuraX View VOL-AL00  12GB+256GB  零度白",
-     "code": "XSCK26101100999",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": 5999.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": 5999.0,
-     "profit": 899.0,
-     "cost": 5100.0,
-     "costRatio": 0.8501416902817136,
-     "cat": "手机",
-     "isReturn": false,
-     "isBundle": true
-    },
-    {
-     "emp": "杨丽华",
-     "product": "华为 Mate90 HLS-AL00  12GB+256GB  曜石黑",
-     "code": "XSCK26101100994",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": 5700.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": 5700.0,
-     "profit": 513.87,
-     "cost": 5186.13,
-     "costRatio": 0.9098473684210526,
-     "cat": "手机",
-     "isReturn": false,
-     "isBundle": true
-    },
-    {
-     "emp": "杨丽华",
-     "product": "华为 Mate70 Pro 优享版 先锋版 PLR-AL50 12GB+512GB 雪域白",
-     "code": "XSCK26101100508",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": 4699.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": 4699.0,
-     "profit": -117.0,
-     "cost": 4816.0,
-     "costRatio": 1.0248989146626941,
-     "cat": "手机",
-     "isReturn": false,
-     "isBundle": true
-    },
-    {
-     "emp": "杨丽华",
-     "product": "华为 WATCH6 Pro NIZ-AL00 46mm(钛金属表带)钛空银",
-     "code": "XSCK26101100515",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": 3999.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": 3999.0,
-     "profit": 673.83,
-     "cost": 3325.17,
-     "costRatio": 0.8315003750937735,
-     "cat": "穿戴",
-     "isReturn": false,
-     "isBundle": true
-    },
-    {
-     "emp": "杨丽华",
-     "product": "华为 Watch GT7 Pro TUM-B49 46mm(黑色易扣氟橡胶表带) 碳晶黑",
-     "code": "XSCK26101101150",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": 2588.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": 2588.0,
-     "profit": 437.0,
-     "cost": 2151.0,
-     "costRatio": 0.8311437403400309,
-     "cat": "穿戴",
-     "isReturn": false,
-     "isBundle": true
-    },
-    {
-     "emp": "杨丽华",
-     "product": "星联优享-499",
-     "code": "XSCK26101101158",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": 499.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": 499.0,
-     "profit": 499.0,
-     "cost": 0.0,
-     "costRatio": 0.0,
-     "cat": "增值",
-     "isReturn": false,
-     "isBundle": true
-    },
-    {
-     "emp": "杨丽华",
-     "product": "COOYEE 华为 mate70pro pro+3D热弯钢化膜",
-     "code": "XSCK26101101162",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": 100.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": 100.0,
-     "profit": 62.3551,
-     "cost": 37.64,
-     "costRatio": 0.3764,
-     "cat": "增值",
-     "isReturn": false,
-     "isBundle": true
-    },
-    {
-     "emp": "杨丽华",
-     "product": "华为-手提袋-中",
-     "code": "XSCK26101100508",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": 0.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": 0.0,
-     "profit": 0.0,
-     "cost": 0.0,
-     "costRatio": null,
-     "cat": "其他",
-     "isReturn": false,
-     "isBundle": true
-    },
-    {
-     "emp": "杨丽华",
-     "product": "华为-手提袋-小",
-     "code": "XSCK26101100515",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": 0.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": 0.0,
-     "profit": 0.0,
-     "cost": 0.0,
-     "costRatio": null,
-     "cat": "其他",
-     "isReturn": false,
-     "isBundle": true
-    },
-    {
-     "emp": "杨丽华",
-     "product": "华为-手提袋-中",
-     "code": "XSCK26101100515",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": 0.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": 0.0,
-     "profit": 0.0,
-     "cost": 0.0,
-     "costRatio": null,
-     "cat": "其他",
-     "isReturn": false,
-     "isBundle": true
-    },
-    {
-     "emp": "杨丽华",
-     "product": "华为-手提袋-小",
-     "code": "XSCK26101100994",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": 0.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": 0.0,
-     "profit": 0.0,
-     "cost": 0.0,
-     "costRatio": null,
-     "cat": "其他",
-     "isReturn": false,
-     "isBundle": true
-    },
-    {
-     "emp": "杨丽华",
-     "product": "华为-手提袋-中",
-     "code": "XSCK26101100994",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": 0.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": 0.0,
-     "profit": 0.0,
-     "cost": 0.0,
-     "costRatio": null,
-     "cat": "其他",
-     "isReturn": false,
-     "isBundle": true
-    },
-    {
-     "emp": "杨丽华",
-     "product": "华为-手提袋-小",
-     "code": "XSCK26101100999",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": 0.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": 0.0,
-     "profit": 0.0,
-     "cost": 0.0,
-     "costRatio": null,
-     "cat": "其他",
-     "isReturn": false,
-     "isBundle": true
-    },
-    {
-     "emp": "杨丽华",
-     "product": "华为-手提袋-小",
-     "code": "XSCK26101101150",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": 0.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": 0.0,
-     "profit": 0.0,
-     "cost": 0.0,
-     "costRatio": null,
-     "cat": "其他",
-     "isReturn": false,
-     "isBundle": true
-    },
-    {
-     "emp": "杨丽华",
-     "product": "华为-手提袋-中",
-     "code": "XSCK26101101150",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": 0.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": 0.0,
-     "profit": 0.0,
-     "cost": 0.0,
-     "costRatio": null,
-     "cat": "其他",
-     "isReturn": false,
-     "isBundle": true
-    },
-    {
-     "emp": "杨丽华",
-     "product": "华为-手提袋-小",
-     "code": "XSCK26101101158",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": 0.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": 0.0,
-     "profit": 0.0,
-     "cost": 0.0,
-     "costRatio": null,
-     "cat": "其他",
-     "isReturn": false,
-     "isBundle": true
-    },
-    {
-     "emp": "杨丽华",
-     "product": "华为-手提袋-中",
-     "code": "XSCK26101101158",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": 0.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": 0.0,
-     "profit": 0.0,
-     "cost": 0.0,
-     "costRatio": null,
-     "cat": "其他",
-     "isReturn": false,
-     "isBundle": true
-    },
-    {
-     "emp": "杨丽华",
-     "product": "华为-手提袋-中",
-     "code": "XSCK26101101162",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": 0.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": 0.0,
-     "profit": 0.0,
-     "cost": 0.0,
-     "costRatio": null,
-     "cat": "其他",
-     "isReturn": false,
-     "isBundle": true
-    },
-    {
-     "emp": "邵乐乐",
-     "product": "华为畅享90 Pro Max CHZ-AL00  8GB+256GB  曜金黑",
-     "code": "XSCK26101101085",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": 1899.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": 1899.0,
-     "profit": 219.0,
-     "cost": 1680.0,
-     "costRatio": 0.8846761453396524,
-     "cat": "手机",
-     "isReturn": false,
-     "isBundle": true
-    },
-    {
-     "emp": "邵乐乐",
-     "product": "华为 FreeClip 2 典藏版 耳机 T0027  星海蓝",
-     "code": "XSCK26101101133",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": 1374.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": 1374.0,
-     "profit": 126.09,
-     "cost": 1247.91,
-     "costRatio": 0.908231441048035,
-     "cat": "音频",
-     "isReturn": false,
-     "isBundle": true
-    },
-    {
-     "emp": "邵乐乐",
-     "product": "华为儿童手表5 Pro TGR-L10(粉色硅胶表带)冰晶粉",
-     "code": "XSCK26101100741",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": 898.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": 898.0,
-     "profit": -25.0,
-     "cost": 923.0,
-     "costRatio": 1.0278396436525612,
-     "cat": "穿戴",
-     "isReturn": false,
-     "isBundle": true
-    },
-    {
-     "emp": "邵乐乐",
-     "product": "Cooyee臻享套装mate90-90pro御甲系列 白色",
-     "code": "XSCK26101101165",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": 286.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": 286.0,
-     "profit": 201.0,
-     "cost": 85.0,
-     "costRatio": 0.2972027972027972,
-     "cat": "增值",
-     "isReturn": false,
-     "isBundle": true
-    },
-    {
-     "emp": "邵乐乐",
-     "product": "COOYEE 华为 mate70pro pro+3D热弯钢化膜",
-     "code": "XSCK26101100928",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": 198.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": 198.0,
-     "profit": 122.7101,
-     "cost": 75.29,
-     "costRatio": 0.3802525252525253,
-     "cat": "增值",
-     "isReturn": false,
-     "isBundle": true
-    },
-    {
-     "emp": "邵乐乐",
-     "product": "Cooyee华为Nova15 Pro/Ultra高清钢化膜",
-     "code": "XSCK26101100934",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": 198.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": 198.0,
-     "profit": 160.0148,
-     "cost": 37.99,
-     "costRatio": 0.19186868686868688,
-     "cat": "增值",
-     "isReturn": false,
-     "isBundle": true
-    },
-    {
-     "emp": "邵乐乐",
-     "product": "Cooyee华为Nova16一体镜头膜",
-     "code": "XSCK26101101133",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": 100.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": 100.0,
-     "profit": 76.0,
-     "cost": 24.0,
-     "costRatio": 0.24,
-     "cat": "增值",
-     "isReturn": false,
-     "isBundle": true
-    },
-    {
-     "emp": "邵乐乐",
-     "product": "COOYEE 华为 mate70pro pro+3D热弯钢化膜",
-     "code": "XSCK26101100928",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": 88.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": 88.0,
-     "profit": 50.3551,
-     "cost": 37.64,
-     "costRatio": 0.42772727272727273,
-     "cat": "增值",
-     "isReturn": false,
-     "isBundle": true
-    },
-    {
-     "emp": "邵乐乐",
-     "product": "COOYEE 华为 mate70pro pro+3D热弯钢化膜",
-     "code": "XSCK26101100934",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": 57.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": 57.0,
-     "profit": 19.3551,
-     "cost": 37.64,
-     "costRatio": 0.6603508771929825,
-     "cat": "增值",
-     "isReturn": false,
-     "isBundle": true
-    },
-    {
-     "emp": "邵乐乐",
-     "product": "华为-手提袋-小",
-     "code": "XSCK26101100741",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": 0.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": 0.0,
-     "profit": 0.0,
-     "cost": 0.0,
-     "costRatio": null,
-     "cat": "其他",
-     "isReturn": false,
-     "isBundle": true
-    },
-    {
-     "emp": "邵乐乐",
-     "product": "华为-手提袋-小",
-     "code": "XSCK26101100775",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": 0.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": 0.0,
-     "profit": 0.0,
-     "cost": 0.0,
-     "costRatio": null,
-     "cat": "其他",
-     "isReturn": true,
-     "isBundle": true
-    },
-    {
-     "emp": "邵乐乐",
-     "product": "华为-手提袋-小",
-     "code": "XSCK26101100928",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": 0.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": 0.0,
-     "profit": 0.0,
-     "cost": 0.0,
-     "costRatio": null,
-     "cat": "其他",
-     "isReturn": false,
-     "isBundle": true
-    },
-    {
-     "emp": "邵乐乐",
-     "product": "华为-手提袋-小",
-     "code": "XSCK26101100934",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": 0.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": 0.0,
-     "profit": 0.0,
-     "cost": 0.0,
-     "costRatio": null,
-     "cat": "其他",
-     "isReturn": false,
-     "isBundle": true
-    },
-    {
-     "emp": "邵乐乐",
-     "product": "华为-手提袋-小",
-     "code": "XSCK26101101085",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": 0.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": 0.0,
-     "profit": 0.0,
-     "cost": 0.0,
-     "costRatio": null,
-     "cat": "其他",
-     "isReturn": false,
-     "isBundle": true
-    },
-    {
-     "emp": "邵乐乐",
-     "product": "华为-手提袋-小",
-     "code": "XSCK26101101133",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": 0.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": 0.0,
-     "profit": 0.0,
-     "cost": 0.0,
-     "costRatio": null,
-     "cat": "其他",
-     "isReturn": false,
-     "isBundle": true
-    },
-    {
-     "emp": "邵乐乐",
-     "product": "华为-手提袋-小",
-     "code": "XSCK26101101165",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": 0.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": 0.0,
-     "profit": 0.0,
-     "cost": 0.0,
-     "costRatio": null,
-     "cat": "其他",
-     "isReturn": false,
-     "isBundle": true
-    },
-    {
-     "emp": "邵乐乐",
-     "product": "Cooyee华为Nova14/15/16高清钢化膜",
-     "code": "XSCK26101100775",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": -101.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": -101.0,
-     "profit": -82.0,
-     "cost": -19.0,
-     "costRatio": null,
-     "cat": "增值",
-     "isReturn": true,
-     "isBundle": true
-    },
-    {
-     "emp": "邵乐乐",
-     "product": "Cooyee华为Nova14/15/16高清钢化膜",
-     "code": "XSCK26101100775",
-     "channel": "自然客流",
-     "bizType": "",
-     "member": "",
-     "origPrice": -200.0,
-     "discount": 0,
-     "discountRate": 0,
-     "amount": -200.0,
-     "profit": -162.0,
-     "cost": -38.0,
-     "costRatio": null,
-     "cat": "增值",
-     "isReturn": true,
-     "isBundle": true
-    }
-   ],
-   "totalAmount": 34479.0,
+   "deals": [],
+   "totalAmount": 0,
    "patterns": [
     {
      "name": "邵乐乐",
@@ -2083,9 +1259,9 @@
      "orders": 94,
      "avgPrice": 2853.581914893617,
      "bundleRate": 0.9148936170212766,
-     "avgDiscount": 0.09165035364515062,
-     "todayOrders": 18,
-     "action": "客单价 2854 元偏低，多推中高端机型提升毛利；平均折扣 9%，注意控制让利节奏"
+     "avgDiscount": 0.08918599566313606,
+     "todayOrders": 0,
+     "action": "今日暂无开单，先检查样机在位和话术准备；客单价 2854 元偏低，多推中高端机型提升毛利；平均折扣 9%，注意控制让利节奏"
     },
     {
      "name": "杨丽华",
@@ -2094,9 +1270,9 @@
      "orders": 75,
      "avgPrice": 3045.9364,
      "bundleRate": 0.8133333333333334,
-     "avgDiscount": 0.04527999972740461,
-     "todayOrders": 18,
-     "action": "成交模式健康，保持节奏"
+     "avgDiscount": 0.04518747398453489,
+     "todayOrders": 0,
+     "action": "今日暂无开单，先检查样机在位和话术准备"
     },
     {
      "name": "李泽",
@@ -2105,9 +1281,9 @@
      "orders": 77,
      "avgPrice": 3344.7514285714287,
      "bundleRate": 0.935064935064935,
-     "avgDiscount": 0.06828516164846897,
-     "todayOrders": 9,
-     "action": "平均折扣 7%，注意控制让利节奏"
+     "avgDiscount": 0.06676705233255766,
+     "todayOrders": 0,
+     "action": "今日暂无开单，先检查样机在位和话术准备；平均折扣 7%，注意控制让利节奏"
     },
     {
      "name": "新员工",
@@ -2123,16 +1299,10 @@
    ],
    "issues": [
     {
-     "level": "danger",
-     "icon": "⚠️",
-     "title": "今日有退货",
-     "body": "华为-手提袋-小、Cooyee华为Nova14/15/16高清钢化膜、Cooyee华为Nova14/15/16高清钢化膜，退货影响毛利。了解退货原因（质量/价格/冲动消费），做好售后挽留。"
-    },
-    {
      "level": "warn",
      "icon": "⏰",
      "title": "多人未开单",
-     "body": "新员工 今日暂无正向成交。没顾客时主动回访老客户，至少打 5 通电话。"
+     "body": "邵乐乐、杨丽华、李泽、新员工 今日暂无正向成交。没顾客时主动回访老客户，至少打 5 通电话。"
     },
     {
      "level": "warn",
@@ -2143,7 +1313,7 @@
    ]
   },
   "weekPlan": {
-   "weekLabel": "10月5-9日",
+   "weekLabel": "10月12-16日",
    "dailyUser": [
     {
      "name": "企微拉新",
@@ -2196,7 +1366,7 @@
    "dutyDays": [
     {
      "label": "周一",
-     "date": "10-05",
+     "date": "10-12",
      "duties": [
       {
        "name": "大扫除",
@@ -2207,7 +1377,7 @@
     },
     {
      "label": "周二",
-     "date": "10-06",
+     "date": "10-13",
      "duties": [
       {
        "name": "膜类/礼品盘点",
@@ -2218,7 +1388,7 @@
     },
     {
      "label": "周三",
-     "date": "10-07",
+     "date": "10-14",
      "duties": [
       {
        "name": "盘库/库房卫生/货品维护",
@@ -2229,12 +1399,12 @@
     },
     {
      "label": "周四",
-     "date": "10-08",
+     "date": "10-15",
      "duties": []
     },
     {
      "label": "周五",
-     "date": "10-09",
+     "date": "10-16",
      "duties": [
       {
        "name": "渠道运营填表/收集图片",
@@ -2271,8 +1441,8 @@
    },
    "rules": "每日反馈·月度闭环 · 每晚11点前反馈 · 超时/漏反馈每项考核10 · 闭环时间20号"
   },
-  "timeProgress": 0.3548387096774194,
-  "remainDays": 21
+  "timeProgress": 0.3870967741935484,
+  "remainDays": 20
  },
  "details": {
   "手机": [
@@ -2291,14 +1461,14 @@
     "sku": "01.001.002.007.002",
     "code": "LS002501862610110002",
     "member": "刘朕",
-    "phone": "13992897239"
+    "phone": "139****7239"
    },
    {
     "date": "2026-10-11",
     "name": "华为 Pura90 Pro MLN-AL00  12GB+512GB  椰青白",
     "qty": 1.0,
-    "origPrice": 5899.0,
-    "discPrice": 0.0,
+    "origPrice": 5999.0,
+    "discPrice": 100.0,
     "amount": 5899.0,
     "profit": 799.0,
     "gpr": 0.1354,
@@ -2308,14 +1478,14 @@
     "sku": "01.001.076.001.006",
     "code": "LS002501862610110006",
     "member": "白冰",
-    "phone": "13700221700"
+    "phone": "137****1700"
    },
    {
     "date": "2026-10-11",
     "name": "华为 Mate90 HLS-AL00  12GB+256GB  曜石黑",
     "qty": 1.0,
-    "origPrice": 5700.0,
-    "discPrice": 0.0,
+    "origPrice": 5999.0,
+    "discPrice": 299.0,
     "amount": 5700.0,
     "profit": 513.87,
     "gpr": 0.0902,
@@ -2325,7 +1495,7 @@
     "sku": "01.001.085.001.001",
     "code": "LS002501862610110012",
     "member": "李思凡",
-    "phone": "18629516296"
+    "phone": "186****6296"
    },
    {
     "date": "2026-10-11",
@@ -2342,14 +1512,14 @@
     "sku": "01.001.083.001.005",
     "code": "LS002501862610110013",
     "member": "梁亮",
-    "phone": "13895418977"
+    "phone": "138****8977"
    },
    {
     "date": "2026-10-11",
     "name": "华为畅享90 Pro Max CHZ-AL00  8GB+256GB  曜金黑",
     "qty": 1.0,
-    "origPrice": 1899.0,
-    "discPrice": 0.0,
+    "origPrice": 1999.0,
+    "discPrice": 100.0,
     "amount": 1899.0,
     "profit": 219.0,
     "gpr": 0.1153,
@@ -2359,7 +1529,7 @@
     "sku": "01.001.072.001.002",
     "code": "LS002501862610110014",
     "member": "彭思斯",
-    "phone": "13201813617"
+    "phone": "132****3617"
    },
    {
     "date": "2026-10-10",
@@ -2376,7 +1546,7 @@
     "sku": "01.001.078.001.005",
     "code": "LS002501862610100001",
     "member": "唐明",
-    "phone": "13572004752"
+    "phone": "135****4752"
    },
    {
     "date": "2026-10-10",
@@ -2393,7 +1563,7 @@
     "sku": "01.001.072.001.002",
     "code": "LS002501862610100002",
     "member": "郑霄霄",
-    "phone": "15927649765"
+    "phone": "159****9765"
    },
    {
     "date": "2026-10-10",
@@ -2410,7 +1580,7 @@
     "sku": "01.001.082.001.002",
     "code": "LS002501862610100003",
     "member": "即时零售",
-    "phone": "18800009999"
+    "phone": "188****9999"
    },
    {
     "date": "2026-10-10",
@@ -2427,7 +1597,7 @@
     "sku": "01.001.086.001.005",
     "code": "LS002501862610090008",
     "member": "汪忠良",
-    "phone": "13429743148"
+    "phone": "134****3148"
    },
    {
     "date": "2026-10-10",
@@ -2444,7 +1614,7 @@
     "sku": "01.001.078.001.003",
     "code": "LS002501862610100005",
     "member": "即时零售",
-    "phone": "18800009999"
+    "phone": "188****9999"
    },
    {
     "date": "2026-10-10",
@@ -2461,7 +1631,7 @@
     "sku": "01.001.062.003.007",
     "code": "LS002501862610100006",
     "member": "即时零售",
-    "phone": "18800009999"
+    "phone": "188****9999"
    },
    {
     "date": "2026-10-10",
@@ -2478,7 +1648,7 @@
     "sku": "01.001.071.001.006",
     "code": "LS002501862610100015",
     "member": "即时零售",
-    "phone": "18800009999"
+    "phone": "188****9999"
    },
    {
     "date": "2026-10-10",
@@ -2495,7 +1665,7 @@
     "sku": "01.001.062.003.002",
     "code": "LS002501862610100016",
     "member": "即时零售",
-    "phone": "18800009999"
+    "phone": "188****9999"
    },
    {
     "date": "2026-10-10",
@@ -2512,7 +1682,7 @@
     "sku": "01.001.086.001.009",
     "code": "LS002501862610100020",
     "member": "陈利宁",
-    "phone": "18691565518"
+    "phone": "186****5518"
    },
    {
     "date": "2026-10-09",
@@ -2529,7 +1699,7 @@
     "sku": "01.001.061.003.003",
     "code": "LS002501862610080013",
     "member": "鞠洪亮",
-    "phone": "13614301409"
+    "phone": "136****1409"
    },
    {
     "date": "2026-10-09",
@@ -2546,7 +1716,7 @@
     "sku": "01.001.072.001.002",
     "code": "LS002501862610090002",
     "member": "陈国亮",
-    "phone": "13661582313"
+    "phone": "136****2313"
    },
    {
     "date": "2026-10-09",
@@ -2563,7 +1733,7 @@
     "sku": "01.001.088.001.005",
     "code": "LS002501862610080005",
     "member": "张芬芬",
-    "phone": "18109135051"
+    "phone": "181****5051"
    },
    {
     "date": "2026-10-09",
@@ -2580,7 +1750,7 @@
     "sku": "01.001.086.001.005",
     "code": "LS002501862610080004",
     "member": "张俊杰",
-    "phone": "15129935034"
+    "phone": "151****5034"
    },
    {
     "date": "2026-10-09",
@@ -2597,7 +1767,7 @@
     "sku": "01.001.074.001.003",
     "code": "LS002501862610090004",
     "member": "何颜军",
-    "phone": "18109229602"
+    "phone": "181****9602"
    },
    {
     "date": "2026-10-09",
@@ -2614,7 +1784,7 @@
     "sku": "01.001.086.001.007",
     "code": "LS002501272610090005",
     "member": "孙钰",
-    "phone": "18991219518"
+    "phone": "189****9518"
    },
    {
     "date": "2026-10-08",
@@ -2631,7 +1801,7 @@
     "sku": "01.001.002.007.003",
     "code": "LS002501862610080001",
     "member": "施福园",
-    "phone": "18392598790"
+    "phone": "183****8790"
    },
    {
     "date": "2026-10-08",
@@ -2648,7 +1818,7 @@
     "sku": "01.001.078.001.007",
     "code": "LS002501862610080002",
     "member": "胡燕君",
-    "phone": "15353663741"
+    "phone": "153****3741"
    },
    {
     "date": "2026-10-08",
@@ -2665,7 +1835,7 @@
     "sku": "01.001.078.001.007",
     "code": "LS002501862610080009",
     "member": "胡燕敏",
-    "phone": "17791791825"
+    "phone": "177****1825"
    },
    {
     "date": "2026-10-08",
@@ -2682,7 +1852,7 @@
     "sku": "01.001.086.001.005",
     "code": "LS002501862610080010",
     "member": "孙策",
-    "phone": "18292078787"
+    "phone": "182****8787"
    },
    {
     "date": "2026-10-08",
@@ -2699,7 +1869,7 @@
     "sku": "01.001.083.001.004",
     "code": "LS002501862610080012",
     "member": "安琪",
-    "phone": "18636454608"
+    "phone": "186****4608"
    },
    {
     "date": "2026-10-08",
@@ -2714,9 +1884,9 @@
     "cost": 1680.0,
     "emp": "李泽",
     "sku": "01.001.072.001.002",
-    "code": "LS002501862610080018",
-    "member": "方大启辰",
-    "phone": "17818111325"
+    "code": "LS002501862610080019",
+    "member": "张宏",
+    "phone": "136****2235"
    },
    {
     "date": "2026-10-08",
@@ -2731,9 +1901,9 @@
     "cost": 1680.0,
     "emp": "李泽",
     "sku": "01.001.072.001.002",
-    "code": "LS002501862610080018",
-    "member": "方大启辰",
-    "phone": "17818111325"
+    "code": "LS002501862610080019",
+    "member": "张宏",
+    "phone": "136****2235"
    },
    {
     "date": "2026-10-07",
@@ -2750,7 +1920,7 @@
     "sku": "01.001.085.001.009",
     "code": "LS002501862610070005",
     "member": "周欢",
-    "phone": "17792380235"
+    "phone": "177****0235"
    },
    {
     "date": "2026-10-07",
@@ -2767,7 +1937,7 @@
     "sku": "01.001.087.002.007",
     "code": "LS002501862610070006",
     "member": "赵春",
-    "phone": "15339164110"
+    "phone": "153****4110"
    },
    {
     "date": "2026-10-07",
@@ -2784,7 +1954,7 @@
     "sku": "01.001.078.001.007",
     "code": "LS002501862610070007",
     "member": "即时零售",
-    "phone": "18800009999"
+    "phone": "188****9999"
    },
    {
     "date": "2026-10-07",
@@ -2801,7 +1971,7 @@
     "sku": "01.001.071.001.004",
     "code": "LS002501862610070010",
     "member": "王曼",
-    "phone": "13709269889"
+    "phone": "137****9889"
    },
    {
     "date": "2026-10-07",
@@ -2818,7 +1988,7 @@
     "sku": "01.001.086.001.005",
     "code": "LS002501862610070013",
     "member": "张佳佳",
-    "phone": "15339252356"
+    "phone": "153****2356"
    },
    {
     "date": "2026-10-07",
@@ -2835,7 +2005,7 @@
     "sku": "01.001.085.001.005",
     "code": "LS002501862610070014",
     "member": "谭梁",
-    "phone": "18700422724"
+    "phone": "187****2724"
    },
    {
     "date": "2026-10-06",
@@ -2852,7 +2022,7 @@
     "sku": "01.001.087.002.007",
     "code": "LS002501272610040002",
     "member": "关巧玲",
-    "phone": "15091683755"
+    "phone": "150****3755"
    },
    {
     "date": "2026-10-06",
@@ -2869,7 +2039,7 @@
     "sku": "01.001.082.001.007",
     "code": "LS002501272610040004",
     "member": "杨万义",
-    "phone": "18700837880"
+    "phone": "187****7880"
    },
    {
     "date": "2026-10-06",
@@ -2886,7 +2056,7 @@
     "sku": "01.001.085.001.004",
     "code": "LS002501862610060007",
     "member": "刘擎",
-    "phone": "15353606189"
+    "phone": "153****6189"
    },
    {
     "date": "2026-10-06",
@@ -2903,7 +2073,7 @@
     "sku": "01.001.079.001.005",
     "code": "LS002501272610060003",
     "member": "魏燕燕",
-    "phone": "18161803396"
+    "phone": "181****3396"
    },
    {
     "date": "2026-10-06",
@@ -2920,7 +2090,7 @@
     "sku": "01.001.087.001.004",
     "code": "LS002501272610060004",
     "member": "罗显元",
-    "phone": "13759954935"
+    "phone": "137****4935"
    },
    {
     "date": "2026-10-06",
@@ -2937,7 +2107,7 @@
     "sku": "01.001.086.001.012",
     "code": "LS002501272610060005",
     "member": "白纪睿",
-    "phone": "18691953030"
+    "phone": "186****3030"
    },
    {
     "date": "2026-10-05",
@@ -2954,7 +2124,7 @@
     "sku": "01.001.082.001.007",
     "code": "LS002501862610050009",
     "member": "王新",
-    "phone": "13571808006"
+    "phone": "135****8006"
    },
    {
     "date": "2026-10-05",
@@ -2971,7 +2141,7 @@
     "sku": "01.001.078.001.008",
     "code": "LS002501862610050010",
     "member": "高军芳",
-    "phone": "15809209600"
+    "phone": "158****9600"
    },
    {
     "date": "2026-10-05",
@@ -2988,7 +2158,7 @@
     "sku": "01.001.079.001.001",
     "code": "LS002501862610050011",
     "member": "贾丽霞",
-    "phone": "15291228560"
+    "phone": "152****8560"
    },
    {
     "date": "2026-10-05",
@@ -3005,7 +2175,7 @@
     "sku": "01.001.082.001.008",
     "code": "LS002501862610050012",
     "member": "吴平",
-    "phone": "13892852671"
+    "phone": "138****2671"
    },
    {
     "date": "2026-10-05",
@@ -3022,7 +2192,7 @@
     "sku": "01.001.087.001.001",
     "code": "LS002501862610050013",
     "member": "赵晨浩",
-    "phone": "16635303570"
+    "phone": "166****3570"
    },
    {
     "date": "2026-10-05",
@@ -3039,7 +2209,7 @@
     "sku": "01.001.077.001.007",
     "code": "LS002501862610050015",
     "member": "闫智予",
-    "phone": "15664853853"
+    "phone": "156****3853"
    },
    {
     "date": "2026-10-05",
@@ -3056,7 +2226,7 @@
     "sku": "01.001.076.001.006",
     "code": "LS002501862610050017",
     "member": "孟海龙",
-    "phone": "13991901166"
+    "phone": "139****1166"
    },
    {
     "date": "2026-10-05",
@@ -3073,7 +2243,7 @@
     "sku": "01.001.085.001.007",
     "code": "LS002501862610050019",
     "member": "魏雅峰",
-    "phone": "13909241920"
+    "phone": "139****1920"
    },
    {
     "date": "2026-10-05",
@@ -3090,7 +2260,7 @@
     "sku": "01.001.086.001.007",
     "code": "LS002501862610050021",
     "member": "王琪",
-    "phone": "13920903062"
+    "phone": "139****3062"
    },
    {
     "date": "2026-10-05",
@@ -3107,7 +2277,7 @@
     "sku": "01.001.087.002.005",
     "code": "LS002501862610050023",
     "member": "杨圆圆",
-    "phone": "13630293995"
+    "phone": "136****3995"
    },
    {
     "date": "2026-10-05",
@@ -3122,9 +2292,9 @@
     "cost": 2241.0,
     "emp": "李泽",
     "sku": "01.001.082.001.008",
-    "code": "LS002501272610050004",
-    "member": "马女士",
-    "phone": "18092232887"
+    "code": "LS002501272610050009",
+    "member": "王福荣",
+    "phone": "177****8231"
    },
    {
     "date": "2026-10-05",
@@ -3141,7 +2311,7 @@
     "sku": "01.001.074.001.012",
     "code": "LS002501272610050007",
     "member": "李丽",
-    "phone": "15029282331"
+    "phone": "150****2331"
    },
    {
     "date": "2026-10-05",
@@ -3158,7 +2328,7 @@
     "sku": "01.001.086.001.001",
     "code": "LS002501862610050027",
     "member": "毛玉婷",
-    "phone": "15891372059"
+    "phone": "158****2059"
    },
    {
     "date": "2026-10-05",
@@ -3175,7 +2345,7 @@
     "sku": "01.001.087.002.006",
     "code": "LS002501862610050023",
     "member": "杨圆圆",
-    "phone": "13630293995"
+    "phone": "136****3995"
    },
    {
     "date": "2026-10-05",
@@ -3190,9 +2360,9 @@
     "cost": 2241.0,
     "emp": "李泽",
     "sku": "01.001.082.001.007",
-    "code": "LS002501272610050004",
-    "member": "马女士",
-    "phone": "18092232887"
+    "code": "LS002501272610050009",
+    "member": "王福荣",
+    "phone": "177****8231"
    },
    {
     "date": "2026-10-04",
@@ -3209,7 +2379,7 @@
     "sku": "01.001.072.001.007",
     "code": "LS002501862610030013",
     "member": "廖文婧",
-    "phone": "13201826335"
+    "phone": "132****6335"
    },
    {
     "date": "2026-10-04",
@@ -3226,7 +2396,7 @@
     "sku": "01.001.085.001.006",
     "code": "LS002501862610040006",
     "member": "杨芳",
-    "phone": "13571962933"
+    "phone": "135****2933"
    },
    {
     "date": "2026-10-04",
@@ -3243,7 +2413,7 @@
     "sku": "01.001.002.010.001",
     "code": "LS002501272610040003",
     "member": "曹雪楼",
-    "phone": "18049252536"
+    "phone": "180****2536"
    },
    {
     "date": "2026-10-04",
@@ -3260,7 +2430,7 @@
     "sku": "01.001.086.001.013",
     "code": "LS002501862610040008",
     "member": "武新林",
-    "phone": "13830738228"
+    "phone": "138****8228"
    },
    {
     "date": "2026-10-04",
@@ -3277,7 +2447,7 @@
     "sku": "01.001.088.001.001",
     "code": "LS002501862610010017",
     "member": "妍妍",
-    "phone": "15129284563"
+    "phone": "151****4563"
    },
    {
     "date": "2026-10-04",
@@ -3294,7 +2464,7 @@
     "sku": "01.001.087.001.002",
     "code": "LS002501862610040014",
     "member": "涂子鑫",
-    "phone": "18621199121"
+    "phone": "186****9121"
    },
    {
     "date": "2026-10-04",
@@ -3311,7 +2481,7 @@
     "sku": "01.001.086.001.005",
     "code": "LS002501272610040008",
     "member": "张帅",
-    "phone": "18966761929"
+    "phone": "189****1929"
    },
    {
     "date": "2026-10-04",
@@ -3328,7 +2498,7 @@
     "sku": "01.001.087.001.003",
     "code": "LS002501862610040014",
     "member": "涂子鑫",
-    "phone": "18621199121"
+    "phone": "186****9121"
    },
    {
     "date": "2026-10-04",
@@ -3345,7 +2515,7 @@
     "sku": "01.001.002.002.007",
     "code": "LS002501862610040019",
     "member": "杜女士",
-    "phone": "18809128006"
+    "phone": "188****8006"
    },
    {
     "date": "2026-10-03",
@@ -3362,7 +2532,7 @@
     "sku": "01.001.072.001.002",
     "code": "LS002501862610020009",
     "member": "郑霄霄",
-    "phone": "15927649765"
+    "phone": "159****9765"
    },
    {
     "date": "2026-10-03",
@@ -3379,7 +2549,7 @@
     "sku": "01.001.076.001.010",
     "code": "LS002501862610030004",
     "member": "高雯琪",
-    "phone": "17391614134"
+    "phone": "173****4134"
    },
    {
     "date": "2026-10-03",
@@ -3396,7 +2566,7 @@
     "sku": "01.001.072.001.002",
     "code": "LS002501862610030007",
     "member": "蒋琪",
-    "phone": "18365787776"
+    "phone": "183****7776"
    },
    {
     "date": "2026-10-03",
@@ -3413,7 +2583,7 @@
     "sku": "01.001.084.001.003",
     "code": "LS002501862610030008",
     "member": "齐",
-    "phone": "13992141314"
+    "phone": "139****1314"
    },
    {
     "date": "2026-10-03",
@@ -3430,7 +2600,7 @@
     "sku": "01.001.044.002.003",
     "code": "LS002501862610030010",
     "member": "谢兴柱",
-    "phone": "18706860800"
+    "phone": "187****0800"
    },
    {
     "date": "2026-10-03",
@@ -3447,7 +2617,7 @@
     "sku": "01.001.088.001.005",
     "code": "LS002501862610030015",
     "member": "张芬芬",
-    "phone": "18109135051"
+    "phone": "181****5051"
    },
    {
     "date": "2026-10-03",
@@ -3464,7 +2634,7 @@
     "sku": "01.001.086.001.005",
     "code": "LS002501272610030007",
     "member": "徐艺洲",
-    "phone": "18908846177"
+    "phone": "189****6177"
    },
    {
     "date": "2026-10-02",
@@ -3479,9 +2649,9 @@
     "cost": 1680.0,
     "emp": "杨丽华",
     "sku": "01.001.072.001.003",
-    "code": "LS002501862610020001",
-    "member": "孙时兴",
-    "phone": "18291822544"
+    "code": "LS002501862610020008",
+    "member": "郑霄霄",
+    "phone": "159****9765"
    },
    {
     "date": "2026-10-02",
@@ -3498,7 +2668,7 @@
     "sku": "01.001.087.001.002",
     "code": "LS002501862610020005",
     "member": "虫子",
-    "phone": "18092073031"
+    "phone": "180****3031"
    },
    {
     "date": "2026-10-02",
@@ -3513,9 +2683,9 @@
     "cost": 1680.0,
     "emp": "杨丽华",
     "sku": "01.001.072.001.002",
-    "code": "LS002501862610020001",
-    "member": "孙时兴",
-    "phone": "18291822544"
+    "code": "LS002501862610020008",
+    "member": "郑霄霄",
+    "phone": "159****9765"
    },
    {
     "date": "2026-10-02",
@@ -3532,7 +2702,7 @@
     "sku": "01.001.084.001.008",
     "code": "LS002501862610020013",
     "member": "小小",
-    "phone": "13572115812"
+    "phone": "135****5812"
    },
    {
     "date": "2026-10-02",
@@ -3549,7 +2719,7 @@
     "sku": "01.001.084.001.001",
     "code": "LS002501272610020001",
     "member": "孙振强",
-    "phone": "13219820828"
+    "phone": "132****0828"
    },
    {
     "date": "2026-10-02",
@@ -3566,7 +2736,7 @@
     "sku": "01.001.084.001.001",
     "code": "LS002501272610020001",
     "member": "孙振强",
-    "phone": "13219820828"
+    "phone": "132****0828"
    },
    {
     "date": "2026-10-01",
@@ -3583,7 +2753,7 @@
     "sku": "01.001.072.001.002",
     "code": "LS002501862610010001",
     "member": "杨",
-    "phone": "18829584054"
+    "phone": "188****4054"
    },
    {
     "date": "2026-10-01",
@@ -3600,7 +2770,7 @@
     "sku": "01.001.072.001.008",
     "code": "LS002501862610010001",
     "member": "杨",
-    "phone": "18829584054"
+    "phone": "188****4054"
    },
    {
     "date": "2026-10-01",
@@ -3617,7 +2787,7 @@
     "sku": "01.001.072.001.001",
     "code": "LS002501272610010002",
     "member": "杜凌云",
-    "phone": "18192561160"
+    "phone": "181****1160"
    },
    {
     "date": "2026-10-01",
@@ -3634,7 +2804,7 @@
     "sku": "01.001.085.001.001",
     "code": "LS002501862610010003",
     "member": "李遣",
-    "phone": "15877387745"
+    "phone": "158****7745"
    },
    {
     "date": "2026-10-01",
@@ -3651,7 +2821,7 @@
     "sku": "01.001.087.001.001",
     "code": "LS002501862610010010",
     "member": "无",
-    "phone": "18691199990"
+    "phone": "186****9990"
    },
    {
     "date": "2026-10-01",
@@ -3668,7 +2838,7 @@
     "sku": "01.001.085.001.002",
     "code": "LS002501862610010011",
     "member": "贝贝",
-    "phone": "17791725923"
+    "phone": "177****5923"
    },
    {
     "date": "2026-10-01",
@@ -3685,7 +2855,7 @@
     "sku": "01.001.072.001.008",
     "code": "LS002501862610010001",
     "member": "杨",
-    "phone": "18829584054"
+    "phone": "188****4054"
    },
    {
     "date": "2026-10-01",
@@ -3702,7 +2872,7 @@
     "sku": "01.001.086.001.006",
     "code": "LS002501272610010004",
     "member": "孙洁",
-    "phone": "15129030193"
+    "phone": "151****0193"
    },
    {
     "date": "2026-10-01",
@@ -3719,7 +2889,7 @@
     "sku": "01.001.086.001.006",
     "code": "LS002501862610010012",
     "member": "重伟",
-    "phone": "15339155068"
+    "phone": "153****5068"
    },
    {
     "date": "2026-10-01",
@@ -3736,7 +2906,7 @@
     "sku": "01.001.086.001.005",
     "code": "LS002501862610010013",
     "member": "张俊杰",
-    "phone": "15129935034"
+    "phone": "151****5034"
    },
    {
     "date": "2026-10-01",
@@ -3753,7 +2923,7 @@
     "sku": "01.001.087.001.003",
     "code": "LS002501272610010005",
     "member": "田小炜",
-    "phone": "13379514532"
+    "phone": "133****4532"
    },
    {
     "date": "2026-10-01",
@@ -3770,7 +2940,7 @@
     "sku": "01.001.085.001.004",
     "code": "LS002501272610010006",
     "member": "董书琦",
-    "phone": "18710804340"
+    "phone": "187****4340"
    },
    {
     "date": "2026-10-01",
@@ -3787,7 +2957,7 @@
     "sku": "01.001.061.003.006",
     "code": "LS002501862610010015",
     "member": "车",
-    "phone": "17782789150"
+    "phone": "177****9150"
    }
   ],
   "PC": [
@@ -3806,7 +2976,7 @@
     "sku": "05.001.022.001.002",
     "code": "LS002501272610030008",
     "member": "张辉",
-    "phone": "13659281327"
+    "phone": "136****1327"
    },
    {
     "date": "2026-10-03",
@@ -3823,7 +2993,7 @@
     "sku": "05.001.012.002.001",
     "code": "LS002501272610030002",
     "member": "白雪",
-    "phone": "18740620190"
+    "phone": "187****0190"
    }
   ],
   "平板": [
@@ -3842,7 +3012,7 @@
     "sku": "06.001.012.010.032",
     "code": "LS002501862610060001",
     "member": "张铖",
-    "phone": "18898099075"
+    "phone": "188****9075"
    },
    {
     "date": "2026-10-04",
@@ -3853,13 +3023,13 @@
     "amount": 3419.0,
     "profit": 407.0,
     "gpr": 0.119,
-    "so": "170.0",
+    "so": "170",
     "cost": 3182.0,
     "emp": "邵乐乐",
     "sku": "06.001.022.001.001",
     "code": "LS002501862610040017",
     "member": "杨嫣华",
-    "phone": "13891881610"
+    "phone": "138****1610"
    },
    {
     "date": "2026-10-03",
@@ -3870,13 +3040,13 @@
     "amount": 2799.0,
     "profit": 226.53,
     "gpr": 0.0809,
-    "so": "150.0",
+    "so": "150",
     "cost": 2722.47,
     "emp": "李泽",
     "sku": "06.001.002.006.029",
     "code": "LS002501862610030022",
     "member": "张辉",
-    "phone": "13572229991"
+    "phone": "135****9991"
    },
    {
     "date": "2026-10-02",
@@ -3887,13 +3057,13 @@
     "amount": 2799.0,
     "profit": 292.0,
     "gpr": 0.1043,
-    "so": "150.0",
+    "so": "150",
     "cost": 2657.0,
     "emp": "邵乐乐",
     "sku": "06.001.002.006.030",
     "code": "LS002501862610020002",
     "member": "刘坤",
-    "phone": "13227808867"
+    "phone": "132****8867"
    },
    {
     "date": "2026-10-02",
@@ -3904,13 +3074,13 @@
     "amount": 5599.0,
     "profit": 477.73,
     "gpr": 0.0853,
-    "so": "425.0",
+    "so": "425",
     "cost": 5546.27,
     "emp": "邵乐乐",
     "sku": "06.001.013.003.013",
     "code": "LS002501862610020004",
     "member": "钱海红",
-    "phone": "13891185823"
+    "phone": "138****5823"
    },
    {
     "date": "2026-10-02",
@@ -3921,13 +3091,13 @@
     "amount": 1999.0,
     "profit": 385.0,
     "gpr": 0.1926,
-    "so": "100.0",
+    "so": "100",
     "cost": 1714.0,
     "emp": "邵乐乐",
     "sku": "06.001.007.004.008",
     "code": "LS002501862610020018",
     "member": "潘阳玥",
-    "phone": "17740802878"
+    "phone": "177****2878"
    },
    {
     "date": "2026-10-01",
@@ -3938,13 +3108,13 @@
     "amount": 1999.0,
     "profit": 385.0,
     "gpr": 0.1926,
-    "so": "100.0",
+    "so": "100",
     "cost": 1714.0,
     "emp": "邵乐乐",
     "sku": "06.001.007.004.008",
     "code": "LS002501272610010001",
     "member": "杜凌云",
-    "phone": "18192561160"
+    "phone": "181****1160"
    }
   ],
   "穿戴": [
@@ -3963,14 +3133,14 @@
     "sku": "08.001.043.001.002",
     "code": "LS002501862610110003",
     "member": "赵妍",
-    "phone": "13022890892"
+    "phone": "130****0892"
    },
    {
     "date": "2026-10-11",
     "name": "华为儿童手表5 Pro TGR-L10(粉色硅胶表带)冰晶粉",
     "qty": 1.0,
-    "origPrice": 898.0,
-    "discPrice": 0.0,
+    "origPrice": 948.0,
+    "discPrice": 50.0,
     "amount": 898.0,
     "profit": -25.0,
     "gpr": -0.0278,
@@ -3980,14 +3150,14 @@
     "sku": "08.001.011.003.001",
     "code": "LS002501862610110007",
     "member": "即时零售",
-    "phone": "18800009999"
+    "phone": "188****9999"
    },
    {
     "date": "2026-10-11",
     "name": "华为 Watch GT7 Pro TUM-B49 46mm(黑色易扣氟橡胶表带) 碳晶黑",
     "qty": 1.0,
-    "origPrice": 2588.0,
-    "discPrice": 0.0,
+    "origPrice": 2688.0,
+    "discPrice": 100.0,
     "amount": 2588.0,
     "profit": 437.0,
     "gpr": 0.1689,
@@ -3997,7 +3167,7 @@
     "sku": "08.001.041.001.003",
     "code": "LS002501272610110002",
     "member": "陈真",
-    "phone": "13891929319"
+    "phone": "138****9319"
    },
    {
     "date": "2026-10-10",
@@ -4014,7 +3184,7 @@
     "sku": "08.001.033.001.003",
     "code": "LS002501862610100009",
     "member": "即时零售",
-    "phone": "18800009999"
+    "phone": "188****9999"
    },
    {
     "date": "2026-10-10",
@@ -4031,7 +3201,7 @@
     "sku": "08.001.044.003.001",
     "code": "LS002501862610100013",
     "member": "齐",
-    "phone": "13992141314"
+    "phone": "139****1314"
    },
    {
     "date": "2026-10-10",
@@ -4048,7 +3218,7 @@
     "sku": "08.001.040.002.004",
     "code": "LS002501862610100014",
     "member": "妍妍",
-    "phone": "15129284563"
+    "phone": "151****4563"
    },
    {
     "date": "2026-10-10",
@@ -4065,7 +3235,7 @@
     "sku": "08.001.038.002.002",
     "code": "LS002501862610100022",
     "member": "即时零售",
-    "phone": "18800009999"
+    "phone": "188****9999"
    },
    {
     "date": "2026-10-09",
@@ -4082,7 +3252,7 @@
     "sku": "08.001.043.001.002",
     "code": "LS002501862610090003",
     "member": "王唐唐",
-    "phone": "18302982975"
+    "phone": "183****2975"
    },
    {
     "date": "2026-10-08",
@@ -4099,7 +3269,7 @@
     "sku": "08.001.042.001.001",
     "code": "LS002501862610080007",
     "member": "罗旭",
-    "phone": "13709187788"
+    "phone": "137****7788"
    },
    {
     "date": "2026-10-08",
@@ -4116,7 +3286,7 @@
     "sku": "08.001.036.001.004",
     "code": "LS002501862610080016",
     "member": "方大启辰",
-    "phone": "17818111325"
+    "phone": "178****1325"
    },
    {
     "date": "2026-10-07",
@@ -4133,7 +3303,7 @@
     "sku": "08.001.042.001.001",
     "code": "LS002501862610070015",
     "member": "李女士",
-    "phone": "15091657053"
+    "phone": "150****7053"
    },
    {
     "date": "2026-10-05",
@@ -4150,7 +3320,7 @@
     "sku": "08.001.044.001.001",
     "code": "LS002501862610050005",
     "member": "王宁侠",
-    "phone": "18691889972"
+    "phone": "186****9972"
    },
    {
     "date": "2026-10-05",
@@ -4165,9 +3335,9 @@
     "cost": 2268.0,
     "emp": "李泽",
     "sku": "08.001.042.002.003",
-    "code": "LS002501272610050002",
-    "member": "111",
-    "phone": "18792834859"
+    "code": "LS002501272610050010",
+    "member": "程晓敏",
+    "phone": "152****1602"
    },
    {
     "date": "2026-10-05",
@@ -4184,7 +3354,7 @@
     "sku": "08.001.040.002.002",
     "code": "LS002501272610050005",
     "member": "杜全安",
-    "phone": "13379268278"
+    "phone": "133****8278"
    },
    {
     "date": "2026-10-05",
@@ -4199,9 +3369,9 @@
     "cost": 2330.16,
     "emp": "李泽",
     "sku": "08.001.042.002.001",
-    "code": "LS002501272610050002",
-    "member": "111",
-    "phone": "18792834859"
+    "code": "LS002501272610050010",
+    "member": "程晓敏",
+    "phone": "152****1602"
    },
    {
     "date": "2026-10-05",
@@ -4218,7 +3388,7 @@
     "sku": "08.001.043.001.001",
     "code": "LS002501272610050011",
     "member": "张翠玲",
-    "phone": "15122100477"
+    "phone": "151****0477"
    },
    {
     "date": "2026-10-04",
@@ -4235,7 +3405,7 @@
     "sku": "08.001.037.001.001",
     "code": "LS002501862610040007",
     "member": "张彦林",
-    "phone": "18192125919"
+    "phone": "181****5919"
    },
    {
     "date": "2026-10-04",
@@ -4252,7 +3422,7 @@
     "sku": "08.001.042.002.001",
     "code": "LS002501862610040009",
     "member": "王冰",
-    "phone": "18509196767"
+    "phone": "185****6767"
    },
    {
     "date": "2026-10-04",
@@ -4269,7 +3439,7 @@
     "sku": "08.001.011.004.001",
     "code": "LS002501862610040013",
     "member": "李丹",
-    "phone": "13892297227"
+    "phone": "138****7227"
    },
    {
     "date": "2026-10-03",
@@ -4286,7 +3456,7 @@
     "sku": "08.001.042.001.001",
     "code": "LS002501862610030001",
     "member": "韩俊辉",
-    "phone": "18091855385"
+    "phone": "180****5385"
    },
    {
     "date": "2026-10-03",
@@ -4303,7 +3473,7 @@
     "sku": "08.001.036.001.002",
     "code": "LS002501862610030003",
     "member": "即时零售",
-    "phone": "18800009999"
+    "phone": "188****9999"
    },
    {
     "date": "2026-10-03",
@@ -4320,7 +3490,7 @@
     "sku": "08.001.042.002.002",
     "code": "LS002501272610030001",
     "member": "李超",
-    "phone": "19945251128"
+    "phone": "199****1128"
    },
    {
     "date": "2026-10-03",
@@ -4337,7 +3507,7 @@
     "sku": "08.001.032.001.003",
     "code": "LS002501272610030003",
     "member": "李超",
-    "phone": "19945251128"
+    "phone": "199****1128"
    },
    {
     "date": "2026-10-03",
@@ -4354,7 +3524,7 @@
     "sku": "08.001.036.001.002",
     "code": "LS002501862610030018",
     "member": "谢兴柱",
-    "phone": "18706860800"
+    "phone": "187****0800"
    },
    {
     "date": "2026-10-02",
@@ -4371,7 +3541,7 @@
     "sku": "08.001.040.002.004",
     "code": "LS002501862610020006",
     "member": "虫子",
-    "phone": "18092073031"
+    "phone": "180****3031"
    },
    {
     "date": "2026-10-02",
@@ -4388,7 +3558,7 @@
     "sku": "08.001.041.001.003",
     "code": "LS002501862610020007",
     "member": "王再再",
-    "phone": "13109537859"
+    "phone": "131****7859"
    },
    {
     "date": "2026-10-02",
@@ -4403,9 +3573,9 @@
     "cost": 1258.49,
     "emp": "邵乐乐",
     "sku": "08.001.040.002.004",
-    "code": "LS002501862610010008",
-    "member": "柳艳",
-    "phone": "18302970998"
+    "code": "LS002501862610020010",
+    "member": "杨红兰",
+    "phone": "158****3167"
    },
    {
     "date": "2026-10-02",
@@ -4420,9 +3590,9 @@
     "cost": 3325.17,
     "emp": "邵乐乐",
     "sku": "08.001.043.001.002",
-    "code": "LS002501862610020011",
-    "member": "张博晨",
-    "phone": "18161914293"
+    "code": "LS002501862610020012",
+    "member": "小小",
+    "phone": "135****5812"
    },
    {
     "date": "2026-10-02",
@@ -4437,9 +3607,9 @@
     "cost": 3325.17,
     "emp": "邵乐乐",
     "sku": "08.001.043.001.002",
-    "code": "LS002501862610020011",
-    "member": "张博晨",
-    "phone": "18161914293"
+    "code": "LS002501862610020012",
+    "member": "小小",
+    "phone": "135****5812"
    },
    {
     "date": "2026-10-02",
@@ -4454,9 +3624,9 @@
     "cost": 1258.49,
     "emp": "邵乐乐",
     "sku": "08.001.040.002.004",
-    "code": "LS002501862610010008",
-    "member": "柳艳",
-    "phone": "18302970998"
+    "code": "LS002501862610020010",
+    "member": "杨红兰",
+    "phone": "158****3167"
    },
    {
     "date": "2026-10-02",
@@ -4473,7 +3643,7 @@
     "sku": "08.001.036.001.002",
     "code": "LS002501862610020017",
     "member": "即时零售",
-    "phone": "18800009999"
+    "phone": "188****9999"
    }
   ],
   "音频": [
@@ -4481,8 +3651,8 @@
     "date": "2026-10-11",
     "name": "华为 FreeClip 2 典藏版 耳机 T0027  星海蓝",
     "qty": 1.0,
-    "origPrice": 1374.0,
-    "discPrice": 0.0,
+    "origPrice": 1499.0,
+    "discPrice": 125.0,
     "amount": 1374.0,
     "profit": 126.09,
     "gpr": 0.0918,
@@ -4492,7 +3662,7 @@
     "sku": "07.001.013.004.001",
     "code": "LS002501862610110015",
     "member": "彭思斯",
-    "phone": "13201813617"
+    "phone": "132****3617"
    },
    {
     "date": "2026-10-10",
@@ -4507,9 +3677,9 @@
     "cost": 1040.0,
     "emp": "李泽",
     "sku": "07.001.013.005.001",
-    "code": "LS002501862610100017",
-    "member": "方大启辰",
-    "phone": "17818111325"
+    "code": "LS002501862609260024",
+    "member": "侯瑞",
+    "phone": "134****8804"
    },
    {
     "date": "2026-10-10",
@@ -4524,9 +3694,9 @@
     "cost": 1068.42,
     "emp": "李泽",
     "sku": "07.001.013.005.005",
-    "code": "LS002501862610100017",
-    "member": "方大启辰",
-    "phone": "17818111325"
+    "code": "LS002501862609260024",
+    "member": "侯瑞",
+    "phone": "134****8804"
    },
    {
     "date": "2026-10-09",
@@ -4543,7 +3713,7 @@
     "sku": "07.001.020.001.001",
     "code": "LS002501862610090005",
     "member": "何颜军",
-    "phone": "18109229602"
+    "phone": "181****9602"
    },
    {
     "date": "2026-10-09",
@@ -4560,7 +3730,7 @@
     "sku": "07.001.020.001.004",
     "code": "LS002501862610090005",
     "member": "何颜军",
-    "phone": "18109229602"
+    "phone": "181****9602"
    },
    {
     "date": "2026-10-08",
@@ -4577,7 +3747,7 @@
     "sku": "07.001.013.005.003",
     "code": "LS002501862610080008",
     "member": "施福园",
-    "phone": "18392598790"
+    "phone": "183****8790"
    },
    {
     "date": "2026-10-07",
@@ -4594,7 +3764,7 @@
     "sku": "07.001.005.002.001",
     "code": "LS002501862610070004",
     "member": "即时零售",
-    "phone": "18800009999"
+    "phone": "188****9999"
    },
    {
     "date": "2026-10-07",
@@ -4611,7 +3781,7 @@
     "sku": "07.001.013.004.001",
     "code": "LS002501862610070012",
     "member": "王",
-    "phone": "13659266399"
+    "phone": "136****6399"
    },
    {
     "date": "2026-10-05",
@@ -4628,7 +3798,7 @@
     "sku": "07.001.013.005.002",
     "code": "LS002501862610050020",
     "member": "周",
-    "phone": "13991884173"
+    "phone": "139****4173"
    },
    {
     "date": "2026-10-04",
@@ -4645,7 +3815,7 @@
     "sku": "07.001.013.005.001",
     "code": "LS002501862610040010",
     "member": "王宁侠",
-    "phone": "18691889972"
+    "phone": "186****9972"
    },
    {
     "date": "2026-10-03",
@@ -4676,7 +3846,7 @@
     "sku": "07.001.013.005.002",
     "code": "LS002501862610030017",
     "member": "张先生",
-    "phone": "13609271277"
+    "phone": "136****1277"
    },
    {
     "date": "2026-10-03",
@@ -4693,7 +3863,7 @@
     "sku": "07.001.013.005.004",
     "code": "LS002501862610030017",
     "member": "张先生",
-    "phone": "13609271277"
+    "phone": "136****1277"
    },
    {
     "date": "2026-10-02",
@@ -4710,7 +3880,7 @@
     "sku": "07.001.013.005.003",
     "code": "LS002501272610020007",
     "member": "潘阳玥",
-    "phone": "17740802878"
+    "phone": "177****2878"
    }
   ],
   "HD": [
@@ -4723,13 +3893,13 @@
     "amount": -3099.0,
     "profit": -479.0,
     "gpr": 0.1546,
-    "so": "-117.0",
+    "so": "-117",
     "cost": -2737.0,
     "emp": "李泽",
     "sku": "12.061.001.001",
     "code": "LS002501862610080003",
     "member": "胡西安",
-    "phone": "18091852355"
+    "phone": "180****2355"
    },
    {
     "date": "2026-10-06",
@@ -4740,13 +3910,13 @@
     "amount": 3099.0,
     "profit": 479.0,
     "gpr": 0.1546,
-    "so": "117.0",
+    "so": "117",
     "cost": 2737.0,
     "emp": "李泽",
     "sku": "12.061.001.001",
     "code": "LS002501862610060002",
     "member": "胡西安",
-    "phone": "18091852355"
+    "phone": "180****2355"
    }
   ],
   "智慧办公": [
@@ -4765,7 +3935,7 @@
     "sku": "05.001.022.001.002",
     "code": "LS002501272610030008",
     "member": "张辉",
-    "phone": "13659281327"
+    "phone": "136****1327"
    },
    {
     "date": "2026-10-06",
@@ -4782,7 +3952,7 @@
     "sku": "06.001.012.010.032",
     "code": "LS002501862610060001",
     "member": "张铖",
-    "phone": "18898099075"
+    "phone": "188****9075"
    },
    {
     "date": "2026-10-04",
@@ -4793,13 +3963,13 @@
     "amount": 3419.0,
     "profit": 407.0,
     "gpr": 0.119,
-    "so": "170.0",
+    "so": "170",
     "cost": 3182.0,
     "emp": "邵乐乐",
     "sku": "06.001.022.001.001",
     "code": "LS002501862610040017",
     "member": "杨嫣华",
-    "phone": "13891881610"
+    "phone": "138****1610"
    },
    {
     "date": "2026-10-03",
@@ -4816,7 +3986,7 @@
     "sku": "05.001.012.002.001",
     "code": "LS002501272610030002",
     "member": "白雪",
-    "phone": "18740620190"
+    "phone": "187****0190"
    },
    {
     "date": "2026-10-03",
@@ -4827,13 +3997,13 @@
     "amount": 2799.0,
     "profit": 226.53,
     "gpr": 0.0809,
-    "so": "150.0",
+    "so": "150",
     "cost": 2722.47,
     "emp": "李泽",
     "sku": "06.001.002.006.029",
     "code": "LS002501862610030022",
     "member": "张辉",
-    "phone": "13572229991"
+    "phone": "135****9991"
    },
    {
     "date": "2026-10-02",
@@ -4844,13 +4014,13 @@
     "amount": 2799.0,
     "profit": 292.0,
     "gpr": 0.1043,
-    "so": "150.0",
+    "so": "150",
     "cost": 2657.0,
     "emp": "邵乐乐",
     "sku": "06.001.002.006.030",
     "code": "LS002501862610020002",
     "member": "刘坤",
-    "phone": "13227808867"
+    "phone": "132****8867"
    },
    {
     "date": "2026-10-02",
@@ -4861,13 +4031,13 @@
     "amount": 5599.0,
     "profit": 477.73,
     "gpr": 0.0853,
-    "so": "425.0",
+    "so": "425",
     "cost": 5546.27,
     "emp": "邵乐乐",
     "sku": "06.001.013.003.013",
     "code": "LS002501862610020004",
     "member": "钱海红",
-    "phone": "13891185823"
+    "phone": "138****5823"
    },
    {
     "date": "2026-10-02",
@@ -4878,13 +4048,13 @@
     "amount": 1999.0,
     "profit": 385.0,
     "gpr": 0.1926,
-    "so": "100.0",
+    "so": "100",
     "cost": 1714.0,
     "emp": "邵乐乐",
     "sku": "06.001.007.004.008",
     "code": "LS002501862610020018",
     "member": "潘阳玥",
-    "phone": "17740802878"
+    "phone": "177****2878"
    },
    {
     "date": "2026-10-01",
@@ -4895,13 +4065,13 @@
     "amount": 1999.0,
     "profit": 385.0,
     "gpr": 0.1926,
-    "so": "100.0",
+    "so": "100",
     "cost": 1714.0,
     "emp": "邵乐乐",
     "sku": "06.001.007.004.008",
     "code": "LS002501272610010001",
     "member": "杜凌云",
-    "phone": "18192561160"
+    "phone": "181****1160"
    }
   ],
   "音频穿戴": [
@@ -4920,14 +4090,14 @@
     "sku": "08.001.043.001.002",
     "code": "LS002501862610110003",
     "member": "赵妍",
-    "phone": "13022890892"
+    "phone": "130****0892"
    },
    {
     "date": "2026-10-11",
     "name": "华为儿童手表5 Pro TGR-L10(粉色硅胶表带)冰晶粉",
     "qty": 1.0,
-    "origPrice": 898.0,
-    "discPrice": 0.0,
+    "origPrice": 948.0,
+    "discPrice": 50.0,
     "amount": 898.0,
     "profit": -25.0,
     "gpr": -0.0278,
@@ -4937,14 +4107,14 @@
     "sku": "08.001.011.003.001",
     "code": "LS002501862610110007",
     "member": "即时零售",
-    "phone": "18800009999"
+    "phone": "188****9999"
    },
    {
     "date": "2026-10-11",
     "name": "华为 FreeClip 2 典藏版 耳机 T0027  星海蓝",
     "qty": 1.0,
-    "origPrice": 1374.0,
-    "discPrice": 0.0,
+    "origPrice": 1499.0,
+    "discPrice": 125.0,
     "amount": 1374.0,
     "profit": 126.09,
     "gpr": 0.0918,
@@ -4954,14 +4124,14 @@
     "sku": "07.001.013.004.001",
     "code": "LS002501862610110015",
     "member": "彭思斯",
-    "phone": "13201813617"
+    "phone": "132****3617"
    },
    {
     "date": "2026-10-11",
     "name": "华为 Watch GT7 Pro TUM-B49 46mm(黑色易扣氟橡胶表带) 碳晶黑",
     "qty": 1.0,
-    "origPrice": 2588.0,
-    "discPrice": 0.0,
+    "origPrice": 2688.0,
+    "discPrice": 100.0,
     "amount": 2588.0,
     "profit": 437.0,
     "gpr": 0.1689,
@@ -4971,7 +4141,7 @@
     "sku": "08.001.041.001.003",
     "code": "LS002501272610110002",
     "member": "陈真",
-    "phone": "13891929319"
+    "phone": "138****9319"
    },
    {
     "date": "2026-10-10",
@@ -4986,9 +4156,9 @@
     "cost": 1040.0,
     "emp": "李泽",
     "sku": "07.001.013.005.001",
-    "code": "LS002501862610100017",
-    "member": "方大启辰",
-    "phone": "17818111325"
+    "code": "LS002501862609260024",
+    "member": "侯瑞",
+    "phone": "134****8804"
    },
    {
     "date": "2026-10-10",
@@ -5005,7 +4175,7 @@
     "sku": "08.001.033.001.003",
     "code": "LS002501862610100009",
     "member": "即时零售",
-    "phone": "18800009999"
+    "phone": "188****9999"
    },
    {
     "date": "2026-10-10",
@@ -5022,7 +4192,7 @@
     "sku": "08.001.044.003.001",
     "code": "LS002501862610100013",
     "member": "齐",
-    "phone": "13992141314"
+    "phone": "139****1314"
    },
    {
     "date": "2026-10-10",
@@ -5039,7 +4209,7 @@
     "sku": "08.001.040.002.004",
     "code": "LS002501862610100014",
     "member": "妍妍",
-    "phone": "15129284563"
+    "phone": "151****4563"
    },
    {
     "date": "2026-10-10",
@@ -5054,9 +4224,9 @@
     "cost": 1068.42,
     "emp": "李泽",
     "sku": "07.001.013.005.005",
-    "code": "LS002501862610100017",
-    "member": "方大启辰",
-    "phone": "17818111325"
+    "code": "LS002501862609260024",
+    "member": "侯瑞",
+    "phone": "134****8804"
    },
    {
     "date": "2026-10-10",
@@ -5073,7 +4243,7 @@
     "sku": "08.001.038.002.002",
     "code": "LS002501862610100022",
     "member": "即时零售",
-    "phone": "18800009999"
+    "phone": "188****9999"
    },
    {
     "date": "2026-10-09",
@@ -5090,7 +4260,7 @@
     "sku": "08.001.043.001.002",
     "code": "LS002501862610090003",
     "member": "王唐唐",
-    "phone": "18302982975"
+    "phone": "183****2975"
    },
    {
     "date": "2026-10-09",
@@ -5107,7 +4277,7 @@
     "sku": "07.001.020.001.001",
     "code": "LS002501862610090005",
     "member": "何颜军",
-    "phone": "18109229602"
+    "phone": "181****9602"
    },
    {
     "date": "2026-10-09",
@@ -5124,7 +4294,7 @@
     "sku": "07.001.020.001.004",
     "code": "LS002501862610090005",
     "member": "何颜军",
-    "phone": "18109229602"
+    "phone": "181****9602"
    },
    {
     "date": "2026-10-08",
@@ -5141,7 +4311,7 @@
     "sku": "08.001.042.001.001",
     "code": "LS002501862610080007",
     "member": "罗旭",
-    "phone": "13709187788"
+    "phone": "137****7788"
    },
    {
     "date": "2026-10-08",
@@ -5158,7 +4328,7 @@
     "sku": "07.001.013.005.003",
     "code": "LS002501862610080008",
     "member": "施福园",
-    "phone": "18392598790"
+    "phone": "183****8790"
    },
    {
     "date": "2026-10-08",
@@ -5175,7 +4345,7 @@
     "sku": "08.001.036.001.004",
     "code": "LS002501862610080016",
     "member": "方大启辰",
-    "phone": "17818111325"
+    "phone": "178****1325"
    },
    {
     "date": "2026-10-07",
@@ -5192,7 +4362,7 @@
     "sku": "07.001.005.002.001",
     "code": "LS002501862610070004",
     "member": "即时零售",
-    "phone": "18800009999"
+    "phone": "188****9999"
    },
    {
     "date": "2026-10-07",
@@ -5209,7 +4379,7 @@
     "sku": "07.001.013.004.001",
     "code": "LS002501862610070012",
     "member": "王",
-    "phone": "13659266399"
+    "phone": "136****6399"
    },
    {
     "date": "2026-10-07",
@@ -5226,7 +4396,7 @@
     "sku": "08.001.042.001.001",
     "code": "LS002501862610070015",
     "member": "李女士",
-    "phone": "15091657053"
+    "phone": "150****7053"
    },
    {
     "date": "2026-10-05",
@@ -5243,7 +4413,7 @@
     "sku": "08.001.044.001.001",
     "code": "LS002501862610050005",
     "member": "王宁侠",
-    "phone": "18691889972"
+    "phone": "186****9972"
    },
    {
     "date": "2026-10-05",
@@ -5260,7 +4430,7 @@
     "sku": "07.001.013.005.002",
     "code": "LS002501862610050020",
     "member": "周",
-    "phone": "13991884173"
+    "phone": "139****4173"
    },
    {
     "date": "2026-10-05",
@@ -5275,9 +4445,9 @@
     "cost": 2268.0,
     "emp": "李泽",
     "sku": "08.001.042.002.003",
-    "code": "LS002501272610050002",
-    "member": "111",
-    "phone": "18792834859"
+    "code": "LS002501272610050010",
+    "member": "程晓敏",
+    "phone": "152****1602"
    },
    {
     "date": "2026-10-05",
@@ -5294,7 +4464,7 @@
     "sku": "08.001.040.002.002",
     "code": "LS002501272610050005",
     "member": "杜全安",
-    "phone": "13379268278"
+    "phone": "133****8278"
    },
    {
     "date": "2026-10-05",
@@ -5309,9 +4479,9 @@
     "cost": 2330.16,
     "emp": "李泽",
     "sku": "08.001.042.002.001",
-    "code": "LS002501272610050002",
-    "member": "111",
-    "phone": "18792834859"
+    "code": "LS002501272610050010",
+    "member": "程晓敏",
+    "phone": "152****1602"
    },
    {
     "date": "2026-10-05",
@@ -5328,7 +4498,7 @@
     "sku": "08.001.043.001.001",
     "code": "LS002501272610050011",
     "member": "张翠玲",
-    "phone": "15122100477"
+    "phone": "151****0477"
    },
    {
     "date": "2026-10-04",
@@ -5345,7 +4515,7 @@
     "sku": "08.001.037.001.001",
     "code": "LS002501862610040007",
     "member": "张彦林",
-    "phone": "18192125919"
+    "phone": "181****5919"
    },
    {
     "date": "2026-10-04",
@@ -5362,7 +4532,7 @@
     "sku": "08.001.042.002.001",
     "code": "LS002501862610040009",
     "member": "王冰",
-    "phone": "18509196767"
+    "phone": "185****6767"
    },
    {
     "date": "2026-10-04",
@@ -5379,7 +4549,7 @@
     "sku": "07.001.013.005.001",
     "code": "LS002501862610040010",
     "member": "王宁侠",
-    "phone": "18691889972"
+    "phone": "186****9972"
    },
    {
     "date": "2026-10-04",
@@ -5396,7 +4566,7 @@
     "sku": "08.001.011.004.001",
     "code": "LS002501862610040013",
     "member": "李丹",
-    "phone": "13892297227"
+    "phone": "138****7227"
    },
    {
     "date": "2026-10-03",
@@ -5413,7 +4583,7 @@
     "sku": "08.001.042.001.001",
     "code": "LS002501862610030001",
     "member": "韩俊辉",
-    "phone": "18091855385"
+    "phone": "180****5385"
    },
    {
     "date": "2026-10-03",
@@ -5430,7 +4600,7 @@
     "sku": "08.001.036.001.002",
     "code": "LS002501862610030003",
     "member": "即时零售",
-    "phone": "18800009999"
+    "phone": "188****9999"
    },
    {
     "date": "2026-10-03",
@@ -5461,7 +4631,7 @@
     "sku": "08.001.042.002.002",
     "code": "LS002501272610030001",
     "member": "李超",
-    "phone": "19945251128"
+    "phone": "199****1128"
    },
    {
     "date": "2026-10-03",
@@ -5478,7 +4648,7 @@
     "sku": "08.001.032.001.003",
     "code": "LS002501272610030003",
     "member": "李超",
-    "phone": "19945251128"
+    "phone": "199****1128"
    },
    {
     "date": "2026-10-03",
@@ -5495,7 +4665,7 @@
     "sku": "07.001.013.005.002",
     "code": "LS002501862610030017",
     "member": "张先生",
-    "phone": "13609271277"
+    "phone": "136****1277"
    },
    {
     "date": "2026-10-03",
@@ -5512,7 +4682,7 @@
     "sku": "08.001.036.001.002",
     "code": "LS002501862610030018",
     "member": "谢兴柱",
-    "phone": "18706860800"
+    "phone": "187****0800"
    },
    {
     "date": "2026-10-03",
@@ -5529,7 +4699,7 @@
     "sku": "07.001.013.005.004",
     "code": "LS002501862610030017",
     "member": "张先生",
-    "phone": "13609271277"
+    "phone": "136****1277"
    },
    {
     "date": "2026-10-02",
@@ -5546,7 +4716,7 @@
     "sku": "08.001.040.002.004",
     "code": "LS002501862610020006",
     "member": "虫子",
-    "phone": "18092073031"
+    "phone": "180****3031"
    },
    {
     "date": "2026-10-02",
@@ -5563,7 +4733,7 @@
     "sku": "08.001.041.001.003",
     "code": "LS002501862610020007",
     "member": "王再再",
-    "phone": "13109537859"
+    "phone": "131****7859"
    },
    {
     "date": "2026-10-02",
@@ -5578,9 +4748,9 @@
     "cost": 1258.49,
     "emp": "邵乐乐",
     "sku": "08.001.040.002.004",
-    "code": "LS002501862610010008",
-    "member": "柳艳",
-    "phone": "18302970998"
+    "code": "LS002501862610020010",
+    "member": "杨红兰",
+    "phone": "158****3167"
    },
    {
     "date": "2026-10-02",
@@ -5595,9 +4765,9 @@
     "cost": 3325.17,
     "emp": "邵乐乐",
     "sku": "08.001.043.001.002",
-    "code": "LS002501862610020011",
-    "member": "张博晨",
-    "phone": "18161914293"
+    "code": "LS002501862610020012",
+    "member": "小小",
+    "phone": "135****5812"
    },
    {
     "date": "2026-10-02",
@@ -5612,9 +4782,9 @@
     "cost": 3325.17,
     "emp": "邵乐乐",
     "sku": "08.001.043.001.002",
-    "code": "LS002501862610020011",
-    "member": "张博晨",
-    "phone": "18161914293"
+    "code": "LS002501862610020012",
+    "member": "小小",
+    "phone": "135****5812"
    },
    {
     "date": "2026-10-02",
@@ -5629,9 +4799,9 @@
     "cost": 1258.49,
     "emp": "邵乐乐",
     "sku": "08.001.040.002.004",
-    "code": "LS002501862610010008",
-    "member": "柳艳",
-    "phone": "18302970998"
+    "code": "LS002501862610020010",
+    "member": "杨红兰",
+    "phone": "158****3167"
    },
    {
     "date": "2026-10-02",
@@ -5648,7 +4818,7 @@
     "sku": "08.001.036.001.002",
     "code": "LS002501862610020017",
     "member": "即时零售",
-    "phone": "18800009999"
+    "phone": "188****9999"
    },
    {
     "date": "2026-10-02",
@@ -5665,7 +4835,7 @@
     "sku": "07.001.013.005.003",
     "code": "LS002501272610020007",
     "member": "潘阳玥",
-    "phone": "17740802878"
+    "phone": "177****2878"
    }
   ],
   "增值": [
@@ -5673,8 +4843,8 @@
     "date": "2026-10-11",
     "name": "MOCOLL 铂金1 系列 2.5D二强高清全屏钢化玻璃膜-Pura X Max  黑色",
     "qty": 1.0,
-    "origPrice": 0.0,
-    "discPrice": 0.0,
+    "origPrice": 99.0,
+    "discPrice": 99.0,
     "amount": 0.0,
     "profit": -17.0,
     "gpr": null,
@@ -5682,9 +4852,9 @@
     "cost": 17.0,
     "emp": "李泽",
     "sku": "15.001.003.061",
-    "code": "LS002501862610110001",
-    "member": "张誉耀",
-    "phone": "18591920916"
+    "code": "LS002501272610110001",
+    "member": "白冰",
+    "phone": "137****1700"
    },
    {
     "date": "2026-10-11",
@@ -5701,14 +4871,14 @@
     "sku": "15.001.003.081",
     "code": "LS002501862610110004",
     "member": "白冰",
-    "phone": "13700221700"
+    "phone": "137****1700"
    },
    {
     "date": "2026-10-11",
     "name": "Cooyee华为P70/P80/P90pro高清钢化膜",
     "qty": 1.0,
-    "origPrice": 0.0,
-    "discPrice": 0.0,
+    "origPrice": 99.0,
+    "discPrice": 99.0,
     "amount": 0.0,
     "profit": -19.0,
     "gpr": null,
@@ -5716,16 +4886,16 @@
     "cost": 19.0,
     "emp": "李泽",
     "sku": "15.001.003.039",
-    "code": "LS002501862610110001",
-    "member": "张誉耀",
-    "phone": "18591920916"
+    "code": "LS002501272610110001",
+    "member": "白冰",
+    "phone": "137****1700"
    },
    {
     "date": "2026-10-11",
     "name": "Cooyee华为Pura90Pro铝合金镜头膜 银色 带定位器",
     "qty": 1.0,
-    "origPrice": 0.0,
-    "discPrice": 0.0,
+    "origPrice": 99.0,
+    "discPrice": 99.0,
     "amount": 0.0,
     "profit": -26.0,
     "gpr": null,
@@ -5733,9 +4903,23 @@
     "cost": 26.0,
     "emp": "李泽",
     "sku": "15.001.003.042",
-    "code": "LS002501862610110001",
-    "member": "张誉耀",
-    "phone": "18591920916"
+    "code": "LS002501272610110001",
+    "member": "白冰",
+    "phone": "137****1700"
+   },
+   {
+    "date": "2026-10-11",
+    "name": "Cooyee华为Nova14/15/16高清钢化膜",
+    "qty": -1.0,
+    "origPrice": -101.0,
+    "discPrice": 0.0,
+    "amount": -101.0,
+    "profit": -82.0,
+    "gpr": 0.8119,
+    "so": "",
+    "cost": -19.0,
+    "emp": "邵乐乐",
+    "sku": "15.001.003.013"
    },
    {
     "date": "2026-10-11",
@@ -5752,24 +4936,7 @@
     "sku": "15.001.003.013",
     "code": "LS002501862610090007",
     "member": "高雯琪",
-    "phone": "17391614134"
-   },
-   {
-    "date": "2026-10-11",
-    "name": "Cooyee华为Nova14/15/16高清钢化膜",
-    "qty": -1.0,
-    "origPrice": -101.0,
-    "discPrice": 0.0,
-    "amount": -101.0,
-    "profit": -82.0,
-    "gpr": 0.8119,
-    "so": "",
-    "cost": -19.0,
-    "emp": "邵乐乐",
-    "sku": "15.001.003.013",
-    "code": "LS002501862610090007",
-    "member": "高雯琪",
-    "phone": "17391614134"
+    "phone": "173****4134"
    },
    {
     "date": "2026-10-11",
@@ -5784,9 +4951,9 @@
     "cost": 75.29,
     "emp": "邵乐乐",
     "sku": "09.999.009.070",
-    "code": "LS002501862610110011",
-    "member": "彭思斯",
-    "phone": "13201813617"
+    "code": "LS002501862610110010",
+    "member": "高雯琪",
+    "phone": "173****4134"
    },
    {
     "date": "2026-10-11",
@@ -5817,7 +4984,7 @@
     "sku": "09.999.009.070",
     "code": "LS002501862610110011",
     "member": "彭思斯",
-    "phone": "13201813617"
+    "phone": "132****3617"
    },
    {
     "date": "2026-10-11",
@@ -5832,16 +4999,16 @@
     "cost": 37.99,
     "emp": "邵乐乐",
     "sku": "15.001.003.014",
-    "code": "LS002501862610110011",
-    "member": "彭思斯",
-    "phone": "13201813617"
+    "code": "LS002501862610110010",
+    "member": "高雯琪",
+    "phone": "173****4134"
    },
    {
     "date": "2026-10-11",
     "name": "COOYEE 华为P70 pro-P70 pro+ 热弯全胶钢化膜",
     "qty": 1.0,
-    "origPrice": 0.0,
-    "discPrice": 0.0,
+    "origPrice": 199.0,
+    "discPrice": 199.0,
     "amount": 0.0,
     "profit": -36.2571,
     "gpr": null,
@@ -5849,9 +5016,9 @@
     "cost": 36.26,
     "emp": "李泽",
     "sku": "09.999.009.078",
-    "code": "LS002501862610110001",
-    "member": "张誉耀",
-    "phone": "18591920916"
+    "code": "LS002501272610110001",
+    "member": "白冰",
+    "phone": "137****1700"
    },
    {
     "date": "2026-10-11",
@@ -5868,7 +5035,7 @@
     "sku": "15.001.003.052",
     "code": "LS002501862610110015",
     "member": "彭思斯",
-    "phone": "13201813617"
+    "phone": "132****3617"
    },
    {
     "date": "2026-10-11",
@@ -5885,7 +5052,7 @@
     "sku": "15.005.011",
     "code": "LS002501272610110003",
     "member": "梁亮",
-    "phone": "13895418977"
+    "phone": "138****8977"
    },
    {
     "date": "2026-10-11",
@@ -5902,14 +5069,14 @@
     "sku": "09.999.009.070",
     "code": "LS002501272610110004",
     "member": "陈真",
-    "phone": "13891929319"
+    "phone": "138****9319"
    },
    {
     "date": "2026-10-11",
     "name": "Cooyee臻享套装mate90-90pro御甲系列 白色",
     "qty": 1.0,
-    "origPrice": 286.0,
-    "discPrice": 0.0,
+    "origPrice": 301.0,
+    "discPrice": 15.0,
     "amount": 286.0,
     "profit": 201.0,
     "gpr": 0.7028,
@@ -5917,9 +5084,9 @@
     "cost": 85.0,
     "emp": "邵乐乐",
     "sku": "15.001.006.072.001",
-    "code": "LS002501862610110010",
-    "member": "高雯琪",
-    "phone": "17391614134"
+    "code": "LS002501862610110016",
+    "member": "孙洁",
+    "phone": "151****0193"
    },
    {
     "date": "2026-10-10",
@@ -5936,7 +5103,7 @@
     "sku": "09.999.009.013",
     "code": "LS002501862610100012",
     "member": "唐明",
-    "phone": "13572004752"
+    "phone": "135****4752"
    },
    {
     "date": "2026-10-10",
@@ -5953,7 +5120,7 @@
     "sku": "15.001.003.013",
     "code": "LS002501862610100012",
     "member": "唐明",
-    "phone": "13572004752"
+    "phone": "135****4752"
    },
    {
     "date": "2026-10-10",
@@ -5970,7 +5137,7 @@
     "sku": "15.001.003.081",
     "code": "LS002501862610100012",
     "member": "唐明",
-    "phone": "13572004752"
+    "phone": "135****4752"
    },
    {
     "date": "2026-10-10",
@@ -5979,15 +5146,15 @@
     "origPrice": 199.0,
     "discPrice": 199.0,
     "amount": 0.0,
-    "profit": -37.6923,
+    "profit": -37.6956,
     "gpr": null,
     "so": "",
-    "cost": 37.69,
+    "cost": 37.7,
     "emp": "杨丽华",
     "sku": "09.999.009.080",
-    "code": "LS002501272610030008",
-    "member": "张辉",
-    "phone": "13659281327"
+    "code": "LS002501272610100003",
+    "member": "张文涛",
+    "phone": "188****1787"
    },
    {
     "date": "2026-10-10",
@@ -6004,7 +5171,7 @@
     "sku": "15.001.002.052",
     "code": "LS002501862610100021",
     "member": "涂子鑫",
-    "phone": "18621199121"
+    "phone": "186****9121"
    },
    {
     "date": "2026-10-09",
@@ -6021,7 +5188,7 @@
     "sku": "15.001.002.054",
     "code": "LS002501862610080005",
     "member": "张芬芬",
-    "phone": "18109135051"
+    "phone": "181****5051"
    },
    {
     "date": "2026-10-09",
@@ -6038,7 +5205,7 @@
     "sku": "09.999.009.113",
     "code": "LS002501272610090001",
     "member": "马骅",
-    "phone": "13572101386"
+    "phone": "135****1386"
    },
    {
     "date": "2026-10-09",
@@ -6055,7 +5222,7 @@
     "sku": "09.999.009.013",
     "code": "LS002501862610090005",
     "member": "何颜军",
-    "phone": "18109229602"
+    "phone": "181****9602"
    },
    {
     "date": "2026-10-09",
@@ -6072,7 +5239,7 @@
     "sku": "15.001.003.013",
     "code": "LS002501862610090006",
     "member": "何颜军",
-    "phone": "18109229602"
+    "phone": "181****9602"
    },
    {
     "date": "2026-10-09",
@@ -6089,7 +5256,7 @@
     "sku": "15.001.003.014",
     "code": "LS002501862610090006",
     "member": "何颜军",
-    "phone": "18109229602"
+    "phone": "181****9602"
    },
    {
     "date": "2026-10-09",
@@ -6098,7 +5265,7 @@
     "origPrice": 198.0,
     "discPrice": 0.0,
     "amount": 198.0,
-    "profit": 154.0455,
+    "profit": 154.0452,
     "gpr": 0.778,
     "so": "",
     "cost": 43.95,
@@ -6106,7 +5273,7 @@
     "sku": "15.001.003.045",
     "code": "LS002501862610090006",
     "member": "何颜军",
-    "phone": "18109229602"
+    "phone": "181****9602"
    },
    {
     "date": "2026-10-09",
@@ -6115,7 +5282,7 @@
     "origPrice": 99.0,
     "discPrice": 0.0,
     "amount": 99.0,
-    "profit": 75.0504,
+    "profit": 75.05,
     "gpr": 0.7581,
     "so": "",
     "cost": 23.95,
@@ -6123,7 +5290,7 @@
     "sku": "15.001.003.046",
     "code": "LS002501862610090006",
     "member": "何颜军",
-    "phone": "18109229602"
+    "phone": "181****9602"
    },
    {
     "date": "2026-10-09",
@@ -6140,7 +5307,7 @@
     "sku": "15.001.006.072.001",
     "code": "LS002501272610090002",
     "member": "汪忠良",
-    "phone": "13429743148"
+    "phone": "134****3148"
    },
    {
     "date": "2026-10-09",
@@ -6157,7 +5324,7 @@
     "sku": "09.999.009.013",
     "code": "LS002501272610090002",
     "member": "汪忠良",
-    "phone": "13429743148"
+    "phone": "134****3148"
    },
    {
     "date": "2026-10-09",
@@ -6166,7 +5333,7 @@
     "origPrice": 198.0,
     "discPrice": 0.0,
     "amount": 198.0,
-    "profit": 160.0149,
+    "profit": 160.0148,
     "gpr": 0.8082,
     "so": "",
     "cost": 37.99,
@@ -6174,7 +5341,7 @@
     "sku": "15.001.003.014",
     "code": "LS002501272610090002",
     "member": "汪忠良",
-    "phone": "13429743148"
+    "phone": "134****3148"
    },
    {
     "date": "2026-10-09",
@@ -6191,7 +5358,7 @@
     "sku": "15.001.002.029",
     "code": "LS002501272610090003",
     "member": "陈国亮",
-    "phone": "13661582313"
+    "phone": "136****2313"
    },
    {
     "date": "2026-10-09",
@@ -6208,7 +5375,7 @@
     "sku": "09.999.009.013",
     "code": "LS002501272610090003",
     "member": "陈国亮",
-    "phone": "13661582313"
+    "phone": "136****2313"
    },
    {
     "date": "2026-10-09",
@@ -6225,7 +5392,7 @@
     "sku": "15.001.006.072.001",
     "code": "LS002501272610090004",
     "member": "孙钰",
-    "phone": "18991219518"
+    "phone": "189****9518"
    },
    {
     "date": "2026-10-09",
@@ -6242,7 +5409,7 @@
     "sku": "09.999.009.107",
     "code": "LS002501272610090004",
     "member": "孙钰",
-    "phone": "18991219518"
+    "phone": "189****9518"
    },
    {
     "date": "2026-10-09",
@@ -6259,7 +5426,7 @@
     "sku": "09.999.009.108",
     "code": "LS002501272610090004",
     "member": "孙钰",
-    "phone": "18991219518"
+    "phone": "189****9518"
    },
    {
     "date": "2026-10-09",
@@ -6276,7 +5443,7 @@
     "sku": "15.001.003.014",
     "code": "LS002501272610090004",
     "member": "孙钰",
-    "phone": "18991219518"
+    "phone": "189****9518"
    },
    {
     "date": "2026-10-08",
@@ -6293,7 +5460,7 @@
     "sku": "15.001.006.072.001",
     "code": "LS002501272610040006",
     "member": "关巧玲",
-    "phone": "15091683755"
+    "phone": "150****3755"
    },
    {
     "date": "2026-10-08",
@@ -6302,15 +5469,15 @@
     "origPrice": 198.0,
     "discPrice": 0.0,
     "amount": 198.0,
-    "profit": 160.0149,
+    "profit": 160.0148,
     "gpr": 0.8082,
     "so": "",
     "cost": 37.99,
     "emp": "杨丽华",
     "sku": "15.001.003.014",
-    "code": "LS002501272610040006",
-    "member": "关巧玲",
-    "phone": "15091683755"
+    "code": "LS002501862610080014",
+    "member": "鞠洪亮",
+    "phone": "136****1409"
    },
    {
     "date": "2026-10-08",
@@ -6327,7 +5494,7 @@
     "sku": "15.001.006.072.001",
     "code": "LS002501862610080006",
     "member": "孙策",
-    "phone": "18292078787"
+    "phone": "182****8787"
    },
    {
     "date": "2026-10-08",
@@ -6344,7 +5511,7 @@
     "sku": "09.999.009.107",
     "code": "LS002501862610080006",
     "member": "孙策",
-    "phone": "18292078787"
+    "phone": "182****8787"
    },
    {
     "date": "2026-10-08",
@@ -6353,15 +5520,15 @@
     "origPrice": 198.0,
     "discPrice": 0.0,
     "amount": 198.0,
-    "profit": 160.0149,
+    "profit": 160.0148,
     "gpr": 0.8082,
     "so": "",
     "cost": 37.99,
     "emp": "杨丽华",
     "sku": "15.001.003.014",
-    "code": "LS002501272610040006",
-    "member": "关巧玲",
-    "phone": "15091683755"
+    "code": "LS002501862610080014",
+    "member": "鞠洪亮",
+    "phone": "136****1409"
    },
    {
     "date": "2026-10-08",
@@ -6378,7 +5545,7 @@
     "sku": "09.999.009.013",
     "code": "LS002501862610080011",
     "member": "周",
-    "phone": "19298251948"
+    "phone": "192****1948"
    },
    {
     "date": "2026-10-08",
@@ -6395,7 +5562,7 @@
     "sku": "15.001.006.038",
     "code": "LS002501862610080014",
     "member": "鞠洪亮",
-    "phone": "13614301409"
+    "phone": "136****1409"
    },
    {
     "date": "2026-10-08",
@@ -6404,15 +5571,15 @@
     "origPrice": 198.0,
     "discPrice": 0.0,
     "amount": 198.0,
-    "profit": 160.0149,
+    "profit": 160.0148,
     "gpr": 0.8082,
     "so": "",
     "cost": 37.99,
     "emp": "杨丽华",
     "sku": "15.001.003.014",
-    "code": "LS002501272610040006",
-    "member": "关巧玲",
-    "phone": "15091683755"
+    "code": "LS002501862610080014",
+    "member": "鞠洪亮",
+    "phone": "136****1409"
    },
    {
     "date": "2026-10-08",
@@ -6429,7 +5596,7 @@
     "sku": "09.999.009.005",
     "code": "LS002501862610080015",
     "member": "李女士",
-    "phone": "15091657053"
+    "phone": "150****7053"
    },
    {
     "date": "2026-10-08",
@@ -6446,7 +5613,7 @@
     "sku": "09.999.009.013",
     "code": "LS002501862610080017",
     "member": "方大启辰",
-    "phone": "17818111325"
+    "phone": "178****1325"
    },
    {
     "date": "2026-10-08",
@@ -6463,7 +5630,7 @@
     "sku": "15.001.003.081",
     "code": "LS002501862610080018",
     "member": "方大启辰",
-    "phone": "17818111325"
+    "phone": "178****1325"
    },
    {
     "date": "2026-10-08",
@@ -6480,7 +5647,7 @@
     "sku": "09.999.009.013",
     "code": "LS002501862610080020",
     "member": "张宏",
-    "phone": "13689282235"
+    "phone": "136****2235"
    },
    {
     "date": "2026-10-08",
@@ -6497,7 +5664,7 @@
     "sku": "15.001.003.081",
     "code": "LS002501862610080020",
     "member": "张宏",
-    "phone": "13689282235"
+    "phone": "136****2235"
    },
    {
     "date": "2026-10-08",
@@ -6506,15 +5673,15 @@
     "origPrice": 297.0,
     "discPrice": 297.0,
     "amount": 0.0,
-    "profit": -56.9777,
+    "profit": -56.9778,
     "gpr": null,
     "so": "",
     "cost": 56.98,
     "emp": "李泽",
     "sku": "15.001.003.014",
-    "code": "LS002501862610080016",
+    "code": "LS002501862610080021",
     "member": "方大启辰",
-    "phone": "17818111325"
+    "phone": "178****1325"
    },
    {
     "date": "2026-10-08",
@@ -6529,9 +5696,9 @@
     "cost": 22.0,
     "emp": "李泽",
     "sku": "15.001.003.070",
-    "code": "LS002501862610080016",
+    "code": "LS002501862610080021",
     "member": "方大启辰",
-    "phone": "17818111325"
+    "phone": "178****1325"
    },
    {
     "date": "2026-10-07",
@@ -6548,7 +5715,7 @@
     "sku": "15.001.006.072.001",
     "code": "LS002501862610070001",
     "member": "周欢",
-    "phone": "17792380235"
+    "phone": "177****0235"
    },
    {
     "date": "2026-10-07",
@@ -6565,7 +5732,7 @@
     "sku": "15.001.002.048",
     "code": "LS002501862610070002",
     "member": "周欢",
-    "phone": "17792380235"
+    "phone": "177****0235"
    },
    {
     "date": "2026-10-07",
@@ -6582,7 +5749,7 @@
     "sku": "09.999.009.070",
     "code": "LS002501862610070003",
     "member": "赵春",
-    "phone": "15339164110"
+    "phone": "153****4110"
    },
    {
     "date": "2026-10-07",
@@ -6599,7 +5766,7 @@
     "sku": "09.999.009.081",
     "code": "LS002501862610070003",
     "member": "赵春",
-    "phone": "15339164110"
+    "phone": "153****4110"
    },
    {
     "date": "2026-10-07",
@@ -6616,7 +5783,7 @@
     "sku": "15.001.003.085",
     "code": "LS002501862610070003",
     "member": "赵春",
-    "phone": "15339164110"
+    "phone": "153****4110"
    },
    {
     "date": "2026-10-07",
@@ -6633,7 +5800,7 @@
     "sku": "15.001.003.087",
     "code": "LS002501862610070003",
     "member": "赵春",
-    "phone": "15339164110"
+    "phone": "153****4110"
    },
    {
     "date": "2026-10-07",
@@ -6650,7 +5817,7 @@
     "sku": "15.001.001.205",
     "code": "LS002501862610070008",
     "member": "王曼",
-    "phone": "13709269889"
+    "phone": "137****9889"
    },
    {
     "date": "2026-10-07",
@@ -6667,7 +5834,7 @@
     "sku": "09.999.009.107",
     "code": "LS002501862610070015",
     "member": "李女士",
-    "phone": "15091657053"
+    "phone": "150****7053"
    },
    {
     "date": "2026-10-07",
@@ -6684,7 +5851,7 @@
     "sku": "15.001.006.072.001",
     "code": "LS002501862610070016",
     "member": "谭梁",
-    "phone": "18700422724"
+    "phone": "187****2724"
    },
    {
     "date": "2026-10-07",
@@ -6701,7 +5868,7 @@
     "sku": "15.001.002.048",
     "code": "LS002501862610070016",
     "member": "谭梁",
-    "phone": "18700422724"
+    "phone": "187****2724"
    },
    {
     "date": "2026-10-07",
@@ -6718,7 +5885,7 @@
     "sku": "15.001.006.072.002",
     "code": "LS002501862610070017",
     "member": "谭梁",
-    "phone": "18700422724"
+    "phone": "187****2724"
    },
    {
     "date": "2026-10-07",
@@ -6727,7 +5894,7 @@
     "origPrice": 99.0,
     "discPrice": 0.0,
     "amount": 99.0,
-    "profit": 80.101,
+    "profit": 80.1002,
     "gpr": 0.8091,
     "so": "",
     "cost": 18.9,
@@ -6735,7 +5902,7 @@
     "sku": "09.999.009.116",
     "code": "LS002501862610070017",
     "member": "谭梁",
-    "phone": "18700422724"
+    "phone": "187****2724"
    },
    {
     "date": "2026-10-07",
@@ -6752,7 +5919,7 @@
     "sku": "15.001.003.014",
     "code": "LS002501862610070017",
     "member": "谭梁",
-    "phone": "18700422724"
+    "phone": "187****2724"
    },
    {
     "date": "2026-10-07",
@@ -6761,7 +5928,7 @@
     "origPrice": 99.0,
     "discPrice": 0.0,
     "amount": 99.0,
-    "profit": 75.0504,
+    "profit": 75.05,
     "gpr": 0.7581,
     "so": "",
     "cost": 23.95,
@@ -6769,7 +5936,7 @@
     "sku": "15.001.003.046",
     "code": "LS002501862610070017",
     "member": "谭梁",
-    "phone": "18700422724"
+    "phone": "187****2724"
    },
    {
     "date": "2026-10-06",
@@ -6786,7 +5953,7 @@
     "sku": "15.001.003.081",
     "code": "LS002501862610060004",
     "member": "魏燕燕",
-    "phone": "18161803396"
+    "phone": "181****3396"
    },
    {
     "date": "2026-10-06",
@@ -6803,7 +5970,7 @@
     "sku": "15.001.003.070",
     "code": "LS002501862610060005",
     "member": "梁燕",
-    "phone": "18192145951"
+    "phone": "181****5951"
    },
    {
     "date": "2026-10-06",
@@ -6820,7 +5987,7 @@
     "sku": "15.001.006.072.001",
     "code": "LS002501862610060006",
     "member": "刘擎",
-    "phone": "15353606189"
+    "phone": "153****6189"
    },
    {
     "date": "2026-10-06",
@@ -6837,7 +6004,7 @@
     "sku": "15.001.006.072.001",
     "code": "LS002501272610060006",
     "member": "白纪睿",
-    "phone": "18691953030"
+    "phone": "186****3030"
    },
    {
     "date": "2026-10-06",
@@ -6854,7 +6021,7 @@
     "sku": "15.001.002.050",
     "code": "LS002501272610060006",
     "member": "白纪睿",
-    "phone": "18691953030"
+    "phone": "186****3030"
    },
    {
     "date": "2026-10-06",
@@ -6871,7 +6038,7 @@
     "sku": "15.001.006.073.002",
     "code": "LS002501272610060006",
     "member": "白纪睿",
-    "phone": "18691953030"
+    "phone": "186****3030"
    },
    {
     "date": "2026-10-06",
@@ -6888,7 +6055,7 @@
     "sku": "15.001.003.014",
     "code": "LS002501272610060007",
     "member": "罗显元",
-    "phone": "13759954935"
+    "phone": "137****4935"
    },
    {
     "date": "2026-10-05",
@@ -6903,9 +6070,9 @@
     "cost": 0.0,
     "emp": "邵乐乐",
     "sku": "15.001.003.081",
-    "code": "LS002501862610050006",
-    "member": "吴平",
-    "phone": "13892852671"
+    "code": "LS002501862610050020",
+    "member": "周",
+    "phone": "139****4173"
    },
    {
     "date": "2026-10-05",
@@ -6914,15 +6081,15 @@
     "origPrice": 99.0,
     "discPrice": 99.0,
     "amount": 0.0,
-    "profit": -18.899,
+    "profit": -18.8998,
     "gpr": null,
     "so": "",
     "cost": 18.9,
     "emp": "邵乐乐",
     "sku": "09.999.009.116",
-    "code": "LS002501862610050005",
-    "member": "王宁侠",
-    "phone": "18691889972"
+    "code": "LS002501862610050007",
+    "member": "吴平",
+    "phone": "138****2671"
    },
    {
     "date": "2026-10-05",
@@ -6937,9 +6104,9 @@
     "cost": 19.0,
     "emp": "邵乐乐",
     "sku": "15.001.003.085",
-    "code": "LS002501862610050005",
-    "member": "王宁侠",
-    "phone": "18691889972"
+    "code": "LS002501862610050007",
+    "member": "吴平",
+    "phone": "138****2671"
    },
    {
     "date": "2026-10-05",
@@ -6954,9 +6121,9 @@
     "cost": 22.0,
     "emp": "邵乐乐",
     "sku": "15.001.003.087",
-    "code": "LS002501862610050005",
-    "member": "王宁侠",
-    "phone": "18691889972"
+    "code": "LS002501862610050007",
+    "member": "吴平",
+    "phone": "138****2671"
    },
    {
     "date": "2026-10-05",
@@ -6971,9 +6138,9 @@
     "cost": 0.0,
     "emp": "邵乐乐",
     "sku": "15.001.003.081",
-    "code": "LS002501862610050006",
-    "member": "吴平",
-    "phone": "13892852671"
+    "code": "LS002501862610050020",
+    "member": "周",
+    "phone": "139****4173"
    },
    {
     "date": "2026-10-05",
@@ -6988,9 +6155,9 @@
     "cost": 18.99,
     "emp": "邵乐乐",
     "sku": "15.001.003.014",
-    "code": "LS002501862610050011",
-    "member": "贾丽霞",
-    "phone": "15291228560"
+    "code": "LS002501862610050029",
+    "member": "张女士",
+    "phone": "151****2765"
    },
    {
     "date": "2026-10-05",
@@ -7005,9 +6172,9 @@
     "cost": -85.0,
     "emp": "邵乐乐",
     "sku": "15.001.006.073.002",
-    "code": "LS002501862610050001",
-    "member": "毛玉婷",
-    "phone": "15891372059"
+    "code": "LS002501862610050003",
+    "member": "武新林",
+    "phone": "138****8228"
    },
    {
     "date": "2026-10-05",
@@ -7024,7 +6191,7 @@
     "sku": "15.001.003.084",
     "code": "LS002501862610050001",
     "member": "毛玉婷",
-    "phone": "15891372059"
+    "phone": "158****2059"
    },
    {
     "date": "2026-10-05",
@@ -7041,7 +6208,7 @@
     "sku": "15.001.003.086",
     "code": "LS002501862610050001",
     "member": "毛玉婷",
-    "phone": "15891372059"
+    "phone": "158****2059"
    },
    {
     "date": "2026-10-05",
@@ -7056,9 +6223,9 @@
     "cost": -85.0,
     "emp": "邵乐乐",
     "sku": "15.001.006.072.001",
-    "code": "LS002501862610050001",
-    "member": "毛玉婷",
-    "phone": "15891372059"
+    "code": "LS002501862610050003",
+    "member": "武新林",
+    "phone": "138****8228"
    },
    {
     "date": "2026-10-05",
@@ -7067,7 +6234,7 @@
     "origPrice": -300.0,
     "discPrice": 0.0,
     "amount": -300.0,
-    "profit": -243.0223,
+    "profit": -243.0222,
     "gpr": 0.8101,
     "so": "",
     "cost": -56.98,
@@ -7075,7 +6242,7 @@
     "sku": "15.001.003.014",
     "code": "LS002501862610050003",
     "member": "武新林",
-    "phone": "13830738228"
+    "phone": "138****8228"
    },
    {
     "date": "2026-10-05",
@@ -7089,10 +6256,7 @@
     "so": "",
     "cost": -18.99,
     "emp": "邵乐乐",
-    "sku": "15.001.003.014",
-    "code": "LS002501862610050003",
-    "member": "武新林",
-    "phone": "13830738228"
+    "sku": "15.001.003.014"
    },
    {
     "date": "2026-10-05",
@@ -7107,9 +6271,9 @@
     "cost": -85.0,
     "emp": "邵乐乐",
     "sku": "15.001.006.073.001",
-    "code": "LS002501862610050001",
-    "member": "毛玉婷",
-    "phone": "15891372059"
+    "code": "LS002501862610050003",
+    "member": "武新林",
+    "phone": "138****8228"
    },
    {
     "date": "2026-10-05",
@@ -7126,7 +6290,7 @@
     "sku": "15.001.003.013",
     "code": "LS002501862610050002",
     "member": "杨芳",
-    "phone": "13571962933"
+    "phone": "135****2933"
    },
    {
     "date": "2026-10-05",
@@ -7143,7 +6307,7 @@
     "sku": "15.001.006.072.002",
     "code": "LS002501862610050014",
     "member": "魏雅峰",
-    "phone": "13909241920"
+    "phone": "139****1920"
    },
    {
     "date": "2026-10-05",
@@ -7160,7 +6324,7 @@
     "sku": "15.001.006.072.002",
     "code": "LS002501862610050018",
     "member": "王琪",
-    "phone": "13920903062"
+    "phone": "139****3062"
    },
    {
     "date": "2026-10-05",
@@ -7177,7 +6341,7 @@
     "sku": "15.001.003.013",
     "code": "LS002501862610050018",
     "member": "王琪",
-    "phone": "13920903062"
+    "phone": "139****3062"
    },
    {
     "date": "2026-10-05",
@@ -7194,7 +6358,7 @@
     "sku": "15.001.003.014",
     "code": "LS002501862610050018",
     "member": "王琪",
-    "phone": "13920903062"
+    "phone": "139****3062"
    },
    {
     "date": "2026-10-05",
@@ -7211,7 +6375,7 @@
     "sku": "15.001.003.039",
     "code": "LS002501862610050018",
     "member": "王琪",
-    "phone": "13920903062"
+    "phone": "139****3062"
    },
    {
     "date": "2026-10-05",
@@ -7226,9 +6390,9 @@
     "cost": 38.0,
     "emp": "邵乐乐",
     "sku": "15.001.003.013",
-    "code": "LS002501862610050006",
-    "member": "吴平",
-    "phone": "13892852671"
+    "code": "LS002501862610050020",
+    "member": "周",
+    "phone": "139****4173"
    },
    {
     "date": "2026-10-05",
@@ -7245,7 +6409,7 @@
     "sku": "15.001.006.072.001",
     "code": "LS002501862610050022",
     "member": "毛玉婷",
-    "phone": "15891372059"
+    "phone": "158****2059"
    },
    {
     "date": "2026-10-05",
@@ -7260,9 +6424,9 @@
     "cost": 38.0,
     "emp": "邵乐乐",
     "sku": "15.001.003.084",
-    "code": "LS002501862610050006",
-    "member": "吴平",
-    "phone": "13892852671"
+    "code": "LS002501862610050020",
+    "member": "周",
+    "phone": "139****4173"
    },
    {
     "date": "2026-10-05",
@@ -7279,7 +6443,7 @@
     "sku": "15.001.003.086",
     "code": "LS002501862610050022",
     "member": "毛玉婷",
-    "phone": "15891372059"
+    "phone": "158****2059"
    },
    {
     "date": "2026-10-05",
@@ -7296,7 +6460,7 @@
     "sku": "15.001.006.084.002",
     "code": "LS002501272610050001",
     "member": "马女士",
-    "phone": "18092232887"
+    "phone": "180****2887"
    },
    {
     "date": "2026-10-05",
@@ -7313,7 +6477,7 @@
     "sku": "15.001.003.081",
     "code": "LS002501272610050003",
     "member": "张誉耀",
-    "phone": "18591920916"
+    "phone": "185****0916"
    },
    {
     "date": "2026-10-05",
@@ -7330,7 +6494,7 @@
     "sku": "15.001.003.081",
     "code": "LS002501272610050003",
     "member": "张誉耀",
-    "phone": "18591920916"
+    "phone": "185****0916"
    },
    {
     "date": "2026-10-05",
@@ -7347,7 +6511,7 @@
     "sku": "15.001.006.072.002",
     "code": "LS002501862610050025",
     "member": "武新林",
-    "phone": "13830738228"
+    "phone": "138****8228"
    },
    {
     "date": "2026-10-05",
@@ -7356,7 +6520,7 @@
     "origPrice": 300.0,
     "discPrice": 0.0,
     "amount": 300.0,
-    "profit": 243.0223,
+    "profit": 243.0222,
     "gpr": 0.8101,
     "so": "",
     "cost": 56.98,
@@ -7364,7 +6528,7 @@
     "sku": "15.001.003.014",
     "code": "LS002501862610050025",
     "member": "武新林",
-    "phone": "13830738228"
+    "phone": "138****8228"
    },
    {
     "date": "2026-10-05",
@@ -7381,7 +6545,7 @@
     "sku": "15.001.003.015",
     "code": "LS002501862610050025",
     "member": "武新林",
-    "phone": "13830738228"
+    "phone": "138****8228"
    },
    {
     "date": "2026-10-05",
@@ -7398,7 +6562,7 @@
     "sku": "15.001.006.073.001",
     "code": "LS002501862610050026",
     "member": "杨芳",
-    "phone": "13571962933"
+    "phone": "135****2933"
    },
    {
     "date": "2026-10-05",
@@ -7415,7 +6579,7 @@
     "sku": "15.001.003.013",
     "code": "LS002501862610050026",
     "member": "杨芳",
-    "phone": "13571962933"
+    "phone": "135****2933"
    },
    {
     "date": "2026-10-05",
@@ -7432,7 +6596,7 @@
     "sku": "15.001.003.081",
     "code": "LS002501272610050008",
     "member": "李丽",
-    "phone": "15029282331"
+    "phone": "150****2331"
    },
    {
     "date": "2026-10-05",
@@ -7441,15 +6605,15 @@
     "origPrice": 199.0,
     "discPrice": 100.0,
     "amount": 99.0,
-    "profit": 80.1364,
-    "gpr": 0.8095,
+    "profit": 80.1352,
+    "gpr": 0.8094,
     "so": "",
     "cost": 18.86,
     "emp": "邵乐乐",
     "sku": "09.999.009.115",
-    "code": "LS002501862610050011",
-    "member": "贾丽霞",
-    "phone": "15291228560"
+    "code": "LS002501862610050029",
+    "member": "张女士",
+    "phone": "151****2765"
    },
    {
     "date": "2026-10-05",
@@ -7466,7 +6630,7 @@
     "sku": "15.001.003.081",
     "code": "LS002501272610050003",
     "member": "张誉耀",
-    "phone": "18591920916"
+    "phone": "185****0916"
    },
    {
     "date": "2026-10-04",
@@ -7483,7 +6647,7 @@
     "sku": "09.999.009.078",
     "code": "LS002501272610040001",
     "member": "王彩霞",
-    "phone": "13700276752"
+    "phone": "137****6752"
    },
    {
     "date": "2026-10-04",
@@ -7500,7 +6664,7 @@
     "sku": "09.999.009.005",
     "code": "LS002501862610040009",
     "member": "王冰",
-    "phone": "18509196767"
+    "phone": "185****6767"
    },
    {
     "date": "2026-10-04",
@@ -7517,7 +6681,7 @@
     "sku": "15.005.014",
     "code": "LS002501862610040010",
     "member": "王宁侠",
-    "phone": "18691889972"
+    "phone": "186****9972"
    },
    {
     "date": "2026-10-04",
@@ -7534,7 +6698,7 @@
     "sku": "15.001.002.009",
     "code": "LS002501862610040010",
     "member": "王宁侠",
-    "phone": "18691889972"
+    "phone": "186****9972"
    },
    {
     "date": "2026-10-04",
@@ -7551,7 +6715,7 @@
     "sku": "15.001.006.072.001",
     "code": "LS002501862610040011",
     "member": "武新林",
-    "phone": "13830738228"
+    "phone": "138****8228"
    },
    {
     "date": "2026-10-04",
@@ -7560,12 +6724,15 @@
     "origPrice": 300.0,
     "discPrice": 0.0,
     "amount": 300.0,
-    "profit": 243.0223,
+    "profit": 243.0222,
     "gpr": 0.8101,
     "so": "",
     "cost": 56.98,
     "emp": "邵乐乐",
-    "sku": "15.001.003.014"
+    "sku": "15.001.003.014",
+    "code": "LS002501862610040011",
+    "member": "武新林",
+    "phone": "138****8228"
    },
    {
     "date": "2026-10-04",
@@ -7596,7 +6763,7 @@
     "sku": "15.001.006.073.001",
     "code": "LS002501862610040011",
     "member": "武新林",
-    "phone": "13830738228"
+    "phone": "138****8228"
    },
    {
     "date": "2026-10-04",
@@ -7613,7 +6780,7 @@
     "sku": "15.001.003.013",
     "code": "LS002501862610040012",
     "member": "杨芳",
-    "phone": "13571962933"
+    "phone": "135****2933"
    },
    {
     "date": "2026-10-04",
@@ -7630,7 +6797,7 @@
     "sku": "15.001.003.079",
     "code": "LS002501862610010017",
     "member": "妍妍",
-    "phone": "15129284563"
+    "phone": "151****4563"
    },
    {
     "date": "2026-10-04",
@@ -7647,7 +6814,7 @@
     "sku": "15.001.003.081",
     "code": "LS002501862610040015",
     "member": "杜女士",
-    "phone": "18809128006"
+    "phone": "188****8006"
    },
    {
     "date": "2026-10-04",
@@ -7664,7 +6831,7 @@
     "sku": "15.001.006.073.002",
     "code": "LS002501862610040011",
     "member": "武新林",
-    "phone": "13830738228"
+    "phone": "138****8228"
    },
    {
     "date": "2026-10-04",
@@ -7681,7 +6848,7 @@
     "sku": "15.001.003.084",
     "code": "LS002501862610040016",
     "member": "毛玉婷",
-    "phone": "15891372059"
+    "phone": "158****2059"
    },
    {
     "date": "2026-10-04",
@@ -7698,7 +6865,7 @@
     "sku": "15.001.003.086",
     "code": "LS002501862610040016",
     "member": "毛玉婷",
-    "phone": "15891372059"
+    "phone": "158****2059"
    },
    {
     "date": "2026-10-04",
@@ -7713,9 +6880,9 @@
     "cost": 85.0,
     "emp": "李泽",
     "sku": "15.001.006.072.002",
-    "code": "LS002501272610040010",
-    "member": "张帅",
-    "phone": "18966761929"
+    "code": "LS002501272610040011",
+    "member": "宁轲",
+    "phone": "186****5189"
    },
    {
     "date": "2026-10-04",
@@ -7730,9 +6897,9 @@
     "cost": 19.0,
     "emp": "李泽",
     "sku": "15.001.003.085",
-    "code": "LS002501272610040010",
-    "member": "张帅",
-    "phone": "18966761929"
+    "code": "LS002501272610040011",
+    "member": "宁轲",
+    "phone": "186****5189"
    },
    {
     "date": "2026-10-03",
@@ -7741,15 +6908,15 @@
     "origPrice": 199.0,
     "discPrice": 199.0,
     "amount": 0.0,
-    "profit": -37.6923,
+    "profit": -37.6956,
     "gpr": null,
     "so": "",
-    "cost": 37.69,
+    "cost": 37.7,
     "emp": "李泽",
     "sku": "09.999.009.080",
-    "code": "LS002501862610030002",
-    "member": "张士龙",
-    "phone": "19861300327"
+    "code": "LS002501862610030025",
+    "member": "MsZ",
+    "phone": "159****8749"
    },
    {
     "date": "2026-10-03",
@@ -7766,7 +6933,7 @@
     "sku": "15.001.002.011",
     "code": "LS002501862610030005",
     "member": "崔家平",
-    "phone": "18640224007"
+    "phone": "186****4007"
    },
    {
     "date": "2026-10-03",
@@ -7783,7 +6950,7 @@
     "sku": "09.999.009.013",
     "code": "LS002501862610030005",
     "member": "崔家平",
-    "phone": "18640224007"
+    "phone": "186****4007"
    },
    {
     "date": "2026-10-03",
@@ -7798,23 +6965,9 @@
     "cost": 0.0,
     "emp": "邵乐乐",
     "sku": "15.001.003.081",
-    "code": "LS002501862610030005",
-    "member": "崔家平",
-    "phone": "18640224007"
-   },
-   {
-    "date": "2026-10-03",
-    "name": "Cooyee华为Nova14/15/16高清钢化膜",
-    "qty": 2.0,
-    "origPrice": 200.0,
-    "discPrice": 0.0,
-    "amount": 200.0,
-    "profit": 162.0,
-    "gpr": 0.81,
-    "so": "",
-    "cost": 38.0,
-    "emp": "邵乐乐",
-    "sku": "15.001.003.013"
+    "code": "LS002501862610030011",
+    "member": "廖文婧",
+    "phone": "132****6335"
    },
    {
     "date": "2026-10-03",
@@ -7832,6 +6985,23 @@
    },
    {
     "date": "2026-10-03",
+    "name": "Cooyee华为Nova14/15/16高清钢化膜",
+    "qty": 2.0,
+    "origPrice": 200.0,
+    "discPrice": 0.0,
+    "amount": 200.0,
+    "profit": 162.0,
+    "gpr": 0.81,
+    "so": "",
+    "cost": 38.0,
+    "emp": "邵乐乐",
+    "sku": "15.001.003.013",
+    "code": "LS002501862610030006",
+    "member": "高雯琪",
+    "phone": "173****4134"
+   },
+   {
+    "date": "2026-10-03",
     "name": "199贴膜套包",
     "qty": 1.0,
     "origPrice": 199.0,
@@ -7843,9 +7013,9 @@
     "cost": 0.0,
     "emp": "李泽",
     "sku": "15.001.003.081",
-    "code": "LS002501862610030009",
-    "member": "MsZ",
-    "phone": "15968078749"
+    "code": "LS002501862610030016",
+    "member": "111",
+    "phone": "189****1745"
    },
    {
     "date": "2026-10-03",
@@ -7860,9 +7030,9 @@
     "cost": 0.0,
     "emp": "邵乐乐",
     "sku": "15.001.002.029",
-    "code": "LS002501862610030005",
-    "member": "崔家平",
-    "phone": "18640224007"
+    "code": "LS002501862610030011",
+    "member": "廖文婧",
+    "phone": "132****6335"
    },
    {
     "date": "2026-10-03",
@@ -7871,15 +7041,15 @@
     "origPrice": 99.0,
     "discPrice": 0.0,
     "amount": 99.0,
-    "profit": 80.101,
+    "profit": 80.1002,
     "gpr": 0.8091,
     "so": "",
     "cost": 18.9,
     "emp": "邵乐乐",
     "sku": "09.999.009.116",
-    "code": "LS002501862610030011",
-    "member": "廖文婧",
-    "phone": "13201826335"
+    "code": "LS002501862610030014",
+    "member": "谢兴柱",
+    "phone": "187****0800"
    },
    {
     "date": "2026-10-03",
@@ -7894,9 +7064,9 @@
     "cost": 36.97,
     "emp": "邵乐乐",
     "sku": "09.999.009.105",
-    "code": "LS002501862610030011",
-    "member": "廖文婧",
-    "phone": "13201826335"
+    "code": "LS002501862610030014",
+    "member": "谢兴柱",
+    "phone": "187****0800"
    },
    {
     "date": "2026-10-03",
@@ -7913,7 +7083,7 @@
     "sku": "15.001.003.014",
     "code": "LS002501272610030004",
     "member": "周",
-    "phone": "19298251948"
+    "phone": "192****1948"
    },
    {
     "date": "2026-10-03",
@@ -7922,15 +7092,15 @@
     "origPrice": 199.0,
     "discPrice": 199.0,
     "amount": 0.0,
-    "profit": -37.6923,
+    "profit": -37.6956,
     "gpr": null,
     "so": "",
-    "cost": 37.69,
+    "cost": 37.7,
     "emp": "杨丽华",
     "sku": "09.999.009.080",
-    "code": "LS002501272610030001",
-    "member": "李超",
-    "phone": "19945251128"
+    "code": "LS002501272610030005",
+    "member": "周",
+    "phone": "192****1948"
    },
    {
     "date": "2026-10-03",
@@ -7947,7 +7117,7 @@
     "sku": "15.001.006.025.001",
     "code": "LS002501272610030006",
     "member": "徐艺洲",
-    "phone": "18908846177"
+    "phone": "189****6177"
    },
    {
     "date": "2026-10-03",
@@ -7964,7 +7134,7 @@
     "sku": "15.001.006.072.001",
     "code": "LS002501272610030006",
     "member": "徐艺洲",
-    "phone": "18908846177"
+    "phone": "189****6177"
    },
    {
     "date": "2026-10-03",
@@ -7981,7 +7151,7 @@
     "sku": "15.001.002.054",
     "code": "LS002501862610030015",
     "member": "张芬芬",
-    "phone": "18109135051"
+    "phone": "181****5051"
    },
    {
     "date": "2026-10-03",
@@ -7996,9 +7166,9 @@
     "cost": 0.0,
     "emp": "李泽",
     "sku": "15.001.003.081",
-    "code": "LS002501862610030009",
-    "member": "MsZ",
-    "phone": "15968078749"
+    "code": "LS002501862610030016",
+    "member": "111",
+    "phone": "189****1745"
    },
    {
     "date": "2026-10-03",
@@ -8015,7 +7185,7 @@
     "sku": "15.005.014",
     "code": "LS002501862610030017",
     "member": "张先生",
-    "phone": "13609271277"
+    "phone": "136****1277"
    },
    {
     "date": "2026-10-03",
@@ -8032,7 +7202,7 @@
     "sku": "15.001.003.039",
     "code": "LS002501862610030018",
     "member": "谢兴柱",
-    "phone": "18706860800"
+    "phone": "187****0800"
    },
    {
     "date": "2026-10-03",
@@ -8049,7 +7219,7 @@
     "sku": "15.001.002.050",
     "code": "LS002501862610030020",
     "member": "陈利宁",
-    "phone": "18691565518"
+    "phone": "186****5518"
    },
    {
     "date": "2026-10-03",
@@ -8064,9 +7234,9 @@
     "cost": 23.79,
     "emp": "李泽",
     "sku": "09.999.009.076",
-    "code": "LS002501862610030002",
-    "member": "张士龙",
-    "phone": "19861300327"
+    "code": "LS002501862610030025",
+    "member": "MsZ",
+    "phone": "159****8749"
    },
    {
     "date": "2026-10-03",
@@ -8075,15 +7245,15 @@
     "origPrice": 199.0,
     "discPrice": 199.0,
     "amount": 0.0,
-    "profit": -37.6923,
+    "profit": -37.6956,
     "gpr": null,
     "so": "",
-    "cost": 37.69,
+    "cost": 37.7,
     "emp": "李泽",
     "sku": "09.999.009.080",
-    "code": "LS002501862610030002",
-    "member": "张士龙",
-    "phone": "19861300327"
+    "code": "LS002501862610030025",
+    "member": "MsZ",
+    "phone": "159****8749"
    },
    {
     "date": "2026-10-03",
@@ -8098,9 +7268,9 @@
     "cost": 23.79,
     "emp": "李泽",
     "sku": "09.999.009.076",
-    "code": "LS002501862610030002",
-    "member": "张士龙",
-    "phone": "19861300327"
+    "code": "LS002501862610030025",
+    "member": "MsZ",
+    "phone": "159****8749"
    },
    {
     "date": "2026-10-03",
@@ -8109,15 +7279,15 @@
     "origPrice": 199.0,
     "discPrice": 199.0,
     "amount": 0.0,
-    "profit": -37.6923,
+    "profit": -37.6956,
     "gpr": null,
     "so": "",
-    "cost": 37.69,
+    "cost": 37.7,
     "emp": "李泽",
     "sku": "09.999.009.080",
-    "code": "LS002501862610030002",
-    "member": "张士龙",
-    "phone": "19861300327"
+    "code": "LS002501862610030025",
+    "member": "MsZ",
+    "phone": "159****8749"
    },
    {
     "date": "2026-10-02",
@@ -8134,7 +7304,7 @@
     "sku": "15.001.002.011",
     "code": "LS002501862610020003",
     "member": "刘坤",
-    "phone": "13227808867"
+    "phone": "132****8867"
    },
    {
     "date": "2026-10-02",
@@ -8151,7 +7321,7 @@
     "sku": "15.001.002.052",
     "code": "LS002501862610020005",
     "member": "虫子",
-    "phone": "18092073031"
+    "phone": "180****3031"
    },
    {
     "date": "2026-10-02",
@@ -8168,7 +7338,7 @@
     "sku": "15.005.014",
     "code": "LS002501862610020006",
     "member": "虫子",
-    "phone": "18092073031"
+    "phone": "180****3031"
    },
    {
     "date": "2026-10-02",
@@ -8185,7 +7355,7 @@
     "sku": "15.005.012",
     "code": "LS002501862610020014",
     "member": "大面团子",
-    "phone": "18840438452"
+    "phone": "188****8452"
    },
    {
     "date": "2026-10-02",
@@ -8202,7 +7372,7 @@
     "sku": "09.999.009.013",
     "code": "LS002501862610020015",
     "member": "小小",
-    "phone": "13572115812"
+    "phone": "135****5812"
    },
    {
     "date": "2026-10-02",
@@ -8217,9 +7387,9 @@
     "cost": 0.0,
     "emp": "李泽",
     "sku": "15.005.012",
-    "code": "LS002501272610020002",
+    "code": "LS002501272610020005",
     "member": "孙振强",
-    "phone": "13219820828"
+    "phone": "132****0828"
    },
    {
     "date": "2026-10-02",
@@ -8236,7 +7406,7 @@
     "sku": "15.001.002.048",
     "code": "LS002501272610020003",
     "member": "贝贝",
-    "phone": "17791725923"
+    "phone": "177****5923"
    },
    {
     "date": "2026-10-02",
@@ -8253,7 +7423,7 @@
     "sku": "15.001.002.050",
     "code": "LS002501272610020004",
     "member": "张俊杰",
-    "phone": "15129935034"
+    "phone": "151****5034"
    },
    {
     "date": "2026-10-02",
@@ -8268,9 +7438,9 @@
     "cost": 0.0,
     "emp": "李泽",
     "sku": "15.005.012",
-    "code": "LS002501272610020002",
+    "code": "LS002501272610020005",
     "member": "孙振强",
-    "phone": "13219820828"
+    "phone": "132****0828"
    },
    {
     "date": "2026-10-02",
@@ -8287,7 +7457,7 @@
     "sku": "15.001.003.081",
     "code": "LS002501272610020006",
     "member": "潘阳玥",
-    "phone": "17740802878"
+    "phone": "177****2878"
    },
    {
     "date": "2026-10-02",
@@ -8304,7 +7474,7 @@
     "sku": "15.005.011",
     "code": "LS002501862610020019",
     "member": "郑霄霄",
-    "phone": "15927649765"
+    "phone": "159****9765"
    },
    {
     "date": "2026-10-02",
@@ -8313,15 +7483,15 @@
     "origPrice": 99.0,
     "discPrice": 99.0,
     "amount": 0.0,
-    "profit": -18.9865,
+    "profit": -18.9867,
     "gpr": null,
     "so": "",
     "cost": 18.99,
     "emp": "杨丽华",
     "sku": "15.001.003.040",
-    "code": "LS002501862610020019",
-    "member": "郑霄霄",
-    "phone": "15927649765"
+    "code": "LS002501862610020020",
+    "member": "周",
+    "phone": "192****1948"
    },
    {
     "date": "2026-10-02",
@@ -8336,9 +7506,9 @@
     "cost": 22.0,
     "emp": "李泽",
     "sku": "15.001.003.068",
-    "code": "LS002501272610020001",
-    "member": "孙振强",
-    "phone": "13219820828"
+    "code": "LS002501862610020021",
+    "member": "潘阳玥",
+    "phone": "177****2878"
    },
    {
     "date": "2026-10-01",
@@ -8355,7 +7525,7 @@
     "sku": "15.001.003.084",
     "code": "LS002501862610010004",
     "member": "李遣",
-    "phone": "15877387745"
+    "phone": "158****7745"
    },
    {
     "date": "2026-10-01",
@@ -8372,7 +7542,7 @@
     "sku": "15.001.003.081",
     "code": "LS002501862610010005",
     "member": "杜凌云",
-    "phone": "18192561160"
+    "phone": "181****1160"
    },
    {
     "date": "2026-10-01",
@@ -8387,9 +7557,9 @@
     "cost": 36.26,
     "emp": "邵乐乐",
     "sku": "09.999.009.078",
-    "code": "LS002501862610010003",
-    "member": "李遣",
-    "phone": "15877387745"
+    "code": "LS002501862610010006",
+    "member": "杜凌云",
+    "phone": "181****1160"
    },
    {
     "date": "2026-10-01",
@@ -8406,7 +7576,7 @@
     "sku": "09.999.009.013",
     "code": "LS002501862610010007",
     "member": "杜凌云",
-    "phone": "18192561160"
+    "phone": "181****1160"
    },
    {
     "date": "2026-10-01",
@@ -8423,7 +7593,7 @@
     "sku": "15.001.006.072.001",
     "code": "LS002501272610010007",
     "member": "董书琦",
-    "phone": "18710804340"
+    "phone": "187****4340"
    },
    {
     "date": "2026-10-01",
@@ -8440,7 +7610,7 @@
     "sku": "15.001.003.079",
     "code": "LS002501862610010014",
     "member": "车",
-    "phone": "17782789150"
+    "phone": "177****9150"
    },
    {
     "date": "2026-10-01",
@@ -8457,7 +7627,7 @@
     "sku": "15.001.002.050",
     "code": "LS002501272610010008",
     "member": "孙洁",
-    "phone": "15129030193"
+    "phone": "151****0193"
    },
    {
     "date": "2026-10-01",
@@ -8474,7 +7644,7 @@
     "sku": "09.999.009.013",
     "code": "LS002501272610010008",
     "member": "孙洁",
-    "phone": "15129030193"
+    "phone": "151****0193"
    },
    {
     "date": "2026-10-01",
@@ -8483,7 +7653,7 @@
     "origPrice": 99.0,
     "discPrice": 0.0,
     "amount": 99.0,
-    "profit": 80.0135,
+    "profit": 80.0133,
     "gpr": 0.8082,
     "so": "",
     "cost": 18.99,
@@ -8491,7 +7661,7 @@
     "sku": "15.001.003.040",
     "code": "LS002501272610010008",
     "member": "孙洁",
-    "phone": "15129030193"
+    "phone": "151****0193"
    },
    {
     "date": "2026-10-01",
@@ -8508,7 +7678,7 @@
     "sku": "15.001.006.072.001",
     "code": "LS002501862610010018",
     "member": "贝贝",
-    "phone": "17791725923"
+    "phone": "177****5923"
    },
    {
     "date": "2026-10-01",
@@ -8525,7 +7695,7 @@
     "sku": "15.001.003.014",
     "code": "LS002501862610010018",
     "member": "贝贝",
-    "phone": "17791725923"
+    "phone": "177****5923"
    },
    {
     "date": "2026-10-01",
@@ -8534,15 +7704,15 @@
     "origPrice": 199.0,
     "discPrice": 199.0,
     "amount": 0.0,
-    "profit": -37.2298,
+    "profit": -37.236,
     "gpr": null,
     "so": "",
-    "cost": 37.23,
+    "cost": 37.24,
     "emp": "李泽",
     "sku": "09.999.009.111",
     "code": "LS002501862610010009",
     "member": "车",
-    "phone": "17782789150"
+    "phone": "177****9150"
    },
    {
     "date": "2026-10-01",
@@ -8559,690 +7729,14 @@
     "sku": "15.001.003.012",
     "code": "LS002501862610010009",
     "member": "车",
-    "phone": "17782789150"
+    "phone": "177****9150"
    }
   ]
  },
- "dayDetails": [
-  {
-   "code": "XSCK26101100171",
-   "type": "贴膜",
-   "emp": "李泽",
-   "product": "MOCOLL 铂金1 系列 2.5D二强高清全屏钢化玻璃膜-Pura X Max  黑色",
-   "sku": "15.001.003.061",
-   "qty": 1.0,
-   "origPrice": 0.0,
-   "discPrice": 0.0,
-   "amount": 0.0,
-   "profit": -17.0,
-   "cost": 17.0,
-   "gpr": null,
-   "cat": "增值"
-  },
-  {
-   "code": "XSCK26101100171",
-   "type": "华为",
-   "emp": "李泽",
-   "product": "华为-手提袋-小",
-   "sku": "17.002.001.001",
-   "qty": 1.0,
-   "origPrice": 0.0,
-   "discPrice": 0.0,
-   "amount": 0.0,
-   "profit": 0.0,
-   "cost": 0.0,
-   "gpr": null,
-   "cat": "其他"
-  },
-  {
-   "code": "XSCK26101100706",
-   "type": "贴膜",
-   "emp": "李泽",
-   "product": "199贴膜套包",
-   "sku": "15.001.003.081",
-   "qty": 1.0,
-   "origPrice": 199.0,
-   "discPrice": 0.0,
-   "amount": 199.0,
-   "profit": 199.0,
-   "cost": 0.0,
-   "gpr": 1.0,
-   "cat": "增值"
-  },
-  {
-   "code": "XSCK26101100706",
-   "type": "华为",
-   "emp": "李泽",
-   "product": "华为-手提袋-小",
-   "sku": "17.002.001.001",
-   "qty": 1.0,
-   "origPrice": 0.0,
-   "discPrice": 0.0,
-   "amount": 0.0,
-   "profit": 0.0,
-   "cost": 0.0,
-   "gpr": null,
-   "cat": "其他"
-  },
-  {
-   "code": "XSCK26101100708",
-   "type": "贴膜",
-   "emp": "李泽",
-   "product": "Cooyee华为P70/P80/P90pro高清钢化膜",
-   "sku": "15.001.003.039",
-   "qty": 1.0,
-   "origPrice": 0.0,
-   "discPrice": 0.0,
-   "amount": 0.0,
-   "profit": -19.0,
-   "cost": 19.0,
-   "gpr": null,
-   "cat": "增值"
-  },
-  {
-   "code": "XSCK26101100708",
-   "type": "贴膜",
-   "emp": "李泽",
-   "product": "Cooyee华为Pura90Pro铝合金镜头膜 银色 带定位器",
-   "sku": "15.001.003.042",
-   "qty": 1.0,
-   "origPrice": 0.0,
-   "discPrice": 0.0,
-   "amount": 0.0,
-   "profit": -26.0,
-   "cost": 26.0,
-   "gpr": null,
-   "cat": "增值"
-  },
-  {
-   "code": "XSCK26101100714",
-   "type": "Pura90 Pro",
-   "emp": "李泽",
-   "product": "华为 Pura90 Pro MLN-AL00  12GB+512GB  椰青白",
-   "sku": "01.001.076.001.006",
-   "qty": 1.0,
-   "origPrice": 5899.0,
-   "discPrice": 0.0,
-   "amount": 5899.0,
-   "profit": 799.0,
-   "cost": 5100.0,
-   "gpr": 0.13544668587896252,
-   "cat": "手机"
-  },
-  {
-   "code": "XSCK26101100714",
-   "type": "华为",
-   "emp": "李泽",
-   "product": "华为-手提袋-小",
-   "sku": "17.002.001.001",
-   "qty": 1.0,
-   "origPrice": 0.0,
-   "discPrice": 0.0,
-   "amount": 0.0,
-   "profit": 0.0,
-   "cost": 0.0,
-   "gpr": null,
-   "cat": "其他"
-  },
-  {
-   "code": "XSCK26101100976",
-   "type": "贴膜",
-   "emp": "李泽",
-   "product": "COOYEE 华为P70 pro-P70 pro+ 热弯全胶钢化膜",
-   "sku": "09.999.009.078",
-   "qty": 1.0,
-   "origPrice": 0.0,
-   "discPrice": 0.0,
-   "amount": 0.0,
-   "profit": -36.2571,
-   "cost": 36.26,
-   "gpr": null,
-   "cat": "增值"
-  },
-  {
-   "code": "XSCK26101100508",
-   "type": "Mate70 Pro",
-   "emp": "杨丽华",
-   "product": "华为 Mate70 Pro 优享版 先锋版 PLR-AL50 12GB+512GB 雪域白",
-   "sku": "01.001.002.007.002",
-   "qty": 1.0,
-   "origPrice": 4699.0,
-   "discPrice": 0.0,
-   "amount": 4699.0,
-   "profit": -117.0,
-   "cost": 4816.0,
-   "gpr": -0.02489891466269419,
-   "cat": "手机"
-  },
-  {
-   "code": "XSCK26101100508",
-   "type": "华为",
-   "emp": "杨丽华",
-   "product": "华为-手提袋-中",
-   "sku": "17.002.001.002",
-   "qty": 1.0,
-   "origPrice": 0.0,
-   "discPrice": 0.0,
-   "amount": 0.0,
-   "profit": 0.0,
-   "cost": 0.0,
-   "gpr": null,
-   "cat": "其他"
-  },
-  {
-   "code": "XSCK26101100515",
-   "type": "WATCH6 Pro",
-   "emp": "杨丽华",
-   "product": "华为 WATCH6 Pro NIZ-AL00 46mm(钛金属表带)钛空银",
-   "sku": "08.001.043.001.002",
-   "qty": 1.0,
-   "origPrice": 3999.0,
-   "discPrice": 0.0,
-   "amount": 3999.0,
-   "profit": 673.83,
-   "cost": 3325.17,
-   "gpr": 0.16849962490622658,
-   "cat": "穿戴"
-  },
-  {
-   "code": "XSCK26101100515",
-   "type": "华为",
-   "emp": "杨丽华",
-   "product": "华为-手提袋-小",
-   "sku": "17.002.001.001",
-   "qty": 1.0,
-   "origPrice": 0.0,
-   "discPrice": 0.0,
-   "amount": 0.0,
-   "profit": 0.0,
-   "cost": 0.0,
-   "gpr": null,
-   "cat": "其他"
-  },
-  {
-   "code": "XSCK26101100515",
-   "type": "华为",
-   "emp": "杨丽华",
-   "product": "华为-手提袋-中",
-   "sku": "17.002.001.002",
-   "qty": 1.0,
-   "origPrice": 0.0,
-   "discPrice": 0.0,
-   "amount": 0.0,
-   "profit": 0.0,
-   "cost": 0.0,
-   "gpr": null,
-   "cat": "其他"
-  },
-  {
-   "code": "XSCK26101100994",
-   "type": "Mate90",
-   "emp": "杨丽华",
-   "product": "华为 Mate90 HLS-AL00  12GB+256GB  曜石黑",
-   "sku": "01.001.085.001.001",
-   "qty": 1.0,
-   "origPrice": 5700.0,
-   "discPrice": 0.0,
-   "amount": 5700.0,
-   "profit": 513.87,
-   "cost": 5186.13,
-   "gpr": 0.09015263157894737,
-   "cat": "手机"
-  },
-  {
-   "code": "XSCK26101100994",
-   "type": "华为",
-   "emp": "杨丽华",
-   "product": "华为-手提袋-小",
-   "sku": "17.002.001.001",
-   "qty": 1.0,
-   "origPrice": 0.0,
-   "discPrice": 0.0,
-   "amount": 0.0,
-   "profit": 0.0,
-   "cost": 0.0,
-   "gpr": null,
-   "cat": "其他"
-  },
-  {
-   "code": "XSCK26101100994",
-   "type": "华为",
-   "emp": "杨丽华",
-   "product": "华为-手提袋-中",
-   "sku": "17.002.001.002",
-   "qty": 1.0,
-   "origPrice": 0.0,
-   "discPrice": 0.0,
-   "amount": 0.0,
-   "profit": 0.0,
-   "cost": 0.0,
-   "gpr": null,
-   "cat": "其他"
-  },
-  {
-   "code": "XSCK26101100999",
-   "type": "Pura X View",
-   "emp": "杨丽华",
-   "product": "华为 PuraX View VOL-AL00  12GB+256GB  零度白",
-   "sku": "01.001.083.001.005",
-   "qty": 1.0,
-   "origPrice": 5999.0,
-   "discPrice": 0.0,
-   "amount": 5999.0,
-   "profit": 899.0,
-   "cost": 5100.0,
-   "gpr": 0.14985830971828637,
-   "cat": "手机"
-  },
-  {
-   "code": "XSCK26101100999",
-   "type": "华为",
-   "emp": "杨丽华",
-   "product": "华为-手提袋-小",
-   "sku": "17.002.001.001",
-   "qty": 1.0,
-   "origPrice": 0.0,
-   "discPrice": 0.0,
-   "amount": 0.0,
-   "profit": 0.0,
-   "cost": 0.0,
-   "gpr": null,
-   "cat": "其他"
-  },
-  {
-   "code": "XSCK26101101150",
-   "type": "Watch GT7 Pro",
-   "emp": "杨丽华",
-   "product": "华为 Watch GT7 Pro TUM-B49 46mm(黑色易扣氟橡胶表带) 碳晶黑",
-   "sku": "08.001.041.001.003",
-   "qty": 1.0,
-   "origPrice": 2588.0,
-   "discPrice": 0.0,
-   "amount": 2588.0,
-   "profit": 437.0,
-   "cost": 2151.0,
-   "gpr": 0.1688562596599691,
-   "cat": "穿戴"
-  },
-  {
-   "code": "XSCK26101101150",
-   "type": "华为",
-   "emp": "杨丽华",
-   "product": "华为-手提袋-小",
-   "sku": "17.002.001.001",
-   "qty": 1.0,
-   "origPrice": 0.0,
-   "discPrice": 0.0,
-   "amount": 0.0,
-   "profit": 0.0,
-   "cost": 0.0,
-   "gpr": null,
-   "cat": "其他"
-  },
-  {
-   "code": "XSCK26101101150",
-   "type": "华为",
-   "emp": "杨丽华",
-   "product": "华为-手提袋-中",
-   "sku": "17.002.001.002",
-   "qty": 1.0,
-   "origPrice": 0.0,
-   "discPrice": 0.0,
-   "amount": 0.0,
-   "profit": 0.0,
-   "cost": 0.0,
-   "gpr": null,
-   "cat": "其他"
-  },
-  {
-   "code": "XSCK26101101158",
-   "type": "权益系列",
-   "emp": "杨丽华",
-   "product": "星联优享-499",
-   "sku": "15.005.011",
-   "qty": 1.0,
-   "origPrice": 499.0,
-   "discPrice": 0.0,
-   "amount": 499.0,
-   "profit": 499.0,
-   "cost": 0.0,
-   "gpr": 1.0,
-   "cat": "增值"
-  },
-  {
-   "code": "XSCK26101101158",
-   "type": "华为",
-   "emp": "杨丽华",
-   "product": "华为-手提袋-小",
-   "sku": "17.002.001.001",
-   "qty": 1.0,
-   "origPrice": 0.0,
-   "discPrice": 0.0,
-   "amount": 0.0,
-   "profit": 0.0,
-   "cost": 0.0,
-   "gpr": null,
-   "cat": "其他"
-  },
-  {
-   "code": "XSCK26101101158",
-   "type": "华为",
-   "emp": "杨丽华",
-   "product": "华为-手提袋-中",
-   "sku": "17.002.001.002",
-   "qty": 1.0,
-   "origPrice": 0.0,
-   "discPrice": 0.0,
-   "amount": 0.0,
-   "profit": 0.0,
-   "cost": 0.0,
-   "gpr": null,
-   "cat": "其他"
-  },
-  {
-   "code": "XSCK26101101162",
-   "type": "贴膜",
-   "emp": "杨丽华",
-   "product": "COOYEE 华为 mate70pro pro+3D热弯钢化膜",
-   "sku": "09.999.009.070",
-   "qty": 1.0,
-   "origPrice": 100.0,
-   "discPrice": 0.0,
-   "amount": 100.0,
-   "profit": 62.3551,
-   "cost": 37.64,
-   "gpr": 0.623551,
-   "cat": "增值"
-  },
-  {
-   "code": "XSCK26101101162",
-   "type": "华为",
-   "emp": "杨丽华",
-   "product": "华为-手提袋-中",
-   "sku": "17.002.001.002",
-   "qty": 1.0,
-   "origPrice": 0.0,
-   "discPrice": 0.0,
-   "amount": 0.0,
-   "profit": 0.0,
-   "cost": 0.0,
-   "gpr": null,
-   "cat": "其他"
-  },
-  {
-   "code": "XSCK26101100741",
-   "type": "儿童手表5 Pro",
-   "emp": "邵乐乐",
-   "product": "华为儿童手表5 Pro TGR-L10(粉色硅胶表带)冰晶粉",
-   "sku": "08.001.011.003.001",
-   "qty": 1.0,
-   "origPrice": 898.0,
-   "discPrice": 0.0,
-   "amount": 898.0,
-   "profit": -25.0,
-   "cost": 923.0,
-   "gpr": -0.02783964365256125,
-   "cat": "穿戴"
-  },
-  {
-   "code": "XSCK26101100741",
-   "type": "华为",
-   "emp": "邵乐乐",
-   "product": "华为-手提袋-小",
-   "sku": "17.002.001.001",
-   "qty": 1.0,
-   "origPrice": 0.0,
-   "discPrice": 0.0,
-   "amount": 0.0,
-   "profit": 0.0,
-   "cost": 0.0,
-   "gpr": null,
-   "cat": "其他"
-  },
-  {
-   "code": "XSCK26101100775",
-   "type": "贴膜",
-   "emp": "邵乐乐",
-   "product": "Cooyee华为Nova14/15/16高清钢化膜",
-   "sku": "15.001.003.013",
-   "qty": -2.0,
-   "origPrice": -200.0,
-   "discPrice": 0.0,
-   "amount": -200.0,
-   "profit": -162.0,
-   "cost": -38.0,
-   "gpr": 0.81,
-   "cat": "增值"
-  },
-  {
-   "code": "XSCK26101100775",
-   "type": "贴膜",
-   "emp": "邵乐乐",
-   "product": "Cooyee华为Nova14/15/16高清钢化膜",
-   "sku": "15.001.003.013",
-   "qty": -1.0,
-   "origPrice": -101.0,
-   "discPrice": 0.0,
-   "amount": -101.0,
-   "profit": -82.0,
-   "cost": -19.0,
-   "gpr": 0.8118811881188119,
-   "cat": "增值"
-  },
-  {
-   "code": "XSCK26101100775",
-   "type": "华为",
-   "emp": "邵乐乐",
-   "product": "华为-手提袋-小",
-   "sku": "17.002.001.001",
-   "qty": -1.0,
-   "origPrice": 0.0,
-   "discPrice": 0.0,
-   "amount": 0.0,
-   "profit": 0.0,
-   "cost": 0.0,
-   "gpr": null,
-   "cat": "其他"
-  },
-  {
-   "code": "XSCK26101100928",
-   "type": "贴膜",
-   "emp": "邵乐乐",
-   "product": "COOYEE 华为 mate70pro pro+3D热弯钢化膜",
-   "sku": "09.999.009.070",
-   "qty": 2.0,
-   "origPrice": 198.0,
-   "discPrice": 0.0,
-   "amount": 198.0,
-   "profit": 122.7101,
-   "cost": 75.29,
-   "gpr": 0.6197479797979798,
-   "cat": "增值"
-  },
-  {
-   "code": "XSCK26101100928",
-   "type": "贴膜",
-   "emp": "邵乐乐",
-   "product": "COOYEE 华为 mate70pro pro+3D热弯钢化膜",
-   "sku": "09.999.009.070",
-   "qty": 1.0,
-   "origPrice": 88.0,
-   "discPrice": 0.0,
-   "amount": 88.0,
-   "profit": 50.3551,
-   "cost": 37.64,
-   "gpr": 0.5722170454545454,
-   "cat": "增值"
-  },
-  {
-   "code": "XSCK26101100928",
-   "type": "华为",
-   "emp": "邵乐乐",
-   "product": "华为-手提袋-小",
-   "sku": "17.002.001.001",
-   "qty": 1.0,
-   "origPrice": 0.0,
-   "discPrice": 0.0,
-   "amount": 0.0,
-   "profit": 0.0,
-   "cost": 0.0,
-   "gpr": null,
-   "cat": "其他"
-  },
-  {
-   "code": "XSCK26101100934",
-   "type": "贴膜",
-   "emp": "邵乐乐",
-   "product": "COOYEE 华为 mate70pro pro+3D热弯钢化膜",
-   "sku": "09.999.009.070",
-   "qty": 1.0,
-   "origPrice": 57.0,
-   "discPrice": 0.0,
-   "amount": 57.0,
-   "profit": 19.3551,
-   "cost": 37.64,
-   "gpr": 0.33956315789473684,
-   "cat": "增值"
-  },
-  {
-   "code": "XSCK26101100934",
-   "type": "贴膜",
-   "emp": "邵乐乐",
-   "product": "Cooyee华为Nova15 Pro/Ultra高清钢化膜",
-   "sku": "15.001.003.014",
-   "qty": 2.0,
-   "origPrice": 198.0,
-   "discPrice": 0.0,
-   "amount": 198.0,
-   "profit": 160.0148,
-   "cost": 37.99,
-   "gpr": 0.8081555555555556,
-   "cat": "增值"
-  },
-  {
-   "code": "XSCK26101100934",
-   "type": "华为",
-   "emp": "邵乐乐",
-   "product": "华为-手提袋-小",
-   "sku": "17.002.001.001",
-   "qty": 1.0,
-   "origPrice": 0.0,
-   "discPrice": 0.0,
-   "amount": 0.0,
-   "profit": 0.0,
-   "cost": 0.0,
-   "gpr": null,
-   "cat": "其他"
-  },
-  {
-   "code": "XSCK26101101085",
-   "type": "畅享90 Pro Max",
-   "emp": "邵乐乐",
-   "product": "华为畅享90 Pro Max CHZ-AL00  8GB+256GB  曜金黑",
-   "sku": "01.001.072.001.002",
-   "qty": 1.0,
-   "origPrice": 1899.0,
-   "discPrice": 0.0,
-   "amount": 1899.0,
-   "profit": 219.0,
-   "cost": 1680.0,
-   "gpr": 0.11532385466034756,
-   "cat": "手机"
-  },
-  {
-   "code": "XSCK26101101085",
-   "type": "华为",
-   "emp": "邵乐乐",
-   "product": "华为-手提袋-小",
-   "sku": "17.002.001.001",
-   "qty": 1.0,
-   "origPrice": 0.0,
-   "discPrice": 0.0,
-   "amount": 0.0,
-   "profit": 0.0,
-   "cost": 0.0,
-   "gpr": null,
-   "cat": "其他"
-  },
-  {
-   "code": "XSCK26101101133",
-   "type": "FreeClip 2",
-   "emp": "邵乐乐",
-   "product": "华为 FreeClip 2 典藏版 耳机 T0027  星海蓝",
-   "sku": "07.001.013.004.001",
-   "qty": 1.0,
-   "origPrice": 1374.0,
-   "discPrice": 0.0,
-   "amount": 1374.0,
-   "profit": 126.09,
-   "cost": 1247.91,
-   "gpr": 0.09176855895196506,
-   "cat": "音频"
-  },
-  {
-   "code": "XSCK26101101133",
-   "type": "贴膜",
-   "emp": "邵乐乐",
-   "product": "Cooyee华为Nova16一体镜头膜",
-   "sku": "15.001.003.052",
-   "qty": 1.0,
-   "origPrice": 100.0,
-   "discPrice": 0.0,
-   "amount": 100.0,
-   "profit": 76.0,
-   "cost": 24.0,
-   "gpr": 0.76,
-   "cat": "增值"
-  },
-  {
-   "code": "XSCK26101101133",
-   "type": "华为",
-   "emp": "邵乐乐",
-   "product": "华为-手提袋-小",
-   "sku": "17.002.001.001",
-   "qty": 1.0,
-   "origPrice": 0.0,
-   "discPrice": 0.0,
-   "amount": 0.0,
-   "profit": 0.0,
-   "cost": 0.0,
-   "gpr": null,
-   "cat": "其他"
-  },
-  {
-   "code": "XSCK26101101165",
-   "type": "三方配件",
-   "emp": "邵乐乐",
-   "product": "Cooyee臻享套装mate90-90pro御甲系列 白色",
-   "sku": "15.001.006.072.001",
-   "qty": 1.0,
-   "origPrice": 286.0,
-   "discPrice": 0.0,
-   "amount": 286.0,
-   "profit": 201.0,
-   "cost": 85.0,
-   "gpr": 0.7027972027972028,
-   "cat": "增值"
-  },
-  {
-   "code": "XSCK26101101165",
-   "type": "华为",
-   "emp": "邵乐乐",
-   "product": "华为-手提袋-小",
-   "sku": "17.002.001.001",
-   "qty": 1.0,
-   "origPrice": 0.0,
-   "discPrice": 0.0,
-   "amount": 0.0,
-   "profit": 0.0,
-   "cost": 0.0,
-   "gpr": null,
-   "cat": "其他"
-  }
- ],
+ "dayDetails": [],
  "qudao": {
-  "timeDate": "2026-10-11",
-  "timeRate": 0.3548387096774194,
+  "timeDate": "2026-10-12",
+  "timeRate": 0.3870967741935484,
   "total": {
    "task": 124200.0,
    "done": 77908.06,
@@ -9280,11 +7774,11 @@
    }
   ],
   "empChannel": {
-   "杨丽华": [
+   "张博晨": [
     {
      "channel": "三大地图",
-     "amount": 18817.01,
-     "bills": 11
+     "amount": 0.0,
+     "bills": 0
     },
     {
      "channel": "小红书",
@@ -9344,6 +7838,38 @@
      "bills": 0
     }
    ],
+   "杨丽华": [
+    {
+     "channel": "三大地图",
+     "amount": 18817.01,
+     "bills": 11
+    },
+    {
+     "channel": "小红书",
+     "amount": 0.0,
+     "bills": 0
+    },
+    {
+     "channel": "大众点评",
+     "amount": 0.0,
+     "bills": 0
+    },
+    {
+     "channel": "异业",
+     "amount": 0.0,
+     "bills": 0
+    },
+    {
+     "channel": "社区",
+     "amount": 0.0,
+     "bills": 0
+    },
+    {
+     "channel": "企业上门购",
+     "amount": 0.0,
+     "bills": 0
+    }
+   ],
    "李泽": [
     {
      "channel": "三大地图",
@@ -9375,231 +7901,21 @@
      "amount": 0.0,
      "bills": 0
     }
-   ],
-   "张博晨": [
-    {
-     "channel": "三大地图",
-     "amount": 0.0,
-     "bills": 0
-    },
-    {
-     "channel": "小红书",
-     "amount": 0.0,
-     "bills": 0
-    },
-    {
-     "channel": "大众点评",
-     "amount": 0.0,
-     "bills": 0
-    },
-    {
-     "channel": "异业",
-     "amount": 0.0,
-     "bills": 0
-    },
-    {
-     "channel": "社区",
-     "amount": 0.0,
-     "bills": 0
-    },
-    {
-     "channel": "企业上门购",
-     "amount": 0.0,
-     "bills": 0
-    }
    ]
   },
   "channelItems": {
-   "杨丽华": {
-    "三大地图": [
-     {
-      "date": "2026-10-01",
-      "code": "LS002501272610010004",
-      "product": "COOYEE 华为P70 pro-P70 pro+ 热弯全胶钢化膜",
-      "sku": "华为-手提袋-中",
-      "qty": 1.0,
-      "amount": 0.0,
-      "member": "孙洁",
-      "phone": "15129030193",
-      "origPrice": 199.0,
-      "discPrice": 199.0,
-      "profit": -36.2571,
-      "gpr": null,
-      "cost": 36.26
-     },
-     {
-      "date": "2026-10-01",
-      "code": "LS002501272610010004",
-      "product": "COOYEE 华为P70 pro-P70 pro+ 热弯全胶钢化膜",
-      "sku": "华为-手提袋-小",
-      "qty": 1.0,
-      "amount": 0.0,
-      "member": "孙洁",
-      "phone": "15129030193",
-      "origPrice": 199.0,
-      "discPrice": 199.0,
-      "profit": -36.2571,
-      "gpr": null,
-      "cost": 36.26
-     },
-     {
-      "date": "2026-10-01",
-      "code": "LS002501272610010004",
-      "product": "华为 Mate90 Pro CMS-AL20  12GB+512GB  晶钻白",
-      "sku": "华为 Mate90 Pro CMS-AL20  12GB+512GB  晶钻白",
-      "qty": 1.0,
-      "amount": 7919.01,
-      "member": "孙洁",
-      "phone": "15129030193",
-      "origPrice": 7999.0,
-      "discPrice": 79.99,
-      "profit": 1039.01,
-      "gpr": 0.1312,
-      "cost": 6880.0
-     },
-     {
-      "date": "2026-10-03",
-      "code": "LS002501272610030002",
-      "product": "COOYEE 华为Mate X6 热弯全胶钢化膜",
-      "sku": "华为-手提袋-中",
-      "qty": 1.0,
-      "amount": 0.0,
-      "member": "白雪",
-      "phone": "18740620190",
-      "origPrice": 199.0,
-      "discPrice": 199.0,
-      "profit": -37.6923,
-      "gpr": null,
-      "cost": 37.69
-     },
-     {
-      "date": "2026-10-03",
-      "code": "LS002501272610030002",
-      "product": "COOYEE 华为Mate X6 热弯全胶钢化膜",
-      "sku": "华为-手提袋-小",
-      "qty": 1.0,
-      "amount": 0.0,
-      "member": "白雪",
-      "phone": "18740620190",
-      "origPrice": 199.0,
-      "discPrice": 199.0,
-      "profit": -37.6923,
-      "gpr": null,
-      "cost": 37.69
-     },
-     {
-      "date": "2026-10-03",
-      "code": "LS002501272610030002",
-      "product": "Hi MateBook D 16 RMA-X  AMD Radeon AMD Ryzen 7 Win11 24GB+512GB  极夜灰",
-      "sku": "Hi MateBook D 16 RMA-X  AMD Radeon AMD Ryzen 7 Win11 24GB+512GB  极夜灰",
-      "qty": 1.0,
-      "amount": 6199.0,
-      "member": "白雪",
-      "phone": "18740620190",
-      "origPrice": 6199.0,
-      "discPrice": 0.0,
-      "profit": 619.0,
-      "gpr": 0.0999,
-      "cost": 5580.0
-     },
-     {
-      "date": "2026-10-10",
-      "code": "LS002501272610100003",
-      "product": "COOYEE 华为Mate X6 热弯全胶钢化膜",
-      "sku": "华为-手提袋-中",
-      "qty": 1.0,
-      "amount": 0.0,
-      "member": "张文涛",
-      "phone": "18821621787",
-      "origPrice": 199.0,
-      "discPrice": 199.0,
-      "profit": -37.6923,
-      "gpr": null,
-      "cost": 37.69
-     },
-     {
-      "date": "2026-10-10",
-      "code": "LS002501272610100003",
-      "product": "COOYEE 华为Mate X6 热弯全胶钢化膜",
-      "sku": "华为-手提袋-小",
-      "qty": 1.0,
-      "amount": 0.0,
-      "member": "张文涛",
-      "phone": "18821621787",
-      "origPrice": 199.0,
-      "discPrice": 199.0,
-      "profit": -37.6923,
-      "gpr": null,
-      "cost": 37.69
-     },
-     {
-      "date": "2026-10-10",
-      "code": "LS002501272610100003",
-      "product": "COOYEE 华为Mate X6 热弯全胶钢化膜",
-      "sku": "华为 多协议超级快充移动电源10000mAh(Max 22.5W SE)P0008 Max 22.5W SE黑色",
-      "qty": 1.0,
-      "amount": 0.0,
-      "member": "张文涛",
-      "phone": "18821621787",
-      "origPrice": 199.0,
-      "discPrice": 199.0,
-      "profit": -37.6923,
-      "gpr": null,
-      "cost": 37.69
-     },
-     {
-      "date": "2026-10-11",
-      "code": "LS002501862610110002",
-      "product": "MOCOLL 铂金1 系列 2.5D二强高清全屏钢化玻璃膜-Pura X Max  黑色",
-      "sku": "华为-手提袋-中",
-      "qty": 1.0,
-      "amount": 0.0,
-      "member": "刘朕",
-      "phone": "13992897239",
-      "origPrice": 0.0,
-      "discPrice": 0.0,
-      "profit": -17.0,
-      "gpr": null,
-      "cost": 17.0
-     },
-     {
-      "date": "2026-10-11",
-      "code": "LS002501862610110002",
-      "product": "华为 Mate70 Pro 优享版 先锋版 PLR-AL50 12GB+512GB 雪域白",
-      "sku": "华为 Mate70 Pro 优享版 先锋版 PLR-AL50 12GB+512GB 雪域白",
-      "qty": 1.0,
-      "amount": 4699.0,
-      "member": "刘朕",
-      "phone": "13992897239",
-      "origPrice": 4699.0,
-      "discPrice": 0.0,
-      "profit": -117.0,
-      "gpr": -0.0249,
-      "cost": 4816.0
-     }
-    ]
-   },
+   "张博晨": {},
    "邵乐乐": {
     "三大地图": [
      {
       "date": "2026-10-09",
       "code": "LS002501862610090004",
-      "product": "华为-手提袋-小",
-      "sku": "华为-手提袋-小",
-      "qty": 1.0,
-      "amount": 0.0,
-      "member": "何颜军",
-      "phone": "18109229602"
-     },
-     {
-      "date": "2026-10-09",
-      "code": "LS002501862610090004",
       "product": "华为 Mate X7 DEL-AL10  12GB+256GB  曜石黑",
-      "sku": "华为 PuraX Max HOP-AL00  12GB+512GB  活力橙",
+      "sku": "01.001.074.001.003",
       "qty": 1.0,
       "amount": 11899.0,
       "member": "何颜军",
-      "phone": "18109229602",
+      "phone": "181****9602",
       "origPrice": 11999.0,
       "discPrice": 100.0,
       "profit": 979.0,
@@ -9609,22 +7925,52 @@
      {
       "date": "2026-10-09",
       "code": "LS002501862610090005",
-      "product": "华为-手提袋-小",
-      "sku": "华为-手提袋-小",
+      "product": "华为 FreeBuds Neo耳机 T0029  星空黑",
+      "sku": "07.001.020.001.001",
       "qty": 1.0,
-      "amount": 0.0,
+      "amount": 619.0,
       "member": "何颜军",
-      "phone": "18109229602"
+      "phone": "181****9602",
+      "origPrice": 669.0,
+      "discPrice": 50.0,
+      "profit": 62.0,
+      "gpr": 0.1002,
+      "cost": 557.0
+     },
+     {
+      "date": "2026-10-09",
+      "code": "LS002501862610090005",
+      "product": "华为 FreeBuds Neo耳机 T0029  星空黑",
+      "sku": "07.001.020.001.004",
+      "qty": 1.0,
+      "amount": 619.0,
+      "member": "何颜军",
+      "phone": "181****9602",
+      "origPrice": 669.0,
+      "discPrice": 50.0,
+      "profit": 62.0,
+      "gpr": 0.1002,
+      "cost": 557.0
+     },
+     {
+      "date": "2026-10-09",
+      "code": "LS002501862610090005",
+      "product": "华为自带线全能充智能移动电源",
+      "sku": "09.001.001.042.001",
+      "qty": 1.0,
+      "amount": 399.0,
+      "member": "何颜军",
+      "phone": "181****9602"
      },
      {
       "date": "2026-10-09",
       "code": "LS002501862610090005",
       "product": "RockSpace 活动权益膜 S码(180BZ-01J)",
-      "sku": "RockSpace 活动权益膜 S码(180BZ-01J)",
+      "sku": "09.999.009.013",
       "qty": 2.0,
       "amount": 80.0,
       "member": "何颜军",
-      "phone": "18109229602",
+      "phone": "181****9602",
       "origPrice": 80.0,
       "discPrice": 0.0,
       "profit": 71.4402,
@@ -9633,63 +7979,13 @@
      },
      {
       "date": "2026-10-09",
-      "code": "LS002501862610090005",
-      "product": "华为自带线全能充智能移动电源",
-      "sku": "华为自带线全能充智能移动电源 100W 12000mAh 陶瓷白",
-      "qty": 1.0,
-      "amount": 399.0,
-      "member": "何颜军",
-      "phone": "18109229602"
-     },
-     {
-      "date": "2026-10-09",
-      "code": "LS002501862610090005",
-      "product": "华为 FreeBuds Neo耳机 T0029  星空黑",
-      "sku": "华为 FreeBuds Neo耳机 T0029  星河银",
-      "qty": 1.0,
-      "amount": 619.0,
-      "member": "何颜军",
-      "phone": "18109229602",
-      "origPrice": 669.0,
-      "discPrice": 50.0,
-      "profit": 62.0,
-      "gpr": 0.1002,
-      "cost": 557.0
-     },
-     {
-      "date": "2026-10-09",
-      "code": "LS002501862610090005",
-      "product": "华为 FreeBuds Neo耳机 T0029  星空黑",
-      "sku": "华为 FreeBuds Neo耳机 T0029  星空黑",
-      "qty": 1.0,
-      "amount": 619.0,
-      "member": "何颜军",
-      "phone": "18109229602",
-      "origPrice": 669.0,
-      "discPrice": 50.0,
-      "profit": 62.0,
-      "gpr": 0.1002,
-      "cost": 557.0
-     },
-     {
-      "date": "2026-10-09",
-      "code": "LS002501862610090006",
-      "product": "华为-手提袋-小",
-      "sku": "华为-手提袋-小",
-      "qty": 1.0,
-      "amount": 0.0,
-      "member": "何颜军",
-      "phone": "18109229602"
-     },
-     {
-      "date": "2026-10-09",
       "code": "LS002501862610090006",
       "product": "Cooyee华为Nova14/15/16高清钢化膜",
-      "sku": "Cooyee华为Nova14/15/16高清钢化膜",
+      "sku": "15.001.003.013",
       "qty": 1.0,
       "amount": 99.0,
       "member": "何颜军",
-      "phone": "18109229602",
+      "phone": "181****9602",
       "origPrice": 99.0,
       "discPrice": 0.0,
       "profit": 80.0,
@@ -9700,11 +7996,11 @@
       "date": "2026-10-09",
       "code": "LS002501862610090006",
       "product": "Cooyee华为Nova15 Pro/Ultra高清钢化膜",
-      "sku": "Cooyee华为Nova15 Pro/Ultra高清钢化膜",
+      "sku": "15.001.003.014",
       "qty": 1.0,
       "amount": 79.05,
       "member": "何颜军",
-      "phone": "18109229602",
+      "phone": "181****9602",
       "origPrice": 104.05,
       "discPrice": 25.0,
       "profit": 60.0574,
@@ -9715,14 +8011,14 @@
       "date": "2026-10-09",
       "code": "LS002501862610090006",
       "product": "Cooyee华为Pura X MAX前屏高清钢化膜",
-      "sku": "Cooyee华为Pura X MAX前屏高清钢化膜",
+      "sku": "15.001.003.045",
       "qty": 2.0,
       "amount": 198.0,
       "member": "何颜军",
-      "phone": "18109229602",
+      "phone": "181****9602",
       "origPrice": 198.0,
       "discPrice": 0.0,
-      "profit": 154.0455,
+      "profit": 154.0452,
       "gpr": 0.778,
       "cost": 43.95
      },
@@ -9730,16 +8026,215 @@
       "date": "2026-10-09",
       "code": "LS002501862610090006",
       "product": "Cooyee华为Nova14/15/16高清钢化膜",
-      "sku": "Cooyee华为Pura Xmax一体镜头膜 带定位器",
+      "sku": "15.001.003.046",
       "qty": 1.0,
       "amount": 99.0,
       "member": "何颜军",
-      "phone": "18109229602",
+      "phone": "181****9602",
       "origPrice": 99.0,
       "discPrice": 0.0,
       "profit": 80.0,
       "gpr": 0.8081,
       "cost": 19.0
+     },
+     {
+      "date": "2026-10-09",
+      "code": "LS002501862610090004",
+      "product": "华为-手提袋-小",
+      "sku": "17.002.001.001",
+      "qty": 1.0,
+      "amount": 0.0,
+      "member": "何颜军",
+      "phone": "181****9602"
+     },
+     {
+      "date": "2026-10-09",
+      "code": "LS002501862610090006",
+      "product": "华为-手提袋-小",
+      "sku": "17.002.001.001",
+      "qty": 1.0,
+      "amount": 0.0,
+      "member": "何颜军",
+      "phone": "181****9602"
+     },
+     {
+      "date": "2026-10-09",
+      "code": "LS002501862610090005",
+      "product": "华为-手提袋-小",
+      "sku": "17.002.001.001",
+      "qty": 1.0,
+      "amount": 0.0,
+      "member": "何颜军",
+      "phone": "181****9602"
+     }
+    ]
+   },
+   "杨丽华": {
+    "三大地图": [
+     {
+      "date": "2026-10-11",
+      "code": "LS002501862610110002",
+      "product": "华为 Mate70 Pro 优享版 先锋版 PLR-AL50 12GB+512GB 雪域白",
+      "sku": "01.001.002.007.002",
+      "qty": 1.0,
+      "amount": 4699.0,
+      "member": "刘朕",
+      "phone": "139****7239",
+      "origPrice": 4699.0,
+      "discPrice": 0.0,
+      "profit": -117.0,
+      "gpr": -0.0249,
+      "cost": 4816.0
+     },
+     {
+      "date": "2026-10-01",
+      "code": "LS002501272610010004",
+      "product": "华为 Mate90 Pro CMS-AL20  12GB+512GB  晶钻白",
+      "sku": "01.001.086.001.006",
+      "qty": 1.0,
+      "amount": 7919.01,
+      "member": "孙洁",
+      "phone": "151****0193",
+      "origPrice": 7999.0,
+      "discPrice": 79.99,
+      "profit": 1039.01,
+      "gpr": 0.1312,
+      "cost": 6880.0
+     },
+     {
+      "date": "2026-10-03",
+      "code": "LS002501272610030002",
+      "product": "Hi MateBook D 16 RMA-X  AMD Radeon AMD Ryzen 7 Win11 24GB+512GB  极夜灰",
+      "sku": "05.001.012.002.001",
+      "qty": 1.0,
+      "amount": 6199.0,
+      "member": "白雪",
+      "phone": "187****0190",
+      "origPrice": 6199.0,
+      "discPrice": 0.0,
+      "profit": 619.0,
+      "gpr": 0.0999,
+      "cost": 5580.0
+     },
+     {
+      "date": "2026-10-10",
+      "code": "LS002501272610100003",
+      "product": "COOYEE 华为Mate X6 热弯全胶钢化膜",
+      "sku": "09.001.001.017.001",
+      "qty": 1.0,
+      "amount": 0.0,
+      "member": "张文涛",
+      "phone": "188****1787",
+      "origPrice": 199.0,
+      "discPrice": 199.0,
+      "profit": -37.6956,
+      "gpr": null,
+      "cost": 37.7
+     },
+     {
+      "date": "2026-10-01",
+      "code": "LS002501272610010004",
+      "product": "COOYEE 华为P70 pro-P70 pro+ 热弯全胶钢化膜",
+      "sku": "17.002.001.001",
+      "qty": 1.0,
+      "amount": 0.0,
+      "member": "孙洁",
+      "phone": "151****0193",
+      "origPrice": 199.0,
+      "discPrice": 199.0,
+      "profit": -36.2571,
+      "gpr": null,
+      "cost": 36.26
+     },
+     {
+      "date": "2026-10-03",
+      "code": "LS002501272610030002",
+      "product": "COOYEE 华为Mate X6 热弯全胶钢化膜",
+      "sku": "17.002.001.001",
+      "qty": 1.0,
+      "amount": 0.0,
+      "member": "白雪",
+      "phone": "187****0190",
+      "origPrice": 199.0,
+      "discPrice": 199.0,
+      "profit": -37.6956,
+      "gpr": null,
+      "cost": 37.7
+     },
+     {
+      "date": "2026-10-10",
+      "code": "LS002501272610100003",
+      "product": "COOYEE 华为Mate X6 热弯全胶钢化膜",
+      "sku": "17.002.001.001",
+      "qty": 1.0,
+      "amount": 0.0,
+      "member": "张文涛",
+      "phone": "188****1787",
+      "origPrice": 199.0,
+      "discPrice": 199.0,
+      "profit": -37.6956,
+      "gpr": null,
+      "cost": 37.7
+     },
+     {
+      "date": "2026-10-10",
+      "code": "LS002501272610100003",
+      "product": "COOYEE 华为Mate X6 热弯全胶钢化膜",
+      "sku": "17.002.001.002",
+      "qty": 1.0,
+      "amount": 0.0,
+      "member": "张文涛",
+      "phone": "188****1787",
+      "origPrice": 199.0,
+      "discPrice": 199.0,
+      "profit": -37.6956,
+      "gpr": null,
+      "cost": 37.7
+     },
+     {
+      "date": "2026-10-01",
+      "code": "LS002501272610010004",
+      "product": "COOYEE 华为P70 pro-P70 pro+ 热弯全胶钢化膜",
+      "sku": "17.002.001.002",
+      "qty": 1.0,
+      "amount": 0.0,
+      "member": "孙洁",
+      "phone": "151****0193",
+      "origPrice": 199.0,
+      "discPrice": 199.0,
+      "profit": -36.2571,
+      "gpr": null,
+      "cost": 36.26
+     },
+     {
+      "date": "2026-10-11",
+      "code": "LS002501862610110002",
+      "product": "MOCOLL 铂金1 系列 2.5D二强高清全屏钢化玻璃膜-Pura X Max  黑色",
+      "sku": "17.002.001.002",
+      "qty": 1.0,
+      "amount": 0.0,
+      "member": "刘朕",
+      "phone": "139****7239",
+      "origPrice": 99.0,
+      "discPrice": 99.0,
+      "profit": -17.0,
+      "gpr": null,
+      "cost": 17.0
+     },
+     {
+      "date": "2026-10-03",
+      "code": "LS002501272610030002",
+      "product": "COOYEE 华为Mate X6 热弯全胶钢化膜",
+      "sku": "17.002.001.002",
+      "qty": 1.0,
+      "amount": 0.0,
+      "member": "白雪",
+      "phone": "187****0190",
+      "origPrice": 199.0,
+      "discPrice": 199.0,
+      "profit": -37.6956,
+      "gpr": null,
+      "cost": 37.7
      }
     ]
    },
@@ -9748,111 +8243,110 @@
      {
       "date": "2026-10-02",
       "code": "LS002501272610020001",
+      "product": "华为 Mate XT2 ULTIMATE DESIGN LAP-AL10  16GB+512GB  皓白",
+      "sku": "01.001.084.001.001",
+      "qty": 1.0,
+      "amount": 21999.0,
+      "member": "孙振强",
+      "phone": "132****0828",
+      "origPrice": 22500.0,
+      "discPrice": 501.0,
+      "profit": 1792.92,
+      "gpr": 0.0815,
+      "cost": 20206.08
+     },
+     {
+      "date": "2026-10-02",
+      "code": "LS002501272610020001",
+      "product": "华为 Mate XT2 ULTIMATE DESIGN LAP-AL10  16GB+512GB  皓白",
+      "sku": "01.001.084.001.001",
+      "qty": 1.0,
+      "amount": 21999.0,
+      "member": "孙振强",
+      "phone": "132****0828",
+      "origPrice": 22500.0,
+      "discPrice": 501.0,
+      "profit": 1792.92,
+      "gpr": 0.0815,
+      "cost": 20206.08
+     },
+     {
+      "date": "2026-10-02",
+      "code": "LS002501272610020005",
+      "product": "星联优享-999",
+      "sku": "15.005.012",
+      "qty": 1.0,
+      "amount": 501.0,
+      "member": "孙振强",
+      "phone": "132****0828",
+      "origPrice": 501.0,
+      "discPrice": 0.0,
+      "profit": 501.0,
+      "gpr": 1.0,
+      "cost": 0.0
+     },
+     {
+      "date": "2026-10-02",
+      "code": "LS002501272610020002",
+      "product": "星联优享-999",
+      "sku": "15.005.012",
+      "qty": 1.0,
+      "amount": 501.0,
+      "member": "孙振强",
+      "phone": "132****0828",
+      "origPrice": 501.0,
+      "discPrice": 0.0,
+      "profit": 501.0,
+      "gpr": 1.0,
+      "cost": 0.0
+     },
+     {
+      "date": "2026-10-02",
+      "code": "LS002501272610020002",
       "product": "Cooyee华为P90 proMax高清钢化膜",
-      "sku": "华为-手提袋-中",
+      "sku": "17.002.001.001",
+      "qty": 1.0,
+      "amount": 0.0,
+      "member": "孙振强",
+      "phone": "132****0828",
+      "origPrice": 99.0,
+      "discPrice": 99.0,
+      "profit": -18.9867,
+      "gpr": null,
+      "cost": 18.99
+     },
+     {
+      "date": "2026-10-02",
+      "code": "LS002501272610020005",
+      "product": "Cooyee华为P90 proMax高清钢化膜",
+      "sku": "17.002.001.001",
+      "qty": 1.0,
+      "amount": 0.0,
+      "member": "孙振强",
+      "phone": "132****0828",
+      "origPrice": 99.0,
+      "discPrice": 99.0,
+      "profit": -18.9867,
+      "gpr": null,
+      "cost": 18.99
+     },
+     {
+      "date": "2026-10-02",
+      "code": "LS002501272610020001",
+      "product": "Cooyee华为P90 proMax高清钢化膜",
+      "sku": "17.002.001.002",
       "qty": 2.0,
       "amount": 0.0,
       "member": "孙振强",
-      "phone": "13219820828",
+      "phone": "132****0828",
       "origPrice": 99.0,
       "discPrice": 99.0,
-      "profit": -18.9865,
-      "gpr": null,
-      "cost": 18.99
-     },
-     {
-      "date": "2026-10-02",
-      "code": "LS002501272610020001",
-      "product": "华为 Mate XT2 ULTIMATE DESIGN LAP-AL10  16GB+512GB  皓白",
-      "sku": "华为 Mate XT2 ULTIMATE DESIGN LAP-AL10  16GB+512GB  皓白",
-      "qty": 1.0,
-      "amount": 21999.0,
-      "member": "孙振强",
-      "phone": "13219820828",
-      "origPrice": 22500.0,
-      "discPrice": 501.0,
-      "profit": 1792.92,
-      "gpr": 0.0815,
-      "cost": 20206.08
-     },
-     {
-      "date": "2026-10-02",
-      "code": "LS002501272610020001",
-      "product": "华为 Mate XT2 ULTIMATE DESIGN LAP-AL10  16GB+512GB  皓白",
-      "sku": "华为 Mate XT2 ULTIMATE DESIGN LAP-AL10  16GB+512GB  皓白",
-      "qty": 1.0,
-      "amount": 21999.0,
-      "member": "孙振强",
-      "phone": "13219820828",
-      "origPrice": 22500.0,
-      "discPrice": 501.0,
-      "profit": 1792.92,
-      "gpr": 0.0815,
-      "cost": 20206.08
-     },
-     {
-      "date": "2026-10-02",
-      "code": "LS002501272610020002",
-      "product": "星联优享-999",
-      "sku": "星联优享-999",
-      "qty": 1.0,
-      "amount": 501.0,
-      "member": "孙振强",
-      "phone": "13219820828",
-      "origPrice": 501.0,
-      "discPrice": 0.0,
-      "profit": 501.0,
-      "gpr": 1.0,
-      "cost": 0.0
-     },
-     {
-      "date": "2026-10-02",
-      "code": "LS002501272610020002",
-      "product": "Cooyee华为P90 proMax高清钢化膜",
-      "sku": "华为-手提袋-小",
-      "qty": 1.0,
-      "amount": 0.0,
-      "member": "孙振强",
-      "phone": "13219820828",
-      "origPrice": 99.0,
-      "discPrice": 99.0,
-      "profit": -18.9865,
-      "gpr": null,
-      "cost": 18.99
-     },
-     {
-      "date": "2026-10-02",
-      "code": "LS002501272610020005",
-      "product": "星联优享-999",
-      "sku": "星联优享-999",
-      "qty": 1.0,
-      "amount": 501.0,
-      "member": "孙振强",
-      "phone": "13219820828",
-      "origPrice": 501.0,
-      "discPrice": 0.0,
-      "profit": 501.0,
-      "gpr": 1.0,
-      "cost": 0.0
-     },
-     {
-      "date": "2026-10-02",
-      "code": "LS002501272610020005",
-      "product": "Cooyee华为P90 proMax高清钢化膜",
-      "sku": "华为-手提袋-小",
-      "qty": 1.0,
-      "amount": 0.0,
-      "member": "孙振强",
-      "phone": "13219820828",
-      "origPrice": 99.0,
-      "discPrice": 99.0,
-      "profit": -18.9865,
+      "profit": -18.9867,
       "gpr": null,
       "cost": 18.99
      }
     ]
-   },
-   "张博晨": {}
+   }
   }
  }
 }
