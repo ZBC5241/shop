@@ -9,7 +9,7 @@
   "isToday": true,
   "lagDays": 0,
   "todayLabel": "10-14",
-  "fetchTime": "17:19",
+  "fetchTime": "17:30",
   "employees": [
    "邵乐乐",
    "杨丽华",
@@ -20,7 +20,7 @@
   "sourceFile": "门店毛利明细表-华为终端.xlsx",
   "sourceRows": 642,
   "dayRows": 19,
-  "generatedAt": "2026-10-14 17:19:39"
+  "generatedAt": "2026-10-14 17:30:01"
  },
  "store": {
   "performance": {
@@ -1282,7 +1282,7 @@
     },
     {
      "emp": "李泽",
-     "product": "华为 Mate 90 Pro Max 星联（一年期）",
+     "product": "华为 Mate 90 Pro Max Care+（一年期）",
      "code": "XSCK26101400329",
      "channel": "自然客流",
      "bizType": "",
@@ -5500,7 +5500,7 @@
    },
    {
     "date": "2026-10-14",
-    "name": "华为 Mate 90 Pro Max 星联（一年期）",
+    "name": "华为 Mate 90 Pro Max Care+（一年期）",
     "qty": 1.0,
     "origPrice": 579.0,
     "discPrice": 0.0,
@@ -5551,7 +5551,7 @@
    },
    {
     "date": "2026-10-13",
-    "name": "华为 Mate 90 Pro Max 星联（一年期）",
+    "name": "华为 Mate 90 Pro Max Care+（一年期）",
     "qty": -1.0,
     "origPrice": -599.0,
     "discPrice": 0.0,
@@ -5973,7 +5973,7 @@
    },
    {
     "date": "2026-10-10",
-    "name": "华为 Mate 90 Pro Max 星联（一年期）",
+    "name": "华为 Mate 90 Pro Max Care+（一年期）",
     "qty": 1.0,
     "origPrice": 599.0,
     "discPrice": 0.0,
@@ -5990,7 +5990,7 @@
    },
    {
     "date": "2026-10-09",
-    "name": "华为 Mate 90 RS 非凡大师 星联（一年期）",
+    "name": "华为 Mate 90 RS 非凡大师 Care+（一年期）",
     "qty": -1.0,
     "origPrice": -999.0,
     "discPrice": 0.0,
@@ -6534,7 +6534,7 @@
    },
    {
     "date": "2026-10-07",
-    "name": "华为 Mate 90 星联（一年期）",
+    "name": "华为 Mate 90 Care+（一年期）",
     "qty": 1.0,
     "origPrice": 400.04,
     "discPrice": 20.0,
@@ -6670,7 +6670,7 @@
    },
    {
     "date": "2026-10-07",
-    "name": "华为 Mate 90 星联（一年期）",
+    "name": "华为 Mate 90 Care+（一年期）",
     "qty": 1.0,
     "origPrice": 399.0,
     "discPrice": 0.0,
@@ -6823,7 +6823,7 @@
    },
    {
     "date": "2026-10-06",
-    "name": "华为 Mate 90 Pro 星联（一年期）",
+    "name": "华为 Mate 90 Pro Care+（一年期）",
     "qty": 1.0,
     "origPrice": 499.0,
     "discPrice": 0.0,
@@ -7503,7 +7503,7 @@
    },
    {
     "date": "2026-10-04",
-    "name": "华为 Clip2 星联（一年期）",
+    "name": "华为 Clip2 Care+（一年期）",
     "qty": 1.0,
     "origPrice": 99.0,
     "discPrice": 0.0,
@@ -7950,7 +7950,7 @@
    },
    {
     "date": "2026-10-03",
-    "name": "华为 Mate 90 RS 非凡大师 星联（一年期）",
+    "name": "华为 Mate 90 RS 非凡大师 Care+（一年期）",
     "qty": 1.0,
     "origPrice": 999.0,
     "discPrice": 0.0,
@@ -8018,7 +8018,7 @@
    },
    {
     "date": "2026-10-03",
-    "name": "华为 Mate 90 Pro 星联（一年期）",
+    "name": "华为 Mate 90 Pro Care+（一年期）",
     "qty": 1.0,
     "origPrice": 499.0,
     "discPrice": 0.0,
@@ -8120,7 +8120,7 @@
    },
    {
     "date": "2026-10-02",
-    "name": "华为 Mate 90 Pro Max 星联（一年期）",
+    "name": "华为 Mate 90 Pro Max Care+（一年期）",
     "qty": 1.0,
     "origPrice": 599.0,
     "discPrice": 0.0,
@@ -8205,7 +8205,7 @@
    },
    {
     "date": "2026-10-02",
-    "name": "华为 Mate 90 星联（一年期）",
+    "name": "华为 Mate 90 Care+（一年期）",
     "qty": 1.0,
     "origPrice": 400.0,
     "discPrice": 0.0,
@@ -8222,7 +8222,7 @@
    },
    {
     "date": "2026-10-02",
-    "name": "华为 Mate 90 Pro 星联（一年期）",
+    "name": "华为 Mate 90 Pro Care+（一年期）",
     "qty": 1.0,
     "origPrice": 499.0,
     "discPrice": 0.0,
@@ -8426,7 +8426,7 @@
    },
    {
     "date": "2026-10-01",
-    "name": "华为 Mate 90 Pro 星联（一年期）",
+    "name": "华为 Mate 90 Pro Care+（一年期）",
     "qty": 1.0,
     "origPrice": 499.0,
     "discPrice": 0.0,
@@ -8655,7 +8655,7 @@
    "code": "XSCK26101400329",
    "type": "碎屏",
    "emp": "李泽",
-   "product": "华为 Mate 90 Pro Max 星联（一年期）",
+   "product": "华为 Mate 90 Pro Max Care+（一年期）",
    "sku": "15.001.002.052",
    "qty": 1.0,
    "origPrice": 579.0,
