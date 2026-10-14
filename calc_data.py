@@ -915,7 +915,7 @@ def build_deal_analysis(xs, rxs, people, plist, ref):
         if avg_price > 0 and avg_price < 3000:
             actions.append(f"客单价 {avg_price:.0f} 元偏低，多推中高端机型提升毛利")
         if bundle_rate < 0.3 and total_orders > 0:
-            actions.append("搭售率偏低，每单必问配件/Care+/贴膜")
+            actions.append("搭售率偏低，每单必问配件/星联/贴膜")
         if avg_discount > 0.05:
             actions.append(f"平均折扣 {avg_discount:.0%}，注意控制让利节奏")
         if not actions:
@@ -964,7 +964,7 @@ def build_deal_analysis(xs, rxs, people, plist, ref):
     if low_bundle:
         names = "、".join(p["name"] for p in low_bundle)
         issues.append({"level": "warn", "icon": "📦", "title": "搭售率偏低",
-                       "body": f"{names} 搭售率低于 30%。每单成交后必须推配件或 Care+，"
+                       "body": f"{names} 搭售率低于 30%。每单成交后必须推配件或 星联，"
                                f"话术：「配个贴膜/壳，一起拿更划算」。"})
 
     # 客单价偏低的员工
@@ -1184,8 +1184,10 @@ def main():
         "dayDetails": build_day_details(rxs),
     }
 
+    # 门店口径：Care+ 已更名为「星联」，数据/看板不应再出现 Care+
+    _json_str = json.dumps(data, ensure_ascii=False, indent=1).replace("Care+", "星联")
     with open(a.out, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=1)
+        f.write(_json_str)
 
     # ---- 体检 ----
     print(f"✅ 复算完成 → {a.out}")
