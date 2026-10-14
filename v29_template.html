@@ -2894,7 +2894,7 @@ function qcsHTML(Q){
   if(hy){
     h += '<div class="q"><div class="q-l">会员搭售率（30%）</div>'
       + '<div class="q-v num" style="' + qRateCol(hy.gap) + '">' + pct(hy.rate,1) + '</div>'
-      + '<div class="q-s">Care+ ' + cnt(hy.care) + ' / 终端 ' + cnt(hy.terminal)
+      + '<div class="q-s">星联 ' + cnt(hy.care) + ' / 终端 ' + cnt(hy.terminal)
       + (isNum(hy.gap) && hy.gap > 0 ? ' · 超 <em style="color:var(--red)">' + cnt(hy.gap) + '</em>' : '')
       + (isNum(hy.gap) && hy.gap < 0 ? ' · 缺 <em style="color:var(--green)">' + cnt(-hy.gap) + '</em>' : '')
       + '</div></div>';
@@ -3045,7 +3045,7 @@ function dayMetricItems(k){
                  "01.001.032.002","01.001.043.002","01.001.044.002","01.001.001.0","01.001.002.0","01.001.003"];
     return dd.filter(r => khj.some(p => r.sku.indexOf(p) === 0));
   }
-  const rx = { '贴膜':/膜|套包/, '回收':/回收/, '会员':/Care|会员|星联优享/,
+  const rx = { '贴膜':/膜|套包/, '回收':/回收/, '会员':/星联|会员|星联优享/,
                '合约':/入网/, '摄影课':/大师课/ }[k];
   if(rx) return dd.filter(r => ((k === '贴膜' || k === '摄影课') ? (r.amount > 0 && rx.test(r.product)) : rx.test(r.product)));
   return null;
@@ -3226,7 +3226,7 @@ function renderPerson(){
 
 /* ---------------- 视图 4：今日 ---------------- */
 const DAY_ORDER = ['毛利','销额','增值','手机','音频穿戴','智慧办公','HD','会员','回收','贴膜','合约','滞销','优享/会员','摄影课','尊享/储值'];
-const GAP_ALIAS = { '会员':'Care+' };
+const GAP_ALIAS = { '会员':'星联' };
 
 function dayHTML(done, gap){
   done = done || {}; gap = gap || {};
@@ -3535,7 +3535,7 @@ function renderOperatorDecisionBoard(ctx,date,plan){
   h+='<div class="op-four">'
     +'<div class="op-lever good"><div class="op-lever-top"><span class="op-lever-k">保</span><b>保住主力产出</b></div><p>'+(conc.top.v>0?iaEsc(conc.top.name)+'当前是主要产出点。高峰时段优先让主力接高意向客户、做高质量单；运营杂项尽量错峰。':'当前没有明确主力产出，需要先拿到首轮成交。')+'</p></div>'
     +'<div class="op-lever hot"><div class="op-lever-top"><span class="op-lever-k">补</span><b>补第二产出点</b></div><p>'+(idle.length?'重点不是继续点名 '+iaEsc(idle.join('、'))+'，而是分别判断无客、转化、待上账，再给不同动作。':'当前开单面较完整，下一步看个人目标缺口和成交质量。')+'</p></div>'
-    +'<div class="op-lever warn"><div class="op-lever-top"><span class="op-lever-k">提</span><b>提高每单质量</b></div><p>主机成交后固定过一遍 Care+、贴膜、会员、回收、音频/穿戴等二次价值检查。当前可识别搭售单 '+bundles+' 单。</p></div>'
+    +'<div class="op-lever warn"><div class="op-lever-top"><span class="op-lever-k">提</span><b>提高每单质量</b></div><p>主机成交后固定过一遍 星联、贴膜、会员、回收、音频/穿戴等二次价值检查。当前可识别搭售单 '+bundles+' 单。</p></div>'
     +'<div class="op-lever"><div class="op-lever-top"><span class="op-lever-k">查</span><b>查被忽略的入口</b></div><p>'+(phone>0&&recycle===0?'今日已有手机产出但回收为0：先核对是否确实无旧机需求、未登记或流程未执行，不直接判定员工漏做。':'回收/积分/退货等属于经营质量证据，需要和主机成交一起核对。')+'</p></div>'
     +'</div>';
   h+='<div class="op-seq">'
@@ -3582,7 +3582,7 @@ function renderCustomerOpportunityBoard(plan,date){
   let h='<section class="ai-section" data-ai-page="customer"><div class="ai-section-h"><span class="ai-spark">机</span><b>客户机会判断</b><small>店长看的不是“回访完成”，而是下一笔成交从哪里来</small></div><div class="op-card"><div class="op-cust-grid">';
   if(!a.length){h+='<div class="op-cust"><b>当前最大问题：客户池还没有被结构化</b><p>没有客户记录时，AI只能看自然成交，无法判断“主动经营是否有效”。先要求回访动作留下姓名/手机号、意向、阻碍、下次时间。</p></div><div class="op-cust"><b>第一阶段不要追求复杂CRM</b><p>先把 <em>联系 → 有效沟通 → 邀约 → 到店 → 成交</em> 跑通，能证明动作带来结果以后，再扩展客户标签。</p></div>';}
   else{h+='<div class="op-cust"><b>24小时内应该追的客户：'+due.length+' 人</b><p>'+(due.length?'这些客户已有明确下一步，优先于继续无差别拉新。':'当前没有临近跟进时间的客户，检查是否每条有效沟通都设置了下一次动作。')+'</p></div><div class="op-cust"><b>当前意向最集中的方向</b><p>'+(topIntent?('<em>'+iaEsc(topIntent[0])+'</em> · '+topIntent[1]+' 人。店长可以围绕该意向准备体验、旧机回收、权益/套餐方案。'):'客户记录里还缺少明确产品意向，下一轮沟通要补齐。')+'</p></div>';}
-  h+='<div class="op-cust"><b>手机成交后的六项复查</b><p>主机成交后依次核对：Care+、贴膜、会员、回收、音频/穿戴、其他场景设备。不是强推，而是确认客户是否存在真实需求并记录拒绝原因。</p></div><div class="op-cust"><b>流失不能只写“考虑一下”</b><p>至少区分价格、产品不匹配、竞品比较、时机未到、体验/信任、审批/家人决策等真实阻碍，第二天AI才能换策略。</p></div>';
+  h+='<div class="op-cust"><b>手机成交后的六项复查</b><p>主机成交后依次核对：星联、贴膜、会员、回收、音频/穿戴、其他场景设备。不是强推，而是确认客户是否存在真实需求并记录拒绝原因。</p></div><div class="op-cust"><b>流失不能只写“考虑一下”</b><p>至少区分价格、产品不匹配、竞品比较、时机未到、体验/信任、审批/家人决策等真实阻碍，第二天AI才能换策略。</p></div>';
   return h+'</div></div></section>';
 }
 
@@ -3842,7 +3842,7 @@ function renderInsight(){
   const cats = [
     dailyInfo('手机','手机','台'), dailyInfo('毛利','毛利','元'), dailyInfo('增值','增值','元'),
     dailyInfo('智慧办公','智慧办公','台'), dailyInfo('音频穿戴','音频穿戴','件'), dailyInfo('HD','HD','台'),
-    dailyInfo('Care+','Care+','单'), dailyInfo('回收','回收','单'), dailyInfo('贴膜','贴膜','单'),
+    dailyInfo('会员','会员','单'), dailyInfo('回收','回收','单'), dailyInfo('贴膜','贴膜','单'),
     dailyInfo('合约','合约','分'), dailyInfo('滞销','滞销','台'), dailyInfo('摄影课','摄影课','单'),
     dailyInfo('优享/会员','优享/会员','单'), dailyInfo('尊享/储值','尊享/储值','单')
   ];
@@ -3939,7 +3939,7 @@ function renderInsight(){
     + '<div class="ai-pk"><b>' + (returnDeal ? money(returnDeal.profit||0,0) : '0') + '</b><span>今日退货毛利影响</span></div>'
     + '<div class="ai-pk"><b>' + pct(((DX.patterns||[])[0]||{}).bundleRate||0,0) + '</b><span>主力搭售率</span></div></div>'
     + '<div class="ai-prob-why"><b>经营判断：</b>销量不等于高质量成交。当前既有高端机成交，也有退货和低搭售，需要把“卖出去”升级为“有利润、可复制、少退货”。</div>'
-    + '<div class="ai-actionline"><strong>动作：</strong>复盘退货原因；复制高质量套餐单；手机/PC成交后固定检查 Care+、贴膜、音频/穿戴和会员机会。对零价赠品必须看整单毛利，不允许只看销量。</div><button class="ai-action-btn" onclick="openInsightAction(&quot;quality-sale&quot;)">进入执行闭环 →</button></div>';
+    + '<div class="ai-actionline"><strong>动作：</strong>复盘退货原因；复制高质量套餐单；手机/PC成交后固定检查 星联、贴膜、音频/穿戴和会员机会。对零价赠品必须看整单毛利，不允许只看销量。</div><button class="ai-action-btn" onclick="openInsightAction(&quot;quality-sale&quot;)">进入执行闭环 →</button></div>';
   h += '</div></section>';
 
 
@@ -4005,10 +4005,10 @@ function renderInsight(){
     h += '<div class="ai-order"><div class="ai-order-head"><span class="ai-order-icon">↩</span><div class="ai-order-title">退货需要单独复盘</div><span class="ai-order-badge">风险订单</span></div><div class="ai-order-text"><b>' + esc(returnDeal.product) + '</b><br>退货影响毛利 ' + money(returnDeal.profit||0,0) + '。不要只做售后处理，要记录“质量 / 价格 / 冲动消费 / 体验预期”中的真实原因，反哺前端销售话术。</div></div>';
   }
   if(bestBundleDeal){
-    h += '<div class="ai-order"><div class="ai-order-head"><span class="ai-order-icon">★</span><div class="ai-order-title">高端机 + Care+ 可复制</div><span class="ai-order-badge">成功路径</span></div><div class="ai-order-text"><b>' + esc(bestBundleDeal.emp) + '</b> 的高端手机订单出现同单搭售。建议把这类订单拆成“客户需求—主品—保障权益”的标准案例，而不是只表扬金额。</div></div>';
+    h += '<div class="ai-order"><div class="ai-order-head"><span class="ai-order-icon">★</span><div class="ai-order-title">高端机 + 星联 可复制</div><span class="ai-order-badge">成功路径</span></div><div class="ai-order-text"><b>' + esc(bestBundleDeal.emp) + '</b> 的高端手机订单出现同单搭售。建议把这类订单拆成“客户需求—主品—保障权益”的标准案例，而不是只表扬金额。</div></div>';
   }
   if(bundleOrder){
-    h += '<div class="ai-order"><div class="ai-order-head"><span class="ai-order-icon">＋</span><div class="ai-order-title">音频订单存在多层价值开发</div><span class="ai-order-badge">套餐案例</span></div><div class="ai-order-text">FreeBuds Pro5 相关订单同时出现会员与 Care+，说明<b>非手机品类同样能做增值</b>。这类成交应成为音频/穿戴员工的标准推荐路径。</div></div>';
+    h += '<div class="ai-order"><div class="ai-order-head"><span class="ai-order-icon">＋</span><div class="ai-order-title">音频订单存在多层价值开发</div><span class="ai-order-badge">套餐案例</span></div><div class="ai-order-text">FreeBuds Pro5 相关订单同时出现会员与 星联，说明<b>非手机品类同样能做增值</b>。这类成交应成为音频/穿戴员工的标准推荐路径。</div></div>';
   }
   h += '</div></section>';
 
@@ -4073,7 +4073,7 @@ function buildInsightActionPlan(ctx){
       target:(idle.length?'当前重点：'+idle.join('、')+'。':'若出现未开单员工，')+'每人完成5名客户/老客触达，至少2个有效沟通、1个邀约，并完成1次重点品类演练。',
       standard:'必须留下5条回访对象/结果记录；有效沟通≥2、邀约≥1、演练≥1，才允许提交验收。'},
     {id:'quality-sale',type:'quality',priority:'P1',title:'成交质量提升',owner:'全员',deadline:'下一单成交后立即检查',
-      target:'主机/PC/音频成交后执行二次价值检查：Care+、贴膜、会员、音频/穿戴或配件机会。',
+      target:'主机/PC/音频成交后执行二次价值检查：星联、贴膜、会员、音频/穿戴或配件机会。',
       standard:'至少完成1笔二次价值检查，并记录是否形成搭售、客户拒绝原因或可复制话术。'},
     {id:'ops-active',type:'ops',priority:'P1',title:'销售空档主动经营',owner:'全员',deadline:'23:00前',
       target:'无客时不等待：企微拉新5个/人、群拉新2个/人、WPS上传3个/人。',
@@ -4413,7 +4413,7 @@ function buildInsightActionPlan(ctx){
       target:(idle.length?'当前重点：'+idle.join('、')+'。':'若出现未开单员工，')+'每人完成5名客户/老客触达，至少2个有效沟通、1个邀约；客户必须进入后续跟进漏斗。',
       standard:'至少5条结构化客户记录；有效沟通≥2、邀约≥1，才允许提交验收。'},
     {id:'quality-sale',type:'quality',priority:'P1',title:'成交质量提升',owner:'全员',deadline:'下一单成交后立即检查',
-      target:'主机/PC/音频成交后执行二次价值检查：Care+、贴膜、会员、音频/穿戴或配件机会。',
+      target:'主机/PC/音频成交后执行二次价值检查：星联、贴膜、会员、音频/穿戴或配件机会。',
       standard:'至少完成1笔二次价值检查，并记录是否形成搭售、客户拒绝原因或可复制话术。'},
     {id:'ops-active',type:'ops',priority:'P1',title:'销售空档主动经营',owner:'全员',deadline:'23:00前',
       target:'无客时不等待：企微拉新5个/人、群拉新2个/人、WPS上传3个/人。',
@@ -4792,7 +4792,7 @@ function v26ProcessBottleneck(activePeople,date){
   if(z.experience < Math.max(1,z.receptions*.5)) return {key:'体验',title:'接待到深度体验转化偏弱',text:'有接待，但进入完整体验的组数偏少。店长先检查需求挖掘、产品上手和场景演示，而不是急着压报价。'};
   if(z.quotes < Math.max(1,z.experience*.65)) return {key:'方案',title:'体验到方案/报价环节偏弱',text:'客户已经体验，但没有充分进入明确方案。重点检查型号配置、权益、回收、预算和替代方案是否讲清楚。'};
   if(z.salesRecords===0 && z.quotes>0) return {key:'成交',title:'已经到报价，卡点更靠近异议与成交',text:'有报价但销售数据暂未响应。店长应参与异议处理/陪访，并记录价格、竞品、决策人、时机等真实阻碍。'};
-  return {key:'质量',title:'过程链已经跑通，下一步提成交质量',text:'当前已有接待、体验、方案与销售响应。继续看毛利、增值、Care+、回收和生态连带，不再只追开单数量。'};
+  return {key:'质量',title:'过程链已经跑通，下一步提成交质量',text:'当前已有接待、体验、方案与销售响应。继续看毛利、增值、星联、回收和生态连带，不再只追开单数量。'};
 }
 function iaEmployeeMode(name,date){
   const sig=iaRealityOne(date,name),sold=iaSoldRow(name),pd=iaPersonData(name),rec=iaNum(sig.receptions),exp=iaNum(sig.experience),quo=iaNum(sig.quotes),lost=iaNum(sig.lost);

@@ -555,7 +555,7 @@ def calc_gap(perf, qcs, rd, labels):
         "智慧办公":  perf["智慧办公"]["gap"],
         "音频穿戴":  perf["音频穿戴"]["gap"],
         "HD":        perf["HD"]["gap"],
-        "Care+":     qcs["会员搭售率"]["gap"],
+        "星联":     qcs["会员搭售率"]["gap"],
         "回收":      qcs["回收搭售率"]["gap"],
         "贴膜":      qcs["贴膜率"]["gap"],
         "合约":      qcs["合约"]["gap"],
