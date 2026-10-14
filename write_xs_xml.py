@@ -244,6 +244,18 @@ def main():
         if old != os.path.basename(bak):
             os.remove(os.path.join(bak_dir, old))
 
+    # 2026-10-14 18hao：条件格式校验改「动态基线」（写入前后数量一致）。
+    # 原因：原写死 >=118 是按 10-13 版底表定的；晨哥 10-14 改版后底表本身
+    # 只有 114 条（删行/改结构带走了 4 条普通条件格式，非 x14 扩展），
+    # 死阈值导致 xssync 自 16:31 起每 15 分钟误报失败（RC=1 + 企微告警刷屏），
+    # 实际 XS/RXS 写入完全正常。动态基线同样能拦住「本次写入弄丢条件格式」
+    # 的真损坏，且以后底表改版不会再误报。
+    cf_pre = sum(
+        len(re.findall(r"<conditionalFormatting", z.read(f).decode("utf-8", "ignore")))
+        for z in [zipfile.ZipFile(target)]
+        for f in z.namelist() if f.startswith("xl/worksheets/sheet") and f.endswith(".xml")
+    )
+
     # 提取原行1（表头）作为模板
     with zipfile.ZipFile(target, "r") as zin:
         xml = zin.read(XS_SHEET_FILE).decode("utf-8")
@@ -341,7 +353,7 @@ def main():
         for z in [zipfile.ZipFile(target)]
         for f in z.namelist() if f.startswith("xl/worksheets/sheet") and f.endswith(".xml")
     )
-    assert cf_count >= 118, f"条件格式丢失: {cf_count} < 118"
+    assert cf_count >= cf_pre, f"条件格式丢失: {cf_count} < 写入前 {cf_pre}"
     print(f"✓ 校验通过: {n} 行 | 4人毛利 ¥{g4:,.2f} | 公式完好 | 条件格式 {cf_count} 处")
 
 
