@@ -1184,10 +1184,8 @@ def main():
         "dayDetails": build_day_details(rxs),
     }
 
-    # 门店口径：Care+ 已更名为「星联」，数据/看板不应再出现 Care+
-    _json_str = json.dumps(data, ensure_ascii=False, indent=1).replace("Care+", "星联")
     with open(a.out, "w", encoding="utf-8") as f:
-        f.write(_json_str)
+        json.dump(data, f, ensure_ascii=False, indent=1)
 
     # ---- 体检 ----
     print(f"✅ 复算完成 → {a.out}")
