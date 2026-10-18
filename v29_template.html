@@ -3046,8 +3046,8 @@ function dayMetricItems(k){
     return dd.filter(r => khj.some(p => r.sku.indexOf(p) === 0));
   }
   const rx = { '贴膜':/膜|套包/, '回收':/回收/, '会员':/星联|会员|星联优享/,
-               '合约':/入网/, '摄影课':/大师课/ }[k];
-  if(rx) return dd.filter(r => ((k === '贴膜' || k === '摄影课') ? (r.amount > 0 && rx.test(r.product)) : rx.test(r.product)));
+               '合约':/入网/ }[k];
+  if(rx) return dd.filter(r => (k === '贴膜' ? (r.amount > 0 && rx.test(r.product)) : rx.test(r.product)));
   return null;
 }
 
@@ -3225,7 +3225,7 @@ function renderPerson(){
 }
 
 /* ---------------- 视图 4：今日 ---------------- */
-const DAY_ORDER = ['毛利','销额','增值','手机','音频穿戴','智慧办公','HD','会员','回收','贴膜','合约','滞销','优享/会员','摄影课','尊享/储值'];
+const DAY_ORDER = ['毛利','销额','增值','手机','音频穿戴','智慧办公','HD','会员','回收','贴膜','合约','滞销','星联会员'];
 const GAP_ALIAS = { '会员':'星联' };
 
 function dayHTML(done, gap){
@@ -3345,7 +3345,7 @@ function renderDay(){
   /* 今日品类：统一排序（毛利/手机/增值置顶，其余按毛利降序），大数字=毛利合计 */
   const dayDone = DATA.store.dailyDone || {};
   const MONEY_CATS = ['毛利','手机','PC','平板','穿戴','音频','HD','智慧办公','音频穿戴','增值'];
-  const SPECIALS = [['回收','单'],['贴膜','单'],['合约','分'],['滞销','台'],['摄影课','课']];
+  const SPECIALS = [['回收','单'],['贴膜','单'],['合约','分'],['滞销','台']];
   const PRIORITY = ['毛利','手机','增值'];
   const mkCat = (c) => {
     if(c === '毛利'){
@@ -3405,7 +3405,7 @@ function renderDay(){
   /* 第2层：每人今日（展示所有销售品类） */
   h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>每人今日</b>'
      + '<span class="tail">全部销售品类</span></div>';
-  const DAY_SHOW = ['销额','毛利','手机','PC','平板','穿戴','音频','音频穿戴','智慧办公','HD','增值','会员','回收','贴膜','合约','滞销','优享/会员','摄影课','尊享/储值'];
+  const DAY_SHOW = ['销额','毛利','手机','PC','平板','穿戴','音频','音频穿戴','智慧办公','HD','增值','会员','回收','贴膜','合约','滞销','星联会员'];
   DATA.meta.employees.forEach(n => {
     const p = DATA.people[n]; if(!p) return;
     const d = p.dailyDone || {};
@@ -3843,8 +3843,7 @@ function renderInsight(){
     dailyInfo('手机','手机','台'), dailyInfo('毛利','毛利','元'), dailyInfo('增值','增值','元'),
     dailyInfo('智慧办公','智慧办公','台'), dailyInfo('音频穿戴','音频穿戴','件'), dailyInfo('HD','HD','台'),
     dailyInfo('会员','会员','单'), dailyInfo('回收','回收','单'), dailyInfo('贴膜','贴膜','单'),
-    dailyInfo('合约','合约','分'), dailyInfo('滞销','滞销','台'), dailyInfo('摄影课','摄影课','单'),
-    dailyInfo('优享/会员','优享/会员','单'), dailyInfo('尊享/储值','尊享/储值','单')
+    dailyInfo('合约','合约','分'), dailyInfo('滞销','滞销','台'), dailyInfo('星联会员','星联会员','单')
   ];
   const cPhone = cats[0], cProfit = cats[1], cValue = cats[2];
   const coreAvg = [cPhone.rate,cProfit.rate,cValue.rate].filter(isNum);
@@ -3984,7 +3983,7 @@ function renderInsight(){
   h += '</div></section>';
 
   /* 5. 14品类今日作战地图 */
-  h += '<section class="ai-section" data-ai-page="team"><div class="ai-section-h"><span class="ai-spark">14</span><b>14项今日任务作战地图</b><small>取每日任务结果，不再只看月累计</small></div><div class="ai-cat-grid">';
+  h += '<section class="ai-section" data-ai-page="team"><div class="ai-section-h"><span class="ai-spark">' + cats.length + '</span><b>' + cats.length + '项今日任务作战地图</b><small>取每日任务结果，不再只看月累计</small></div><div class="ai-cat-grid">';
   cats.forEach(c => {
     let st = 'none', txt='未配置';
     if(isNum(c.task) && c.task > 0){
@@ -5167,10 +5166,9 @@ function readLabels(grid, labelRow, start, end){
   }
   return out;
 }
-const DROP_KEYS = new Set(['摄影课']);
 function readFlat(grid, row, labels, start){
   const d = {};
-  labels.forEach((lab,i) => { if(lab && !DROP_KEYS.has(lab)) d[lab] = g(grid,row,start+i); });
+  labels.forEach((lab,i) => { if(lab) d[lab] = g(grid,row,start+i); });
   return d;
 }
 
