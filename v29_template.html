@@ -4941,6 +4941,39 @@ function wpSwitch(idx){
 }
 
 /* ---------------- 主渲染 ---------------- */
+/* ===== 【18号 2026-10-21】下拉刷新滚动位自管 =====
+   华为浏览器（定制 Blink）下拉刷新整页重载时，浏览器自带 scroll restoration 不可靠：
+   页面渲染完成前就放弃恢复 → 用户被扔回顶部，「整体进度一览」大卡贴到吸顶栏上（晨哥华为机上报）。
+   对策：自己存、自己恢复——滚动防抖存 sessionStorage，页面加载后首次渲染完成时若发现滚动位
+   丢失（当前远低于记录值且文档已够高）就主动送回原位；浏览器恢复成功则不打扰。 */
+(function(){
+  var SK = 'sb_scroll_y';
+  window.__sbScrollBooted = false;
+  var lastY = -1;
+  window.addEventListener('scroll', function(){
+    var y = Math.round(window.scrollY);
+    if (lastY >= 0 && Math.abs(y - lastY) < 8) return;
+    lastY = y;
+    clearTimeout(window.__sbScrollT);
+    window.__sbScrollT = setTimeout(function(){
+      try{ sessionStorage.setItem(SK, String(window.scrollY)); }catch(e){}
+    }, 150);
+  }, {passive:true});
+  window.__sbRestoreScroll = function(){
+    if (window.__sbScrollBooted) return;
+    var y = 0;
+    try{ y = parseInt(sessionStorage.getItem(SK) || '0', 10) || 0; }catch(e){}
+    if (!(y > 0)) { window.__sbScrollBooted = true; return; }
+    var docH = document.documentElement.scrollHeight;
+    if (docH < y + 200) return;              /* 文档未渲染够高，等下一次 render 再试 */
+    if (window.scrollY > y - 60) { window.__sbScrollBooted = true; return; }  /* 浏览器已恢复，不打扰 */
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){
+      window.scrollTo(0, y);
+      window.__sbScrollBooted = true;
+    });});
+  };
+})();
+
 function render(keepScroll){
   /* 视图必须属于当前板块的 tab 集合（#ops 直达等场景下自动归位） */
   if(!BOARDS[BOARD].tabs.includes(VIEW)) VIEW = BOARDS[BOARD].tabs[0];
@@ -4977,6 +5010,8 @@ function render(keepScroll){
   animateHeroRings();
   bindDynamic();
   if(!keepScroll) window.scrollTo(0,0);
+  /* 【18号 2026-10-21】下拉刷新后自管滚动位恢复（华为浏览器 restoration 不可靠，见上方 IIFE） */
+  if(typeof window.__sbRestoreScroll === 'function') window.__sbRestoreScroll();
 }
 
 function bindDynamic(){
