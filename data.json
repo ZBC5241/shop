@@ -10,7 +10,7 @@
   "isToday": true,
   "lagDays": 0,
   "todayLabel": "10-21",
-  "fetchTime": "10:23",
+  "fetchTime": "10:38",
   "employees": [
    "邵乐乐",
    "杨丽华",
@@ -21,7 +21,7 @@
   "sourceFile": "李家村门店毛利明细表-华为终端.xlsx",
   "sourceRows": 926,
   "dayRows": 0,
-  "generatedAt": "2026-10-21 10:23:03"
+  "generatedAt": "2026-10-21 10:38:09"
  },
  "store": {
   "performance": {
