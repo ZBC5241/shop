@@ -4212,7 +4212,7 @@ function currentInsightPlan(){
   return buildInsightActionPlan({m,T,DX,activePeople,topSeller:null,returnDeal:(DX.deals||[]).find(d=>d.isReturn),bestBundleDeal:null,bundleOrder:null,cPhone:di('手机','手机','台'),cProfit:di('毛利','毛利','元'),cValue:di('增值','增值','元')});
 }
 function findInsightTask(id){ return currentInsightPlan().find(t=>t.id===id); }
-function refreshInsightKeepPosition(){ const y=window.scrollY; render(); setTimeout(()=>window.scrollTo(0,y),0); }
+function refreshInsightKeepPosition(){ render(true); }  /* 【18号 2026-10-21】保持滚动位刷新，去掉 render 回顶再恢复的中间跳变（华为机可见） */
 
 function openInsightAction(id){
   const task=findInsightTask(id); if(!task) return;
