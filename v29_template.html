@@ -577,7 +577,7 @@ svg{display:block}
   display:inline-flex;align-items:center;gap:4px;font-size:10px;
   color:#15803d;font-weight:700;
 }
-.badge-live::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:blink 2s infinite}
+.badge-live::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green)}/* 【18号 2026-10-21】去掉 blink 2s infinite 呼吸：60帧连拍证实这是全页最后一个无故闪烁源（顶栏每2秒眨一次），静态点保留实时语义，位置大小颜色不变 */
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 .toast{
   position:fixed;left:50%;top:calc(50% - 20px);transform:translate(-50%,-50%);
@@ -815,7 +815,7 @@ svg{display:block}
 .ai-data-response{margin-top:7px;padding:7px 8px;border-radius:9px;font-size:9.7px;line-height:1.55;border:1px solid var(--line);background:#fafbff;color:var(--tx2)}.ai-data-response.positive{background:var(--aiGoodSoft);color:#166534;border-color:rgba(22,163,74,.12)}.ai-data-response.warn{background:var(--aiWarnSoft);color:#92400e;border-color:rgba(217,119,6,.13)}.ai-data-response b{font-weight:850}
 .ai-next-step{margin-top:6px;font-size:9.5px;line-height:1.55;color:#4c4298;background:var(--aiSoft);border-radius:8px;padding:6px 8px}.ai-next-step b{font-weight:850}
 .ai-boundary{margin-top:8px;font-size:9px;color:var(--tx3);line-height:1.6;padding:7px 8px;border-radius:9px;background:var(--soft)}.ai-boundary b{color:var(--tx2)}
-.ai-live-refreshing .ai-live-dot{animation:blink .7s infinite}
+.ai-live-refreshing .ai-live-dot{background:#f59e0b;box-shadow:0 0 0 4px rgba(245,158,11,.10)}/* 【18号 2026-10-21】刷新中去 blink .7s infinite：改用静态琥珀色表达「刷新中」，不闪 */
 @media(min-width:768px){.ai-live-grid{grid-template-columns:repeat(5,1fr)}}
 
 
@@ -4941,7 +4941,7 @@ function wpSwitch(idx){
 }
 
 /* ---------------- 主渲染 ---------------- */
-function render(){
+function render(keepScroll){
   /* 视图必须属于当前板块的 tab 集合（#ops 直达等场景下自动归位） */
   if(!BOARDS[BOARD].tabs.includes(VIEW)) VIEW = BOARDS[BOARD].tabs[0];
   const m = DATA.meta || {};
@@ -4976,7 +4976,7 @@ function render(){
   $('#app').innerHTML = fn();
   animateHeroRings();
   bindDynamic();
-  window.scrollTo(0,0);
+  if(!keepScroll) window.scrollTo(0,0);
 }
 
 function bindDynamic(){
@@ -5119,10 +5119,18 @@ function loadRemote(silent){
         IA_LAST_REMOTE_AT = Date.now();
         const newSig = iaDataSignature(j);
         if(oldSig && newSig && oldSig!==newSig) iaRecordSystemEvent(iaDescribeDataChange(oldData,j));
-        render();
-        if(keepY) setTimeout(()=>window.scrollTo(0,keepY),0);
         $('#liveTag').textContent = '数据已更新';
-        if(!silent) toast(oldSig!==newSig?'发现新经营数据，洞察已重算':'数据已是最新');
+        /* 【18号 2026-10-21】数据签名没变就绝不重渲染：
+           否则每15分钟自动刷新都会整页 innerHTML 重建 + animateHeroRings 把进度环
+           transition(1s) 重画一遍 = 「整体进度一览圆圈闪红光」；每次点左上角进 AI 界面
+           更是 setBoard render 一次 + loadRemote 回来又 render 一次，深色 ai-hero
+           双次重建+入场动画重放 = 「AI界面闪黑线」。桌面Chrome/安卓华为浏览器全中。 */
+        const changed = !(oldSig && newSig && oldSig === newSig);
+        if(!silent) toast(changed?'发现新经营数据，洞察已重算':'数据已是最新');
+        if(changed){
+          render(true);
+          if(keepY) setTimeout(()=>window.scrollTo(0,keepY),0);
+        }
         return true;
       }
       throw new Error('格式不对');
