@@ -105,9 +105,6 @@ svg{display:block}
 .tp-fill{height:100%;border-radius:5px;background:var(--grad);box-shadow:0 0 10px rgba(124,58,237,.35);transition:width 1s cubic-bezier(.22,1,.36,1)}
 .tp-days{font-size:11px;color:var(--tx3);white-space:nowrap;letter-spacing:.2px}
 .tp-days b{color:#f59e0b;font-weight:800;font-variant-numeric:tabular-nums}
-.tp-days-sub{font-size:10px;color:var(--tx3);margin-left:5px;font-weight:400;letter-spacing:0}
-.tp-wd{font-size:10px;color:var(--tx3);font-weight:400;white-space:nowrap}
-.tp-wd b{color:var(--tx2);font-weight:800;font-variant-numeric:tabular-nums}
 
 /* ============ 标签栏 ============ */
 .tabs{
@@ -2182,7 +2179,6 @@ body[data-board="ops"] :is(.ai-action-target,.ai-action-standard,.ai-action-resu
     <div class="tp">
       <div class="tp-h">
         <span>本月时间进度</span>
-        <span class="tp-wd" id="tpWd"></span>
       </div>
       <div class="tp-bar-row">
         <div class="tp-bar"><div class="tp-fill" id="tpFill" style="width:0"></div></div>
@@ -4938,12 +4934,7 @@ function render(){
         rd = Math.max(1, last - d.getDate() + 1);
       } else rd = 0;
     }
-    days.innerHTML = '剩 <b class="num">' + rd + '</b> 天<span class="tp-days-sub">自然月·含今日</span>';
-  }
-  const wd = document.getElementById('tpWd');   // 任务工作日 = 底表每日任务分母(扣周末)
-  if(wd){
-    const w = isNum(m.remainDays) ? m.remainDays : '--';
-    wd.innerHTML = '任务工作日 <b>' + w + '</b> 天';
+    days.innerHTML = '剩 <b class="num">' + rd + '</b> 天';
   }
 
   updateBoardUI();
