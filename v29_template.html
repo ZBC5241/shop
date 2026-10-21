@@ -2193,6 +2193,20 @@ html.ios-glass-off .action-mask,html.ios-glass-off .mask{background:rgba(24,23,4
   }catch(e){}
 })();
 </script>
+<script>
+/*【18号 2026-10-21】版本守卫：GitHub Pages max-age=600，华为浏览器下拉刷新会吃缓存旧页导致修复不生效；
+   每次改代码递增 SB_BUILD，用户端首次打开自动强制重载到最新版（本会话只重一次，防循环）。 */
+(function(){
+  try{
+    var V = 'sb_20261021_3';
+    if (localStorage.getItem('sb_build_ver') === V) return;
+    if (sessionStorage.getItem('sb_build_reloading') === V) return;
+    sessionStorage.setItem('sb_build_reloading', V);
+    localStorage.setItem('sb_build_ver', V);
+    location.reload(true);
+  }catch(e){}
+})();
+</script>
 </head>
 <body>
 
@@ -4957,19 +4971,30 @@ function wpSwitch(idx){
     clearTimeout(window.__sbScrollT);
     window.__sbScrollT = setTimeout(function(){
       try{ sessionStorage.setItem(SK, String(window.scrollY)); }catch(e){}
-    }, 150);
+    }, 100);
   }, {passive:true});
+  function sbScheduleRetry(){
+    if (window.__sbScrollBooted) return;
+    window.__sbRetryN = (window.__sbRetryN || 0) + 1;
+    if (window.__sbRetryN > 12) { window.__sbScrollBooted = true; return; }  /* 约4秒后放弃，不再打扰 */
+    setTimeout(function(){ window.__sbRestoreScroll(); }, 300);
+  }
   window.__sbRestoreScroll = function(){
     if (window.__sbScrollBooted) return;
     var y = 0;
     try{ y = parseInt(sessionStorage.getItem(SK) || '0', 10) || 0; }catch(e){}
     if (!(y > 0)) { window.__sbScrollBooted = true; return; }
     var docH = document.documentElement.scrollHeight;
-    if (docH < y + 200) return;              /* 文档未渲染够高，等下一次 render 再试 */
+    if (docH < y + 200) { sbScheduleRetry(); return; }   /* 文档未渲染够高，稍后重试 */
     if (window.scrollY > y - 60) { window.__sbScrollBooted = true; return; }  /* 浏览器已恢复，不打扰 */
+    /* 双帧确保布局稳定后送回原位；350ms 复查是否被其他时序（如 keepScroll 恢复）覆盖，被覆盖就再试 */
     requestAnimationFrame(function(){ requestAnimationFrame(function(){
       window.scrollTo(0, y);
-      window.__sbScrollBooted = true;
+      setTimeout(function(){
+        if (window.__sbScrollBooted) return;
+        if (Math.abs(window.scrollY - y) < 60) { window.__sbScrollBooted = true; return; }
+        sbScheduleRetry();
+      }, 350);
     });});
   };
 })();
@@ -5164,7 +5189,7 @@ function loadRemote(silent){
         if(!silent) toast(changed?'发现新经营数据，洞察已重算':'数据已是最新');
         if(changed){
           render(true);
-          if(keepY) setTimeout(()=>window.scrollTo(0,keepY),0);
+          if(keepY) setTimeout(()=>{ if(window.__sbScrollBooted) window.scrollTo(0,keepY); },0);  /* 滚动位自管恢复未完成时让位，防互相覆盖（华为机） */
         }
         return true;
       }
