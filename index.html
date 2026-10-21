@@ -1718,6 +1718,24 @@ body[data-board="ops"] :is(.ai-summary,.ai-problem,.ai-person,.ai-cat,.ai-order,
   box-shadow:0 4px 11px rgba(47,62,78,.055),inset 0 1px 0 rgba(255,255,255,.98),inset 0 -1px 0 rgba(54,70,88,.055)!important;
 }
 
+/* =====【18号修复 2026-10-21 · iOS 26 闪烁】=====
+   根因（iOS 26 WebKit 已知渲染 bug，Chrome 上不复现）：
+   a) backdrop-filter 玻璃层 + sticky/fixed 定位：滚动/重排时逐帧重光栅化 → 顶栏玻璃闪黑线（进AI界面时全页玻璃同时重排，最明显）；
+   b) 顶栏玻璃下方滚过红色达成率圆环 → 红弧透过半透明玻璃闪烁红光（「整体进度一览」圆圈红光）。
+   修复 = 给常驻玻璃导航层与圆环 SVG 强制独立合成层（translate3d）+ backface-visibility 双保险。
+   ⚠️ 防回归：玻璃卡内严禁再引入逐帧动画/逐帧 CSS 变量改写（重蹈「动态材质引擎」覆辙），
+   新增动画前必须在 iPhone 真机 Safari 验证。 */
+.top,.tabs{
+  -webkit-transform:translate3d(0,0,0);
+  transform:translate3d(0,0,0);
+  -webkit-backface-visibility:hidden;
+  backface-visibility:hidden;
+}
+.ring svg,.tp-ring svg{
+  -webkit-transform:translate3d(0,0,0);
+  transform:translate3d(0,0,0);
+}
+
 /* AI 页面大卡保持中性冰晶色，不重新引入深色或紫色 */
 body[data-board="ops"] .ai-hero{
   color:var(--tx)!important;
@@ -4305,19 +4323,6 @@ function iaFreshness(){
   return {mins:mins,fresh:mins==null?true:mins<=30};
 }
 function iaCountdown(){ return Math.max(0,Math.ceil((IA_NEXT_REFRESH_AT-Date.now())/60000)); }
-function renderInsightRealtimePulse(plan,date,ctx){
-  const stats=getInsightActionStats(plan,date), f=iaFreshness(), ev=iaSystemEvents();
-  let nowTitle='先处理最高优先级行动', nowText='';
-  if(stats.review>0){nowTitle='先验收 '+stats.review+' 项待验收任务';nowText='不验收就不算闭环。先看执行质量，再决定通过还是退回。';}
-  else if((ctx.T.idle||[]).length){nowTitle=(ctx.T.idle||[]).length+' 名员工当前未开单';nowText='先进入“未开单员工恢复动作”，验证是客流/执行/成交/上账哪一环卡住。';}
-  else if(stats.doing>0){nowTitle=stats.doing+' 项行动正在执行';nowText='不要继续派新任务，先盯当前动作结果和下一轮销售数据响应。';}
-  else {nowTitle='当前没有紧急执行阻塞';nowText='继续盯手机、毛利、增值核心缺口和成交质量。';}
-  return '<section class="ai-live"><div class="ai-live-head"><span class="ai-live-dot '+(f.fresh?'':'stale')+'"></span><div class="ai-live-title">实时行动脉搏</div><div class="ai-live-time">数据 '+(f.mins==null?'已载入':f.mins+'分钟前')+' · 自动刷新约 '+iaCountdown()+' 分钟</div></div>'
-    +'<div class="ai-live-grid"><div class="ai-live-k"><b>'+((ctx.T.totalOrders)||0)+'</b><span>今日上账</span></div><div class="ai-live-k"><b>'+stats.doing+'</b><span>执行中</span></div><div class="ai-live-k"><b>'+stats.review+'</b><span>待验收</span></div><div class="ai-live-k"><b>'+stats.done+'</b><span>已闭环</span></div><div class="ai-live-k"><b>'+((ctx.T.idle||[]).length)+'</b><span>未开单员工</span></div></div>'
-    +'<div class="ai-now"><b>现在最应该处理：'+iaEsc(nowTitle)+'</b><p>'+iaEsc(nowText)+'</p><div class="ai-now-actions"><button class="ai-mini-btn primary" onclick="insightForceRefresh()">刷新经营数据</button><button class="ai-mini-btn" onclick="document.getElementById(\'aiActionCenter\').scrollIntoView({behavior:\'smooth\'})">看执行中心</button></div></div>'
-    +(ev.length?'<div class="ai-system-events">'+ev.slice(0,5).map(x=>'<div class="ai-system-event"><b>'+iaEsc((x.time||'').slice(-8))+'</b> '+iaEsc(x.text)+'</div>').join('')+'</div>':'')
-    +'<div class="ai-boundary"><b>实时判断边界：</b>当前销售数据可以随 data.json 更新重算，但现有明细没有可靠的“成交时间戳/接待人数/排班状态”，因此现在可以判断“今日未开单”，还不能严谨判断“连续2小时未开单”。接入这些字段后再启用小时级预警，避免AI乱猜。</div></section>';
-}
 function insightForceRefresh(){ IA_NEXT_REFRESH_AT=Date.now()+IA_REFRESH_MS; if(location.protocol==='http:'||location.protocol==='https:') loadRemote(false); else { render(); toast('本地文件无法拉线上数据，当前已用本地快照重算'); } }
 function iaAutoRefresh(){ if(document.visibilityState!=='visible') return; IA_NEXT_REFRESH_AT=Date.now()+IA_REFRESH_MS; if(location.protocol==='http:'||location.protocol==='https:') loadRemote(true); }
 setInterval(iaAutoRefresh,IA_REFRESH_MS);
