@@ -1166,6 +1166,8 @@ def main():
             "dayTitle": f"{base.month:02d}-{base.day:02d}达成",
             "timeProgress": ref.day / last_day,
             "remainDays": rd,
+            # 自然月剩余(含今天)：仅展示用，月底-今天+1；不动 remainDays(底表每日任务分母)
+            "naturalRemainDays": last_day - base.day + 1,
             "refDate": ref.isoformat(),
             # 上账时效：店员销售后才上账，可能滞后，但当天必补齐
             "isToday": base == ref,
