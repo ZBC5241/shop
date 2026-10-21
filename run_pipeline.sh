@@ -32,6 +32,13 @@ log "▶ 更新看板：销售毛利明细 + 销售分析 同时刷新（8月·�
 # 🅰 销售毛利明细（纯HTTP，免浏览器，~1.7s）
 log "[1/2] 抓销售毛利明细（纯HTTP）→ 导入 XS/RXS 明细 ..."
 "$PY" fetch_yonyou_http.py "$TSV"
+# 【18号 2026-10-21】TSV 日期范围校验：用友报表接口曾只返到 10-10 的半量数据，
+# 若放任重算会把线上全量数据打回旧档。最新日期早于昨天 → 中止管线，保留现有 data.json。
+LASTDAY=$(awk -F'\t' 'NR>1 && $3 ~ /^[0-9]{4}-/ {print $3}' "$TSV" | sort | tail -1)
+EXPECT=$(date -v-1d +%Y-%m-%d 2>/dev/null || date -d "yesterday" +%Y-%m-%d)
+if [ -n "$LASTDAY" ] && [ "$LASTDAY" \< "$EXPECT" ]; then
+  echo "✗ 用友报表数据不完整（TSV 最新 $LASTDAY，应至 $EXPECT），已中止管线，线上数据不受影响"; exit 1;
+fi
 "$PY" write_xlsx.py "$TSV" "$XLSX"
 
 # 🅱 销售分析：先秒出（读本地仓），后台静默刷新成最新
