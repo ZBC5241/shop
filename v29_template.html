@@ -2161,7 +2161,38 @@ body[data-board="ops"] :is(.ai-action-target,.ai-action-standard,.ai-action-resu
 @media(prefers-reduced-motion:reduce){
   .action-sheet,.action-mask.on,.action-sheet-actions button{animation:none!important;transition:none!important}
 }
+
+/* =====【18号 2026-10-21 根治 iOS 玻璃闪烁】=====
+   iOS WebKit 已知 bug：全页大量 backdrop-filter 玻璃层 + sticky/fixed 导航，滚动/切页时闪黑线、闪红光
+   （黑线历史三次发作均与玻璃体系相关；translate3d 合成层隔离真机实测压不住）。
+   根治：iOS 设备整体关闭毛玻璃——卡片底色本就近乎不透明，视觉几乎无差异；
+   桌面/Android 保持玻璃不变。链接加 ?glass=1 可在 iOS 上强制开玻璃做对照。
+   ⚠️ 本文件是 v29 模板（build_v29.py 每轮管线用它重建 index.html），UI 改动必须落在本文件，改 index.html 会被冲掉。 */
+html.ios-glass-off *,html.ios-glass-off *::before,html.ios-glass-off *::after{
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+/* AI 界面（ops）的玻璃规则带 body[data-board] 两级权重，需同级权重反杀（上文通配符不够） */
+html.ios-glass-off body[data-board] *,html.ios-glass-off body[data-board] *::before,html.ios-glass-off body[data-board] *::after{
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+/* 关玻璃后补偿可读性（仅浅色经营看板；AI 深色顶栏 .98 本就近不透明，不动） */
+html.ios-glass-off body:not([data-board="ops"]) .top{background:linear-gradient(180deg,rgba(255,255,255,.97),rgba(247,248,252,.95))!important}
+html.ios-glass-off .tabs{background:linear-gradient(180deg,rgba(255,255,255,.93),rgba(255,255,255,.88))!important;border:1px solid rgba(255,255,255,.92)!important}
+html.ios-glass-off .action-mask,html.ios-glass-off .mask{background:rgba(24,23,42,.62)!important}
 </style>
+<script>
+/*【18号 2026-10-21】iOS 全关毛玻璃根治闪烁（机制见样式表末尾说明）；?glass=1 强制开玻璃对照 */
+(function(){
+  try{
+    if(new URLSearchParams(location.search).has('glass'))return;
+    var ua=navigator.userAgent||'';
+    var ios=/iP(hone|od|ad)/.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+    if(ios)document.documentElement.classList.add('ios-glass-off');
+  }catch(e){}
+})();
+</script>
 </head>
 <body>
 
