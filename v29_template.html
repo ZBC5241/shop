@@ -2171,7 +2171,7 @@ html.ios-glass-off .action-mask,html.ios-glass-off .mask{background:rgba(24,23,4
    每次改代码递增 SB_BUILD，用户端首次打开自动强制重载到最新版（本会话只重一次，防循环）。 */
 (function(){
   try{
-    var V = 'sb_20261021_3';
+    var V = 'sb_20261024_1';
     if (localStorage.getItem('sb_build_ver') === V) return;
     if (sessionStorage.getItem('sb_build_reloading') === V) return;
     sessionStorage.setItem('sb_build_reloading', V);
@@ -3120,29 +3120,49 @@ function clickDayMetric(k){
 }
 
 /* ---------------- 视图 2：排行 ---------------- */
-const RANK_DIMS = [
+const RANK_DIMS = [  /*【18号 2026-10-24】16 项排行，顺序晨哥定：销额、毛利、手机、增值、合约、PC、平板、音频、穿戴、HD、音频穿戴、智慧办公、会员、回收、贴膜、滞销 */
+  {k:'销额',   src:'performance'},
   {k:'毛利',   src:'performance'},
-  {k:'销额',   src:'performance', label:'销售额'},
   {k:'手机',   src:'performance'},
-  {k:'音频穿戴', src:'performance'},
-  {k:'穿戴',   src:'performance'},
   {k:'增值',   src:'qcs'},
-  {k:'合约', src:'qcs'},
+  {k:'合约',   src:'qcs'},
+  {k:'PC',   src:'performance'},
+  {k:'平板',   src:'performance'},
+  {k:'音频',   src:'performance'},
+  {k:'穿戴',   src:'performance'},
+  {k:'HD',   src:'performance'},
+  {k:'音频穿戴', src:'performance'},
+  {k:'智慧办公', src:'performance'},
+  /* 比率型维度：按 rate 排序，subOf 定制副行文案 */
+  {k:'会员',   src:'qcs', key:'会员搭售率', type:'rate', subOf:k => Math.round(k.care||0) + '/' + Math.round(k.terminal||0) + '台'},
+  {k:'回收',   src:'qcs', key:'回收搭售率', type:'rate', subOf:k => Math.round(k.orders||0) + '单'},
+  {k:'贴膜',   src:'qcs', key:'贴膜率',   type:'rate', subOf:k => Math.round(k.orders||0) + '单'},
+  /* 滞销数源=考核机型块（月度 task/done） */
+  {k:'滞销',   src:'qcs', key:'考核机型'},
 ];
 
 function renderRank(){
   const dim = RANK_DIMS.find(d => d.k === RANK_BY) || RANK_DIMS[0];
+  const rkey = dim.key || dim.k;   /* 维度名→数据键（会员→会员搭售率、滞销→考核机型） */
+  const isRateDim = dim.type === 'rate';
   const list = DATA.meta.employees.map(n => {
     const p = DATA.people[n] || {};
-    const k = ((p[dim.src] || {})[dim.k]) || null;
+    const k = ((p[dim.src] || {})[rkey]) || null;
+    if(isRateDim){
+      /* 比率型（会员/回收/贴膜）：rate 即分数，无任务结构 */
+      const has = !!(k && isNum(k.rate));
+      return { name:n, k:k, done: has ? k.rate : -Infinity, rate: has ? k.rate : null, has: has };
+    }
+    /* 任务型：数据只有 task/done 无 rate 时现算达成率 */
+    const rate = (k && isNum(k.rate)) ? k.rate
+               : ((k && isNum(k.task) && k.task > 0 && isNum(k.done)) ? k.done / k.task : null);
     return { name:n, k:k, done: (k && isNum(k.done)) ? k.done : -Infinity,
-             rate:(k && isNum(k.rate)) ? k.rate : null, has: hasTask(k) };
+             rate:rate, has: hasTask(k) };
   });
-  // 排序：有任务的按达成率，没任务的按完成量垫底
+  // 排序：有数据的按达成率，没数据的按完成量垫底
   list.sort((a,b) => {
     if(a.has !== b.has) return a.has ? -1 : 1;
-    if(a.has) return (b.rate||0) - (a.rate||0);
-    return b.done - a.done;
+    return (b.rate||0) - (a.rate||0) || b.done - a.done;
   });
 
   let h = '<div class="wrap">';
@@ -3161,17 +3181,21 @@ function renderRank(){
     const s = it.has ? stat(it.rate) : 'na';
     const colorVar = {done:'--red',over:'--red',on:'--amber',low:'--green',zero:'--red',na:'--gray'}[s];
     const w = it.has && isNum(it.rate) ? Math.min(it.rate,1)*100 : 0;
+    /* 副行：比率型用 subOf 定制（如 13/45台、18单），任务型用 完成/任务 */
+    const sub = isRateDim
+      ? (it.k && dim.subOf ? esc(dim.subOf(it.k)) : '—')
+      : fmtU(it.k ? it.k.done : null, unitOf(dim.k, it.k))
+        + (it.has ? ' / ' + fmtU(it.k.task, unitOf(dim.k, it.k)) : ' · 未分配任务');
     h += '<div class="rk" data-person="' + esc(it.name) + '">'
       + '<div class="rk-bg" style="width:' + w.toFixed(1) + '%;background:var(' + colorVar + ')"></div>'
       + '<div class="rk-no' + (it.has && i<3 ? ' n'+(i+1) : '') + '">' + (it.has ? (i+1) : '—') + '</div>'
       + '<div class="rk-m">'
         + '<div class="rk-n">' + esc(it.name) + '</div>'
-        + '<div class="rk-sub num">' + fmtU(it.k ? it.k.done : null, unitOf(dim.k, it.k))
-        + (it.has ? ' / ' + fmtU(it.k.task, unitOf(dim.k, it.k)) : ' · 未分配任务') + '</div>'
+        + '<div class="rk-sub num">' + sub + '</div>'
       + '</div>'
       + '<div class="rk-r">'
         + '<div class="p num" style="color:var(' + colorVar + ')">' + (it.has ? pct(it.rate,0) : '—') + '</div>'
-        + '<div class="g">' + (it.has && it.k && isNum(it.k.gap)
+        + '<div class="g">' + (!isRateDim && it.has && it.k && isNum(it.k.gap)
             ? (it.k.gap < 0 ? '缺 ' + fmtU(-it.k.gap, unitOf(dim.k, it.k))
                             : '超 ' + fmtU(it.k.gap, unitOf(dim.k, it.k)))
             : STAT_TXT[s]) + '</div>'
