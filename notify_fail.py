@@ -15,6 +15,18 @@ import urllib.request
 CONF = "/Users/mac/WorkBuddy/Claw/.wecom_webhook"
 
 
+def _local_notify(stage, code):
+    """本机 macOS 通知兜底（不依赖企微群，2026-10-23 加）"""
+    try:
+        import subprocess
+        subprocess.run(
+            ["osascript", "-e",
+             'display notification "{} 失败(rc={})，请查日志" with title "看板定时任务告警"'.format(stage, code)],
+            timeout=5, capture_output=True)
+    except Exception:
+        pass
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--stage", required=True)
@@ -26,6 +38,8 @@ def main():
     try:
         key = open(CONF, encoding="utf-8").read().strip()
     except Exception:
+        print("⚠️ 告警留痕：企微 webhook 配置缺失/不可读（{}），转本机通知".format(CONF))
+        _local_notify(a.stage, a.exit_code)
         return 2
 
     tail = ""
@@ -52,7 +66,10 @@ def main():
         data=data, headers={"Content-Type": "application/json"})
     try:
         urllib.request.urlopen(req, timeout=10)
-    except Exception:
+        print("✅ 告警已发企微群（stage={} rc={}）".format(a.stage, a.exit_code))
+    except Exception as e:
+        print("⚠️ 企微告警发送失败：{}，转本机通知".format(e))
+        _local_notify(a.stage, a.exit_code)
         return 3
     return 0
 
