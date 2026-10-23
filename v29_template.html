@@ -5067,12 +5067,13 @@ function bindDynamic(){
       setTimeout(() => row.classList.remove('flash'), 1000);
     }
   });
-  /* 点击总览进度环：达成即撒彩带庆祝 */
+  /* 点击总览进度环：环面展示的是「增值达成」，判定与文案都按增值口径 */
   const ring = $('.ring');
   if(ring) ring.onclick = () => {
-    const P = (DATA.store && DATA.store.performance) || {};
-    const sales = P['销额'] || {};
-    if(hasTask(sales) && isNum(sales.rate) && sales.rate >= 1){ confetti(); toast('销售额已达成，撒花庆祝'); }
+    const Q = (DATA.store && DATA.store.qcs) || {};
+    const zeng = Q['增值'] || {};
+    if(hasTask(zeng) && isNum(zeng.rate) && zeng.rate >= 1){ confetti(); toast('增值已达成，撒花庆祝'); }
+    else if(hasTask(zeng) && isNum(zeng.rate)){ toast('增值达成 ' + pct(zeng.rate, 1) + '，继续冲'); }
   };
 }
 

@@ -899,10 +899,13 @@ def build_deal_analysis(xs, rxs, people, plist, ref):
 
         # 生成 badge 和行动建议
         score = p.get("score", 0)
-        if score >= 0.067:  # 时间进度
+        # 时间进度口径（与 build_insights / 员工 level 判定一致）：当日 / 当月总天数
+        last_day = calendar.monthrange(ref.year, ref.month)[1]
+        tp = ref.day / last_day
+        if score >= tp:
             badge = "达标"
             badge_color = "var(--red)"
-        elif score >= 0.067 * 0.5:
+        elif score >= tp * 0.6:
             badge = "需追赶"
             badge_color = "var(--amber)"
         else:
