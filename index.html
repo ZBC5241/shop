@@ -2171,7 +2171,7 @@ html.ios-glass-off .action-mask,html.ios-glass-off .mask{background:rgba(24,23,4
    每次改代码递增 SB_BUILD，用户端首次打开自动强制重载到最新版（本会话只重一次，防循环）。 */
 (function(){
   try{
-    var V = 'sb_20261024_1';
+    var V = 'sb_20261024_2';
     if (localStorage.getItem('sb_build_ver') === V) return;
     if (sessionStorage.getItem('sb_build_reloading') === V) return;
     sessionStorage.setItem('sb_build_reloading', V);
@@ -5012,6 +5012,15 @@ function render(keepScroll){
   $('#app').innerHTML = fn();
   animateHeroRings();
   bindDynamic();
+  /* 【18号 2026-10-24】点品类后把选中标签滚到视野中间（重渲染会把横向滑动条拽回最左） */
+  if(VIEW === 'rank'){
+    const box = $('#app .chips'), on = $('#app .chip.on');
+    if(box && on){
+      const delta = (on.getBoundingClientRect().left - box.getBoundingClientRect().left)
+                  - (box.clientWidth - on.offsetWidth) / 2;
+      box.scrollLeft += delta;
+    }
+  }
   if(!keepScroll) window.scrollTo(0,0);
   /* 【18号 2026-10-21】下拉刷新后自管滚动位恢复（华为浏览器 restoration 不可靠，见上方 IIFE） */
   if(typeof window.__sbRestoreScroll === 'function') window.__sbRestoreScroll();
