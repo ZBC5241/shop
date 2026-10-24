@@ -323,6 +323,52 @@ svg{display:block}
 .hero-row b{font-weight:800}
 .hero-tp{margin-top:9px;font-size:11.5px;color:var(--tx3)}
 .hero-tp b{color:var(--purple);font-weight:800}
+/*【18号 2026-10-24】桌面优化布局：首屏一屏治 + 品类双列卡 + 三栏收尾；<1100 自动回落竖排 */
+.grid-top{display:grid;grid-template-columns:5fr 7fr;gap:16px;margin-bottom:16px;align-items:start}
+.grid-mid{display:grid;grid-template-columns:5fr 7fr;gap:16px;margin-bottom:16px;align-items:start}
+.grid-bot{display:grid;grid-template-columns:5fr 4fr 3fr;gap:16px;align-items:start}
+.grid-top>.sec,.grid-mid>.sec,.grid-bot>.sec{margin-bottom:0}
+.kpi-sec>.sec-h{display:none}
+.hero{transition:transform .16s ease,box-shadow .16s ease}
+.hero:hover{transform:translateY(-2px)}
+.hero-quad{display:grid;grid-template-columns:1fr 1fr;gap:0 18px}
+.hero-tp{display:flex;align-items:center;gap:9px}
+.hero-tp-l{flex:none}
+.hero-tp-bar{flex:1;height:6px;background:#eceef4;border-radius:4px;overflow:hidden}
+.hero-tp-bar i{display:block;height:100%;background:linear-gradient(90deg,#a78bfa,#8b5cf6);border-radius:4px}
+/* 柱顶数值 */
+.mc-pv{font-size:10px;font-weight:800;letter-spacing:-.2px;margin-bottom:3px}
+/* 品类达成卡片 */
+.cat-list{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cat{background:var(--panel2);border:1px solid var(--line2);border-radius:var(--r2);padding:10px 12px;cursor:pointer;transition:border-color .15s,transform .15s;min-width:0}
+.cat:hover{border-color:#c9cdf5;transform:translateY(-1px)}
+.cat.c-last{grid-column:1/-1;background:linear-gradient(135deg,#fff5f5,#ffeef0);border-color:#fbd5d5}
+.cat.on{border-color:var(--blue);box-shadow:0 0 0 3px rgba(10,132,255,.10)}
+.cat-r1{display:flex;align-items:center;gap:7px;margin-bottom:7px}
+.cat-n{font-size:12.5px;font-weight:700}
+.cat-tag{font-size:9.5px;font-weight:800;padding:2px 6px;border-radius:5px;background:#f1f2f7;color:var(--tx3)}
+.cat.s-over .cat-tag,.cat.s-done .cat-tag{background:#fee2e2;color:#b91c1c}
+.cat.s-on .cat-tag{background:#fef3c7;color:#b45309}
+.cat.s-low .cat-tag,.cat.s-zero .cat-tag{background:#dcfce7;color:#15803d}
+.cat-pct{margin-left:auto;font-size:13.5px;font-weight:800;letter-spacing:-.3px}
+.cat-track{height:6px;background:#e9ebf2;border-radius:4px;overflow:hidden}
+.cat-track i{display:block;height:100%;border-radius:4px;transition:width .9s cubic-bezier(.22,1,.36,1)}
+.cat-r2{display:flex;justify-content:space-between;margin-top:6px;font-size:10.5px;color:var(--tx3)}
+.cat .cat-det{display:none;padding:8px 0 2px;margin-top:8px;border-top:1px solid var(--line2)}
+.cat .cat-det.open{display:block;animation:detIn .22s ease}
+/* 考核机型横条 */
+.kh-bar{height:10px;background:#eef0f5;border-radius:6px;margin:2px 0 12px;overflow:hidden}
+.kh-bar i{display:block;height:100%;background:linear-gradient(90deg,#f87171,#ef4444);border-radius:6px;transition:width .9s cubic-bezier(.22,1,.36,1)}
+/* 绩效大数字卡 */
+.pf2{padding:20px 16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;height:100%}
+.pf2-l{font-size:11.5px;color:var(--tx3);font-weight:600}
+.pf2-v{font-size:44px;font-weight:800;letter-spacing:-2px;line-height:1}
+@media (max-width:1099px){
+  .grid-top,.grid-mid,.grid-bot{grid-template-columns:1fr}
+  .cat-list{grid-template-columns:1fr}
+  .hero-quad{grid-template-columns:1fr}
+  .kpi-sec>.sec-h{display:flex}
+}
 
 /* 品类速览柱状图 */
 .mc{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);
@@ -2171,7 +2217,7 @@ html.ios-glass-off .action-mask,html.ios-glass-off .mask{background:rgba(24,23,4
    每次改代码递增 SB_BUILD，用户端首次打开自动强制重载到最新版（本会话只重一次，防循环）。 */
 (function(){
   try{
-    var V = 'sb_20261024_3';
+    var V = 'sb_20261024_4';
     function guard(){
       if (localStorage.getItem('sb_build_ver') === V) return;
       if (sessionStorage.getItem('sb_build_reloading') === V) return;
@@ -2793,18 +2839,22 @@ function heroRow(label, k){
 function storeHero(P, Q){
   const zeng = Q['增值'] || {};
   const s = hasTask(zeng) ? stat(zeng.rate) : 'na';
-  let h = '<div class="sec"><div class="hero">';
+  let h = '<div class="hero">';
   h += '<div class="ring">' + ringSVG(zeng.rate, s, 100)
      + '<div class="ring-c"><b class="num">' + pct(zeng.rate, 0) + '</b><span>增值达成</span></div></div>';
   h += '<div class="hero-r">'
      + '<div class="hero-t">整体进度一览</div>'
+     + '<div class="hero-quad">'
      + heroRow('销售额', P['销额'])
      + heroRow('毛利', P['毛利'])
      + heroRow('手机', P['手机'])
      + heroRow('增值', Q['增值'])
-     + '<div class="hero-tp">时间进度 <b class="num">' + pct(DATA.meta.timeProgress, 1) + '</b></div>'
+     + '</div>'
+     + '<div class="hero-tp"><span class="hero-tp-l">时间进度</span>'
+     + '<span class="hero-tp-bar"><i style="width:' + (isNum(DATA.meta.timeProgress) ? Math.min(DATA.meta.timeProgress,1)*100 : 0).toFixed(1) + '%"></i></span>'
+     + '<b class="num">' + pct(DATA.meta.timeProgress, 1) + '</b></div>'
      + '</div>';
-  h += '</div></div>';
+  h += '</div>';
   return h;
 }
 
@@ -2819,7 +2869,9 @@ function catChartHTML(P){
     const rate = (k && isNum(k.rate)) ? Math.min(k.rate, 1) : 0;
     const s = k && hasTask(k) ? stat(k.rate) : 'na';
     const col = {done:'var(--red)', over:'var(--red)', on:'var(--amber)', low:'var(--green)', zero:'var(--red)', na:'var(--gray)'}[s];
-    bars += '<div class="mc-b" data-cat="' + esc(c) + '"><div class="mc-track">'
+    bars += '<div class="mc-b" data-cat="' + esc(c) + '">'
+          + '<span class="mc-pv num r-' + s + '">' + (k && hasTask(k) ? pct(k.rate,0) : '—') + '</span>'
+          + '<div class="mc-track">'
           + '<div class="mc-f" style="height:' + (rate*100).toFixed(0) + '%;background:' + col + '"></div>'
           + (tpPct > 0 ? '<div class="mc-mk" style="bottom:' + tpPct.toFixed(0) + '%"></div>' : '')
           + '</div><span class="mc-l">' + esc(c) + '</span></div>';
@@ -2838,11 +2890,11 @@ function renderSales(){
   const Q = DATA.store.qcs || {};
   let h = '<div class="wrap">';
 
-  /* 总览 hero（增值达成，沿用上一版口径） */
+  /*【18号 2026-10-24】桌面优化版：首屏一屏治 + 品类双列卡 + 三栏收尾（小屏自动回落竖排；口径/交互全不变） */
+  /* 第一屏：hero（进度环+四指标）与 KPI 田字并排 */
+  h += '<div class="grid-top">';
   h += storeHero(P, Q);
-
-  /* 核心 KPI */
-  h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>核心指标</b>'
+  h += '<div class="sec kpi-sec"><div class="sec-h"><span class="bar"></span><b>核心指标</b>'
      + '<span class="tail">时间进度 ' + pct(DATA.meta.timeProgress,1) + '</span></div>';
   h += '<div class="kpi-grid">';
   h += kpiCard('毛利', P['毛利'], '毛利');
@@ -2850,36 +2902,61 @@ function renderSales(){
   h += kpiCard('增值', Q['增值'], '增值');
   h += kpiCard('手机', P['手机'], '手机');
   h += '</div></div>';
+  h += '</div>';
 
-  /* 品类速览（柱状图） + 品类达成 → 桌面并排 */
-  h += '<div class="cols">';
+  /* 第二屏：柱状图（带柱顶数值）+ 品类达成卡片双列 */
+  h += '<div class="grid-mid">';
   h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>品类速览</b>'
-     + '<span class="tail">柱高 = 达成率</span></div>' + catChartHTML(P) + '</div>';
+     + '<span class="tail">柱高 = 达成率 · 点柱看明细</span></div>' + catChartHTML(P) + '</div>';
   h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>品类达成</b>'
-     + '<span class="tail">点品类行展开明细</span></div><div class="rows">';
-  CATS.forEach(c => { h += catRow(c, P[c], c); });
-  h += catRow('增值', Q['增值'], '增值');
+     + '<span class="tail">点品类卡展开明细</span></div><div class="cat-list">';
+  CATS.concat(['增值']).forEach(c => {
+    h += catCardHTML(c, (c === '增值') ? Q['增值'] : P[c], c, c === '增值');
+  });
   h += '</div></div>';
-  h += '</div>'; /* /cols */
+  h += '</div>';
 
-  /* 考核机型 + 全科生（运营服务） → 桌面并排 */
-  h += '<div class="cols">';
+  /* 第三屏：考核机型 + 全科生 + 绩效三栏 */
+  h += '<div class="grid-bot">';
   h += assessHTML(Q['考核机型'], DATA.meta.employees);
   h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>全科生</b></div>';
   h += qcsHTML(Q);
   h += '</div>';
-  h += '</div>'; /* /cols */
-
-  /* 绩效 */
-  if(isNum(P['绩效'])){
-    h += '<div class="sec"><div class="card" style="padding:14px;text-align:center">'
-       + '<div style="font-size:11px;color:var(--tx3)">门店综合绩效得分</div>'
-       + '<div class="num" style="font-size:30px;font-weight:800;margin-top:4px;letter-spacing:-1px;'
-       + perfCol(P['绩效']) + '">' + P['绩效'].toFixed(2) + '</div></div></div>';
-  }
+  h += perfCardHTML(P);
+  h += '</div>';
 
   h += '</div>';
   return h;
+}
+
+/*【18号 2026-10-24】品类达成卡片（桌面双列/小屏单列）；保留 cat-click 下钻 + cat-det 容器（置于卡内不占栅格） */
+function catCardHTML(name, k, key, isLast){
+  if(!k) return '';
+  const has = hasTask(k);
+  const s   = has ? stat(k.rate) : 'na';
+  const u = unitOf(key, k);
+  return '<div class="cat cat-click s-' + s + (isLast ? ' c-last' : '') + '" data-cat="' + esc(name) + '">'
+    + '<div class="cat-r1"><span class="cat-n">' + esc(name) + '</span>'
+    + '<span class="cat-tag">' + (has ? STAT_TXT[s] : '无任务') + '</span>'
+    + '<span class="cat-pct num r-' + s + '">' + (has ? pct(k.rate,0) : '—') + '</span></div>'
+    + '<div class="cat-track"><i class="f-' + s + '" style="width:'
+    + (isNum(k.rate) ? Math.min(k.rate,1)*100 : 0).toFixed(1) + '%"></i></div>'
+    + '<div class="cat-r2 num"><span>' + fmtU(k.done, u) + (has ? ' / ' + fmtU(k.task, u) : '')
+    + '</span><span>' + (has && isNum(k.gap)
+        ? (k.gap < 0 ? '<em style="color:var(--green);font-style:normal">缺 ' + fmtU(-k.gap, u) + '</em>'
+                     : '<em style="color:var(--red);font-style:normal">超 ' + fmtU(k.gap, u) + '</em>')
+        : '') + '</span></div>'
+    + '<div class="cat-det" data-cat="' + esc(name) + '"></div>'
+    + '</div>';
+}
+
+/*【18号 2026-10-24】绩效独立大数字卡（桌面第三屏收尾） */
+function perfCardHTML(P){
+  if(!isNum(P['绩效'])) return '';
+  return '<div class="sec"><div class="card pf2">'
+    + '<div class="pf2-l">门店综合绩效得分</div>'
+    + '<div class="pf2-v num" style="' + perfCol(P['绩效']) + '">' + P['绩效'].toFixed(2) + '</div>'
+    + '</div></div>';
 }
 
 /* 运营看板「渠道」视图：仅渠道挂账（含逐人进度） */
@@ -2895,9 +2972,11 @@ function renderStore(){
 function assessHTML(kh, names){
   if(!kh) return '';
   const gc = v => (isNum(v) && v < 0) ? 'var(--green)' : 'var(--red)';   /* 缺=绿(落后)，超/齐=红(领先) */
+  const khRate = (isNum(kh.task) && kh.task > 0 && isNum(kh.done)) ? Math.min(kh.done / kh.task, 1) : 0;
   let h = '<div class="sec"><div class="sec-h"><span class="bar"></span><b>考核机型</b>'
         + '<span class="tail">未完成 −100/台</span></div>';
   h += '<div class="card" style="padding:13px 14px">';
+  h += '<div class="kh-bar"><i style="width:' + (khRate*100).toFixed(1) + '%"></i></div>';
 
   h += '<div style="display:flex;align-items:baseline;gap:7px;flex-wrap:wrap">'
      + '<span style="font-size:11.5px;color:var(--tx3)">' + (names ? '门店任务' : '任务') + '</span>'
