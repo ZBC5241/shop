@@ -290,6 +290,25 @@ svg{display:block}
 .kpi-l{font-size:11px;color:var(--tx3);display:flex;align-items:center;gap:5px}
 .kpi-v{font-size:clamp(21px,1.35rem + .55vw,28px);font-weight:800;margin:6px 0 3px;letter-spacing:-.6px}
 .kpi-s{font-size:10.5px;color:var(--tx3)}
+/*【18号 2026-10-24】新版 KPI 卡（对齐桌面预览） */
+.kpi-n{padding:15px 16px 13px;cursor:pointer;transition:transform .16s ease,box-shadow .16s ease}
+.kpi-n:hover{transform:translateY(-2px);box-shadow:0 2px 6px rgba(20,20,50,.07),0 14px 34px rgba(20,20,50,.10)}
+.kpi-n-hd{display:flex;align-items:center;gap:8px;margin-bottom:3px}
+.kpi-n-ic{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:13px;background:#f4f5f9;flex:none}
+.kpi-n-l{font-size:12px;font-weight:700;color:var(--tx2)}
+.kpi-n-r{margin-left:auto;font-size:12px;font-weight:800}
+.kpi-n-bar{position:relative;height:8px;background:#eef0f5;border-radius:5px;margin:9px 0 7px}
+.kpi-n-bar i{position:absolute;left:0;top:0;bottom:0;border-radius:5px}
+.kpi-n-bar em{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--purple);border-radius:2px;transform:translateX(-1px)}
+/* 桌面：KPI 田字 2×2（对齐预览；<1100 回落 auto-fit） */
+@media (min-width:1100px){ .kpi-sec .kpi-grid{grid-template-columns:1fr 1fr} }
+/* 柱状图网格线 */
+.mc-gl{position:absolute;left:0;right:0;border-top:1px dashed #e8eaf2;pointer-events:none}
+/* hero 升级：大环 + 紫色光晕 */
+.hero{position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-70px;top:-70px;width:230px;height:230px;border-radius:50%;
+  background:radial-gradient(circle,rgba(139,92,246,.10),transparent 68%);pointer-events:none}
+.ring{width:112px;height:112px}
 .kpi-r{
   position:absolute;right:11px;top:11px;font-size:11px;font-weight:800;
   padding:2px 7px;border-radius:7px;
@@ -374,9 +393,9 @@ svg{display:block}
 /* 品类速览柱状图 */
 .mc{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);
   padding:14px 12px 10px;box-shadow:var(--shadow-s)}
-.mc-bars{display:flex;align-items:flex-end;gap:6px;height:122px}
+.mc-bars{display:flex;align-items:flex-end;gap:6px;height:168px}
 .mc-b{flex:1;display:flex;flex-direction:column;align-items:center;min-width:0}
-.mc-track{position:relative;width:100%;max-width:28px;height:100px;background:var(--soft);
+.mc-track{position:relative;width:100%;max-width:28px;height:142px;background:var(--soft);
   border-radius:7px;overflow:hidden;display:flex;align-items:flex-end}
 .mc-f{width:100%;border-radius:7px 7px 0 0;transition:height .9s cubic-bezier(.22,1,.36,1)}
 .mc-mk{position:absolute;left:-4px;right:-4px;height:0;border-top:1.5px dashed var(--purple);opacity:.8}
@@ -716,8 +735,8 @@ svg{display:block}
   .kpi-l{font-size:12px}
   .hero{padding:20px 22px;gap:22px}
   .ring{width:118px;height:118px}
-  .mc-bars{height:140px}
-  .mc-track{height:118px}
+  .mc-bars{height:210px}
+  .mc-track{height:186px}
   /* 桌面：相邻区块并两列（minmax(0,1fr) 防止内容撑破） */
   .cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start}
   .cols>.sec{margin-bottom:0}
@@ -2218,7 +2237,7 @@ html.ios-glass-off .action-mask,html.ios-glass-off .mask{background:rgba(24,23,4
    每次改代码递增 SB_BUILD，用户端首次打开自动强制重载到最新版（本会话只重一次，防循环）。 */
 (function(){
   try{
-    var V = 'sb_20261024_5';
+    var V = 'sb_20261024_6';
     function guard(){
       if (localStorage.getItem('sb_build_ver') === V) return;
       if (sessionStorage.getItem('sb_build_reloading') === V) return;
@@ -2487,15 +2506,20 @@ function kpiCard(label, k, key){
   const s = hasTask(k) ? stat(k.rate) : 'na';
   const rateTxt = hasTask(k) ? pct(k.rate,1) : '无任务';
   const u = unitOf(key, k);
-  return '<div class="kpi s-' + s + '" data-kpi="' + esc(key) + '">'
-    + '<div class="kpi-r r-' + s + '">' + rateTxt + '</div>'
-    + '<div class="kpi-l">' + esc(label) + '</div>'
+  /*【18号 2026-10-24】新版 KPI 卡：图标 + 大数 + 带时间线的进度条（与桌面预览一致）；保留 class/data-kpi 供跳转排行 */
+  const ic = {'毛利':'💰','销额':'🧾','增值':'✨','手机':'📱'}[key] || '📊';
+  const tp = isNum(DATA.meta.timeProgress) ? Math.min(DATA.meta.timeProgress,1)*100 : 0;
+  return '<div class="kpi kpi-n s-' + s + '" data-kpi="' + esc(key) + '">'
+    + '<div class="kpi-n-hd"><span class="kpi-n-ic">' + ic + '</span>'
+    + '<span class="kpi-n-l">' + esc(label) + '</span>'
+    + '<span class="kpi-n-r r-' + s + '">' + rateTxt + '</span></div>'
     + '<div class="kpi-v num">' + fmtU(k.done, u) + '</div>'
+    + '<div class="kpi-n-bar"><i class="f-' + s + '" style="width:'
+    + (isNum(k.rate) ? Math.min(k.rate,1)*100 : 0).toFixed(1) + '%"></i>'
+    + (tp > 0 ? '<em style="left:' + tp.toFixed(1) + '%"></em>' : '') + '</div>'
     + '<div class="kpi-s num">任务 ' + (hasTask(k) ? fmtU(k.task, u) : '—')
     + (isNum(k.gap) && hasTask(k) && k.gap < 0 ? ' · <span style="color:var(--green)">缺 ' + fmtU(-k.gap, u) + '</span>' : '')
     + (isNum(k.gap) && hasTask(k) && k.gap > 0 ? ' · <span style="color:var(--red)">超 ' + fmtU(k.gap, u) + '</span>' : '') + '</div>'
-    + '<div class="kpi-bar"><i class="f-' + s + '" style="width:'
-    + (isNum(k.rate) ? Math.min(k.rate,1)*100 : 0).toFixed(1) + '%"></i></div>'
     + '</div>';
 }
 
@@ -2841,7 +2865,7 @@ function storeHero(P, Q){
   const zeng = Q['增值'] || {};
   const s = hasTask(zeng) ? stat(zeng.rate) : 'na';
   let h = '<div class="hero">';
-  h += '<div class="ring">' + ringSVG(zeng.rate, s, 100)
+  h += '<div class="ring">' + ringSVG(zeng.rate, s, 112)
      + '<div class="ring-c"><b class="num">' + pct(zeng.rate, 0) + '</b><span>增值达成</span></div></div>';
   h += '<div class="hero-r">'
      + '<div class="hero-t">整体进度一览</div>'
@@ -2873,6 +2897,7 @@ function catChartHTML(P){
     bars += '<div class="mc-b" data-cat="' + esc(c) + '">'
           + '<span class="mc-pv num r-' + s + '">' + (k && hasTask(k) ? pct(k.rate,0) : '—') + '</span>'
           + '<div class="mc-track">'
+          + '<div class="mc-gl" style="bottom:25%"></div><div class="mc-gl" style="bottom:50%"></div><div class="mc-gl" style="bottom:75%"></div>'
           + '<div class="mc-f" style="height:' + (rate*100).toFixed(0) + '%;background:' + col + '"></div>'
           + (tpPct > 0 ? '<div class="mc-mk" style="bottom:' + tpPct.toFixed(0) + '%"></div>' : '')
           + '</div><span class="mc-l">' + esc(c) + '</span></div>';
