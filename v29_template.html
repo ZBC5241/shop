@@ -339,7 +339,8 @@ svg{display:block}
 /* 柱顶数值 */
 .mc-pv{font-size:10px;font-weight:800;letter-spacing:-.2px;margin-bottom:3px}
 /* 品类达成卡片 */
-.cat-list{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cat-list{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start}
+.cat-col{display:flex;flex-direction:column;gap:10px;min-width:0}
 .cat{background:var(--panel2);border:1px solid var(--line2);border-radius:var(--r2);padding:10px 12px;cursor:pointer;transition:border-color .15s,transform .15s;min-width:0}
 .cat:hover{border-color:#c9cdf5;transform:translateY(-1px)}
 .cat.c-last{grid-column:1/-1;background:linear-gradient(135deg,#fff5f5,#ffeef0);border-color:#fbd5d5}
@@ -2217,7 +2218,7 @@ html.ios-glass-off .action-mask,html.ios-glass-off .mask{background:rgba(24,23,4
    每次改代码递增 SB_BUILD，用户端首次打开自动强制重载到最新版（本会话只重一次，防循环）。 */
 (function(){
   try{
-    var V = 'sb_20261024_4';
+    var V = 'sb_20261024_5';
     function guard(){
       if (localStorage.getItem('sb_build_ver') === V) return;
       if (sessionStorage.getItem('sb_build_reloading') === V) return;
@@ -2910,9 +2911,12 @@ function renderSales(){
      + '<span class="tail">柱高 = 达成率 · 点柱看明细</span></div>' + catChartHTML(P) + '</div>';
   h += '<div class="sec"><div class="sec-h"><span class="bar"></span><b>品类达成</b>'
      + '<span class="tail">点品类卡展开明细</span></div><div class="cat-list">';
-  CATS.concat(['增值']).forEach(c => {
-    h += catCardHTML(c, (c === '增值') ? Q['增值'] : P[c], c, c === '增值');
-  });
+  /*【18号 2026-10-24】品类卡双列竖排：左列读完读右列（Z 字流视线跳，对照两列别扭）；小屏两列自然回落为竖排 */
+  h += '<div class="cat-list">'
+     + '<div class="cat-col">' + CATS.slice(0, 4).map(c => catCardHTML(c, P[c], c)).join('') + '</div>'
+     + '<div class="cat-col">' + CATS.slice(4).map(c => catCardHTML(c, P[c], c)).join('') + '</div>'
+     + '</div>';
+  h += catCardHTML('增值', Q['增值'], '增值', true);
   h += '</div></div>';
   h += '</div>';
 
