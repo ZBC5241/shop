@@ -2171,12 +2171,31 @@ html.ios-glass-off .action-mask,html.ios-glass-off .mask{background:rgba(24,23,4
    每次改代码递增 SB_BUILD，用户端首次打开自动强制重载到最新版（本会话只重一次，防循环）。 */
 (function(){
   try{
-    var V = 'sb_20261024_2';
-    if (localStorage.getItem('sb_build_ver') === V) return;
-    if (sessionStorage.getItem('sb_build_reloading') === V) return;
-    sessionStorage.setItem('sb_build_reloading', V);
-    localStorage.setItem('sb_build_ver', V);
-    location.reload(true);
+    var V = 'sb_20261024_3';
+    function guard(){
+      if (localStorage.getItem('sb_build_ver') === V) return;
+      if (sessionStorage.getItem('sb_build_reloading') === V) return;
+      sessionStorage.setItem('sb_build_reloading', V);
+      localStorage.setItem('sb_build_ver', V);
+      location.reload(true);
+    }
+    guard();
+    /* 【18号 2026-10-24】标签页长期不重载时 JS 不会重跑、加载时守卫失效；
+       切回前台时复查服务器版本（5分钟节流），不一致即强刷 */
+    document.addEventListener('visibilitychange', function(){
+      if (document.hidden) return;
+      try{
+        var last = +(sessionStorage.getItem('sb_last_vercheck') || 0);
+        if (Date.now() - last < 5*60*1000) return;
+        sessionStorage.setItem('sb_last_vercheck', String(Date.now()));
+        fetch(location.href, {cache:'no-store', headers:{'Range':'bytes=0-16383'}})
+          .then(function(r){ return r.text(); })
+          .then(function(txt){
+            var m = txt.match(/var V = '(sb_[0-9_]+)'/);
+            if (m && m[1] !== V) location.reload(true);
+          }).catch(function(){});
+      }catch(e){}
+    });
   }catch(e){}
 })();
 </script>
