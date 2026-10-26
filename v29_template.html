@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#F6F7F9">
-<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1A1B20">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <title>李家村万达 · AI店长</title>
@@ -2147,81 +2146,7 @@ body[data-board="ops"] :is(.ai-action-target,.ai-action-standard,.ai-action-resu
   .action-sheet-actions{margin-left:-14px!important;margin-right:-14px!important;padding-left:14px!important;padding-right:14px!important}
   .action-grid.three{grid-template-columns:1fr!important}
 }
-@media(prefers-reduced-motion:reduce){
-  .action-sheet,.action-mask.on,.action-sheet-actions button{animation:none!important;transition:none!important}
-}
-
-/* =====【18号 2026-10-21 根治 iOS 玻璃闪烁】=====
-   iOS WebKit 已知 bug：全页大量 backdrop-filter 玻璃层 + sticky/fixed 导航，滚动/切页时闪黑线、闪红光
-   （黑线历史三次发作均与玻璃体系相关；translate3d 合成层隔离真机实测压不住）。
-   根治：iOS 设备整体关闭毛玻璃——卡片底色本就近乎不透明，视觉几乎无差异；
-   桌面/Android 保持玻璃不变。链接加 ?glass=1 可在 iOS 上强制开玻璃做对照。
-   ⚠️ 本文件是 v29 模板（build_v29.py 每轮管线用它重建 index.html），UI 改动必须落在本文件，改 index.html 会被冲掉。 */
-html.ios-glass-off *,html.ios-glass-off *::before,html.ios-glass-off *::after{
-  backdrop-filter:none!important;
-  -webkit-backdrop-filter:none!important;
-}
-/* AI 界面（ops）的玻璃规则带 body[data-board] 两级权重，需同级权重反杀（上文通配符不够） */
-html.ios-glass-off body[data-board] *,html.ios-glass-off body[data-board] *::before,html.ios-glass-off body[data-board] *::after{
-  backdrop-filter:none!important;
-  -webkit-backdrop-filter:none!important;
-}
-/* 关玻璃后补偿可读性（仅浅色经营看板；AI 深色顶栏 .98 本就近不透明，不动） */
-html.ios-glass-off body:not([data-board="ops"]) .top{background:linear-gradient(180deg,rgba(255,255,255,.97),rgba(247,248,252,.95))!important}
-html.ios-glass-off .tabs{background:linear-gradient(180deg,rgba(255,255,255,.93),rgba(255,255,255,.88))!important;border:1px solid rgba(255,255,255,.92)!important}
-html.ios-glass-off .action-mask,html.ios-glass-off .mask{background:rgba(24,23,42,.62)!important}
-
-/* ===== 深色模式（2026-10-26：晨哥拍板重启，随系统自动切换 =====
-   令牌换深 + 白卡清扫 + 玻璃条深玻璃 + 徽章深字提亮；浅色模式零影响 */
-@media(prefers-color-scheme:dark){
-  :root{
-    --bg:#1A1B20; --panel:#24262E; --soft:rgba(255,255,255,.09);
-    --line:rgba(255,255,255,.09); --line2:rgba(255,255,255,.16);
-    --tx:#E9EBF2; --tx2:#A9B1C2; --tx3:#7A8296;
-    --purple:#A78BFA; --purple2:#C4B5FD; --purpleDim:rgba(167,139,250,.16);
-    --red:#F87171; --red2:#FCA5A5; --redDim:rgba(248,113,113,.16);
-    --green:#4ADE80; --greenDim:rgba(74,222,128,.14);
-    --amber:#FBBF24; --amberDim:rgba(251,191,36,.15);
-    --blue:#818CF8; --blueDim:rgba(129,140,248,.18);
-    --gray:#8B93A7; --grayDim:rgba(139,147,167,.2);
-    --grad:linear-gradient(135deg,#8B5CF6,#A78BFA);
-    --shadow:0 1px 2px rgba(0,0,0,.45),0 6px 16px rgba(0,0,0,.35);
-    --shadow-s:0 1px 2px rgba(0,0,0,.45);
-    --shadow-h:0 2px 4px rgba(0,0,0,.5),0 10px 24px rgba(0,0,0,.45);
-  }
-  html,body{background:var(--bg)}
-  body{color:var(--tx)}
-  .top{background:rgba(19,22,30,.86)}
-  .tabs{background:rgba(19,22,30,.92)}
-  [data-board="ops"] .tab.on{background:rgba(255,255,255,.08)}
-  .ai-metric,.ai-section{background:rgba(255,255,255,.08)}
-  ..ai-funnel,..ai-learning-card,..ai-live-k,..ai-mini-btn,..ai-ops-rule,..ai-phase-card,..ai-reality-card,..ai-rule,..ai-system-event,..danger,..ghost,..op-cust,..op-lever,..op-linkbtn,..op-q,..op-staff,..v26-donts,..v26-goal,..v26-level,..v26-opp,..v26-process-row,..v26-quad,..v27-alert,..v27-card,..v27-day,..v27-play,..v28-alert-item,..v28-card,..v28-handbox,..v28-person{background:var(--panel)}
-  .pf-t.b,
-  .tx-tag.ret,
-  .r-low,
-  .badge-live,
-  .ai-action-result,
-  .action-validation.ok,
-  .ai-data-response.positive,
-  .op-lever-k,
-  .op-role.main,
-  .v27-badge,
-  .done,
-  .v27-play-tag.good,
-  .v28-tag.good{color:#4ADE80}
-  .tx-ch.ref,
-  .tx-tag.disc,
-  .r-on,
-  .ai-data-response.warn,
-  .op-lever-k,
-  .op-role.convert,
-  .op-q-pri,
-  .v26-opp-pri.mid,
-  .v27-play-tag.warn,
-  .v28-tag.warn{color:#FBBF24}
-  .v28-tag.danger{color:#F87171}
-}
-</style>
+@media(prefers-reduced-motion:reduce){</style>
 <script>
 /*【18号 2026-10-21】iOS 全关毛玻璃根治闪烁（机制见样式表末尾说明）；?glass=1 强制开玻璃对照 */
 (function(){
