@@ -2199,6 +2199,29 @@ html.ios-glass-off .action-mask,html.ios-glass-off .mask{background:rgba(24,23,4
 })();
 </script>
 
+
+<style id="flat-clean-override">
+/* 膜套包式彻底干净：斩光层+毛玻璃，实白卡+中性灰阴影 */
+html{background:#F6F7F9!important}
+body{background:#F6F7F9!important;color:var(--tx)!important}
+body::before,body::after{display:none!important}
+*,*::before,*::after{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+.top,.tabs,.card,.kpi,.rk,.day,.bt-c,.q,.ct,.pf,.adv,.mc,.tx-card,.tx-pf,.hero,.rows,.lag-tip,.wp-task,.tab.on,.logo,.ai-hero,
+body[data-board="ops"] .ai-hero,body[data-board="ops"] .ai-section,
+body[data-board="ops"] :is(.ai-summary,.ai-problem,.ai-person,.ai-cat,.ai-order,.ai-todo-item,.ai-loop-overview,.ai-action-card,.ai-reality,.ai-reality-card,.ai-cust-card,.ai-funnel,.ai-learning-card,.ai-review-card,.ai-phase-card,.ai-checkpoint,.ai-ops-rule,.v27-card,.v28-card,.v28-panel,.v29-panel,.v29-card,.v29-formal){
+  background:#fff!important;background-image:none!important;
+  border:1px solid rgba(0,0,0,.06)!important;
+  box-shadow:0 1px 2px rgba(0,0,0,.04),0 6px 16px rgba(0,0,0,.05)!important;
+}
+.tab.on{background:#efeafc!important;border-color:rgba(124,58,237,.22)!important}
+.logo{color:#7c3aed!important}
+.ai-hero:before,.ai-hero:after,
+body[data-board="ops"] .ai-hero:before,body[data-board="ops"] .ai-hero:after{display:none!important}
+.tp-bar,.kpi-bar,.row-bar,.mc-track,.cat-chart,.hb-track{background:rgba(0,0,0,.05)!important;border:1px solid rgba(0,0,0,.06)!important}
+.tp-fill,.bar{background:linear-gradient(135deg,#7c3aed,#a855f7)!important;box-shadow:none!important}
+.rp-ring{display:none!important}
+</style>
+
 </head>
 <body>
 
