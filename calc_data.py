@@ -282,6 +282,36 @@ def load_people(xlsx):
     TASK_ROW = task_row
 
 
+# ============================ 全科生搭售率目标（直读底表表头，不写死） ============================
+def parse_qcs_targets(ws):
+    """从底表「全科生」表头行解析 会员搭售率/回收搭售率/贴膜率 的目标占比。
+
+    表头形如 '会员搭售率（30%）' / '回收（25%）' / '贴膜（50%）'，这些是晨哥在底表手工维护的
+    目标占比。此前被硬编码在 calc_qcs 里（会员0.30/回收0.20/贴膜0.50），底表翻月或调目标后
+    看板就显示旧值（例如「UI 回收还按 20% 显示」）。改为直读底表表头，根治此类问题。
+
+    返回 {会员搭售率, 回收搭售率, 贴膜率}（0~1）。带缺省兜底，防止底表格式异常时整段挂掉。
+    """
+    t = {"会员搭售率": 0.30, "回收搭售率": 0.20, "贴膜率": 0.50}
+    pat = re.compile(r'（\s*(\d+(?:\.\d+)?)\s*%\s*）')
+    for r in range(1, ws.max_row + 1):
+        row = [str(ws.cell(r, c).value or "") for c in range(1, 20)]
+        if any('会员搭售率' in x for x in row) and any('回收' in x for x in row):
+            for x in row:
+                m = pat.search(x)
+                if not m:
+                    continue
+                v = float(m.group(1)) / 100.0
+                if '会员搭售率' in x:
+                    t['会员搭售率'] = v
+                elif '回收' in x:
+                    t['回收搭售率'] = v
+                elif '贴膜' in x:
+                    t['贴膜率'] = v
+            break
+    return t
+
+
 # ============================ 读表格里的手工项 ============================
 def load_manual(xlsx):
     """任务量、乐机收、太力回收、绩效——这几样不来自明细，从表格取。"""
@@ -361,7 +391,8 @@ def load_manual(xlsx):
     # 每日任务 K38 引用 $D14=合约缺口单数）。代码层统一映射为「合约」（不碰桌面真表）。
     lab_day = [('合约' if (c and '电信积分' in str(c)) else c) for c in lab_day]
     lab_gap = [('合约' if (c and '电信积分' in str(c)) else c) for c in lab_gap]
-    return tasks, lehui, taili, perf, lab_day, lab_gap
+    targets = parse_qcs_targets(ws)
+    return tasks, lehui, taili, perf, lab_day, lab_gap, targets
 
 
 # ============================ 复算：业绩考核 ============================
@@ -438,7 +469,7 @@ def build_details(xs):
 
 
 # ============================ 复算：全科生 / 增值 ============================
-def calc_qcs(xs, name, task, perf, lehui, taili):
+def calc_qcs(xs, name, task, perf, lehui, taili, targets):
     P = ("P", name)
     手机 = perf["手机"]["done"]
     智慧办公 = perf["智慧办公"]["done"]
@@ -454,11 +485,11 @@ def calc_qcs(xs, name, task, perf, lehui, taili):
 
     # 星联搭售（照搬底表 G14:G18 公式：XS!G 列含「星联*」；Care+ 已从会员口径剔除）
     care = sumifs(xs, "I", P, ("G", "星联*"))
-    care_gap = care - roundup(手机 * 0.30)
+    care_gap = care - roundup(手机 * targets['会员搭售率'])
 
     # 回收搭售
     回收 = sumifs(xs, "I", P, ("G", "*回收*")) + taili[name]["orders"] + lehui[name]["orders"]
-    回收_gap = 回收 - roundup(手机 * 0.20)
+    回收_gap = 回收 - roundup(手机 * targets['回收搭售率'])
 
     # 贴膜（新口径 2026-09-28，照搬底表 M14:M18 公式）：
     #   M = SUMIFS(XS!I, 姓名, G("*膜*")且M<>0) + SUMIFS(XS!I, 姓名, "*贴膜套包") + AH(会员体系)
@@ -469,7 +500,7 @@ def calc_qcs(xs, name, task, perf, lehui, taili):
         mem = sumifs(xs, "I", P, ("G", "*会员*")) + sumifs(xs, "I", P, ("G", "星联优享*"))
     贴膜 = sumifs(xs, "I", P, ("G", "*膜*"), ("M", "<>0")) + sumifs(xs, "I", P, ("G", "*贴膜套包")) + mem
     贴膜基数 = 手机 + 智慧办公 + 穿戴
-    贴膜_gap = 贴膜 - roundup(贴膜基数 * 0.50)
+    贴膜_gap = 贴膜 - roundup(贴膜基数 * targets['贴膜率'])
 
     # 考核机型：完成 = 各 SKU 前缀命中之和；表格里 S 列存的是「缺口 = 完成 - 任务」
     考核完成 = sumifs_any(xs, "I", [P], "F", KHJX_SKU)
@@ -491,9 +522,9 @@ def calc_qcs(xs, name, task, perf, lehui, taili):
     return {
         "合约":       {"task": 合约任务, "done": 合约单数,
                      "gap": 合约单数 - 合约任务, "rate": div(合约单数, 合约任务)},
-        "会员搭售率": {"terminal": 手机, "care": care, "gap": care_gap, "rate": div(care, 手机)},
-        "回收搭售率": {"orders": 回收, "gap": 回收_gap, "rate": div(回收, 手机)},
-        "贴膜率":     {"orders": 贴膜, "gap": 贴膜_gap, "rate": div(贴膜, 贴膜基数)},
+        "会员搭售率": {"terminal": 手机, "care": care, "gap": care_gap, "rate": div(care, 手机), "target": targets['会员搭售率']},
+        "回收搭售率": {"orders": 回收, "gap": 回收_gap, "rate": div(回收, 手机), "target": targets['回收搭售率']},
+        "贴膜率":     {"orders": 贴膜, "gap": 贴膜_gap, "rate": div(贴膜, 贴膜基数), "target": targets['贴膜率']},
         "考核机型":   {"task": 考核任务, "done": 考核完成, "gap": 考核完成 - 考核任务},
         "乐机收":     dict(lehui[name]),
         "太力回收":   {"orders": taili[name]["orders"], "amount": taili[name]["amount"],
@@ -594,7 +625,7 @@ def total_perf(people):
     return out
 
 
-def total_qcs(people, sp):
+def total_qcs(people, sp, targets):
     S = lambda k, f: sum(people[n]["qcs"][k][f] for n in PEOPLE_ORDER)
     手机, 智慧办公, 穿戴 = sp["手机"]["done"], sp["智慧办公"]["done"], sp["穿戴"]["done"]
     毛利, 销额 = sp["毛利"]["done"], sp["销额"]["done"]
@@ -605,14 +636,15 @@ def total_qcs(people, sp):
     zz_t, zz_d = S("增值", "task"), S("增值", "done")
     优惠券 = S("健康度", "coupon")
     # 合计行的三个「缺口」不是各人相加，而是拿合计量重算（表格 H19/K19/N19 原样搬运）：
-    #   care  = G19 - ROUNDUP(F19*30%)   回收 = J19 - ROUNDUP(G9*20%)
-    #   贴膜  = M19 - ROUNDUP(G9*50%)    ← 合计行基数只取手机，与个人行口径不同
+    #   care  = G19 - ROUNDUP(F19*会员目标%)   回收 = J19 - ROUNDUP(G9*回收目标%)
+    #   贴膜  = M19 - ROUNDUP(G9*贴膜目标%)    ← 合计行基数只取手机，与个人行口径不同
+    #   目标占比统一直读底表表头（不再写死 30/20/50）
     return {
         "合约":       {"task": jf_t, "done": jf_d, "gap": jf_d - jf_t, "rate": div(jf_d, jf_t)},
         "会员搭售率": {"terminal": 手机, "care": care,
-                     "gap": care - roundup(手机 * 0.30), "rate": div(care, 手机)},
-        "回收搭售率": {"orders": 回收, "gap": 回收 - roundup(手机 * 0.20), "rate": div(回收, 手机)},
-        "贴膜率":     {"orders": 贴膜, "gap": 贴膜 - roundup(手机 * 0.50), "rate": div(贴膜, 贴膜基数)},
+                     "gap": care - roundup(手机 * targets['会员搭售率']), "rate": div(care, 手机), "target": targets['会员搭售率']},
+        "回收搭售率": {"orders": 回收, "gap": 回收 - roundup(手机 * targets['回收搭售率']), "rate": div(回收, 手机), "target": targets['回收搭售率']},
+        "贴膜率":     {"orders": 贴膜, "gap": 贴膜 - roundup(手机 * targets['贴膜率']), "rate": div(贴膜, 贴膜基数), "target": targets['贴膜率']},
         "考核机型":   {"task": kh_t, "done": kh_d, "gap": kh_d - kh_t},
         "乐机收":     {f: S("乐机收", f) for f in ("orders", "amount", "增值")},
         "太力回收":   {f: S("太力回收", f) for f in ("orders", "amount", "增值")},
@@ -1134,13 +1166,13 @@ def main():
 
     ensure_xlsx_ok(a.xlsx)   # 2026-10-01 17hao：读前完整性校验 + 损坏自动恢复
     load_people(a.xlsx)
-    tasks, lehui, taili, perf_score, lab_day, lab_gap = load_manual(a.xlsx)
+    tasks, lehui, taili, perf_score, lab_day, lab_gap, targets = load_manual(a.xlsx)
     # 乐机收：直接读《李家村销售》T14:U18（持久化由 xlsx 文件承载；用户每次写入就是最新值）
 
     people = {}
     for n in PEOPLE_ORDER:
         p = calc_perf(xs, n, tasks[n])
-        q = calc_qcs(xs, n, tasks[n], p, lehui, taili)
+        q = calc_qcs(xs, n, tasks[n], p, lehui, taili, targets)
         p["绩效"] = perf_score[n]
         people[n] = {
             "performance": p,
@@ -1152,7 +1184,7 @@ def main():
     sp = total_perf(people)
     _ps = [v for v in perf_score.values() if v is not None]      # 合计行是 AVERAGE，忽略空值
     sp["绩效"] = sum(_ps) / len(_ps) if _ps else None
-    sq = total_qcs(people, sp)
+    sq = total_qcs(people, sp, targets)
     store = {
         "performance": sp,
         "qcs": sq,
