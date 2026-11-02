@@ -1,16 +1,16 @@
 {
   "meta": {
     "storeName": "华为李家村万达授权体验店",
-    "date": "2026-11-01",
-    "dayTitle": "11-01达成",
-    "timeProgress": 0.03333333333333333,
-    "remainDays": 25,
-    "naturalRemainDays": 30,
-    "refDate": "2026-11-01",
+    "date": "2026-11-02",
+    "dayTitle": "11-02达成",
+    "timeProgress": 0.06666666666666667,
+    "remainDays": 24,
+    "naturalRemainDays": 29,
+    "refDate": "2026-11-02",
     "isToday": true,
     "lagDays": 0,
-    "todayLabel": "11-01",
-    "fetchTime": "23:37",
+    "todayLabel": "11-02",
+    "fetchTime": "10:22",
     "employees": [
       "邵乐乐",
       "杨丽华",
@@ -20,8 +20,8 @@
     ],
     "sourceFile": "李家村门店毛利明细表-华为终端.xlsx",
     "sourceRows": 19,
-    "dayRows": 19,
-    "generatedAt": "2026-11-01 23:37:47"
+    "dayRows": 0,
+    "generatedAt": "2026-11-02 10:22:45"
   },
   "store": {
     "performance": {
@@ -85,7 +85,7 @@
         "gap": -1810114.36,
         "rate": 0.021559805405405405
       },
-      "绩效": 20.8598548
+      "绩效": 20.6902078
     },
     "qcs": {
       "合约": {
@@ -102,9 +102,9 @@
         "target": 0.3
       },
       "回收搭售率": {
-        "orders": 47.0,
-        "gap": 45.0,
-        "rate": 7.833333333333333,
+        "orders": 35.0,
+        "gap": 33.0,
+        "rate": 5.833333333333333,
         "target": 0.25
       },
       "贴膜率": {
@@ -119,8 +119,8 @@
         "gap": -12.0
       },
       "乐机收": {
-        "orders": 28.0,
-        "amount": 1415.0,
+        "orders": 2.0,
+        "amount": 180.0,
         "增值": 0.0
       },
       "太力回收": {
@@ -130,15 +130,15 @@
       },
       "增值": {
         "task": 52000.0,
-        "done": 3758.6000000000004,
-        "gap": -48241.4,
-        "rate": 0.07228076923076923
+        "done": 3037.6000000000004,
+        "gap": -48962.4,
+        "rate": 0.05841538461538462
       },
       "健康度": {
-        "coupon": 0.0,
-        "ratio": 0.0,
+        "coupon": 1405.3600000000001,
+        "ratio": 0.33388531067137717,
         "grossMargin": 0.10552945872248759,
-        "增值率": 0.0942344161959041
+        "增值率": 0.07615773496426284
       },
       "星联会员": {
         "优享": 0.0,
@@ -147,24 +147,24 @@
       }
     },
     "dailyDone": {
-      "手机": 6.0,
-      "毛利": 4209.11,
-      "增值": 399.0,
+      "手机": 0.0,
+      "毛利": 0.0,
+      "增值": 0.0,
       "智慧办公": 0.0,
-      "音频穿戴": 2.0,
+      "音频穿戴": 0.0,
       "HD": 0.0,
       "会员": 0.0,
       "回收": 0.0,
-      "贴膜": 4.0,
+      "贴膜": 0.0,
       "合约": 0,
       "滞销": 0.0,
       "优享/会员": 0.0,
-      "销额": 39885.64
+      "销额": 0.0
     },
     "dailyGap": {
       "手机": 10.0,
-      "毛利": 8834.0,
-      "增值": 1931.0,
+      "毛利": 9201.0,
+      "增值": 2043.0,
       "智慧办公": 4.0,
       "音频穿戴": 7.0,
       "HD": 1.0,
@@ -272,8 +272,8 @@
           "gap": -4.0
         },
         "乐机收": {
-          "orders": 16.0,
-          "amount": 698.0,
+          "orders": 0.0,
+          "amount": 0.0,
           "增值": 0.0
         },
         "太力回收": {
@@ -288,8 +288,8 @@
           "rate": 0.08374235294117648
         },
         "健康度": {
-          "coupon": 0.0,
-          "ratio": 0.0,
+          "coupon": 350.0,
+          "ratio": 1.32787009636543,
           "grossMargin": 0.07872759856630823,
           "增值率": 0.4252150537634409
         },
@@ -300,11 +300,11 @@
         }
       },
       "dailyDone": {
-        "手机": 1.0,
-        "毛利": 263.58,
+        "手机": 0.0,
+        "毛利": 0.0,
         "增值": 0.0,
         "智慧办公": 0.0,
-        "音频穿戴": 1.0,
+        "音频穿戴": 0.0,
         "HD": 0.0,
         "会员": 0.0,
         "回收": 0.0,
@@ -312,12 +312,12 @@
         "合约": 0,
         "滞销": 0.0,
         "优享/会员": 0.0,
-        "销额": 3348.0
+        "销额": 0.0
       },
       "dailyGap": {
         "手机": 3.0,
-        "毛利": 2390.0,
-        "增值": 624.0,
+        "毛利": 2490.0,
+        "增值": 650.0,
         "智慧办公": 1.0,
         "音频穿戴": 2.0,
         "HD": 0,
@@ -424,8 +424,8 @@
           "gap": -4.0
         },
         "乐机收": {
-          "orders": 10.0,
-          "amount": 537.0,
+          "orders": 0.0,
+          "amount": 0.0,
           "增值": 0.0
         },
         "太力回收": {
@@ -440,8 +440,8 @@
           "rate": 0.06088117647058824
         },
         "健康度": {
-          "coupon": 0.0,
-          "ratio": 0.0,
+          "coupon": 506.36,
+          "ratio": 1.8572476525821597,
           "grossMargin": 0.05809949197040471,
           "增值率": 0.2205538886426404
         },
@@ -452,8 +452,8 @@
         }
       },
       "dailyDone": {
-        "手机": 1.0,
-        "毛利": 272.64,
+        "手机": 0.0,
+        "毛利": 0.0,
         "增值": 0.0,
         "智慧办公": 0.0,
         "音频穿戴": 0.0,
@@ -464,12 +464,12 @@
         "合约": 0,
         "滞销": 0.0,
         "优享/会员": 0.0,
-        "销额": 4692.64
+        "销额": 0.0
       },
       "dailyGap": {
         "手机": 3.0,
-        "毛利": 2390.0,
-        "增值": 639.0,
+        "毛利": 2489.0,
+        "增值": 666.0,
         "智慧办公": 1.0,
         "音频穿戴": 2.0,
         "HD": 0,
@@ -542,7 +542,7 @@
           "gap": -430655.0,
           "rate": 0.06885405405405405
         },
-        "绩效": 14.905697
+        "绩效": 14.057462
       },
       "qcs": {
         "合约": {
@@ -559,9 +559,9 @@
           "target": 0.3
         },
         "回收搭售率": {
-          "orders": 14.0,
-          "gap": 13.0,
-          "rate": 3.5,
+          "orders": 2.0,
+          "gap": 1.0,
+          "rate": 0.5,
           "target": 0.25
         },
         "贴膜率": {
@@ -587,15 +587,15 @@
         },
         "增值": {
           "task": 17000.0,
-          "done": 1300.0,
-          "gap": -15700.0,
-          "rate": 0.07647058823529412
+          "done": 579.0,
+          "gap": -16421.0,
+          "rate": 0.034058823529411766
         },
         "健康度": {
-          "coupon": 0.0,
-          "ratio": 0.0,
+          "coupon": 549.0,
+          "ratio": 0.14947357530446054,
           "grossMargin": 0.11533647354372742,
-          "增值率": 0.04082273512325326
+          "增值率": 0.01818181818181818
         },
         "星联会员": {
           "优享": 0.0,
@@ -604,24 +604,24 @@
         }
       },
       "dailyDone": {
-        "手机": 4.0,
-        "毛利": 3672.89,
-        "增值": 399.0,
+        "手机": 0.0,
+        "毛利": 0.0,
+        "增值": 0.0,
         "智慧办公": 0.0,
-        "音频穿戴": 1.0,
+        "音频穿戴": 0.0,
         "HD": 0.0,
         "会员": 0.0,
         "回收": 0.0,
-        "贴膜": 4.0,
+        "贴膜": 0.0,
         "合约": 0,
         "滞销": 0.0,
         "优享/会员": 0.0,
-        "销额": 31845.0
+        "销额": 0.0
       },
       "dailyGap": {
         "手机": 3.0,
-        "毛利": 2254.0,
-        "增值": 628.0,
+        "毛利": 2347.0,
+        "增值": 685.0,
         "智慧办公": 1.0,
         "音频穿戴": 2.0,
         "HD": 1.0,
@@ -772,8 +772,8 @@
       },
       "dailyGap": {
         "手机": 1.0,
-        "毛利": 1800.0,
-        "增值": 40.0,
+        "毛利": 1875.0,
+        "增值": 42.0,
         "智慧办公": 1.0,
         "音频穿戴": 1.0,
         "HD": 0,
@@ -934,7 +934,7 @@
         "task": 13.0,
         "done": 0.0,
         "rate": 0,
-        "lag": -0.03333333333333333,
+        "lag": -0.06666666666666667,
         "level": "danger",
         "lastDate": null,
         "coldDays": null,
@@ -954,7 +954,7 @@
         "task": 20.0,
         "done": 0.0,
         "rate": 0,
-        "lag": -0.03333333333333333,
+        "lag": -0.06666666666666667,
         "level": "danger",
         "lastDate": null,
         "coldDays": null,
@@ -974,7 +974,7 @@
         "task": 85.0,
         "done": 0.0,
         "rate": 0,
-        "lag": -0.03333333333333333,
+        "lag": -0.06666666666666667,
         "level": "danger",
         "lastDate": null,
         "coldDays": null,
@@ -994,7 +994,7 @@
         "task": 1.0,
         "done": 0.0,
         "rate": 0,
-        "lag": -0.03333333333333333,
+        "lag": -0.06666666666666667,
         "level": "danger",
         "lastDate": null,
         "coldDays": null,
@@ -1011,11 +1011,11 @@
         "task": 180.0,
         "done": 6.0,
         "rate": 0.03333333333333333,
-        "lag": 0.0,
-        "level": "good",
+        "lag": -0.03333333333333333,
+        "level": "warn",
         "lastDate": "2026-11-01",
-        "coldDays": 0,
-        "needPerDay": 7.0,
+        "coldDays": 1,
+        "needPerDay": 8.0,
         "sellers": {
           "邵乐乐": 1.0,
           "杨丽华": 1.0,
@@ -1032,10 +1032,10 @@
         "task": 40.0,
         "done": 2.0,
         "rate": 0.05,
-        "lag": 0.01666666666666667,
-        "level": "good",
+        "lag": -0.016666666666666663,
+        "level": "warn",
         "lastDate": "2026-11-01",
-        "coldDays": 0,
+        "coldDays": 1,
         "needPerDay": 2.0,
         "sellers": {
           "邵乐乐": 1.0,
@@ -1050,7 +1050,7 @@
     "people": [
       {
         "name": "李泽",
-        "score": 0.0677197161319073,
+        "score": 0.059237363190730835,
         "毛利": {
           "done": 3672.89,
           "task": 60000.0,
@@ -1062,12 +1062,12 @@
           "rate": 0.07272727272727272
         },
         "增值": {
-          "done": 1300.0,
+          "done": 579.0,
           "task": 17000.0,
-          "rate": 0.07647058823529412
+          "rate": 0.034058823529411766
         },
         "毛利率": 0.11533647354372742,
-        "券占比": 0.0,
+        "券占比": 0.14947357530446054,
         "strong": [
           "手机",
           "音频"
@@ -1078,10 +1078,10 @@
           "穿戴",
           "HD 智慧屏"
         ],
-        "todayGross": 3672.89,
-        "todayPhone": 4.0,
+        "todayGross": 0.0,
+        "todayPhone": 0.0,
         "rank": 1,
-        "level": "good"
+        "level": "warn"
       },
       {
         "name": "邵乐乐",
@@ -1102,19 +1102,20 @@
           "rate": 0.08374235294117648
         },
         "毛利率": 0.07872759856630823,
-        "券占比": 0.0,
+        "券占比": 1.32787009636543,
         "strong": [
           "音频"
         ],
         "weak": [
+          "手机",
           "电脑",
           "平板",
           "穿戴"
         ],
-        "todayGross": 263.58,
-        "todayPhone": 1.0,
+        "todayGross": 0.0,
+        "todayPhone": 0.0,
         "rank": 2,
-        "level": "warn"
+        "level": "danger"
       },
       {
         "name": "杨丽华",
@@ -1135,16 +1136,17 @@
           "rate": 0.06088117647058824
         },
         "毛利率": 0.05809949197040471,
-        "券占比": 0.0,
+        "券占比": 1.8572476525821597,
         "strong": [],
         "weak": [
+          "手机",
           "电脑",
           "平板",
           "穿戴",
           "音频"
         ],
-        "todayGross": 272.64,
-        "todayPhone": 1.0,
+        "todayGross": 0.0,
+        "todayPhone": 0.0,
         "rank": 3,
         "level": "danger"
       },
@@ -1183,28 +1185,15 @@
       }
     ],
     "today": {
-      "sold": [
-        {
-          "name": "李泽",
-          "orders": 13,
-          "gross": 3672.89
-        },
-        {
-          "name": "杨丽华",
-          "orders": 2,
-          "gross": 272.64
-        },
-        {
-          "name": "邵乐乐",
-          "orders": 4,
-          "gross": 263.58
-        }
-      ],
+      "sold": [],
       "idle": [
+        "邵乐乐",
+        "杨丽华",
+        "李泽",
         "新员工"
       ],
-      "totalOrders": 19,
-      "totalGross": 4209.11
+      "totalOrders": 0,
+      "totalGross": 0
     },
     "advices": [
       {
@@ -1215,403 +1204,54 @@
       },
       {
         "level": "warn",
+        "icon": "📉",
+        "title": "进度落后（时间已过 7%）",
+        "body": "手机 还差 174台，日均要 8台。建议把这几项拆到人头，早会点名报进度。"
+      },
+      {
+        "level": "warn",
         "icon": "👤",
         "title": "需要重点帮扶",
-        "body": "杨丽华（毛利 0%）、新员工（毛利 0%） 综合进度明显掉队。别只催结果，先看是客流少、接待量少，还是成交率低——三种病不同药。"
+        "body": "邵乐乐（毛利 0%）、杨丽华（毛利 0%）、新员工（毛利 0%） 综合进度明显掉队。别只催结果，先看是客流少、接待量少，还是成交率低——三种病不同药。"
       },
       {
         "level": "warn",
         "icon": "⏰",
         "title": "今日还没开单",
-        "body": "新员工 今天暂无上账记录。先确认是没卖还是没及时上账，卖了要立刻补账。"
-      },
-      {
-        "level": "good",
-        "icon": "🏆",
-        "title": "本月标杆",
-        "body": "李泽 综合进度领先（毛利 6%、手机 7%）。让他在早会讲两句怎么谈的，比店长讲管用。"
+        "body": "邵乐乐、杨丽华、李泽、新员工 今天暂无上账记录。先确认是没卖还是没及时上账，卖了要立刻补账。"
       },
       {
         "level": "warn",
         "icon": "💰",
         "title": "毛利率偏低",
-        "body": "全店毛利率 10.6%，低于 13% 参考线。多推增值和配件搭售，比单纯冲机器数划算。"
-      },
-      {
-        "level": "good",
-        "icon": "✅",
-        "title": "进度健康",
-        "body": "手机 3%、音频 5% 已跑赢时间进度，保持节奏就行。"
+        "body": "全店毛利率 10.6%，低于 13% 参考线。优惠券占比 33% 偏高，多推增值和配件搭售，比单纯冲机器数划算。"
       }
     ],
     "dealAnalysis": {
-      "deals": [
-        {
-          "emp": "李泽",
-          "product": "华为 PuraX Max HOP-AL00  12GB+512GB  幻夜黑",
-          "code": "XSCK26110100851",
-          "channel": "自然客流",
-          "bizType": "",
-          "member": "",
-          "origPrice": 11999.0,
-          "discount": 0,
-          "discountRate": 0,
-          "amount": 11999.0,
-          "profit": 1079.0,
-          "cost": 10920.0,
-          "costRatio": 0.9100758396533044,
-          "cat": "手机",
-          "isReturn": false,
-          "isBundle": true
-        },
-        {
-          "emp": "李泽",
-          "product": "华为 Mate90 Pro Max CMM-AL10  16GB+512GB  翡冷翠",
-          "code": "XSCK26110100931",
-          "channel": "自然客流",
-          "bizType": "",
-          "member": "",
-          "origPrice": 9799.0,
-          "discount": 0,
-          "discountRate": 0,
-          "amount": 9799.0,
-          "profit": 954.89,
-          "cost": 8844.11,
-          "costRatio": 0.9025523012552302,
-          "cat": "手机",
-          "isReturn": false,
-          "isBundle": true
-        },
-        {
-          "emp": "李泽",
-          "product": "华为 PuraX View VOL-AL00  12GB+256GB  零度白",
-          "code": "XSCK26110100789",
-          "channel": "自然客流",
-          "bizType": "",
-          "member": "",
-          "origPrice": 5999.0,
-          "discount": 0,
-          "discountRate": 0,
-          "amount": 5999.0,
-          "profit": 899.0,
-          "cost": 5100.0,
-          "costRatio": 0.8501416902817136,
-          "cat": "手机",
-          "isReturn": false,
-          "isBundle": true
-        },
-        {
-          "emp": "李泽",
-          "product": "华为 畅享100 Pro CHZ-AL60  6GB+512GB  幻夜黑",
-          "code": "XSCK26110100880",
-          "channel": "自然客流",
-          "bizType": "",
-          "member": "",
-          "origPrice": 2549.0,
-          "discount": 0,
-          "discountRate": 0,
-          "amount": 2549.0,
-          "profit": 281.0,
-          "cost": 2268.0,
-          "costRatio": 0.8897606904668497,
-          "cat": "手机",
-          "isReturn": false,
-          "isBundle": true
-        },
-        {
-          "emp": "李泽",
-          "product": "华为 FreeClip2 耳机 T0027  潮玩拼色(红/蓝)",
-          "code": "XSCK26110100879",
-          "channel": "自然客流",
-          "bizType": "",
-          "member": "",
-          "origPrice": 1100.0,
-          "discount": 0,
-          "discountRate": 0,
-          "amount": 1100.0,
-          "profit": 60.0,
-          "cost": 1040.0,
-          "costRatio": 0.9454545454545454,
-          "cat": "音频",
-          "isReturn": false,
-          "isBundle": true
-        },
-        {
-          "emp": "李泽",
-          "product": "199贴膜套包",
-          "code": "XSCK26110100931",
-          "channel": "自然客流",
-          "bizType": "",
-          "member": "",
-          "origPrice": 200.0,
-          "discount": 0,
-          "discountRate": 0,
-          "amount": 200.0,
-          "profit": 200.0,
-          "cost": 0.0,
-          "costRatio": 0.0,
-          "cat": "增值",
-          "isReturn": false,
-          "isBundle": true
-        },
-        {
-          "emp": "李泽",
-          "product": "199贴膜套包",
-          "code": "XSCK26110100803",
-          "channel": "自然客流",
-          "bizType": "",
-          "member": "",
-          "origPrice": 199.0,
-          "discount": 0,
-          "discountRate": 0,
-          "amount": 199.0,
-          "profit": 199.0,
-          "cost": 0.0,
-          "costRatio": 0.0,
-          "cat": "增值",
-          "isReturn": false,
-          "isBundle": true
-        },
-        {
-          "emp": "李泽",
-          "product": "华为-手提袋-中",
-          "code": "XSCK26110100789",
-          "channel": "自然客流",
-          "bizType": "",
-          "member": "",
-          "origPrice": 0.0,
-          "discount": 0,
-          "discountRate": 0,
-          "amount": 0.0,
-          "profit": 0.0,
-          "cost": 0.0,
-          "costRatio": null,
-          "cat": "其他",
-          "isReturn": false,
-          "isBundle": true
-        },
-        {
-          "emp": "李泽",
-          "product": "华为-手提袋-中",
-          "code": "XSCK26110100803",
-          "channel": "自然客流",
-          "bizType": "",
-          "member": "",
-          "origPrice": 0.0,
-          "discount": 0,
-          "discountRate": 0,
-          "amount": 0.0,
-          "profit": 0.0,
-          "cost": 0.0,
-          "costRatio": null,
-          "cat": "其他",
-          "isReturn": false,
-          "isBundle": true
-        },
-        {
-          "emp": "李泽",
-          "product": "华为-手提袋-中",
-          "code": "XSCK26110100851",
-          "channel": "自然客流",
-          "bizType": "",
-          "member": "",
-          "origPrice": 0.0,
-          "discount": 0,
-          "discountRate": 0,
-          "amount": 0.0,
-          "profit": 0.0,
-          "cost": 0.0,
-          "costRatio": null,
-          "cat": "其他",
-          "isReturn": false,
-          "isBundle": true
-        },
-        {
-          "emp": "李泽",
-          "product": "华为-手提袋-中",
-          "code": "XSCK26110100879",
-          "channel": "自然客流",
-          "bizType": "",
-          "member": "",
-          "origPrice": 0.0,
-          "discount": 0,
-          "discountRate": 0,
-          "amount": 0.0,
-          "profit": 0.0,
-          "cost": 0.0,
-          "costRatio": null,
-          "cat": "其他",
-          "isReturn": false,
-          "isBundle": true
-        },
-        {
-          "emp": "李泽",
-          "product": "华为-手提袋-中",
-          "code": "XSCK26110100880",
-          "channel": "自然客流",
-          "bizType": "",
-          "member": "",
-          "origPrice": 0.0,
-          "discount": 0,
-          "discountRate": 0,
-          "amount": 0.0,
-          "profit": 0.0,
-          "cost": 0.0,
-          "costRatio": null,
-          "cat": "其他",
-          "isReturn": false,
-          "isBundle": true
-        },
-        {
-          "emp": "李泽",
-          "product": "华为-手提袋-中",
-          "code": "XSCK26110100931",
-          "channel": "自然客流",
-          "bizType": "",
-          "member": "",
-          "origPrice": 0.0,
-          "discount": 0,
-          "discountRate": 0,
-          "amount": 0.0,
-          "profit": 0.0,
-          "cost": 0.0,
-          "costRatio": null,
-          "cat": "其他",
-          "isReturn": false,
-          "isBundle": true
-        },
-        {
-          "emp": "杨丽华",
-          "product": "华为 Mate80 VYG-AL30  12GB+512GB  晨曦金",
-          "code": "XSCK26110101011",
-          "channel": "自然客流",
-          "bizType": "",
-          "member": "",
-          "origPrice": 4692.64,
-          "discount": 0,
-          "discountRate": 0,
-          "amount": 4692.64,
-          "profit": 272.64,
-          "cost": 4420.0,
-          "costRatio": 0.9419005080295952,
-          "cat": "手机",
-          "isReturn": false,
-          "isBundle": true
-        },
-        {
-          "emp": "杨丽华",
-          "product": "华为-手提袋-小",
-          "code": "XSCK26110101011",
-          "channel": "自然客流",
-          "bizType": "",
-          "member": "",
-          "origPrice": 0.0,
-          "discount": 0,
-          "discountRate": 0,
-          "amount": 0.0,
-          "profit": 0.0,
-          "cost": 0.0,
-          "costRatio": null,
-          "cat": "其他",
-          "isReturn": false,
-          "isBundle": true
-        },
-        {
-          "emp": "邵乐乐",
-          "product": "华为 畅享100 Pro Max YEW-AL80  8GB+256GB  曜金黑",
-          "code": "XSCK26110100897",
-          "channel": "自然客流",
-          "bizType": "",
-          "member": "",
-          "origPrice": 2349.0,
-          "discount": 0,
-          "discountRate": 0,
-          "amount": 2349.0,
-          "profit": 333.0,
-          "cost": 2016.0,
-          "costRatio": 0.8582375478927203,
-          "cat": "手机",
-          "isReturn": false,
-          "isBundle": true
-        },
-        {
-          "emp": "邵乐乐",
-          "product": "华为 FreeClip2 耳机 T0027  冰莓紫",
-          "code": "XSCK26110100979",
-          "channel": "自然客流",
-          "bizType": "",
-          "member": "",
-          "origPrice": 999.0,
-          "discount": 0,
-          "discountRate": 0,
-          "amount": 999.0,
-          "profit": -69.42,
-          "cost": 1068.42,
-          "costRatio": 1.0694894894894895,
-          "cat": "音频",
-          "isReturn": false,
-          "isBundle": true
-        },
-        {
-          "emp": "邵乐乐",
-          "product": "华为-手提袋-中",
-          "code": "XSCK26110100897",
-          "channel": "自然客流",
-          "bizType": "",
-          "member": "",
-          "origPrice": 0.0,
-          "discount": 0,
-          "discountRate": 0,
-          "amount": 0.0,
-          "profit": 0.0,
-          "cost": 0.0,
-          "costRatio": null,
-          "cat": "其他",
-          "isReturn": false,
-          "isBundle": true
-        },
-        {
-          "emp": "邵乐乐",
-          "product": "华为-手提袋-小",
-          "code": "XSCK26110100979",
-          "channel": "自然客流",
-          "bizType": "",
-          "member": "",
-          "origPrice": 0.0,
-          "discount": 0,
-          "discountRate": 0,
-          "amount": 0.0,
-          "profit": 0.0,
-          "cost": 0.0,
-          "costRatio": null,
-          "cat": "其他",
-          "isReturn": false,
-          "isBundle": true
-        }
-      ],
-      "totalAmount": 39885.64,
+      "deals": [],
+      "totalAmount": 0,
       "patterns": [
         {
           "name": "李泽",
-          "badge": "达标",
-          "badgeColor": "var(--red)",
+          "badge": "需追赶",
+          "badgeColor": "var(--amber)",
           "orders": 6,
           "avgPrice": 5307.5,
           "bundleRate": 1.0,
-          "avgDiscount": 0,
-          "todayOrders": 13,
-          "action": "成交模式健康，保持节奏"
+          "avgDiscount": 0.07625763490495965,
+          "todayOrders": 0,
+          "action": "今日暂无开单，先检查样机在位和话术准备；平均折扣 8%，注意控制让利节奏"
         },
         {
           "name": "邵乐乐",
-          "badge": "需追赶",
-          "badgeColor": "var(--amber)",
+          "badge": "落后",
+          "badgeColor": "var(--green)",
           "orders": 2,
           "avgPrice": 1674.0,
           "bundleRate": 1.0,
-          "avgDiscount": 0,
-          "todayOrders": 4,
-          "action": "客单价 1674 元偏低，多推中高端机型提升毛利"
+          "avgDiscount": 0.1258944498621924,
+          "todayOrders": 0,
+          "action": "今日暂无开单，先检查样机在位和话术准备；客单价 1674 元偏低，多推中高端机型提升毛利；平均折扣 13%，注意控制让利节奏"
         },
         {
           "name": "杨丽华",
@@ -1620,9 +1260,9 @@
           "orders": 1,
           "avgPrice": 4692.64,
           "bundleRate": 1.0,
-          "avgDiscount": 0,
-          "todayOrders": 2,
-          "action": "成交模式健康，保持节奏"
+          "avgDiscount": 0.0973956530101942,
+          "todayOrders": 0,
+          "action": "今日暂无开单，先检查样机在位和话术准备；平均折扣 10%，注意控制让利节奏"
         },
         {
           "name": "新员工",
@@ -1641,7 +1281,7 @@
           "level": "warn",
           "icon": "⏰",
           "title": "多人未开单",
-          "body": "新员工 今日暂无正向成交。没顾客时主动回访老客户，至少打 5 通电话。"
+          "body": "李泽、邵乐乐、杨丽华、新员工 今日暂无正向成交。没顾客时主动回访老客户，至少打 5 通电话。"
         },
         {
           "level": "warn",
@@ -1652,7 +1292,7 @@
       ]
     },
     "weekPlan": {
-      "weekLabel": "10月26-30日",
+      "weekLabel": "11月2-6日",
       "dailyUser": [
         {
           "name": "企微拉新",
@@ -1705,7 +1345,7 @@
       "dutyDays": [
         {
           "label": "周一",
-          "date": "10-26",
+          "date": "11-02",
           "duties": [
             {
               "name": "大扫除",
@@ -1716,7 +1356,7 @@
         },
         {
           "label": "周二",
-          "date": "10-27",
+          "date": "11-03",
           "duties": [
             {
               "name": "膜类/礼品盘点",
@@ -1727,7 +1367,7 @@
         },
         {
           "label": "周三",
-          "date": "10-28",
+          "date": "11-04",
           "duties": [
             {
               "name": "盘库/库房卫生/货品维护",
@@ -1738,12 +1378,12 @@
         },
         {
           "label": "周四",
-          "date": "10-29",
+          "date": "11-05",
           "duties": []
         },
         {
           "label": "周五",
-          "date": "10-30",
+          "date": "11-06",
           "duties": [
             {
               "name": "渠道运营填表/收集图片",
@@ -1780,8 +1420,8 @@
       },
       "rules": "每日反馈·月度闭环 · 每晚11点前反馈 · 超时/漏反馈每项考核10 · 闭环时间20号"
     },
-    "timeProgress": 0.03333333333333333,
-    "remainDays": 25
+    "timeProgress": 0.06666666666666667,
+    "remainDays": 24
   },
   "details": {
     "手机": [
@@ -1823,8 +1463,8 @@
         "date": "2026-11-01",
         "name": "华为 畅享100 Pro CHZ-AL60  6GB+512GB  幻夜黑",
         "qty": 1.0,
-        "origPrice": 2549.0,
-        "discPrice": 0.0,
+        "origPrice": 2699.0,
+        "discPrice": 150.0,
         "amount": 2549.0,
         "profit": 281.0,
         "gpr": 0.1102,
@@ -1840,8 +1480,8 @@
         "date": "2026-11-01",
         "name": "华为 畅享100 Pro Max YEW-AL80  8GB+256GB  曜金黑",
         "qty": 1.0,
-        "origPrice": 2349.0,
-        "discPrice": 0.0,
+        "origPrice": 2399.0,
+        "discPrice": 50.0,
         "amount": 2349.0,
         "profit": 333.0,
         "gpr": 0.1418,
@@ -1857,8 +1497,8 @@
         "date": "2026-11-01",
         "name": "华为 Mate90 Pro Max CMM-AL10  16GB+512GB  翡冷翠",
         "qty": 1.0,
-        "origPrice": 9799.0,
-        "discPrice": 0.0,
+        "origPrice": 9999.0,
+        "discPrice": 200.0,
         "amount": 9799.0,
         "profit": 954.89,
         "gpr": 0.0974,
@@ -1874,8 +1514,8 @@
         "date": "2026-11-01",
         "name": "华为 Mate80 VYG-AL30  12GB+512GB  晨曦金",
         "qty": 1.0,
-        "origPrice": 4692.64,
-        "discPrice": 0.0,
+        "origPrice": 5199.0,
+        "discPrice": 506.36,
         "amount": 4692.64,
         "profit": 272.64,
         "gpr": 0.0581,
@@ -1896,8 +1536,8 @@
         "date": "2026-11-01",
         "name": "华为 FreeClip2 耳机 T0027  潮玩拼色(红/蓝)",
         "qty": 1.0,
-        "origPrice": 1100.0,
-        "discPrice": 0.0,
+        "origPrice": 1299.0,
+        "discPrice": 199.0,
         "amount": 1100.0,
         "profit": 60.0,
         "gpr": 0.0545,
@@ -1913,8 +1553,8 @@
         "date": "2026-11-01",
         "name": "华为 FreeClip2 耳机 T0027  冰莓紫",
         "qty": 1.0,
-        "origPrice": 999.0,
-        "discPrice": 0.0,
+        "origPrice": 1299.0,
+        "discPrice": 300.0,
         "amount": 999.0,
         "profit": -69.42,
         "gpr": -0.0695,
@@ -1934,8 +1574,8 @@
         "date": "2026-11-01",
         "name": "华为 FreeClip2 耳机 T0027  潮玩拼色(红/蓝)",
         "qty": 1.0,
-        "origPrice": 1100.0,
-        "discPrice": 0.0,
+        "origPrice": 1299.0,
+        "discPrice": 199.0,
         "amount": 1100.0,
         "profit": 60.0,
         "gpr": 0.0545,
@@ -1951,8 +1591,8 @@
         "date": "2026-11-01",
         "name": "华为 FreeClip2 耳机 T0027  冰莓紫",
         "qty": 1.0,
-        "origPrice": 999.0,
-        "discPrice": 0.0,
+        "origPrice": 1299.0,
+        "discPrice": 300.0,
         "amount": 999.0,
         "profit": -69.42,
         "gpr": -0.0695,
@@ -2002,296 +1642,10 @@
       }
     ]
   },
-  "dayDetails": [
-    {
-      "code": "XSCK26110100789",
-      "type": "Pura X View",
-      "emp": "李泽",
-      "product": "华为 PuraX View VOL-AL00  12GB+256GB  零度白",
-      "sku": "01.001.083.001.005",
-      "qty": 1.0,
-      "origPrice": 5999.0,
-      "discPrice": 0.0,
-      "amount": 5999.0,
-      "profit": 899.0,
-      "cost": 5100.0,
-      "gpr": 0.14985830971828637,
-      "cat": "手机"
-    },
-    {
-      "code": "XSCK26110100789",
-      "type": "华为",
-      "emp": "李泽",
-      "product": "华为-手提袋-中",
-      "sku": "17.002.001.002",
-      "qty": 1.0,
-      "origPrice": 0.0,
-      "discPrice": 0.0,
-      "amount": 0.0,
-      "profit": 0.0,
-      "cost": 0.0,
-      "gpr": null,
-      "cat": "其他"
-    },
-    {
-      "code": "XSCK26110100803",
-      "type": "贴膜",
-      "emp": "李泽",
-      "product": "199贴膜套包",
-      "sku": "15.001.003.080",
-      "qty": 1.0,
-      "origPrice": 199.0,
-      "discPrice": 0.0,
-      "amount": 199.0,
-      "profit": 199.0,
-      "cost": 0.0,
-      "gpr": 1.0,
-      "cat": "增值"
-    },
-    {
-      "code": "XSCK26110100803",
-      "type": "华为",
-      "emp": "李泽",
-      "product": "华为-手提袋-中",
-      "sku": "17.002.001.002",
-      "qty": 1.0,
-      "origPrice": 0.0,
-      "discPrice": 0.0,
-      "amount": 0.0,
-      "profit": 0.0,
-      "cost": 0.0,
-      "gpr": null,
-      "cat": "其他"
-    },
-    {
-      "code": "XSCK26110100851",
-      "type": "Pura X Max",
-      "emp": "李泽",
-      "product": "华为 PuraX Max HOP-AL00  12GB+512GB  幻夜黑",
-      "sku": "01.001.074.001.005",
-      "qty": 1.0,
-      "origPrice": 11999.0,
-      "discPrice": 0.0,
-      "amount": 11999.0,
-      "profit": 1079.0,
-      "cost": 10920.0,
-      "gpr": 0.08992416034669556,
-      "cat": "手机"
-    },
-    {
-      "code": "XSCK26110100851",
-      "type": "华为",
-      "emp": "李泽",
-      "product": "华为-手提袋-中",
-      "sku": "17.002.001.002",
-      "qty": 1.0,
-      "origPrice": 0.0,
-      "discPrice": 0.0,
-      "amount": 0.0,
-      "profit": 0.0,
-      "cost": 0.0,
-      "gpr": null,
-      "cat": "其他"
-    },
-    {
-      "code": "XSCK26110100879",
-      "type": "FreeClip 2",
-      "emp": "李泽",
-      "product": "华为 FreeClip2 耳机 T0027  潮玩拼色(红/蓝)",
-      "sku": "07.001.013.005.006",
-      "qty": 1.0,
-      "origPrice": 1100.0,
-      "discPrice": 0.0,
-      "amount": 1100.0,
-      "profit": 60.0,
-      "cost": 1040.0,
-      "gpr": 0.05454545454545454,
-      "cat": "音频"
-    },
-    {
-      "code": "XSCK26110100879",
-      "type": "华为",
-      "emp": "李泽",
-      "product": "华为-手提袋-中",
-      "sku": "17.002.001.002",
-      "qty": 1.0,
-      "origPrice": 0.0,
-      "discPrice": 0.0,
-      "amount": 0.0,
-      "profit": 0.0,
-      "cost": 0.0,
-      "gpr": null,
-      "cat": "其他"
-    },
-    {
-      "code": "XSCK26110100880",
-      "type": "畅享100 Pro",
-      "emp": "李泽",
-      "product": "华为 畅享100 Pro CHZ-AL60  6GB+512GB  幻夜黑",
-      "sku": "01.001.090.001.004",
-      "qty": 1.0,
-      "origPrice": 2549.0,
-      "discPrice": 0.0,
-      "amount": 2549.0,
-      "profit": 281.0,
-      "cost": 2268.0,
-      "gpr": 0.11023930953315025,
-      "cat": "手机"
-    },
-    {
-      "code": "XSCK26110100880",
-      "type": "华为",
-      "emp": "李泽",
-      "product": "华为-手提袋-中",
-      "sku": "17.002.001.002",
-      "qty": 1.0,
-      "origPrice": 0.0,
-      "discPrice": 0.0,
-      "amount": 0.0,
-      "profit": 0.0,
-      "cost": 0.0,
-      "gpr": null,
-      "cat": "其他"
-    },
-    {
-      "code": "XSCK26110100931",
-      "type": "Mate90 Pro Max",
-      "emp": "李泽",
-      "product": "华为 Mate90 Pro Max CMM-AL10  16GB+512GB  翡冷翠",
-      "sku": "01.001.087.001.003",
-      "qty": 1.0,
-      "origPrice": 9799.0,
-      "discPrice": 0.0,
-      "amount": 9799.0,
-      "profit": 954.89,
-      "cost": 8844.11,
-      "gpr": 0.09744769874476987,
-      "cat": "手机"
-    },
-    {
-      "code": "XSCK26110100931",
-      "type": "贴膜",
-      "emp": "李泽",
-      "product": "199贴膜套包",
-      "sku": "15.001.003.080",
-      "qty": 1.0,
-      "origPrice": 200.0,
-      "discPrice": 0.0,
-      "amount": 200.0,
-      "profit": 200.0,
-      "cost": 0.0,
-      "gpr": 1.0,
-      "cat": "增值"
-    },
-    {
-      "code": "XSCK26110100931",
-      "type": "华为",
-      "emp": "李泽",
-      "product": "华为-手提袋-中",
-      "sku": "17.002.001.002",
-      "qty": 1.0,
-      "origPrice": 0.0,
-      "discPrice": 0.0,
-      "amount": 0.0,
-      "profit": 0.0,
-      "cost": 0.0,
-      "gpr": null,
-      "cat": "其他"
-    },
-    {
-      "code": "XSCK26110101011",
-      "type": "Mate80",
-      "emp": "杨丽华",
-      "product": "华为 Mate80 VYG-AL30  12GB+512GB  晨曦金",
-      "sku": "01.001.062.003.007",
-      "qty": 1.0,
-      "origPrice": 4692.64,
-      "discPrice": 0.0,
-      "amount": 4692.64,
-      "profit": 272.64,
-      "cost": 4420.0,
-      "gpr": 0.05809949197040471,
-      "cat": "手机"
-    },
-    {
-      "code": "XSCK26110101011",
-      "type": "华为",
-      "emp": "杨丽华",
-      "product": "华为-手提袋-小",
-      "sku": "17.002.001.001",
-      "qty": 2.0,
-      "origPrice": 0.0,
-      "discPrice": 0.0,
-      "amount": 0.0,
-      "profit": 0.0,
-      "cost": 0.0,
-      "gpr": null,
-      "cat": "其他"
-    },
-    {
-      "code": "XSCK26110100897",
-      "type": "畅享100 Pro Max",
-      "emp": "邵乐乐",
-      "product": "华为 畅享100 Pro Max YEW-AL80  8GB+256GB  曜金黑",
-      "sku": "01.001.091.002.001",
-      "qty": 1.0,
-      "origPrice": 2349.0,
-      "discPrice": 0.0,
-      "amount": 2349.0,
-      "profit": 333.0,
-      "cost": 2016.0,
-      "gpr": 0.1417624521072797,
-      "cat": "手机"
-    },
-    {
-      "code": "XSCK26110100897",
-      "type": "华为",
-      "emp": "邵乐乐",
-      "product": "华为-手提袋-中",
-      "sku": "17.002.001.002",
-      "qty": 1.0,
-      "origPrice": 0.0,
-      "discPrice": 0.0,
-      "amount": 0.0,
-      "profit": 0.0,
-      "cost": 0.0,
-      "gpr": null,
-      "cat": "其他"
-    },
-    {
-      "code": "XSCK26110100979",
-      "type": "FreeClip 2",
-      "emp": "邵乐乐",
-      "product": "华为 FreeClip2 耳机 T0027  冰莓紫",
-      "sku": "07.001.013.005.005",
-      "qty": 1.0,
-      "origPrice": 999.0,
-      "discPrice": 0.0,
-      "amount": 999.0,
-      "profit": -69.42,
-      "cost": 1068.42,
-      "gpr": -0.06948948948948949,
-      "cat": "音频"
-    },
-    {
-      "code": "XSCK26110100979",
-      "type": "华为",
-      "emp": "邵乐乐",
-      "product": "华为-手提袋-小",
-      "sku": "17.002.001.001",
-      "qty": 1.0,
-      "origPrice": 0.0,
-      "discPrice": 0.0,
-      "amount": 0.0,
-      "profit": 0.0,
-      "cost": 0.0,
-      "gpr": null,
-      "cat": "其他"
-    }
-  ],
+  "dayDetails": [],
   "qudao": {
-    "timeDate": "2026-11-01",
-    "timeRate": 0.03333333333333333,
+    "timeDate": "2026-11-02",
+    "timeRate": 0.06666666666666667,
     "total": {
       "task": 124200.0,
       "done": 0.0,
